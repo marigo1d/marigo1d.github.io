@@ -8,7 +8,7 @@
 
 
 
-<h1 id="MIT6-S081-record"><a href="#MIT6-S081-record" class="headerlink" title="MIT6_S081_record"></a>MIT6_S081_record</h1><h3 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h3><p>QEMU：近似模拟硬件SiFiveFU540-C000主板(RISC-V,64 bit register, 56 bit physical memory)</p>
+<h1 id="Operation-sys-learning-record"><a href="#Operation-sys-learning-record" class="headerlink" title="Operation_sys_learning_record"></a>Operation_sys_learning_record</h1><h3 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h3><p>QEMU：近似模拟硬件SiFiveFU540-C000主板(RISC-V,64 bit register, 56 bit physical memory)</p>
 <p>intel 8086：20根地址线，16位寄存器</p>
 <h3 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h3><p>XV6：操作系统</p>
 <h2 id="系统启动"><a href="#系统启动" class="headerlink" title="系统启动"></a>系统启动</h2><h3 id="基础信息"><a href="#基础信息" class="headerlink" title="基础信息"></a>基础信息</h3><h4 id="Intel-8086地址空间"><a href="#Intel-8086地址空间" class="headerlink" title="Intel 8086地址空间"></a>Intel 8086地址空间</h4><p>20根地址线，16位寄存器，可访问1MB的内存空间</p>
@@ -147,8 +147,9 @@
 
 
 <p>Linux 2.6</p>
-<p>虚拟地址高10位，在页目录表中查找对应索引，获得页表的物理地址；</p>
-<p>虚拟地址中10位，在页表中查找对应索引，获得页的物理地址；</p>
+<p>虚拟地址高10位，在页目录表中查找对应索引，获得页表的物理地址（20位，余下12位补0）；</p>
+<p>虚拟地址中10位，在页表中查找对应索引，获得页的物理地址（20位，余下12位补0）；</p>
+<p>虚拟地址后12位，页内偏移；</p>
 <img src="/2024/04/12/MIT6-S081-record/image-20240420140907729.png" class="" title="image-20240420140907729">
 
 
@@ -158,8 +159,9 @@
 <p>以下情况为内核较小（仅存在于1MB物理内存以内），用户使用低3GB，内核使用高1GB，每页4KB</p>
 <p>建立页目录表–页目录表的项即指向一个页表</p>
 <p>e在物理地址0x100000建立页目录表，一个页目录表含1024个页表项PDE，每个页目录表项4B，占4KB，</p>
-<p>第0项（保证loader程序在启动页表后能够正常运行）和第768（虚拟地址3GB，用户程序访问内核）项指向物理地址0x101000</p>
-<p>第1023项指向页目录表字节的地址</p>
+<p>第0项（保证loader程序在启动页表后能够正常运行）指向物理地址0x101000</p>
+<p>第768项（虚拟地址3GB，用户程序访问内核）指向物理地址0x101000</p>
+<p>第1023项指向页目录表字节的地址0x100000</p>
 <p>建立页表</p>
 <p>在物理地址0x101000建立，一个页表含1024个页表项，每个页表项4B，占4KB，可表示4KB*1024&#x3D;4MB的地址空间</p>
 <p>该页表指向的物理地址为0-0x3fffff</p>
@@ -172,37 +174,35 @@
 <p>10.修改gdt中内容：gdt中段描述符基址上移，</p>
 <p>11.上移gdt基址，上移esp</p>
 <p>12.将页目录地址赋值给cr3，打开cr3的pg位，新gdt值写入gdtr</p>
-<h3 id="kernel启动"><a href="#kernel启动" class="headerlink" title="kernel启动"></a>kernel启动</h3><p>makefile所生成kernel文件</p>
+<h3 id="kernel"><a href="#kernel" class="headerlink" title="kernel"></a>kernel</h3><p>makefile所生成kernel文件</p>
 <p>kernel程序内容</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kinit：设置好页表分配器（page allocator）</span><br><span class="line"></span><br><span class="line">kvminit：为kernel分配页表，将低地址设备映射到kernel地址空间（即在kernel页表中写入PTE指向设备）</span><br><span class="line"></span><br><span class="line">kvminithart：页表开始生效，程序计数器将会通过MMU翻译为物理地址</span><br><span class="line"></span><br><span class="line">processinit：设置好初始进程或者说设置好进程表单</span><br><span class="line"></span><br><span class="line">trapinit/trapinithart：设置好user/kernel mode转换代码</span><br><span class="line"></span><br><span class="line">plicinit/plicinithart：设置好中断控制器PLIC（Platform Level Interrupt Controller），我们后面在介绍中断的时候会详细的介绍这部分，这是我们用来与磁盘和console交互方式</span><br><span class="line"></span><br><span class="line">binit：分配buffer cache</span><br><span class="line"></span><br><span class="line">iinit：初始化inode缓存</span><br><span class="line"></span><br><span class="line">fileinit：初始化文件系统</span><br><span class="line"></span><br><span class="line">virtio_disk_init：初始化磁盘</span><br><span class="line"></span><br><span class="line">userinit：最后当所有的设置都完成了，操作系统也运行起来了，会通过userinit运行第一个进程</span><br></pre></td></tr></table></figure>
 
-<p>Intel 8086</p>
-<p>加载kernel elf文件前4K到0x10000，根据kernel elf文件前4K文件头信息加载kernel 映像文件到0x100000（此时已进入保护模式，可访问0x100000以后的位置，位于DRAM中），跳转执行kernel</p>
-<p>内核加载完成时内存布局</p>
-<img src="/2024/04/12/MIT6-S081-record/image-20240416195436728.png" class="" title="image-20240416195436728">
+<img src="/2024/04/12/MIT6-S081-record/image-20240421144651548.png" class="" title="image-20240421144651548">
 
 
 
-
+<p>loader程序与kernel程序对比</p>
+<p>loader为纯二进制程序 ，仅包含机器码，根据机器码内容装载至内存后直接开始运行；</p>
+<p>kernel为elf文件，存在文件头，节等内容，在进行segment展开后成为可运行的机器码</p>
+<p>loader中实现kernel写入内核</p>
+<p>loader程序</p>
+<p>13.读磁盘指定扇区，写kernel.bin到0x70000~0x9fbff</p>
+<p>14.初始化kernel，将kernel.bin中的segment复制到被编译的虚拟地址处，第一个segment位于0x1500</p>
+<p>15.修改栈指针，跳转至kernel运行</p>
+<img src="/2024/04/12/MIT6-S081-record/image-20240421151156773.png" class="" title="image-20240421151156773">
 
 
 
 <p>kernel进行：</p>
-<p>开启分页机制：创建临时页表，加载页表物理地址到CR3并置位1，…</p>
 <p>对系统的各个部分进行初始化：启动其他CPU…</p>
 <p>BSP启动APs</p>
-<p>kernel初始化完成：</p>
-<img src="/2024/04/12/MIT6-S081-record/image-20240413190243827.png" class="" title="image-20240413190243827">
-
-
-
 <p>SiFive FU540</p>
 <img src="/2024/04/12/MIT6-S081-record/image-20240412184838896.png" class="" title="image-20240412184838896.png">
 
 
 
-<h3 id="用户程序启动"><a href="#用户程序启动" class="headerlink" title="用户程序启动"></a>用户程序启动</h3><p>下图截取自教材</p>
-<p>虚拟地址：</p>
+<h3 id="用户程序启动"><a href="#用户程序启动" class="headerlink" title="用户程序启动"></a>用户程序启动</h3><p>虚拟地址：</p>
 <p>KERNBASE &#x3D; 0x8000 0000</p>
 <p>KERNLINK &#x3D; 0x8010 0000</p>
 <p>KERNBASE+PHYSTOP &#x3D; 0x8E00 0000</p>
@@ -225,17 +225,17 @@
 
 
 
-<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><h3 id="外部中断"><a href="#外部中断" class="headerlink" title="外部中断"></a>外部中断</h3><img src="/2024/04/12/MIT6-S081-record/image-20240417110342766.png" class="" title="image-20240417110342766">
+<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><h3 id="外部中断"><a href="#外部中断" class="headerlink" title="外部中断"></a>外部中断</h3><img src="/2024/04/12/MIT6-S081-record/image-20240421152049031.png" class="" title="image-20240421152049031">
 
 <p>中断引脚：</p>
 <p>INTR: Interupter</p>
-<p>NMI: Non Maskable Interupter	中断向量号 2</p>
-<p>外部设备中断由中断代理芯片接收后发送中断向量号到CPU中断引脚</p>
+<p>NMI: Non Maskable Interupter	向CPU传入中断向量号 2</p>
+<p>外部设备中断由中断代理芯片8259A接收后发送中断向量号到CPU中断引脚INTR</p>
 <h3 id="内部中断"><a href="#内部中断" class="headerlink" title="内部中断"></a>内部中断</h3><p>软中断：系统调用</p>
 <p>异常：指针越界，栈溢出</p>
-<h3 id="实模式下的中断向量表"><a href="#实模式下的中断向量表" class="headerlink" title="实模式下的中断向量表"></a>实模式下的中断向量表</h3><p>仅在实模式使用</p>
-<p>位于0x00000</p>
-<h3 id="保护模式下的中断描述符表"><a href="#保护模式下的中断描述符表" class="headerlink" title="保护模式下的中断描述符表"></a>保护模式下的中断描述符表</h3><p>中断向量号 -&gt; 中断向量表&#x2F;中断描述符表 索引下标</p>
+<h4 id="实模式下的中断向量表"><a href="#实模式下的中断向量表" class="headerlink" title="实模式下的中断向量表"></a>实模式下的中断向量表</h4><p>仅在实模式使用，由BIOS进行创建，位于0x00000~0x003ff</p>
+<p>可使用汇编指令INT x访问，</p>
+<h4 id="保护模式下的中断描述符表"><a href="#保护模式下的中断描述符表" class="headerlink" title="保护模式下的中断描述符表"></a>保护模式下的中断描述符表</h4><p>中断向量号 -&gt; 中断向量表&#x2F;中断描述符表 索引下标</p>
 <p>IDTR(Interrupt Descriptor Table Register) 中保存 IDT 位置信息</p>
 <img src="/2024/04/12/MIT6-S081-record/image-20240417105214817.png" class="" title="image-20240417105214817">
 
@@ -243,12 +243,42 @@
 <p>item: 门</p>
 <img src="/2024/04/12/MIT6-S081-record/image-20240417104649804.png" class="" title="image-20240417104649804">
 
-<p>过程</p>
+<h3 id="中断处理过程"><a href="#中断处理过程" class="headerlink" title="中断处理过程"></a>中断处理过程</h3><p>1.中断请求</p>
+<p>中断请求可能为内部中断或者外部中断</p>
+<p>外部中断如下：</p>
+<p>当外设发出中断信号后，信号被送入8259A；</p>
+<p>8259A检查IMR寄存器中是否屏蔽了来自该IRQ的信号，若IMR寄存器中对应的位为1，表示屏蔽了IRQ代表的中断，则丢掉此中断信号，若IMR寄存器中对应的位为0，表示未屏蔽此中断，则将IRR寄存器中与此中断对应的位 置1。</p>
+<p>PR优先级裁决器从IRR寄存器中挑选一个优先级最大的中断，然后8259A向CPU发送INTR信号。</p>
+<p>2.中断响应</p>
+<p>CPU收到INTR信号后便知道有新的中断了，在执行完当前指令后，向8259A发送一个中断回复信号。</p>
+<p>8259A收到回复信号后，将选出来的优先级最大的中断在ISR寄存器中相应的位 置1，表示该中断正在处理，同时将此中断在IRR寄存器中相应的位 置0，相当于将此中断从中断请求队列中去掉。</p>
+<p>CPU再向8259A发送INTR信号，表示想要获取中断向量号。</p>
+<p>8259A通过数据总线向CPU发送中断向量号，<strong>中断向量号 &#x3D; 起始向量号 + IRQ接口号</strong>，一般起始向量号为32，从中断向量表可看出0—31已经被占用，后面的32—127是分配给可屏蔽中断的，所以此处外设的中断设置的起始向量号便为32。</p>
+<p>3.保护现场__压栈</p>
+<p>CPU据中断向量号去IDT中获取中断描述符，取出选择子中的DPL与当前特权级CPL进行比较，若特权级发生变化，则需要切换栈。（不同特权级有着不同的栈，如Linux使用了0， 3特权级，则有两个栈，一个内核栈，一个用户栈）</p>
+<p>于是处理器临时保存当前的旧栈SS和ESP的值，从TSS（每一个任务有一个TSS结构，其中保存着不同特权级栈的SS和ESP值）中获取与DPL特权级同的栈信息加载到SS和ESP寄存器。再将旧栈SS和ESP的值压入新栈中。若没有特权级变化，则跳过此步骤。</p>
+<p>压入程序状态信息，即EFLAGS寄存器</p>
+<p>压入断点，即返回地址，即当前任务的CS，EIP值。</p>
+<p>若该中断有错误码，压入错误码</p>
+<img src="/2024/04/12/MIT6-S081-record/image-20240421154614894.png" class="" title="image-20240421154614894">
+
+<p>4.定位中断服务程序</p>
 <img src="/2024/04/12/MIT6-S081-record/image-20240417110140482.png" class="" title="image-20240417110140482">
 
 
 
-]]></content>
+<p>5.中断处理过程</p>
+<p>中断的实际处理过程就是执行中断处理程序，Linux将中断处理程序分为上下两部分，需要紧急处理立即执行的归为上半部，不那么紧急的归为下半部。</p>
+<p>开中断，即EFLAGS的IF位置1，表示允许响应中断；关中断，即EFLAGS的IF位置0，表示不允许响应中断。</p>
+<p>上半部分是刻不容缓的，需要立即执行的部分，所以要在关中断的状态下执行。</p>
+<p>而下半部分不那么紧急，在开中断的情况下进行，如果此时有新的中断发生，当前中断处理程序便会换下CPU，CPU会另寻时间重新调度，完成整个中断处理程序。</p>
+<p>6.中断返回——出栈</p>
+<p>中断返回就是出栈的过程，将第三步保护现场压入栈中的信息弹出。</p>
+<p>有错误码弹出错误码。</p>
+<p>此时的栈顶指针ESP应指向EIP_old，剩余栈中的信息使用iret指令弹出，CPU执行到iret指令时再次检查和比较特权级是否变化。</p>
+<p>弹出EIP_old, CS_old</p>
+<p>若特权级变化，将ESP_old, SS_old, 加载到ESP，SS寄存器。</p>
+<h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2>]]></content>
       <categories>
         <category>operation system</category>
       </categories>
