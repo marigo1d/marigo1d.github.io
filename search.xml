@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
     <title>MIT6_S081_record</title>
     <url>/2024/04/12/MIT6-S081-record/</url>
     <content><![CDATA[<p>MIT6-S081课程与操作系统相关学习记录</p>
@@ -8,7 +14,7 @@
 
 
 
-<h1 id="Operation-sys-learning-record"><a href="#Operation-sys-learning-record" class="headerlink" title="Operation_sys_learning_record"></a>Operation_sys_learning_record</h1><h3 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h3><p>QEMU：近似模拟硬件SiFiveFU540-C000主板(RISC-V,64 bit register, 56 bit physical memory)</p>
+<h1 id="Opsys-learning-record"><a href="#Opsys-learning-record" class="headerlink" title="Opsys_learning_record"></a>Opsys_learning_record</h1><h3 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h3><p>QEMU：近似模拟硬件SiFiveFU540-C000主板(RISC-V,64 bit register, 56 bit physical memory)</p>
 <p>intel 8086：20根地址线，16位寄存器</p>
 <h3 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h3><p>XV6：操作系统</p>
 <h2 id="系统启动"><a href="#系统启动" class="headerlink" title="系统启动"></a>系统启动</h2><h3 id="基础信息"><a href="#基础信息" class="headerlink" title="基础信息"></a>基础信息</h3><h4 id="Intel-8086地址空间"><a href="#Intel-8086地址空间" class="headerlink" title="Intel 8086地址空间"></a>Intel 8086地址空间</h4><p>20根地址线，16位寄存器，可访问1MB的内存空间</p>
@@ -249,17 +255,20 @@
 <p>当外设发出中断信号后，信号被送入8259A；</p>
 <p>8259A检查IMR寄存器中是否屏蔽了来自该IRQ的信号，若IMR寄存器中对应的位为1，表示屏蔽了IRQ代表的中断，则丢掉此中断信号，若IMR寄存器中对应的位为0，表示未屏蔽此中断，则将IRR寄存器中与此中断对应的位 置1。</p>
 <p>PR优先级裁决器从IRR寄存器中挑选一个优先级最大的中断，然后8259A向CPU发送INTR信号。</p>
-<p>2.中断响应</p>
+<p>内部中断由代码通过中断向量号触发。</p>
+<p>2.(外)中断响应</p>
 <p>CPU收到INTR信号后便知道有新的中断了，在执行完当前指令后，向8259A发送一个中断回复信号。</p>
 <p>8259A收到回复信号后，将选出来的优先级最大的中断在ISR寄存器中相应的位 置1，表示该中断正在处理，同时将此中断在IRR寄存器中相应的位 置0，相当于将此中断从中断请求队列中去掉。</p>
 <p>CPU再向8259A发送INTR信号，表示想要获取中断向量号。</p>
 <p>8259A通过数据总线向CPU发送中断向量号，<strong>中断向量号 &#x3D; 起始向量号 + IRQ接口号</strong>，一般起始向量号为32，从中断向量表可看出0—31已经被占用，后面的32—127是分配给可屏蔽中断的，所以此处外设的中断设置的起始向量号便为32。</p>
 <p>3.保护现场__压栈</p>
+<p>中断栈位于内核空间的PCB中内核栈页的最顶端</p>
 <p>CPU据中断向量号去IDT中获取中断描述符，取出选择子中的DPL与当前特权级CPL进行比较，若特权级发生变化，则需要切换栈。（不同特权级有着不同的栈，如Linux使用了0， 3特权级，则有两个栈，一个内核栈，一个用户栈）</p>
 <p>于是处理器临时保存当前的旧栈SS和ESP的值，从TSS（每一个任务有一个TSS结构，其中保存着不同特权级栈的SS和ESP值）中获取与DPL特权级同的栈信息加载到SS和ESP寄存器。再将旧栈SS和ESP的值压入新栈中。若没有特权级变化，则跳过此步骤。</p>
 <p>压入程序状态信息，即EFLAGS寄存器</p>
 <p>压入断点，即返回地址，即当前任务的CS，EIP值。</p>
 <p>若该中断有错误码，压入错误码</p>
+<p>图示为发生了特权级改变时的压栈情况</p>
 <img src="/2024/04/12/MIT6-S081-record/image-20240421154614894.png" class="" title="image-20240421154614894">
 
 <p>4.定位中断服务程序</p>
@@ -278,19 +287,76 @@
 <p>此时的栈顶指针ESP应指向EIP_old，剩余栈中的信息使用iret指令弹出，CPU执行到iret指令时再次检查和比较特权级是否变化。</p>
 <p>弹出EIP_old, CS_old</p>
 <p>若特权级变化，将ESP_old, SS_old, 加载到ESP，SS寄存器。</p>
-<h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2>]]></content>
+<h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><p>进程有各自的页表</p>
+<p>进程&#x3D;线程+资源</p>
+<img src="/2024/04/12/MIT6-S081-record/image-20240424100100197.png" class="" title="image-20240424100100197">
+
+
+
+<h3 id="在内核空间实现的线程"><a href="#在内核空间实现的线程" class="headerlink" title="在内核空间实现的线程"></a>在内核空间实现的线程</h3><p>内核线程包含</p>
+<p>1.内核栈</p>
+<p>中断栈，位于PCB中栈所在页的顶端；线程栈，位置不固定，一般位于中断栈的下方</p>
+<p>2.PCB内容</p>
+<table>
+<thead>
+<tr>
+<th>self_kstack</th>
+<th>内核栈指针</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>status</td>
+<td>线程状态</td>
+</tr>
+<tr>
+<td>name</td>
+<td>线程名</td>
+</tr>
+<tr>
+<td>priority</td>
+<td>优先级</td>
+</tr>
+<tr>
+<td>tick</td>
+<td>每次在处理器上运行的时钟数</td>
+</tr>
+<tr>
+<td>elapsed_tick</td>
+<td>已使用时钟数</td>
+</tr>
+<tr>
+<td>general_tag</td>
+<td>线程在队列上的tag</td>
+</tr>
+<tr>
+<td>all_list_tag</td>
+<td>线程队列</td>
+</tr>
+<tr>
+<td>pgdir</td>
+<td>页表</td>
+</tr>
+<tr>
+<td>stack_magic</td>
+<td>栈溢出标记，位于内核栈下方</td>
+</tr>
+</tbody></table>
+<p>执行过程</p>
+<p>初始化队列信息；如果kernel第一次运行，则为kernel创建PCB；</p>
+<p>kernel启动线程，传入线程参数，进入线程初始化执行；</p>
+<p>1.从内核空间申请页面，加入线程队列，线程指针thread指向该页面底部；</p>
+<p>2.初始化页面为PCB，写入对应信息到PCB，初始化线程内核栈位置为页面顶部，thread-&gt;self_kstack指向线程内核栈；</p>
+<p>3.下移thread-&gt;self_kstack，留出中断栈空间sizeof(intr_stack)</p>
+<p>4.下移thread-&gt;self_kstack，留出线程栈空间sizeof(thread_stack)</p>
+<p>5.创建线程栈指针kthread_stack指向当前thread-&gt;self_kstack，初始化线程栈，压入参数，函数名和返回地址；寄存器初始值压栈；</p>
+<p>6.thread-&gt;self_kstack作为栈顶，此时指向线程栈的最低处，将压栈内容弹出到对应寄存器；执行ret，将压栈的参数，函数名和返回地址弹出，并前往执行对应函数；</p>
+]]></content>
       <categories>
         <category>operation system</category>
       </categories>
       <tags>
         <tag>operation system</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
   </entry>
   <entry>
     <title>第一篇博客</title>
