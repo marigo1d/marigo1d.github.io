@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Algo Learning Record</title>
+    <url>/2024/04/25/Algo-Learning-Record/</url>
+    <content><![CDATA[<p>算法相关学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><p>递归&amp;动态规划</p>
+<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
+
+
+
+<p>递归会重复进入状态</p>
+<p>eg.无权图两点间路径数</p>
+<p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>，转移至下一态；</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>；</p>
+<p>3.到达起点，递归结束，返回记录到达目标点的分支数；递归返回；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>旁侧点</strong>的走法有1种；</p>
+<p>2.到达<strong>次旁侧点</strong>的走法为从<strong>旁侧点</strong>到<strong>次旁侧点</strong>的走法之和；</p>
+<p>3.到达终点的走法为从<strong>终点旁侧点</strong>到终点的走法和；</p>
+<p>eg.有权图两点间最大路径</p>
+<p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>，转移至下一态；</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>；</p>
+<p>3.到达起点，递归结束，返回当前节点值；递归返回；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>旁侧点</strong>的距离可知；</p>
+<p>2.到达<strong>次旁侧点</strong>的最大距离为从<strong>旁侧点</strong>到<strong>次旁侧点</strong>的最大距离；</p>
+<p>3.到达终点的走法为从<strong>终点旁侧点</strong>到终点的最大距离；</p>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
     <title>第一篇博客</title>
     <url>/2024/04/11/first_post/</url>
     <content><![CDATA[<p>写一个测试试一下</p>
@@ -425,52 +471,6 @@
       </categories>
       <tags>
         <tag>operation system</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>Algo Learning Record</title>
-    <url>/2024/04/25/Algo-Learning-Record/</url>
-    <content><![CDATA[<p>算法相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><p>递归&amp;动态规划</p>
-.PNG)
-
-
-
-<p>递归会重复进入状态</p>
-<p>eg.无权图两点间路径数</p>
-<p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>，转移至下一态；</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>；</p>
-<p>3.到达起点，递归结束，返回记录到达目标点的分支数；递归返回；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>旁侧点</strong>的走法有1种；</p>
-<p>2.到达<strong>次旁侧点</strong>的走法为从<strong>旁侧点</strong>到<strong>次旁侧点</strong>的走法之和；</p>
-<p>3.到达终点的走法为从<strong>终点旁侧点</strong>到终点的走法和；</p>
-<p>eg.有权图两点间最大路径</p>
-<p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>，转移至下一态；</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>；</p>
-<p>3.到达起点，递归结束，返回当前节点值；递归返回；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>旁侧点</strong>的距离可知；</p>
-<p>2.到达<strong>次旁侧点</strong>的最大距离为从<strong>旁侧点</strong>到<strong>次旁侧点</strong>的最大距离；</p>
-<p>3.到达终点的走法为从<strong>终点旁侧点</strong>到终点的最大距离；</p>
-]]></content>
-      <categories>
-        <category>algorithm</category>
-      </categories>
-      <tags>
-        <tag>algorithm</tag>
       </tags>
   </entry>
 </search>
