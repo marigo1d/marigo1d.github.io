@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>MIT6_S081_record</title>
+    <title>Op_sys Learning Record</title>
     <url>/2024/04/12/MIT6-S081-record/</url>
-    <content><![CDATA[<p>MIT6-S081课程与操作系统相关学习记录</p>
+    <content><![CDATA[<p>操作系统相关学习记录</p>
 <span id="more"></span>
 
 
@@ -420,15 +420,9 @@
       </tags>
   </entry>
   <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>algorithm</title>
+    <title>Algo Learning Record</title>
     <url>/2024/04/25/algorithm/</url>
-    <content><![CDATA[<p>算法相关学校记录</p>
+    <content><![CDATA[<p>算法相关学习记录</p>
 <span id="more"></span>
 
 
@@ -458,6 +452,9 @@
 <p>2.到达<strong>次旁侧点</strong>的最大距离为从<strong>旁侧点</strong>到<strong>次旁侧点</strong>的最大距离；</p>
 <p>3.到达终点的走法为从<strong>终点旁侧点</strong>到终点的最大距离；</p>
 ]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
       <tags>
         <tag>algorithm</tag>
       </tags>
@@ -469,5 +466,11 @@
 <p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
 <p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
   </entry>
 </search>
