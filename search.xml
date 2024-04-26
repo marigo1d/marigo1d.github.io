@@ -1,46 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>algorithm</title>
-    <url>/2024/04/25/algorithm/</url>
-    <content><![CDATA[<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><p>递归&amp;动态规划</p>
-.PNG)
-
-
-
-<p>递归会重复进入状态</p>
-<p>eg.无权图两点间路径数</p>
-<p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>，转移至下一态；</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>；</p>
-<p>3.到达起点，递归结束，返回记录到达目标点的分支数；递归返回；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>旁侧点</strong>的走法有1种；</p>
-<p>2.到达<strong>次旁侧点</strong>的走法为从<strong>旁侧点</strong>到<strong>次旁侧点</strong>的走法之和；</p>
-<p>3.到达终点的走法为从<strong>终点旁侧点</strong>到终点的走法和；</p>
-<p>eg.有权图两点间最大路径</p>
-<p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>，转移至下一态；</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>；</p>
-<p>3.到达起点，递归结束，返回当前节点值；递归返回；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>旁侧点</strong>的距离可知；</p>
-<p>2.到达<strong>次旁侧点</strong>的最大距离为从<strong>旁侧点</strong>到<strong>次旁侧点</strong>的最大距离；</p>
-<p>3.到达终点的走法为从<strong>终点旁侧点</strong>到终点的最大距离；</p>
-]]></content>
-      <tags>
-        <tag>algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
     <title>MIT6_S081_record</title>
     <url>/2024/04/12/MIT6-S081-record/</url>
     <content><![CDATA[<p>MIT6-S081课程与操作系统相关学习记录</p>
@@ -466,12 +426,48 @@
 <img src="/2024/04/12/pic-test/img.png" class="">]]></content>
   </entry>
   <entry>
-    <title></title>
-    <url>/2024/04/24/%E5%8D%9A%E5%AE%A2%E6%8E%A7%E5%88%B6%E6%8C%87%E4%BB%A4/</url>
-    <content><![CDATA[<p>hexo s	预览</p>
-<p>hexo g	生成文件</p>
-<p>hexo d	上传</p>
-<p>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</p>
+    <title>algorithm</title>
+    <url>/2024/04/25/algorithm/</url>
+    <content><![CDATA[<p>算法相关学校记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><p>递归&amp;动态规划</p>
+.PNG)
+
+
+
+<p>递归会重复进入状态</p>
+<p>eg.无权图两点间路径数</p>
+<p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>，转移至下一态；</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>；</p>
+<p>3.到达起点，递归结束，返回记录到达目标点的分支数；递归返回；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>旁侧点</strong>的走法有1种；</p>
+<p>2.到达<strong>次旁侧点</strong>的走法为从<strong>旁侧点</strong>到<strong>次旁侧点</strong>的走法之和；</p>
+<p>3.到达终点的走法为从<strong>终点旁侧点</strong>到终点的走法和；</p>
+<p>eg.有权图两点间最大路径</p>
+<p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>，转移至下一态；</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>；</p>
+<p>3.到达起点，递归结束，返回当前节点值；递归返回；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>旁侧点</strong>的距离可知；</p>
+<p>2.到达<strong>次旁侧点</strong>的最大距离为从<strong>旁侧点</strong>到<strong>次旁侧点</strong>的最大距离；</p>
+<p>3.到达终点的走法为从<strong>终点旁侧点</strong>到终点的最大距离；</p>
+]]></content>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
 ]]></content>
   </entry>
 </search>
