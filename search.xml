@@ -64,6 +64,12 @@
       </tags>
   </entry>
   <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
     <title>第一篇博客</title>
     <url>/2024/04/11/first_post/</url>
     <content><![CDATA[<p>写一个测试试一下</p>
@@ -181,7 +187,7 @@
 <p>loader程序位于0x900，使用0x900以下部分作为程序栈</p>
 <p>loader实现从实模式到保护模式，并在保护模式加载内核</p>
 <h4 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h4><p>保护模式使机器从16位进入到32位</p>
-<h5 id="全局描述符表"><a href="#全局描述符表" class="headerlink" title="全局描述符表"></a>全局描述符表</h5><p>段寄存器</p>
+<h5 id="段描述符与全局描述符表GDT"><a href="#段描述符与全局描述符表GDT" class="headerlink" title="段描述符与全局描述符表GDT"></a>段描述符与全局描述符表GDT</h5><p>段寄存器</p>
 <p>保存选择子；RPL：特权等级；TI：选择GDT&#x2F;LDT；索引值：GDT&#x2F;LDT表中的第x个段描述符</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416193845119.png" class="" title="image-20240416193845119">
 
@@ -191,16 +197,16 @@
 
 <p>LDTR</p>
 <p>保存LDT的内存地址，<strong>LDT必须在GDT中声明</strong>，通过GDT获得LDT内存地址后写入LDTR后使用LDT</p>
-<p>段描述符</p>
+<p>GDT</p>
+<p>item: 段描述符</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416192952163.png" class="" title="image-20240416192952163">
 
 <p>段基址：32位段基址；</p>
 <p>段界限：对于数据段和代码段，段界限向高地址延申；对于栈，段界限向低地址延申；若偏移量超界错；段大小由 段界限*G 确定，</p>
-<p>S：系统段</p>
+<p>DPL：段特权级</p>
+<p>S：是否系统段</p>
 <p>TYPE：段类型</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240427102403905.png" class="" title="image-20240427102403905">
-
-
 
 
 
@@ -214,6 +220,11 @@
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240427102456078.png" class="" title="image-20240427102456078">
 
 <p>地址计算方式&#x3D;32位段基址+32段偏移</p>
+<h6 id="段描述符与门描述符区别"><a href="#段描述符与门描述符区别" class="headerlink" title="段描述符与门描述符区别"></a>段描述符与门描述符区别</h6><img src="/2024/04/12/Op-sys-Learning-Record/image-20240416192952163.png" class="" title="image-20240416192952163">
+
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240417104649804.png" class="" title="image-20240417104649804">
+
+<p>门描述符中包含了段选择子，指向段描述符</p>
 <h5 id="保护模式的启动"><a href="#保护模式的启动" class="headerlink" title="保护模式的启动"></a>保护模式的启动</h5><p>loader程序</p>
 <p>1.构建GDT，<strong>GDT内容直接定义在loader内</strong></p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240427102121106.png" class="" title="image-20240427102121106">
@@ -277,7 +288,7 @@
 <p>从gdt中获得的段描述符的值为虚拟地址；</p>
 <h3 id="kernel地址空间"><a href="#kernel地址空间" class="headerlink" title="kernel地址空间"></a>kernel地址空间</h3><p>loader中实现kernel写入内核</p>
 <p>loader程序</p>
-<p>13.读磁盘指定扇区，写kernel.bin到物理地址0x70000~0x9fbff</p>
+<p>13.读磁盘指定扇区，写kernel.bin到虚拟地址0xc0070000~0xc009fbff</p>
 <p>14.初始化kernel，将kernel.bin中的segment复制到被编译的虚拟地址处，第一个segment起始于0xc0001500</p>
 <p>15.修改栈指针，跳转至kernel，虚拟地址0xc0001500</p>
 <p>tiny-os kernel地址空间</p>
@@ -324,8 +335,7 @@
 <h3 id="内部中断"><a href="#内部中断" class="headerlink" title="内部中断"></a>内部中断</h3><p>软中断：系统调用</p>
 <p>异常：指针越界，栈溢出</p>
 <h4 id="实模式下的中断向量表"><a href="#实模式下的中断向量表" class="headerlink" title="实模式下的中断向量表"></a>实模式下的中断向量表</h4><p>仅在实模式使用，由BIOS进行创建，位于0x00000~0x003ff</p>
-<p>可使用汇编指令INT x访问，</p>
-<h4 id="保护模式下的中断描述符表"><a href="#保护模式下的中断描述符表" class="headerlink" title="保护模式下的中断描述符表"></a>保护模式下的中断描述符表</h4><p>中断向量号 -&gt; 中断向量表&#x2F;中断描述符表 索引下标</p>
+<h4 id="中断门与保护模式下的中断描述符表IDT"><a href="#中断门与保护模式下的中断描述符表IDT" class="headerlink" title="中断门与保护模式下的中断描述符表IDT"></a>中断门与保护模式下的中断描述符表IDT</h4><p>中断向量号为 中断向量表&#x2F;中断描述符表 的索引下标</p>
 <p>IDTR(Interrupt Descriptor Table Register) 中保存 IDT 位置信息</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240417105214817.png" class="" title="image-20240417105214817">
 
@@ -522,6 +532,14 @@
 <td>用户进程的虚拟地址</td>
 </tr>
 </tbody></table>
+<h4 id="TSS"><a href="#TSS" class="headerlink" title="TSS"></a>TSS</h4><p>TR(Task Register)保存TSS虚拟地址</p>
+<p>Task State Segment	</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240428111029824.png" class="" title="image-20240428111029824">
+
+
+
+<p>CPL(Current Privilege Level)</p>
+<p>RPL(Request Privilege Level)</p>
 <h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p>物理内存被划分为内核内存池和用户内存池</p>
 <p>所有程序（用户程序和内核）存在虚拟地址池，记录虚拟内存是否使用</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240425160621730.png" class="" title="image-20240425160621730">
@@ -562,11 +580,5 @@
       <tags>
         <tag>operation system</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
   </entry>
 </search>
