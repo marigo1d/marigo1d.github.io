@@ -63,14 +63,15 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240417104649804.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240421154614894.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240417110140482.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240424100100197.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240425101059850.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240425101121206.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240506191146645.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240506191245406.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240428111029824.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240424100100197.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240425101059850.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240425101121206.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240507185615764.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240507170811516.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240507173112800.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240416193845119.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240416192952163.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240416192952163.png">
@@ -80,7 +81,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240425160621730.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240421144651548.png">
 <meta property="article:published_time" content="2024-04-12T10:47:23.000Z">
-<meta property="article:modified_time" content="2024-05-06T13:37:47.482Z">
+<meta property="article:modified_time" content="2024-05-07T11:02:11.493Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="operation system">
 <meta name="twitter:card" content="summary">
@@ -273,7 +274,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-05-06 21:37:47" itemprop="dateModified" datetime="2024-05-06T21:37:47+08:00">2024-05-06</time>
+                <time title="Modified: 2024-05-07 19:02:11" itemprop="dateModified" datetime="2024-05-07T19:02:11+08:00">2024-05-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -628,16 +629,23 @@
 
 
 
-<h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><p>进程有各自的页表</p>
-<p>进程&#x3D;线程+资源</p>
+<h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><h3 id="TSS"><a href="#TSS" class="headerlink" title="TSS"></a>TSS</h3><p>TR(Task Register)保存TSS虚拟地址</p>
+<p>Task State Segment	</p>
+<p>TSS描述符保存于GDT</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240506191146645.png" class="" title="image-20240506191146645">
+
+<p>TSS内容</p>
+<p>保存任务快照（任务被换上&#x2F;换下CPU时）</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240506191245406.png" class="" title="image-20240506191245406">
+
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240428111029824.png" class="" title="image-20240428111029824">
+
+<p>Linux系统不通过切换TSS实现任务切换</p>
+<p>每个CPU上的所有任务共享一个TSS，并由该CPU的TR保存；进程切换时，改变TSS中SS0和esp0的值，任务上下文压入<strong>内核中断栈</strong>保存</p>
+<p>所有进程的代码段，数据段等描述符均保存在GDT中</p>
+<h3 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h3><p>进程&#x3D;线程+资源</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240424100100197.png" class="" title="image-20240424100100197">
 
-
-
-<h3 id="在内核空间实现的线程与调度"><a href="#在内核空间实现的线程与调度" class="headerlink" title="在内核空间实现的线程与调度"></a>在内核空间实现的线程与调度</h3><p>内核线程包含</p>
-<p>1.内核栈</p>
-<p>中断栈，位于PCB中栈所在页的顶端；线程栈，位置不固定，一般位于中断栈的下方</p>
-<p>2.PCB内容</p>
 <table>
 <thead>
 <tr>
@@ -648,6 +656,10 @@
 <tbody><tr>
 <td>self_kstack</td>
 <td>内核栈指针</td>
+</tr>
+<tr>
+<td>pid</td>
+<td></td>
 </tr>
 <tr>
 <td>status</td>
@@ -682,113 +694,24 @@
 <td>页表</td>
 </tr>
 <tr>
-<td>stack_magic</td>
-<td>栈溢出标记，位于内核栈下方</td>
-</tr>
-</tbody></table>
-<p>线程创建过程</p>
-<p>初始化PCB队列信息；如果kernel第一次运行，则为kernel创建PCB；</p>
-<p>kernel启动线程，传入线程参数（线程PCB地址，线程名和优先级），启动线程：</p>
-<p>1.初始化线程</p>
-<p>从内核空间申请页面，清洗页面，初始化线程名；</p>
-<p>根据线程名初始化线程状态；</p>
-<p>初始化优先级，时间片上限，已使用时间片，页目录表地址，内核栈指针，魔数；</p>
-<p>加入线程队列，线程指针thread指向该页面底部；</p>
-<p>2.初始化内核栈</p>
-<p>线程内核栈位置为PCB页面顶部（高地址），thread-&gt;self_kstack为线程内核栈指针；</p>
-<p>下移thread-&gt;self_kstack，留出中断栈空间sizeof(intr_stack)</p>
-<img src="/2024/04/12/Op-sys-Learning-Record/image-20240425101059850.png" class="" title="image-20240425101059850">
-
-<p>下移thread-&gt;self_kstack，留出线程栈空间sizeof(thread_stack)</p>
-<img src="/2024/04/12/Op-sys-Learning-Record/image-20240425101121206.png" class="" title="image-20240425101121206">
-
-
-
-<p>创建线程栈指针kthread_stack，指向当前thread-&gt;self_kstack指针位置，</p>
-<p>初始化线程栈，依次写入eip，函数名，函数参数和寄存器初始值ebp,ebx,esi,edi；</p>
-<p>thread-&gt;self_kstack此时位于线程栈栈顶，栈顶内容为edi，esi，ebx，ebp，函数参数，函数名，eip；</p>
-<p>执行ret指令，将压栈的函数参数，函数名和返回地址弹出，并前往执行对应函数；</p>
-<p>线程执行与调度过程：</p>
-<p>定时器定时发生0x20中断，中断发生后调用中断处理函数intr_timer_handler，该函数对当前运行线程的PCB进行操作：检测栈是否溢出，记录该线程占用的CPU时钟数，若时间片已耗尽进行调度，未耗尽减少可用时间片；</p>
-<h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>进程包含</p>
-<p>1.内核栈</p>
-<p>中断栈，位于PCB中栈所在页的顶端；线程栈，位置不固定，一般位于中断栈的下方</p>
-<p>2.PCB内容</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>self_kstack</td>
-<td>内核栈指针</td>
+<td>userprog_vaddr</td>
+<td>用户进程虚拟地址池</td>
 </tr>
 <tr>
-<td>status</td>
-<td>线程状态</td>
-</tr>
-<tr>
-<td>name</td>
-<td>线程名</td>
-</tr>
-<tr>
-<td>priority</td>
-<td>优先级</td>
-</tr>
-<tr>
-<td>tick</td>
-<td>每次在处理器上运行的时钟数</td>
-</tr>
-<tr>
-<td>elapsed_tick</td>
-<td>已使用时钟数</td>
-</tr>
-<tr>
-<td>general_tag</td>
-<td>线程在队列上的tag</td>
-</tr>
-<tr>
-<td>all_list_tag</td>
-<td>线程队列</td>
-</tr>
-<tr>
-<td>pgdir</td>
-<td>页表<strong>虚拟地址</strong></td>
+<td>u_block_desc[DESC_CNT]</td>
+<td>用户内存块描述符表</td>
 </tr>
 <tr>
 <td>stack_magic</td>
 <td>栈溢出标记，位于内核栈下方</td>
 </tr>
-<tr>
-<td>virtual_addr_userprog_vaddr</td>
-<td>用户进程的虚拟地址</td>
-</tr>
 </tbody></table>
-<h4 id="TSS"><a href="#TSS" class="headerlink" title="TSS"></a>TSS</h4><p>TR(Task Register)保存TSS虚拟地址</p>
-<p>Task State Segment	</p>
-<p>TSS描述符保存于GDT</p>
-<img src="/2024/04/12/Op-sys-Learning-Record/image-20240506191146645.png" class="" title="image-20240506191146645">
-
-<p>TSS内容</p>
-<p>保存任务快照（任务被换上&#x2F;换下CPU时）</p>
-<img src="/2024/04/12/Op-sys-Learning-Record/image-20240506191245406.png" class="" title="image-20240506191245406">
-
-<img src="/2024/04/12/Op-sys-Learning-Record/image-20240428111029824.png" class="" title="image-20240428111029824">
-
-<p>Linux系统不通过切换TSS实现任务切换</p>
-<p>每个CPU上的所有任务共享一个TSS，并由该CPU的TR保存；进程切换时，改变TSS中SS0和esp0的值，任务上下文压入<strong>内核中断栈</strong>保存</p>
-<p>所有进程的代码段，数据段等描述符均保存在GDT中</p>
-<h4 id="实现的用户进程与调度"><a href="#实现的用户进程与调度" class="headerlink" title="实现的用户进程与调度"></a>实现的用户进程与调度</h4><p>PCB内容</p>
-<p>虚拟地址池：用于记录用户程序所使用的虚拟地址空间</p>
-<p>进程页目录表虚拟地址</p>
-<p>进程创建过程</p>
+<h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>进程创建过程</p>
 <p>kernel启动进程，传入进程参数（进程文件名和进程名），启动进程。</p>
 <p>1.初始化线程</p>
-<p>从内核空间申请页面，清洗页面，初始化线程名为进程名；</p>
-<p>根据线程名初始化线程状态；</p>
-<p>初始化优先级，时间片上限，已使用时间片，页目录表地址，内核栈指针，魔数；</p>
+<p>从内核空间申请页面，清洗页面，初始化线程名为线程&#x2F;进程名；</p>
+<p>根据线程&#x2F;进程名初始化线程状态；</p>
+<p>初始化优先级，时间片上限，已使用时间片，页目录表地址，内核栈指针，魔数等；</p>
 <p>加入线程队列，线程指针thread指向该页面底部；</p>
 <p>2.创建用户进程的虚拟地址池</p>
 <p>用户进程虚拟地址池位于PCB中</p>
@@ -812,16 +735,43 @@
 <p>从内核分配一页作为进程页目录表</p>
 <p>将内核页目录表的高半部分（对应内核空间部分）项复制到进程页目录表中</p>
 <p>设置最后一项页表的地址为页目录表地址</p>
-<p>5.调度链表</p>
+<p>4.5 初始化用户内存块表</p>
+<p>5.加入调度链表</p>
 <p>关中断；</p>
 <p>将进程加入调度链表；</p>
 <p>开中断；</p>
 <p>进程执行</p>
-<p>移动线程栈指针kthread_stack指向intr_stack顶部，线程栈底</p>
-<p>写入中断栈，依次写入很多内容</p>
-<p>thread-&gt;self_kstack此时位于中断栈栈顶，栈顶内容为很多；</p>
-<p>执行中断返回指令，将压栈的函数参数，函数名和返回地址弹出，并前往执行对应函数；</p>
-<p>切换当前进程页表</p>
+<p>构建用户进程初始上下文信息</p>
+<p>移动线程栈指针kthread_stack指向intr_stack顶部，线程栈底部</p>
+<p>写入中断栈，依次写入edi, esi, ebp, esp_dummy</p>
+<p>ebx, edx, ecx, eax, gs, </p>
+<p>ds, es, fs, eip, cs, eflag, esp, ss, 此类寄存器中值均为用户空间，为通过中断返回的方式进入3特权级做准备</p>
+<p>thread-&gt;self_kstack此时位于中断栈栈顶，栈顶内容为：</p>
+<p>vec_no, edi, esi, ebp, esp_dummy……</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240507185615764.png" class="" title="image-20240507185615764">
+
+
+
+<p>将esp设置为中断栈栈顶指针thread-&gt;self_kstack，</p>
+<p>jmp intr_exit，跳过压入的中断向量号vec_no，popad弹出所有通用寄存器值，pop gs，fs，es，ds，跳过错误码；此时栈顶为：eip值为filename（指向用户进程入口地址），cs值为SELECTOR_U_CODE，eflag为(EFLAGS_IOPL_0 | EFLAGS_MBS | EFLAGS_IF_1);</p>
+<p>前往执行对应函数，进入特权级3；</p>
+<h3 id="基于线程的调度"><a href="#基于线程的调度" class="headerlink" title="基于线程的调度"></a>基于线程的调度</h3><p>每一个线程均拥有一个PCB，PCB是调度的基础</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240507170811516.png" class="" title="image-20240507170811516">
+
+<p>1.发生中断时，CPU根据中断向量号和IDTR给出中断入口程序的段选择子和偏移：段选择子-&gt;GDT-&gt;页表+偏移得到物理地址；</p>
+<p>2.中断入口程序保护线程上下文，将寄存器ds, es, fs, gs压入当前线程的中断栈，根据中断向量号前往中断服务程序</p>
+<p>3.中断服务程序提供服务：进行线程调度</p>
+<p>此时已内核，中断服务程序进行判断：若时间片耗尽，将该线程加入就绪队列；若未耗尽，时间片自减；</p>
+<p>根据调度链表获得下一个线程，修改CR3为该线程所属进程的页表物理地址<a href="%E6%AD%A4%E6%97%B6%E9%A1%B5%E8%A1%A8%E5%B7%B2%E7%BB%8F%E4%BB%8E%E5%8E%9F%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2%E4%B8%BA%E4%B8%8B%E4%B8%80%E7%BA%BF%E7%A8%8B%EF%BC%8C%E4%BD%86%E7%94%B1%E4%BA%8E%E6%89%80%E6%9C%89%E8%BF%9B%E7%A8%8B%E5%85%B1%E4%BA%AB%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%EF%BC%8C%E6%95%85%E9%A1%B5%E8%A1%A8%E7%9A%84%E5%88%87%E6%8D%A2%E4%B8%8D%E5%BD%B1%E5%93%8D%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%AD%E5%AF%B9PCB%E7%9A%84%E6%93%8D%E4%BD%9C">^注</a></p>
+<p>4.开始任务切换</p>
+<p>中断服务程序call函数swith_to</p>
+<p>swith_to函数保护内核上下文，将寄存器esi, edi, ebx, ebp压入被中断线程PCB的内核栈，将当前栈指针esp写入被中断线程PCB的self_kstack；</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240507173112800.png" class="" title="image-20240507173112800">
+
+<p>将下一个线程的self_kstack写入esp，切换内核栈从原线程到下一线程，将下一线程内核栈中的寄存器值esi, edi, ebx, ebp出栈，根据栈顶返回地址执行ret指令；</p>
+<p>5.ret执行返回至中断入口程序，中断入口程序jmp至intr_exit，将下一线程的上下文恢复至寄存器中，</p>
+<p>&#x2F;&#x2F;4.返回中断入口程序，中断入口程序恢复原线程上下文</p>
+<p>&#x2F;&#x2F;5.中断返回程序</p>
 <h2 id="特权级"><a href="#特权级" class="headerlink" title="特权级"></a>特权级</h2><p>CPL(Current Privilege Level)  当前代码特权级</p>
 <p>为当前运行代码段的特权级，保存于CS寄存器中段选择子的RPL(2位)处</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416193845119.png" class="" title="image-20240416193845119">
@@ -965,7 +915,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Opsys-learning-record"><span class="nav-text">Opsys_learning_record</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6"><span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6"><span class="nav-text">软件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8"><span class="nav-text">系统启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF"><span class="nav-text">基础信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Intel-8086%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">Intel 8086地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SiFive-FU540%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">SiFive FU540地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E5%AD%98%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">显存地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-text">寄存器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Intel%E6%B1%87%E7%BC%96%E8%AF%AD%E6%B3%95"><span class="nav-text">Intel汇编语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AT-T%E6%B1%87%E7%BC%96%E8%AF%AD%E6%B3%95"><span class="nav-text">AT&amp;T汇编语法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BIOS"><span class="nav-text">BIOS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MBR%E4%B8%8ELoader"><span class="nav-text">MBR与Loader</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GDT-LDT%E4%B8%8ETSS"><span class="nav-text">GDT, LDT与TSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MBR"><span class="nav-text">MBR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#loader"><span class="nav-text">loader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F"><span class="nav-text">保护模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E5%85%A8%E5%B1%80%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8GDT"><span class="nav-text">段描述符与全局描述符表GDT</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E9%97%A8%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%8C%BA%E5%88%AB"><span class="nav-text">段描述符与门描述符区别</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%90%AF%E5%8A%A8"><span class="nav-text">保护模式的启动</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%B5%E8%A1%A8%E7%BB%84%E6%88%90%E4%B8%8E%E6%9E%84%E5%BB%BA"><span class="nav-text">页表组成与构建</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%A1%B5%E8%A1%A8%E6%9E%84%E5%BB%BA%E4%B8%8E%E8%BF%9B%E5%85%A5%E5%88%86%E9%A1%B5%E6%A8%A1%E5%BC%8F"><span class="nav-text">页表构建与进入分页模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kernel%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">kernel地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%A8%8B%E5%BA%8F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">用户程序地址空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD"><span class="nav-text">中断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD"><span class="nav-text">外部中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E4%B8%AD%E6%96%AD"><span class="nav-text">内部中断</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8"><span class="nav-text">实模式下的中断向量表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E9%97%A8%E4%B8%8E%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8IDT"><span class="nav-text">中断门与保护模式下的中断描述符表IDT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">中断初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="nav-text">中断处理过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F"><span class="nav-text">中断处理程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-text">进程与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%B0%83%E5%BA%A6"><span class="nav-text">在内核空间实现的线程与调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TSS"><span class="nav-text">TSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B%E4%B8%8E%E8%B0%83%E5%BA%A6"><span class="nav-text">实现的用户进程与调度</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%9D%83%E7%BA%A7"><span class="nav-text">特权级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%A8%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="nav-text">门描述符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B"><span class="nav-text">访问过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-text">内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%90%AF%E5%8A%A8"><span class="nav-text">内存管理启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kernel%E7%A8%8B%E5%BA%8F"><span class="nav-text">kernel程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VX6-kernel%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9"><span class="nav-text">VX6 kernel程序内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tiny-os-kernel%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9"><span class="nav-text">tiny-os kernel程序内容</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Opsys-learning-record"><span class="nav-text">Opsys_learning_record</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6"><span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6"><span class="nav-text">软件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8"><span class="nav-text">系统启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF"><span class="nav-text">基础信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Intel-8086%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">Intel 8086地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SiFive-FU540%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">SiFive FU540地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E5%AD%98%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">显存地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-text">寄存器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Intel%E6%B1%87%E7%BC%96%E8%AF%AD%E6%B3%95"><span class="nav-text">Intel汇编语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AT-T%E6%B1%87%E7%BC%96%E8%AF%AD%E6%B3%95"><span class="nav-text">AT&amp;T汇编语法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BIOS"><span class="nav-text">BIOS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MBR%E4%B8%8ELoader"><span class="nav-text">MBR与Loader</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GDT-LDT%E4%B8%8ETSS"><span class="nav-text">GDT, LDT与TSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MBR"><span class="nav-text">MBR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#loader"><span class="nav-text">loader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F"><span class="nav-text">保护模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E5%85%A8%E5%B1%80%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8GDT"><span class="nav-text">段描述符与全局描述符表GDT</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E9%97%A8%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%8C%BA%E5%88%AB"><span class="nav-text">段描述符与门描述符区别</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%90%AF%E5%8A%A8"><span class="nav-text">保护模式的启动</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%B5%E8%A1%A8%E7%BB%84%E6%88%90%E4%B8%8E%E6%9E%84%E5%BB%BA"><span class="nav-text">页表组成与构建</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%A1%B5%E8%A1%A8%E6%9E%84%E5%BB%BA%E4%B8%8E%E8%BF%9B%E5%85%A5%E5%88%86%E9%A1%B5%E6%A8%A1%E5%BC%8F"><span class="nav-text">页表构建与进入分页模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kernel%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">kernel地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%A8%8B%E5%BA%8F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">用户程序地址空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD"><span class="nav-text">中断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD"><span class="nav-text">外部中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E4%B8%AD%E6%96%AD"><span class="nav-text">内部中断</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8"><span class="nav-text">实模式下的中断向量表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E9%97%A8%E4%B8%8E%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8IDT"><span class="nav-text">中断门与保护模式下的中断描述符表IDT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">中断初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="nav-text">中断处理过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F"><span class="nav-text">中断处理程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-text">进程与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TSS"><span class="nav-text">TSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PCB"><span class="nav-text">PCB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%BA%BF%E7%A8%8B%E7%9A%84%E8%B0%83%E5%BA%A6"><span class="nav-text">基于线程的调度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%9D%83%E7%BA%A7"><span class="nav-text">特权级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%A8%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="nav-text">门描述符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B"><span class="nav-text">访问过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-text">内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%90%AF%E5%8A%A8"><span class="nav-text">内存管理启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kernel%E7%A8%8B%E5%BA%8F"><span class="nav-text">kernel程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VX6-kernel%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9"><span class="nav-text">VX6 kernel程序内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tiny-os-kernel%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9"><span class="nav-text">tiny-os kernel程序内容</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
