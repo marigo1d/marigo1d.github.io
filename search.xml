@@ -1,83 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Algo Learning Record</title>
-    <url>/2024/04/25/Algo-Learning-Record/</url>
-    <content><![CDATA[<p>算法相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><h3 id="DP问题分析"><a href="#DP问题分析" class="headerlink" title="DP问题分析"></a>DP问题分析</h3><p>递归&amp;动态规划</p>
-<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
-
-<p>递归会重复进入状态，DP不会</p>
-<p>递归一个起点，多个终点；</p>
-<p>DP多个起点，一个终点；</p>
-<p>DP核心：</p>
-<p>1.确定状态和动作</p>
-<p>2.确定起点和终点</p>
-<h3 id="无权图两点间路径数"><a href="#无权图两点间路径数" class="headerlink" title="无权图两点间路径数"></a>无权图两点间<strong>路径数</strong></h3><p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果相加。</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
-<p>3.到达起点，当前递归结束，返回；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>邻接点</strong>的走法已知；</p>
-<p>2.到达<strong>次邻接点</strong>的走法为从<strong>邻接点</strong>到<strong>次邻接点</strong>的走法之和；</p>
-<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的走法之和；</p>
-<p>实例：</p>
-<img src="/2024/04/25/Algo-Learning-Record/image-20240426101614103.png" class="" title="image-20240426101614103">
-
-<p>递归</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCount</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">1</span> || n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> pathsCount(m - <span class="number">1</span>, n) + pathsCount(m , n -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>DP</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCounts</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="有权图两点间最大路径"><a href="#有权图两点间最大路径" class="headerlink" title="有权图两点间最大路径"></a>有权图两点间<strong>最大路径</strong></h3><p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果取最大。</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
-<p>3.到达起点，当前递归结束，返回当前节点值；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>邻接点</strong>的距离可知；</p>
-<p>2.到达<strong>次邻接点</strong>的最大距离为从<strong>邻接点</strong>到<strong>次邻接点</strong>的最大距离；</p>
-<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的最大距离；</p>
-<p>实例：</p>
-<img src="/2024/04/25/Algo-Learning-Record/image-20240426102031155.png" class="" title="image-20240426102031155">
-
-<p>递归</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> getMin(grid, m-<span class="number">1</span>, n-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getMin</span><span class="params">(<span class="type">int</span>[][] grid, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">minRow</span> <span class="operator">=</span> getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    <span class="type">int</span> <span class="variable">minColumn</span> <span class="operator">=</span> getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grid[i][j] + Math.min(minRow, minColumn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>DP</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m ;i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n;i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = grid[i][j] + Math.min(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>algorithm</category>
-      </categories>
-      <tags>
-        <tag>algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
     <title>Op_sys Learning Record</title>
     <url>/2024/04/12/Op-sys-Learning-Record/</url>
     <content><![CDATA[<p>操作系统相关学习记录</p>
@@ -622,5 +545,82 @@
       <tags>
         <tag>operation system</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Algo Learning Record</title>
+    <url>/2024/04/25/Algo-Learning-Record/</url>
+    <content><![CDATA[<p>算法相关学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><h3 id="DP问题分析"><a href="#DP问题分析" class="headerlink" title="DP问题分析"></a>DP问题分析</h3><p>递归&amp;动态规划</p>
+<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
+
+<p>递归会重复进入状态，DP不会</p>
+<p>递归一个起点，多个终点；</p>
+<p>DP多个起点，一个终点；</p>
+<p>DP核心：</p>
+<p>1.确定状态和动作</p>
+<p>2.确定起点和终点</p>
+<h3 id="无权图两点间路径数"><a href="#无权图两点间路径数" class="headerlink" title="无权图两点间路径数"></a>无权图两点间<strong>路径数</strong></h3><p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果相加。</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
+<p>3.到达起点，当前递归结束，返回；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>邻接点</strong>的走法已知；</p>
+<p>2.到达<strong>次邻接点</strong>的走法为从<strong>邻接点</strong>到<strong>次邻接点</strong>的走法之和；</p>
+<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的走法之和；</p>
+<p>实例：</p>
+<img src="/2024/04/25/Algo-Learning-Record/image-20240426101614103.png" class="" title="image-20240426101614103">
+
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCount</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">1</span> || n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> pathsCount(m - <span class="number">1</span>, n) + pathsCount(m , n -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>DP</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCounts</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="有权图两点间最大路径"><a href="#有权图两点间最大路径" class="headerlink" title="有权图两点间最大路径"></a>有权图两点间<strong>最大路径</strong></h3><p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果取最大。</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
+<p>3.到达起点，当前递归结束，返回当前节点值；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>邻接点</strong>的距离可知；</p>
+<p>2.到达<strong>次邻接点</strong>的最大距离为从<strong>邻接点</strong>到<strong>次邻接点</strong>的最大距离；</p>
+<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的最大距离；</p>
+<p>实例：</p>
+<img src="/2024/04/25/Algo-Learning-Record/image-20240426102031155.png" class="" title="image-20240426102031155">
+
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> getMin(grid, m-<span class="number">1</span>, n-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getMin</span><span class="params">(<span class="type">int</span>[][] grid, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">minRow</span> <span class="operator">=</span> getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    <span class="type">int</span> <span class="variable">minColumn</span> <span class="operator">=</span> getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grid[i][j] + Math.min(minRow, minColumn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>DP</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m ;i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n;i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = grid[i][j] + Math.min(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
   </entry>
 </search>
