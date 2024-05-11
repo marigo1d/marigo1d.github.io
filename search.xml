@@ -610,18 +610,18 @@
       </tags>
   </entry>
   <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
     <title>第一篇博客</title>
     <url>/2024/04/11/first_post/</url>
     <content><![CDATA[<p>写一个测试试一下</p>
 <p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
 <p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
   </entry>
   <entry>
     <title>pytorch_learning_record</title>
@@ -666,6 +666,7 @@
 <p>Pow代表乘方；</p>
 <p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
 <h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
+<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
 <p>y &#x3D; (x + w) * (w + 1)</p>
 <p>a &#x3D; x+w</p>
 <p>b &#x3D; w + 1</p>
@@ -716,6 +717,12 @@
 
 
 
+<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
+
+<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
+
 
 
 <h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
@@ -763,6 +770,13 @@
 
 <p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
 <p>.backward()方法仅适用于标量</p>
+<p>.register_hook()</p>
+<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
+<p>获取中间tensor的grad值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
+
+
+
 ]]></content>
       <tags>
         <tag>python, pytorch</tag>
