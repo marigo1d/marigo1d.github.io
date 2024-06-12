@@ -39,6 +39,10 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240610204152914.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240610213003398.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240610213050168.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612093758370.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612093948192.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612093958259.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612094048209.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240610204627264.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/shiow.PNG">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240610205402396.png">
@@ -57,10 +61,22 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240611162513650.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240611162624769.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240611191221769.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612100452913.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240611194333945.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612100509915.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612100629893.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240610213003398.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612100732404.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612102026769.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612102256431.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240611200059062.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612110026419.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612110241521.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612110951796.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612111022161.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612110750284.png">
 <meta property="article:published_time" content="2024-06-10T12:29:05.000Z">
-<meta property="article:modified_time" content="2024-06-11T12:02:10.797Z">
+<meta property="article:modified_time" content="2024-06-12T03:30:04.623Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="python, reinforce learning">
 <meta name="twitter:card" content="summary">
@@ -253,7 +269,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-06-11 20:02:10" itemprop="dateModified" datetime="2024-06-11T20:02:10+08:00">2024-06-11</time>
+                <time title="Modified: 2024-06-12 11:30:04" itemprop="dateModified" datetime="2024-06-12T11:30:04+08:00">2024-06-12</time>
               </span>
 
           
@@ -308,13 +324,26 @@
 <h3 id="状态价值函数与动作价值函数关系"><a href="#状态价值函数与动作价值函数关系" class="headerlink" title="状态价值函数与动作价值函数关系"></a>状态价值函数与动作价值函数关系</h3><img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
 
 <ul>
-<li>从状态s出发，可能采取动作a1, a2, a3, …;对于每个可能采取的动作，均有动作价值Q， 状态价值为所有动作价值的和</li>
+<li>从状态s出发，可能采取动作a1, a2, a3, …;对于每个可能采取的动作，均有动作价值Q，则状态s的状态价值为所有动作价值的期望</li>
 </ul>
 <img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
 
 <ul>
 <li>在状态s执行动作a后，得到奖励r(s,a)；由于可能到达多个不同的状态s’，动作价值为即时奖励r(s,a)+可能到达的所有状态的价值的期望</li>
 </ul>
+<h3 id="最优策略"><a href="#最优策略" class="headerlink" title="最优策略"></a>最优策略</h3><p>策略之间的偏序关系</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093758370.png" class="" title="image-20240612093758370">
+
+<p>最优策略为 对于任意的策略，均有最优策略优于或不差于其他策略</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093948192.png" class="" title="image-20240612093948192">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093958259.png" class="" title="image-20240612093958259">
+
+<p>最优状态价值与最优动作价值的关系</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612094048209.png" class="" title="image-20240612094048209">
+
+
+
 <h3 id="贝尔曼期望方程"><a href="#贝尔曼期望方程" class="headerlink" title="贝尔曼期望方程"></a>贝尔曼期望方程</h3><p>采取策略Π</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240610204627264.png" class="" title="image-20240610204627264">
 
@@ -324,6 +353,7 @@
 </ul>
 <img src="/2024/06/10/reinforce-learning-record/shiow.PNG" class="" title="shiow">
 
+<p>图中情况为每个动作只会到达一个状态&amp;应该直接将动作视为一个节点，图为树</p>
 <h3 id="贝尔曼最优方程"><a href="#贝尔曼最优方程" class="headerlink" title="贝尔曼最优方程"></a>贝尔曼最优方程</h3><p>存在策略*，使对于任意的状态s，均有基于策略*状态价值函数大于基于策略Π的状态价值函数</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240610205402396.png" class="" title="image-20240610205402396">
 
@@ -421,21 +451,83 @@
 <li>增量更新体现在 减号前部分为 (新 状态s的状态价值)，减号后部分为 (旧 状态s的状态价值)</li>
 </ul>
 <h3 id="Sarsa算法"><a href="#Sarsa算法" class="headerlink" title="Sarsa算法"></a>Sarsa算法</h3><p>Value-based + online</p>
-<p>类似于时序差分算法，对动作价值进行更新</p>
+<p>类似于时序差分算法，对动作价值进行更新，目标是估计 <strong>ε-greedy策略的动作价值函数</strong></p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240611191221769.png" class="" title="image-20240611191221769">
 
-<p>ε-greedy 选择 随机动作 or 最大动作价值-&gt;动作</p>
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100452913.png" class="" title="image-20240612100452913">
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1, a1] - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="Q-learning算法"><a href="#Q-learning算法" class="headerlink" title="Q-learning算法"></a>Q-learning算法</h3><p>Value-based + offline</p>
-<p>对动作价值进行更新</p>
+<p>对动作价值进行更新，目标是估计 <strong>最优策略的动作价值函数</strong></p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240611194333945.png" class="" title="image-20240611194333945">
+
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100509915.png" class="" title="image-20240612100509915">
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1].max() - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+
+
 
 <h3 id="DQN-DDQN"><a href="#DQN-DDQN" class="headerlink" title="DQN&#x2F;DDQN"></a>DQN&#x2F;DDQN</h3><p>Value-based + offline</p>
 <p>将Q-learning的Q表换成net</p>
 <h3 id="策略梯度算法-REINFORCE"><a href="#策略梯度算法-REINFORCE" class="headerlink" title="策略梯度算法(REINFORCE)"></a>策略梯度算法(REINFORCE)</h3><p>Policy-based + online</p>
-<p>算法流程：</p>
+<p>定义策略学习的目标函数为，s0为初始状态</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100629893.png" class="" title="image-20240612100629893">
+
+<p>目标是修改参数θ，使J(θ)取最大；即对θ求导</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100732404.png" class="" title="image-20240612100732404">
+
+<p>where 第一行第一个求和符号后的对象为 策略的<strong>状态访问分布</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612102026769.png" class="" title="image-20240612102026769">
+
+<p>策略的状态访问分布表示该策略和在环境中会访问到的状态的分布情况(即到达每个状态的概率)</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612102256431.png" class="" title="image-20240612102256431">
+
+<p>故该求导表示 对于每个状态，我们有一定的概率在该状态，从该状态出发，策略决定了我们能获得的价值的期望</p>
+<p>算法</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240611200059062.png" class="" title="image-20240611200059062">
 
-<h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3>
+<p>时刻t向后的回报即为(动作)价值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">reward_list = transition_dict[<span class="string">&#x27;rewards&#x27;</span>]</span><br><span class="line">state_list = transition_dict[<span class="string">&#x27;states&#x27;</span>]</span><br><span class="line">action_list = transition_dict[<span class="string">&#x27;actions&#x27;</span>]</span><br><span class="line"></span><br><span class="line">G = <span class="number">0</span></span><br><span class="line">self.optimizer.zero_grad()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(<span class="built_in">len</span>(reward_list))):  <span class="comment"># 从最后一步算起</span></span><br><span class="line">    reward = reward_list[i]  <span class="comment"># 取时间步i获得的奖励</span></span><br><span class="line">    state = torch.tensor([state_list[i]],</span><br><span class="line">                         dtype=torch.<span class="built_in">float</span>).to(self.device)  <span class="comment"># 取时间步i的状态</span></span><br><span class="line">    action = torch.tensor([action_list[i]]).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)  <span class="comment"># 取时间步i的动作</span></span><br><span class="line">    log_prob = torch.log(self.policy_net(state).gather(<span class="number">1</span>, action))</span><br><span class="line">    <span class="comment"># self.policy_net(state)： 将状态输入策略网络，得到所有可能动作的概率分布。</span></span><br><span class="line">	<span class="comment"># .gather(1, action): 从概率分布中选取实际执行动作对应的概率值。</span></span><br><span class="line">	<span class="comment"># torch.log(...): 对选取的概率值取对数，得到对数概率</span></span><br><span class="line">    G = self.gamma * G + reward  <span class="comment"># G累计了从当前时间步i到episode结束的所有奖励</span></span><br><span class="line">    loss = -log_prob * G  <span class="comment"># loss对应公式中符号α后的部分</span></span><br><span class="line">    loss.backward()  <span class="comment"># 反向传播计算梯度</span></span><br><span class="line">self.optimizer.step()  <span class="comment"># 梯度下降，实际上是对策略进行求导</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3><p>(Value + Policy)-based + offline</p>
+<p>策略函数梯度表示为</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110026419.png" class="" title="image-20240612110026419">
+
+<p>ψ_t可为不同值，表示不同的方法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110241521.png" class="" title="image-20240612110241521">
+
+
+
+<p>价值函数的损失函数与梯度表示为</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110951796.png" class="" title="image-20240612110951796">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612111022161.png" class="" title="image-20240612111022161">
+
+
+
+<p>Actor（策略网络）和 Critic（价值网络）</p>
+<ul>
+<li><p>Actor 要做的是与环境交互，并在 Critic 价值函数的指导下用策略梯度学习一个更好的策略。</p>
+</li>
+<li><p>Critic 要做的是通过 Actor 与环境交互收集的数据学习一个价值函数，这个价值函数会用于判断在当前状态什么动作是好的，什么动作不是好的，进而帮助 Actor 进行策略更新。</p>
+</li>
+</ul>
+<p>基于<strong>时序差分(TD)<strong>方法的</strong>Actor-Critic</strong>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110750284.png" class="" title="image-20240612110750284">
+
+<p>价值网络使用时序差分(TD)更新，策略网络使用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络 (critic) - 时序差分</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络 (critic) 预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络 (actor) </span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数，使用均方误差 (MSE)。使用价值网络获得</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
+
+
     </div>
 
     
@@ -515,7 +607,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#reinforce-learning-record"><span class="nav-text">reinforce learning record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MRP"><span class="nav-text">MRP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%8A%A5"><span class="nav-text">回报</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">价值函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MDP"><span class="nav-text">MDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5"><span class="nav-text">策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">状态价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">动作价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E4%B8%8E%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E5%85%B3%E7%B3%BB"><span class="nav-text">状态价值函数与动作价值函数关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%9F%E6%9C%9B%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼期望方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼最优方程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">策略迭代算法&#x2F;基于策略函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">价值迭代算法&#x2F;基于价值函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E6%A8%A1%E5%9E%8B-%E6%97%A0%E6%A8%A1%E5%9E%8B-%E5%9C%A8%E7%BA%BF%E7%AD%96%E7%95%A5-%E7%A6%BB%E7%BA%BF%E7%AD%96%E7%95%A5"><span class="nav-text">有模型&amp;无模型+在线策略&amp;离线策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95"><span class="nav-text">蒙特卡洛方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%E7%AE%97%E6%B3%95"><span class="nav-text">时序差分算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sarsa%E7%AE%97%E6%B3%95"><span class="nav-text">Sarsa算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning%E7%AE%97%E6%B3%95"><span class="nav-text">Q-learning算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DQN-DDQN"><span class="nav-text">DQN&#x2F;DDQN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E7%AE%97%E6%B3%95-REINFORCE"><span class="nav-text">策略梯度算法(REINFORCE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor-Critic"><span class="nav-text">Actor-Critic</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#reinforce-learning-record"><span class="nav-text">reinforce learning record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MRP"><span class="nav-text">MRP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%8A%A5"><span class="nav-text">回报</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">价值函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MDP"><span class="nav-text">MDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5"><span class="nav-text">策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">状态价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">动作价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E4%B8%8E%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E5%85%B3%E7%B3%BB"><span class="nav-text">状态价值函数与动作价值函数关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-text">最优策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%9F%E6%9C%9B%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼期望方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼最优方程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">策略迭代算法&#x2F;基于策略函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">价值迭代算法&#x2F;基于价值函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E6%A8%A1%E5%9E%8B-%E6%97%A0%E6%A8%A1%E5%9E%8B-%E5%9C%A8%E7%BA%BF%E7%AD%96%E7%95%A5-%E7%A6%BB%E7%BA%BF%E7%AD%96%E7%95%A5"><span class="nav-text">有模型&amp;无模型+在线策略&amp;离线策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95"><span class="nav-text">蒙特卡洛方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%E7%AE%97%E6%B3%95"><span class="nav-text">时序差分算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sarsa%E7%AE%97%E6%B3%95"><span class="nav-text">Sarsa算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning%E7%AE%97%E6%B3%95"><span class="nav-text">Q-learning算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DQN-DDQN"><span class="nav-text">DQN&#x2F;DDQN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E7%AE%97%E6%B3%95-REINFORCE"><span class="nav-text">策略梯度算法(REINFORCE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor-Critic"><span class="nav-text">Actor-Critic</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

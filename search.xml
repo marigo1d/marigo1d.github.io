@@ -64,6 +64,20 @@
       </tags>
   </entry>
   <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
     <title>Op_sys Learning Record</title>
     <url>/2024/04/12/Op-sys-Learning-Record/</url>
     <content><![CDATA[<p>操作系统相关学习记录</p>
@@ -714,196 +728,6 @@
       </tags>
   </entry>
   <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>reinforce-learning-record</title>
-    <url>/2024/06/10/reinforce-learning-record/</url>
-    <content><![CDATA[<p>reinforce learning</p>
-<span id="more"></span>
-
-<h1 id="reinforce-learning-record"><a href="#reinforce-learning-record" class="headerlink" title="reinforce learning record"></a>reinforce learning record</h1><h2 id="MRP"><a href="#MRP" class="headerlink" title="MRP"></a>MRP</h2><img src="/2024/06/10/reinforce-learning-record/image-20240610205131367.png" class="" title="image-20240610205131367">
-
-<h3 id="回报"><a href="#回报" class="headerlink" title="回报"></a>回报</h3><p>在一个马尔可夫奖励过程中，从第t时刻状态S_t开始，直到终止状态时，所有奖励的衰减之和称为<strong>回报</strong>（Return）</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203108806.png" class="" title="image-20240610203108806">
-
-<ul>
-<li>Rt表示在时刻t获得的奖励</li>
-<li><strong>到达状态Si</strong>，得到奖励r(s)；若在时刻t到达状态Si，则<strong>Rt&#x3D;r(Si)</strong></li>
-<li>对于某状态序列<img src="/2024/06/10/reinforce-learning-record/image-20240610203423677.png" class="" title="image-20240610203423677">我们有对应于该状态序列的奖励G<img src="/2024/06/10/reinforce-learning-record/image-20240610203434567.png" class="" title="image-20240610203434567"></li>
-</ul>
-<h3 id="价值函数"><a href="#价值函数" class="headerlink" title="价值函数"></a>价值函数</h3><p>在马尔可夫奖励过程中，一个状态的期望回报（即从这个状态出发的未来累积奖励的期望）被称为这个状态的<strong>价值</strong>（value）。所有状态的价值就组成了<strong>价值函数</strong>（value function），价值函数的输入为某个状态，输出为这个状态的价值。</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203509585.png" class="" title="image-20240610203509585">
-
-<ul>
-<li>对于某个状态s，从该状态出发可得到的状态序列有很多条</li>
-<li>对于某个状态s，价值函数为<strong>从该状态出发，可能存在的所有状态序列的奖励的均值</strong></li>
-</ul>
-<p>贝尔曼方程</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203841177.png" class="" title="image-20240610203841177">
-
-<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><p>与MRP相比，奖励与状态和动作相关</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610205112917.png" class="" title="image-20240610205112917">
-
-<h3 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h3><p>策略表示在状态s下采取动作a的<strong>概率</strong>，概率可能为1</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204522539.png" class="" title="image-20240610204522539">
-
-<h3 id="状态价值函数"><a href="#状态价值函数" class="headerlink" title="状态价值函数"></a>状态价值函数</h3><p>在 MDP 中基于策略Π的状态价值函数（state-value function），定义为从状态s出发遵循策略Π能获得的期望回报</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204014373.png" class="" title="image-20240610204014373">
-
-<h3 id="动作价值函数"><a href="#动作价值函数" class="headerlink" title="动作价值函数"></a>动作价值函数</h3><p>在 MDP 中，由于动作的存在，我们额外定义一个<strong>动作价值函数</strong>（action-value function）。表示在 MDP 遵循策略Π时，对当前状态s执行动作a得到的期望回报</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204152914.png" class="" title="image-20240610204152914">
-
-<ul>
-<li><strong>采取动作a到达状态s</strong>，得到奖励R</li>
-</ul>
-<h3 id="状态价值函数与动作价值函数关系"><a href="#状态价值函数与动作价值函数关系" class="headerlink" title="状态价值函数与动作价值函数关系"></a>状态价值函数与动作价值函数关系</h3><img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<ul>
-<li>从状态s出发，可能采取动作a1, a2, a3, …;对于每个可能采取的动作，均有动作价值Q， 状态价值为所有动作价值的和</li>
-</ul>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<ul>
-<li>在状态s执行动作a后，得到奖励r(s,a)；由于可能到达多个不同的状态s’，动作价值为即时奖励r(s,a)+可能到达的所有状态的价值的期望</li>
-</ul>
-<h3 id="贝尔曼期望方程"><a href="#贝尔曼期望方程" class="headerlink" title="贝尔曼期望方程"></a>贝尔曼期望方程</h3><p>采取策略Π</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204627264.png" class="" title="image-20240610204627264">
-
-<ul>
-<li>对于状态s，s的状态价值为 ( 折损的 <strong>所有可达的下一状态的价值的期望</strong> + <strong>到达所有可达的下一状态的r(s’,a)的期望</strong> )</li>
-<li>对于状态s和动作a，在状态s进行动作a的价值为 ( <strong>在状态s执行动作a的r(s,a)的期望</strong>(实际上就是r(s,a)) + 折损的 <strong>在执行动作a后所有可达的下一状态的所有可执行动作的价值的期望</strong> )</li>
-</ul>
-<img src="/2024/06/10/reinforce-learning-record/shiow.PNG" class="" title="shiow">
-
-<h3 id="贝尔曼最优方程"><a href="#贝尔曼最优方程" class="headerlink" title="贝尔曼最优方程"></a>贝尔曼最优方程</h3><p>存在策略*，使对于任意的状态s，均有基于策略*状态价值函数大于基于策略Π的状态价值函数</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610205402396.png" class="" title="image-20240610205402396">
-
-<ul>
-<li>对于状态价值：非最优形式是求期望，最优形式是直接选取当前状态，所有动作中，未来状态序列中价值最大的</li>
-<li>对于动作价值：非最优形式是求期望，最优形式是直接选取下一状态，所有动作中，未来状态序列中动作价值最大的</li>
-</ul>
-<h2 id="策略迭代算法-基于策略函数的"><a href="#策略迭代算法-基于策略函数的" class="headerlink" title="策略迭代算法&#x2F;基于策略函数的"></a>策略迭代算法&#x2F;基于策略函数的</h2><p>策略评估：</p>
-<p>基于当前策略Π，在已知状态转移函数的情况下（即我们可以知道采取动作a后有多高的几率到达哪个状态），使用<strong>贝尔曼期望方程</strong>迭代更新状态价值函数</p>
-<p>ps: 原文中迭代更新状态价值函数是通过</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<p>以上两个公式实现的，也即</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">		qsa = <span class="number">0</span>  <span class="comment"># 当前动作的动作价值</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:  <span class="comment"># 有模型，即状态转移函数已知</span></span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))  <span class="comment"># 第一个公式，计算该动作的价值(开头的p为动作成功概率)</span></span><br><span class="line">         qsa_list.append(self.pi[s][a] * qsa)  <span class="comment"># 乘采取该动作的几率</span></span><br><span class="line">	new_v[s] = <span class="built_in">sum</span>(qsa_list)  <span class="comment"># 第二个公式，根据所有动作的价值计算状态价值</span></span><br></pre></td></tr></table></figure>
-
-<p>target: 更新<strong>状态价值函数</strong>，使之收敛</p>
-<p>策略提升：</p>
-<p>由于</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<p>故修改策略，使得动作价值最大的动作以更高的概率(若最大值唯一，该动作将成为唯一被选取动作；若不唯一，这些动作将均分概率1)被选取，可使新策略下的状态价值函数增大，也即<img src="/2024/06/10/reinforce-learning-record/image-20240611150030644.png" class="" title="image-20240611150030644"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">    	qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)</span><br><span class="line">     maxq = <span class="built_in">max</span>(qsa_list)</span><br><span class="line">     cntq = qsa_list.count(maxq)  <span class="comment"># 计算有几个动作得到了最大的Q值</span></span><br><span class="line">     <span class="comment"># 让这些动作均分概率</span></span><br><span class="line">     self.pi[s] = [<span class="number">1</span> / cntq <span class="keyword">if</span> q == maxq <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> q <span class="keyword">in</span> qsa_list]</span><br></pre></td></tr></table></figure>
-
-<p>target: 修改<strong>策略</strong>，使在新策略下，有基于新策略的状态价值函数大于原策略的状态价值函数</p>
-<h2 id="价值迭代算法-基于价值函数的"><a href="#价值迭代算法-基于价值函数的" class="headerlink" title="价值迭代算法&#x2F;基于价值函数的"></a>价值迭代算法&#x2F;基于价值函数的</h2><p>使用贝尔曼最优方程</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611191853492.png" class="" title="image-20240611191853492">
-
-<p>迭代形式</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611152610430.png" class="" title="image-20240611152610430">
-
-<p>进行价值迭代；</p>
-<p>使用</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611152643864.png" class="" title="image-20240611152643864">
-
-<p>从迭代完成的状态价值函数中获取策略，即 从当前状态出发，哪个动作的 (即时奖励+下一状态价值) 最大，策略就为哪个动作</p>
-<p>ps: 程序实际使用公式</p>
-<p>最优状态价值是选择此时使最优动作价值最大的那一个动作时的状态价值</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611153610316.png" class="" title="image-20240611153610316">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">max_diff = <span class="number">0</span></span><br><span class="line">new_v = [<span class="number">0</span>] * self.env.ncol * self.env.nrow  <span class="comment"># 迷宫环境，初始化状态价值</span></span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> <span class="built_in">range</span>(self.env.ncol * self.env.nrow):</span><br><span class="line">    qsa_list = []</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">            p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)  <span class="comment"># 记录状态s下的所有Q(s,a)价值</span></span><br><span class="line">     new_v[s] = <span class="built_in">max</span>(qsa_list)  <span class="comment"># 取最大作为新状态价值</span></span><br><span class="line">     max_diff = <span class="built_in">max</span>(max_diff, <span class="built_in">abs</span>(new_v[s] - self.v[s]))</span><br><span class="line">self.v = new_v</span><br><span class="line"><span class="keyword">if</span> max_diff &lt; self.theta: <span class="keyword">break</span>  <span class="comment"># 满足收敛条件,退出评估迭代</span></span><br><span class="line">cnt += <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="有模型-无模型-在线策略-离线策略"><a href="#有模型-无模型-在线策略-离线策略" class="headerlink" title="有模型&amp;无模型+在线策略&amp;离线策略"></a>有模型&amp;无模型+在线策略&amp;离线策略</h2><p><strong>有模型强化学习：</strong></p>
-<p>智能体学习环境的状态转移函数</p>
-<p>环境的状态转移函数已知</p>
-<p>智能体可以直接根据状态转移函数得到在对环境进行动作a后环境的下一状态</p>
-<p># 状态转移函数P[state][action] &#x3D; [(p, next_state, reward, done)]包含转移成功概率，下一个状态，奖励和是否完成</p>
-<ul>
-<li>Dyna-Q</li>
-<li>Monte Carlo Tree Search (MCTS)</li>
-<li>PILCO (Probabilistic Inference for Learning Control)</li>
-</ul>
-<p><strong>无模型强化学习：</strong></p>
-<p>智能体通过与环境交互学习状态和奖励之间的映射关系</p>
-<p>环境的状态转移函数未知</p>
-<p>智能体必须通过与环境的交互才能得到环境的下一状态</p>
-<ul>
-<li>Q-learning</li>
-<li>SARSA</li>
-<li>Deep Q-Network (DQN)</li>
-<li>Policy Gradient methods (e.g., REINFORCE, A2C, PPO)</li>
-</ul>
-<p>样本：当前状态，下一状态，采取动作，奖励</p>
-<p><strong>在线策略学习：</strong></p>
-<p>不保存样本</p>
-<p><strong>离线策略学习：</strong></p>
-<p>使用经验回放池保存样本</p>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="蒙特卡洛方法"><a href="#蒙特卡洛方法" class="headerlink" title="蒙特卡洛方法"></a>蒙特卡洛方法</h3><p>Value-based + online</p>
-<p>从某状态s出发，基于策略Π，获得一条状态序列，该状态序列对应一个回报G；该过程为一次采样。</p>
-<p>反复采样，得到N个状态序列+回报和M，由大数定律，可得该状态的状态价值</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161858965.png" class="" title="image-20240611161858965">
-
-<p>使用增量更新方法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161157050.png" class="" title="image-20240611161157050">
-
-<p>补：增量更新原理</p>
-<p>新均值 &#x3D; 旧均值 + 1&#x2F;总量 * (新值 - 旧均值) ？</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161942958.png" class="" title="image-20240611161942958">
-
-<h3 id="时序差分算法"><a href="#时序差分算法" class="headerlink" title="时序差分算法"></a>时序差分算法</h3><p>Value-based + online</p>
-<p>类似于蒙特卡洛，更新状态s的状态价值时，不使用完整的状态序列，在得到下一状态时立即对状态s的状态价值进行更新</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611162513650.png" class="" title="image-20240611162513650">
-
-<p>蒙特卡洛使用第三行对状态价值进行更新，时序差分使用第四行对状态价值进行更新</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611162624769.png" class="" title="image-20240611162624769">
-
-<ul>
-<li>只向前走了一步的蒙特卡洛</li>
-<li>使用下一状态的状态价值代替了很长的状态序列的回报(状态价值本身就是所有未来时刻的回报期望和)</li>
-<li>增量更新体现在 减号前部分为 (新 状态s的状态价值)，减号后部分为 (旧 状态s的状态价值)</li>
-</ul>
-<h3 id="Sarsa算法"><a href="#Sarsa算法" class="headerlink" title="Sarsa算法"></a>Sarsa算法</h3><p>Value-based + online</p>
-<p>类似于时序差分算法，对动作价值进行更新</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611191221769.png" class="" title="image-20240611191221769">
-
-<p>ε-greedy 选择 随机动作 or 最大动作价值-&gt;动作</p>
-<h3 id="Q-learning算法"><a href="#Q-learning算法" class="headerlink" title="Q-learning算法"></a>Q-learning算法</h3><p>Value-based + offline</p>
-<p>对动作价值进行更新</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611194333945.png" class="" title="image-20240611194333945">
-
-<h3 id="DQN-DDQN"><a href="#DQN-DDQN" class="headerlink" title="DQN&#x2F;DDQN"></a>DQN&#x2F;DDQN</h3><p>Value-based + offline</p>
-<p>将Q-learning的Q表换成net</p>
-<h3 id="策略梯度算法-REINFORCE"><a href="#策略梯度算法-REINFORCE" class="headerlink" title="策略梯度算法(REINFORCE)"></a>策略梯度算法(REINFORCE)</h3><p>Policy-based + online</p>
-<p>算法流程：</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611200059062.png" class="" title="image-20240611200059062">
-
-<h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3>]]></content>
-      <tags>
-        <tag>python, reinforce learning</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pytorch_learning_record</title>
     <url>/2024/05/08/pytorch-learning-record/</url>
     <content><![CDATA[<p>dqn与pytorch</p>
@@ -1060,6 +884,258 @@
 ]]></content>
       <tags>
         <tag>python, pytorch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>reinforce-learning-record</title>
+    <url>/2024/06/10/reinforce-learning-record/</url>
+    <content><![CDATA[<p>reinforce learning</p>
+<span id="more"></span>
+
+<h1 id="reinforce-learning-record"><a href="#reinforce-learning-record" class="headerlink" title="reinforce learning record"></a>reinforce learning record</h1><h2 id="MRP"><a href="#MRP" class="headerlink" title="MRP"></a>MRP</h2><img src="/2024/06/10/reinforce-learning-record/image-20240610205131367.png" class="" title="image-20240610205131367">
+
+<h3 id="回报"><a href="#回报" class="headerlink" title="回报"></a>回报</h3><p>在一个马尔可夫奖励过程中，从第t时刻状态S_t开始，直到终止状态时，所有奖励的衰减之和称为<strong>回报</strong>（Return）</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203108806.png" class="" title="image-20240610203108806">
+
+<ul>
+<li>Rt表示在时刻t获得的奖励</li>
+<li><strong>到达状态Si</strong>，得到奖励r(s)；若在时刻t到达状态Si，则<strong>Rt&#x3D;r(Si)</strong></li>
+<li>对于某状态序列<img src="/2024/06/10/reinforce-learning-record/image-20240610203423677.png" class="" title="image-20240610203423677">我们有对应于该状态序列的奖励G<img src="/2024/06/10/reinforce-learning-record/image-20240610203434567.png" class="" title="image-20240610203434567"></li>
+</ul>
+<h3 id="价值函数"><a href="#价值函数" class="headerlink" title="价值函数"></a>价值函数</h3><p>在马尔可夫奖励过程中，一个状态的期望回报（即从这个状态出发的未来累积奖励的期望）被称为这个状态的<strong>价值</strong>（value）。所有状态的价值就组成了<strong>价值函数</strong>（value function），价值函数的输入为某个状态，输出为这个状态的价值。</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203509585.png" class="" title="image-20240610203509585">
+
+<ul>
+<li>对于某个状态s，从该状态出发可得到的状态序列有很多条</li>
+<li>对于某个状态s，价值函数为<strong>从该状态出发，可能存在的所有状态序列的奖励的均值</strong></li>
+</ul>
+<p>贝尔曼方程</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203841177.png" class="" title="image-20240610203841177">
+
+<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><p>与MRP相比，奖励与状态和动作相关</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610205112917.png" class="" title="image-20240610205112917">
+
+<h3 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h3><p>策略表示在状态s下采取动作a的<strong>概率</strong>，概率可能为1</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204522539.png" class="" title="image-20240610204522539">
+
+<h3 id="状态价值函数"><a href="#状态价值函数" class="headerlink" title="状态价值函数"></a>状态价值函数</h3><p>在 MDP 中基于策略Π的状态价值函数（state-value function），定义为从状态s出发遵循策略Π能获得的期望回报</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204014373.png" class="" title="image-20240610204014373">
+
+<h3 id="动作价值函数"><a href="#动作价值函数" class="headerlink" title="动作价值函数"></a>动作价值函数</h3><p>在 MDP 中，由于动作的存在，我们额外定义一个<strong>动作价值函数</strong>（action-value function）。表示在 MDP 遵循策略Π时，对当前状态s执行动作a得到的期望回报</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204152914.png" class="" title="image-20240610204152914">
+
+<ul>
+<li><strong>采取动作a到达状态s</strong>，得到奖励R</li>
+</ul>
+<h3 id="状态价值函数与动作价值函数关系"><a href="#状态价值函数与动作价值函数关系" class="headerlink" title="状态价值函数与动作价值函数关系"></a>状态价值函数与动作价值函数关系</h3><img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<ul>
+<li>从状态s出发，可能采取动作a1, a2, a3, …;对于每个可能采取的动作，均有动作价值Q，则状态s的状态价值为所有动作价值的期望</li>
+</ul>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<ul>
+<li>在状态s执行动作a后，得到奖励r(s,a)；由于可能到达多个不同的状态s’，动作价值为即时奖励r(s,a)+可能到达的所有状态的价值的期望</li>
+</ul>
+<h3 id="最优策略"><a href="#最优策略" class="headerlink" title="最优策略"></a>最优策略</h3><p>策略之间的偏序关系</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093758370.png" class="" title="image-20240612093758370">
+
+<p>最优策略为 对于任意的策略，均有最优策略优于或不差于其他策略</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093948192.png" class="" title="image-20240612093948192">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093958259.png" class="" title="image-20240612093958259">
+
+<p>最优状态价值与最优动作价值的关系</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612094048209.png" class="" title="image-20240612094048209">
+
+
+
+<h3 id="贝尔曼期望方程"><a href="#贝尔曼期望方程" class="headerlink" title="贝尔曼期望方程"></a>贝尔曼期望方程</h3><p>采取策略Π</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204627264.png" class="" title="image-20240610204627264">
+
+<ul>
+<li>对于状态s，s的状态价值为 ( 折损的 <strong>所有可达的下一状态的价值的期望</strong> + <strong>到达所有可达的下一状态的r(s’,a)的期望</strong> )</li>
+<li>对于状态s和动作a，在状态s进行动作a的价值为 ( <strong>在状态s执行动作a的r(s,a)的期望</strong>(实际上就是r(s,a)) + 折损的 <strong>在执行动作a后所有可达的下一状态的所有可执行动作的价值的期望</strong> )</li>
+</ul>
+<img src="/2024/06/10/reinforce-learning-record/shiow.PNG" class="" title="shiow">
+
+<p>图中情况为每个动作只会到达一个状态&amp;应该直接将动作视为一个节点，图为树</p>
+<h3 id="贝尔曼最优方程"><a href="#贝尔曼最优方程" class="headerlink" title="贝尔曼最优方程"></a>贝尔曼最优方程</h3><p>存在策略*，使对于任意的状态s，均有基于策略*状态价值函数大于基于策略Π的状态价值函数</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610205402396.png" class="" title="image-20240610205402396">
+
+<ul>
+<li>对于状态价值：非最优形式是求期望，最优形式是直接选取当前状态，所有动作中，未来状态序列中价值最大的</li>
+<li>对于动作价值：非最优形式是求期望，最优形式是直接选取下一状态，所有动作中，未来状态序列中动作价值最大的</li>
+</ul>
+<h2 id="策略迭代算法-基于策略函数的"><a href="#策略迭代算法-基于策略函数的" class="headerlink" title="策略迭代算法&#x2F;基于策略函数的"></a>策略迭代算法&#x2F;基于策略函数的</h2><p>策略评估：</p>
+<p>基于当前策略Π，在已知状态转移函数的情况下（即我们可以知道采取动作a后有多高的几率到达哪个状态），使用<strong>贝尔曼期望方程</strong>迭代更新状态价值函数</p>
+<p>ps: 原文中迭代更新状态价值函数是通过</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<p>以上两个公式实现的，也即</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">		qsa = <span class="number">0</span>  <span class="comment"># 当前动作的动作价值</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:  <span class="comment"># 有模型，即状态转移函数已知</span></span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))  <span class="comment"># 第一个公式，计算该动作的价值(开头的p为动作成功概率)</span></span><br><span class="line">         qsa_list.append(self.pi[s][a] * qsa)  <span class="comment"># 乘采取该动作的几率</span></span><br><span class="line">	new_v[s] = <span class="built_in">sum</span>(qsa_list)  <span class="comment"># 第二个公式，根据所有动作的价值计算状态价值</span></span><br></pre></td></tr></table></figure>
+
+<p>target: 更新<strong>状态价值函数</strong>，使之收敛</p>
+<p>策略提升：</p>
+<p>由于</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<p>故修改策略，使得动作价值最大的动作以更高的概率(若最大值唯一，该动作将成为唯一被选取动作；若不唯一，这些动作将均分概率1)被选取，可使新策略下的状态价值函数增大，也即<img src="/2024/06/10/reinforce-learning-record/image-20240611150030644.png" class="" title="image-20240611150030644"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">    	qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)</span><br><span class="line">     maxq = <span class="built_in">max</span>(qsa_list)</span><br><span class="line">     cntq = qsa_list.count(maxq)  <span class="comment"># 计算有几个动作得到了最大的Q值</span></span><br><span class="line">     <span class="comment"># 让这些动作均分概率</span></span><br><span class="line">     self.pi[s] = [<span class="number">1</span> / cntq <span class="keyword">if</span> q == maxq <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> q <span class="keyword">in</span> qsa_list]</span><br></pre></td></tr></table></figure>
+
+<p>target: 修改<strong>策略</strong>，使在新策略下，有基于新策略的状态价值函数大于原策略的状态价值函数</p>
+<h2 id="价值迭代算法-基于价值函数的"><a href="#价值迭代算法-基于价值函数的" class="headerlink" title="价值迭代算法&#x2F;基于价值函数的"></a>价值迭代算法&#x2F;基于价值函数的</h2><p>使用贝尔曼最优方程</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611191853492.png" class="" title="image-20240611191853492">
+
+<p>迭代形式</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611152610430.png" class="" title="image-20240611152610430">
+
+<p>进行价值迭代；</p>
+<p>使用</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611152643864.png" class="" title="image-20240611152643864">
+
+<p>从迭代完成的状态价值函数中获取策略，即 从当前状态出发，哪个动作的 (即时奖励+下一状态价值) 最大，策略就为哪个动作</p>
+<p>ps: 程序实际使用公式</p>
+<p>最优状态价值是选择此时使最优动作价值最大的那一个动作时的状态价值</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611153610316.png" class="" title="image-20240611153610316">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">max_diff = <span class="number">0</span></span><br><span class="line">new_v = [<span class="number">0</span>] * self.env.ncol * self.env.nrow  <span class="comment"># 迷宫环境，初始化状态价值</span></span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> <span class="built_in">range</span>(self.env.ncol * self.env.nrow):</span><br><span class="line">    qsa_list = []</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">            p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)  <span class="comment"># 记录状态s下的所有Q(s,a)价值</span></span><br><span class="line">     new_v[s] = <span class="built_in">max</span>(qsa_list)  <span class="comment"># 取最大作为新状态价值</span></span><br><span class="line">     max_diff = <span class="built_in">max</span>(max_diff, <span class="built_in">abs</span>(new_v[s] - self.v[s]))</span><br><span class="line">self.v = new_v</span><br><span class="line"><span class="keyword">if</span> max_diff &lt; self.theta: <span class="keyword">break</span>  <span class="comment"># 满足收敛条件,退出评估迭代</span></span><br><span class="line">cnt += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="有模型-无模型-在线策略-离线策略"><a href="#有模型-无模型-在线策略-离线策略" class="headerlink" title="有模型&amp;无模型+在线策略&amp;离线策略"></a>有模型&amp;无模型+在线策略&amp;离线策略</h2><p><strong>有模型强化学习：</strong></p>
+<p>智能体学习环境的状态转移函数</p>
+<p>环境的状态转移函数已知</p>
+<p>智能体可以直接根据状态转移函数得到在对环境进行动作a后环境的下一状态</p>
+<p># 状态转移函数P[state][action] &#x3D; [(p, next_state, reward, done)]包含转移成功概率，下一个状态，奖励和是否完成</p>
+<ul>
+<li>Dyna-Q</li>
+<li>Monte Carlo Tree Search (MCTS)</li>
+<li>PILCO (Probabilistic Inference for Learning Control)</li>
+</ul>
+<p><strong>无模型强化学习：</strong></p>
+<p>智能体通过与环境交互学习状态和奖励之间的映射关系</p>
+<p>环境的状态转移函数未知</p>
+<p>智能体必须通过与环境的交互才能得到环境的下一状态</p>
+<ul>
+<li>Q-learning</li>
+<li>SARSA</li>
+<li>Deep Q-Network (DQN)</li>
+<li>Policy Gradient methods (e.g., REINFORCE, A2C, PPO)</li>
+</ul>
+<p>样本：当前状态，下一状态，采取动作，奖励</p>
+<p><strong>在线策略学习：</strong></p>
+<p>不保存样本</p>
+<p><strong>离线策略学习：</strong></p>
+<p>使用经验回放池保存样本</p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="蒙特卡洛方法"><a href="#蒙特卡洛方法" class="headerlink" title="蒙特卡洛方法"></a>蒙特卡洛方法</h3><p>Value-based + online</p>
+<p>从某状态s出发，基于策略Π，获得一条状态序列，该状态序列对应一个回报G；该过程为一次采样。</p>
+<p>反复采样，得到N个状态序列+回报和M，由大数定律，可得该状态的状态价值</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161858965.png" class="" title="image-20240611161858965">
+
+<p>使用增量更新方法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161157050.png" class="" title="image-20240611161157050">
+
+<p>补：增量更新原理</p>
+<p>新均值 &#x3D; 旧均值 + 1&#x2F;总量 * (新值 - 旧均值) ？</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161942958.png" class="" title="image-20240611161942958">
+
+<h3 id="时序差分算法"><a href="#时序差分算法" class="headerlink" title="时序差分算法"></a>时序差分算法</h3><p>Value-based + online</p>
+<p>类似于蒙特卡洛，更新状态s的状态价值时，不使用完整的状态序列，在得到下一状态时立即对状态s的状态价值进行更新</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611162513650.png" class="" title="image-20240611162513650">
+
+<p>蒙特卡洛使用第三行对状态价值进行更新，时序差分使用第四行对状态价值进行更新</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611162624769.png" class="" title="image-20240611162624769">
+
+<ul>
+<li>只向前走了一步的蒙特卡洛</li>
+<li>使用下一状态的状态价值代替了很长的状态序列的回报(状态价值本身就是所有未来时刻的回报期望和)</li>
+<li>增量更新体现在 减号前部分为 (新 状态s的状态价值)，减号后部分为 (旧 状态s的状态价值)</li>
+</ul>
+<h3 id="Sarsa算法"><a href="#Sarsa算法" class="headerlink" title="Sarsa算法"></a>Sarsa算法</h3><p>Value-based + online</p>
+<p>类似于时序差分算法，对动作价值进行更新，目标是估计 <strong>ε-greedy策略的动作价值函数</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611191221769.png" class="" title="image-20240611191221769">
+
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100452913.png" class="" title="image-20240612100452913">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1, a1] - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Q-learning算法"><a href="#Q-learning算法" class="headerlink" title="Q-learning算法"></a>Q-learning算法</h3><p>Value-based + offline</p>
+<p>对动作价值进行更新，目标是估计 <strong>最优策略的动作价值函数</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611194333945.png" class="" title="image-20240611194333945">
+
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100509915.png" class="" title="image-20240612100509915">
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1].max() - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="DQN-DDQN"><a href="#DQN-DDQN" class="headerlink" title="DQN&#x2F;DDQN"></a>DQN&#x2F;DDQN</h3><p>Value-based + offline</p>
+<p>将Q-learning的Q表换成net</p>
+<h3 id="策略梯度算法-REINFORCE"><a href="#策略梯度算法-REINFORCE" class="headerlink" title="策略梯度算法(REINFORCE)"></a>策略梯度算法(REINFORCE)</h3><p>Policy-based + online</p>
+<p>定义策略学习的目标函数为，s0为初始状态</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100629893.png" class="" title="image-20240612100629893">
+
+<p>目标是修改参数θ，使J(θ)取最大；即对θ求导</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100732404.png" class="" title="image-20240612100732404">
+
+<p>where 第一行第一个求和符号后的对象为 策略的<strong>状态访问分布</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612102026769.png" class="" title="image-20240612102026769">
+
+<p>策略的状态访问分布表示该策略和在环境中会访问到的状态的分布情况(即到达每个状态的概率)</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612102256431.png" class="" title="image-20240612102256431">
+
+<p>故该求导表示 对于每个状态，我们有一定的概率在该状态，从该状态出发，策略决定了我们能获得的价值的期望</p>
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611200059062.png" class="" title="image-20240611200059062">
+
+<p>时刻t向后的回报即为(动作)价值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">reward_list = transition_dict[<span class="string">&#x27;rewards&#x27;</span>]</span><br><span class="line">state_list = transition_dict[<span class="string">&#x27;states&#x27;</span>]</span><br><span class="line">action_list = transition_dict[<span class="string">&#x27;actions&#x27;</span>]</span><br><span class="line"></span><br><span class="line">G = <span class="number">0</span></span><br><span class="line">self.optimizer.zero_grad()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(<span class="built_in">len</span>(reward_list))):  <span class="comment"># 从最后一步算起</span></span><br><span class="line">    reward = reward_list[i]  <span class="comment"># 取时间步i获得的奖励</span></span><br><span class="line">    state = torch.tensor([state_list[i]],</span><br><span class="line">                         dtype=torch.<span class="built_in">float</span>).to(self.device)  <span class="comment"># 取时间步i的状态</span></span><br><span class="line">    action = torch.tensor([action_list[i]]).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)  <span class="comment"># 取时间步i的动作</span></span><br><span class="line">    log_prob = torch.log(self.policy_net(state).gather(<span class="number">1</span>, action))</span><br><span class="line">    <span class="comment"># self.policy_net(state)： 将状态输入策略网络，得到所有可能动作的概率分布。</span></span><br><span class="line">	<span class="comment"># .gather(1, action): 从概率分布中选取实际执行动作对应的概率值。</span></span><br><span class="line">	<span class="comment"># torch.log(...): 对选取的概率值取对数，得到对数概率</span></span><br><span class="line">    G = self.gamma * G + reward  <span class="comment"># G累计了从当前时间步i到episode结束的所有奖励</span></span><br><span class="line">    loss = -log_prob * G  <span class="comment"># loss对应公式中符号α后的部分</span></span><br><span class="line">    loss.backward()  <span class="comment"># 反向传播计算梯度</span></span><br><span class="line">self.optimizer.step()  <span class="comment"># 梯度下降，实际上是对策略进行求导</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3><p>(Value + Policy)-based + offline</p>
+<p>策略函数梯度表示为</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110026419.png" class="" title="image-20240612110026419">
+
+<p>ψ_t可为不同值，表示不同的方法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110241521.png" class="" title="image-20240612110241521">
+
+
+
+<p>价值函数的损失函数与梯度表示为</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110951796.png" class="" title="image-20240612110951796">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612111022161.png" class="" title="image-20240612111022161">
+
+
+
+<p>Actor（策略网络）和 Critic（价值网络）</p>
+<ul>
+<li><p>Actor 要做的是与环境交互，并在 Critic 价值函数的指导下用策略梯度学习一个更好的策略。</p>
+</li>
+<li><p>Critic 要做的是通过 Actor 与环境交互收集的数据学习一个价值函数，这个价值函数会用于判断在当前状态什么动作是好的，什么动作不是好的，进而帮助 Actor 进行策略更新。</p>
+</li>
+</ul>
+<p>基于<strong>时序差分(TD)<strong>方法的</strong>Actor-Critic</strong>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110750284.png" class="" title="image-20240612110750284">
+
+<p>价值网络使用时序差分(TD)更新，策略网络使用</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络 (critic) - 时序差分</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络 (critic) 预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络 (actor) </span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数，使用均方误差 (MSE)。使用价值网络获得</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>python, reinforce learning</tag>
       </tags>
   </entry>
 </search>
