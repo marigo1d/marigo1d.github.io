@@ -76,7 +76,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612111022161.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612110750284.png">
 <meta property="article:published_time" content="2024-06-10T12:29:05.000Z">
-<meta property="article:modified_time" content="2024-06-12T03:30:04.623Z">
+<meta property="article:modified_time" content="2024-06-12T06:47:01.854Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="python, reinforce learning">
 <meta name="twitter:card" content="summary">
@@ -269,7 +269,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-06-12 11:30:04" itemprop="dateModified" datetime="2024-06-12T11:30:04+08:00">2024-06-12</time>
+                <time title="Modified: 2024-06-12 14:47:01" itemprop="dateModified" datetime="2024-06-12T14:47:01+08:00">2024-06-12</time>
               </span>
 
           
@@ -499,7 +499,7 @@
 
 
 <h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3><p>(Value + Policy)-based + offline</p>
-<p>策略函数梯度表示为</p>
+<p>策略函数梯度</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240612110026419.png" class="" title="image-20240612110026419">
 
 <p>ψ_t可为不同值，表示不同的方法</p>
@@ -507,7 +507,7 @@
 
 
 
-<p>价值函数的损失函数与梯度表示为</p>
+<p>价值函数的损失函数与梯度</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240612110951796.png" class="" title="image-20240612110951796">
 
 <img src="/2024/06/10/reinforce-learning-record/image-20240612111022161.png" class="" title="image-20240612111022161">
@@ -525,7 +525,7 @@
 <img src="/2024/06/10/reinforce-learning-record/image-20240612110750284.png" class="" title="image-20240612110750284">
 
 <p>价值网络使用时序差分(TD)更新，策略网络使用</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络 (critic) - 时序差分</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络 (critic) 预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络 (actor) </span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数，使用均方误差 (MSE)。使用价值网络获得</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络(critic)</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络(critic)预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络(actor)</span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数。(价值网络给出的当前状态价值)和(r+价值网络给出的下一状态的状态价值)的均方误差，即((a-b)^2)/2</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。策略函数梯度</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
 
 
     </div>
@@ -548,7 +548,10 @@
     <a href="/2024/05/08/pytorch-learning-record/" rel="prev" title="pytorch_learning_record">
       <i class="fa fa-chevron-left"></i> pytorch_learning_record
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2024/06/22/common-commands/" rel="next" title="common-commands">
+      common-commands <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -623,7 +626,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -634,7 +637,7 @@
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
