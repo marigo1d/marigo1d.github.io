@@ -76,7 +76,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612111022161.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612110750284.png">
 <meta property="article:published_time" content="2024-06-10T12:29:05.000Z">
-<meta property="article:modified_time" content="2024-06-27T09:48:13.638Z">
+<meta property="article:modified_time" content="2024-07-02T01:38:07.307Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="python, reinforce learning">
 <meta name="twitter:card" content="summary">
@@ -269,7 +269,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-06-27 17:48:13" itemprop="dateModified" datetime="2024-06-27T17:48:13+08:00">2024-06-27</time>
+                <time title="Modified: 2024-07-02 09:38:07" itemprop="dateModified" datetime="2024-07-02T09:38:07+08:00">2024-07-02</time>
               </span>
 
           
@@ -531,13 +531,12 @@
 
 <h2 id="强化学习设置小心得"><a href="#强化学习设置小心得" class="headerlink" title="强化学习设置小心得"></a>强化学习设置小心得</h2><p>控制状态空间大小，尽量选择有限状态空间</p>
 <p>eg: 将state中的一些值int化</p>
-<p>归一化状态空间</p>
-<p>对于一些较大的状态空间，尽量归一化</p>
 <p>状态空间的表示值尽量接近</p>
 <p>采用标准化技术将state内的值均一化</p>
+<p>eg: [1, 200, 9999] -&gt; [0.001, 0.99, 0.9999]</p>
 <p>reward设置</p>
-<p>惩罚和奖励设置插值不要过大，2vs20?</p>
-<p>防止惩罚过大不动了</p>
+<p>惩罚和奖励设置插值不要过大, 防止惩罚拟合过快</p>
+<p>+2, -200 -&gt; +2, 0</p>
 
     </div>
 
