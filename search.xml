@@ -64,6 +64,20 @@
       </tags>
   </entry>
   <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
+  </entry>
+  <entry>
     <title>Op_sys Learning Record</title>
     <url>/2024/04/12/Op-sys-Learning-Record/</url>
     <content><![CDATA[<p>操作系统相关学习记录</p>
@@ -129,7 +143,8 @@
 
 <p>通用寄存器组，Eflag和EIP变为32位</p>
 <p>段寄存器仍为16位宽！！内容为段选择子</p>
-<h4 id="Intel汇编语法"><a href="#Intel汇编语法" class="headerlink" title="Intel汇编语法"></a>Intel汇编语法</h4><p>实模式</p>
+<h4 id="Intel汇编语法"><a href="#Intel汇编语法" class="headerlink" title="Intel汇编语法"></a>Intel汇编语法</h4><p>右 -&gt; 左</p>
+<p>实模式</p>
 <p>段内偏移默认基于DS进行偏移</p>
 <p>基址寄存器：bx寄存器默认基于DS进行偏移，bp寄存器默认基于SS进行偏移</p>
 <p>变址寄存器：si寄存器和di寄存器默认基于ds进行偏移</p>
@@ -146,7 +161,8 @@
 <p>segment与section</p>
 <p>section称为节，是指在汇编源码中经由关键字section或segment修饰、逻辑划分的指令或数据区域，汇编器会将这两个关键字修饰的区域在目标文件中编译成节，也就是说“节”最初诞生于目标文件中。</p>
 <p>segment称为段，是链接器根据目标文件中属性相同的多个section合并后的section集合，这个集合称为segment，也就是段，链接器把目标文件链接成可执行文件，因此段最终诞生于可执行文件中。我们平时所说的可执行程序内存空间中的代码段和数据段就是指的segment。</p>
-<h4 id="AT-T汇编语法"><a href="#AT-T汇编语法" class="headerlink" title="AT&amp;T汇编语法"></a>AT&amp;T汇编语法</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">movl %eax, base_value+(%ebx, %esi,2)	</span><br><span class="line">	//将eax的值写入内存base_value+ebx+esi*2处</span><br><span class="line">	//()括号表示取内的值作为内存地址</span><br><span class="line">	//寄存器前必须有%</span><br><span class="line"></span><br><span class="line">movl $123, %eax	//将立即数123写入寄存器eax</span><br></pre></td></tr></table></figure>
+<h4 id="AT-T汇编语法"><a href="#AT-T汇编语法" class="headerlink" title="AT&amp;T汇编语法"></a>AT&amp;T汇编语法</h4><p>左 -&gt; 右</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">movl %eax, immed32(%ebx, %esi,2)	</span><br><span class="line">	#将eax的值写入内存immed32+ebx+esi*2处</span><br><span class="line">	#()括号表示取内的值作为内存地址</span><br><span class="line">	#寄存器前必须有%</span><br><span class="line"></span><br><span class="line">movl $123, %eax	#将立即数123写入寄存器eax</span><br><span class="line"></span><br><span class="line">xchgl %eax, (%esp) #交换寄存器eax和栈顶位置的值</span><br><span class="line"></span><br><span class="line">popl %eax #指从栈顶弹出数据，并将弹出的数据写入 %eax 寄存器。</span><br><span class="line"></span><br><span class="line">ret #弹出栈顶值写入PC</span><br><span class="line">iret #弹出eip并写入，弹出cs并写入，弹出eflags并写入</span><br></pre></td></tr></table></figure>
 
 
 
@@ -398,21 +414,19 @@
 <p>13.读磁盘指定扇区，写kernel.bin到虚拟地址0xc0070000~0xc009fbff</p>
 <p>14.初始化kernel，将kernel.bin中的segment复制到被编译的虚拟地址处，第一个segment起始于0xc0001500</p>
 <p>15.修改栈指针，跳转至kernel，虚拟地址0xc0001500</p>
-<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><h3 id="外部中断"><a href="#外部中断" class="headerlink" title="外部中断"></a>外部中断</h3><img src="/2024/04/12/Op-sys-Learning-Record/image-20240421152049031.png" class="" title="image-20240421152049031">
+<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><h3 id="外部中断与内部中断"><a href="#外部中断与内部中断" class="headerlink" title="外部中断与内部中断"></a>外部中断与内部中断</h3><img src="/2024/04/12/Op-sys-Learning-Record/image-20240421152049031.png" class="" title="image-20240421152049031">
 
 <p>中断引脚：</p>
 <p>INTR: Interupter</p>
 <p>NMI: Non Maskable Interupter	向CPU传入中断向量号 2</p>
 <p>外部设备中断由中断代理芯片8259A接收后发送中断向量号到CPU中断引脚INTR</p>
 <p>Linux： int32 ~ int47 -&gt; IRQ0 ~ IRQ15</p>
-<p>IRQ0</p>
-<p>可编程芯片 8253 定时发出IRQ0信号</p>
-<h3 id="内部中断"><a href="#内部中断" class="headerlink" title="内部中断"></a>内部中断</h3><p>软中断：系统调用</p>
+<p>软中断：系统调用</p>
 <p>Linux：int128</p>
 <p>异常：指针越界，栈溢出</p>
 <p>Linux：int0 ~ int31</p>
-<h4 id="实模式下的中断向量表"><a href="#实模式下的中断向量表" class="headerlink" title="实模式下的中断向量表"></a>实模式下的中断向量表</h4><p>仅在实模式使用，由BIOS进行创建，位于0x00000~0x003ff</p>
-<h4 id="中断门与保护模式下的中断描述符表IDT"><a href="#中断门与保护模式下的中断描述符表IDT" class="headerlink" title="中断门与保护模式下的中断描述符表IDT"></a>中断门与保护模式下的中断描述符表IDT</h4><p>中断向量号为 中断向量表&#x2F;中断描述符表 的索引下标</p>
+<h3 id="实模式下的中断向量表"><a href="#实模式下的中断向量表" class="headerlink" title="实模式下的中断向量表"></a>实模式下的中断向量表</h3><p>仅在实模式使用，由BIOS进行创建，位于0x00000~0x003ff</p>
+<h3 id="中断门与保护模式下的中断描述符表IDT"><a href="#中断门与保护模式下的中断描述符表IDT" class="headerlink" title="中断门与保护模式下的中断描述符表IDT"></a>中断门与保护模式下的中断描述符表IDT</h3><p>中断向量号为 中断向量表&#x2F;中断描述符表 的索引下标</p>
 <p>IDTR(Interrupt Descriptor Table Register) 中保存 IDT 位置信息</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240417105214817.png" class="" title="image-20240417105214817">
 
@@ -420,9 +434,7 @@
 <p>item: 门</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240417104649804.png" class="" title="image-20240417104649804">
 
-
-
-<h3 id="中断初始化"><a href="#中断初始化" class="headerlink" title="中断初始化"></a>中断初始化</h3><p>tiny_os</p>
+<h3 id="中断过程"><a href="#中断过程" class="headerlink" title="中断过程"></a>中断过程</h3><h4 id="中断初始化"><a href="#中断初始化" class="headerlink" title="中断初始化"></a>中断初始化</h4><p>tiny_os</p>
 <p>实模式由BIOS创建中断向量表和中断处理程序；</p>
 <p>保护模式由kernel创建中断描述符表和中断处理程序；</p>
 <p>1.kernel进行中断初始化：中断描述符初始化，异常处理程序初始化，pic初始化</p>
@@ -430,7 +442,7 @@
 <p>3.异常处理程序初始化：将异常处理程序的地址写入二阶中断处理程序表，该表保存函数地址，由一阶中断处理程序call；</p>
 <p>4.pic初始化</p>
 <p>5.将中断描述符表地址写入idtr</p>
-<h3 id="中断处理过程"><a href="#中断处理过程" class="headerlink" title="中断处理过程"></a>中断处理过程</h3><p>1.中断请求</p>
+<h4 id="中断处理过程"><a href="#中断处理过程" class="headerlink" title="中断处理过程"></a>中断处理过程</h4><p>1.中断请求</p>
 <p>中断请求可能为内部中断或者外部中断</p>
 <p>外部中断如下：</p>
 <p>当外设发出中断信号后，信号被送入8259A；</p>
@@ -444,12 +456,14 @@
 <p>8259A通过数据总线向CPU发送中断向量号，<strong>中断向量号 &#x3D; 起始向量号 + IRQ接口号</strong>，一般起始向量号为32，从中断向量表可看出0—31已经被占用，后面的32—127是分配给可屏蔽中断的，所以此处外设的中断设置的起始向量号便为32。</p>
 <p>3.保护现场__压栈</p>
 <p>CPU据中断向量号去IDT中获取中断描述符，取出选择子中的DPL与当前特权级CPL进行比较，若特权级发生变化，则需要切换栈（不同特权级有着不同的栈，如Linux使用了0， 3特权级，则有两个栈，一个内核栈，一个用户栈）。</p>
-<p>程序跳转至中断服务程序，进入内核态。</p>
-<p>处理器将当前的旧栈SS和ESP的值压入中断栈(中断栈位于当前进程的PCB页中内核栈的最顶端，<strong>每个进程都拥有独立的内核栈</strong>)，从TSS（每一个任务有一个TSS结构，其中保存着不同特权级栈的SS和ESP值）中获取与DPL特权级同的栈信息加载到SS和ESP寄存器。再将旧栈SS和ESP的值压入新栈中。若没有特权级变化，则跳过此步骤。</p>
-<p>向中断栈压入程序状态信息，即EFLAGS寄存器</p>
-<p>向中断栈压入断点，即返回地址，即当前任务的CS，EIP值。</p>
+<p>CPU将中断描述符中中断描述程序的代码段选择子和偏移写入cs和eip，程序跳转至一阶中断服务程序，进入内核态。</p>
+<p>处理器将当前的旧的SS和ESP的值压入内核栈(<strong>每个进程都拥有独立的内核栈</strong>).</p>
+<p>从TSS（每一个任务有一个TSS结构，其中保存着不同特权级栈的SS和ESP值）中获取与DPL特权级同的栈信息加载到SS和ESP寄存器。</p>
+<p>向内核栈压入程序状态信息，即EFLAGS寄存器</p>
+<p>向内核栈压入断点，即返回地址，即原任务的CS，EIP值。</p>
 <p>若该中断有错误码，压入错误码</p>
 <p>图示为发生了特权级改变时的压栈情况</p>
+<p><strong>该过程不由一阶中断程序实现</strong></p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240421154614894.png" class="" title="image-20240421154614894">
 
 <p>4.定位中断服务程序</p>
@@ -458,13 +472,22 @@
 <p>2.中断描述符给出<strong>一阶中断处理程序</strong>的段选择子和偏移</p>
 <p>3.通过gdtr获得gdt的地址，将段选择子作为索引，访问到段描述符</p>
 <p>4.段描述符给出<strong>一阶中断处理程序</strong>的段<strong>虚拟地址</strong>，</p>
-<p>5.通过段<strong>虚拟地址</strong>和偏移访问到<strong>一阶中断处理程序</strong>，</p>
-<p>一阶中断处理程序进行上下文的保存并call<strong>二阶中断处理程序</strong>(真正的中断处理程序)，并在<strong>二阶中断处理程序</strong>执行完成后进行后进行上下文的恢复和返回</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240417110140482.png" class="" title="image-20240417110140482">
+
+<p>5.通过段<strong>虚拟地址</strong>和偏移访问到<strong>一阶中断处理程序</strong>，</p>
+<p><strong>一阶中断处理程序</strong>将C函数地址(二阶中断处理程序)压栈，后将该值交换写入eax, eax入栈</p>
+<p>上下文(ebx,ecx,edx,edi,esi,ebp,ds,es,fs)压栈，</p>
+<p>压入错误码，压入执行一阶中断程序前的栈指针(esp0)，作为<strong>二阶中断处理程序参数</strong></p>
+<p>并在<strong>二阶中断处理程序</strong>执行完成后，</p>
+<p>弹出错误码和esp0，弹出上下文</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240702102514943.png" class="" title="image-20240702102514943">
+
+
 
 
 
 <p>5.中断处理过程</p>
+<p><strong>二阶中断处理程序</strong>，打印出错程序信息</p>
 <p>中断的实际处理过程就是执行中断处理程序，Linux将中断处理程序分为上下两部分，需要紧急处理立即执行的归为上半部，不那么紧急的归为下半部。</p>
 <p>开中断，即EFLAGS的IF位置1，表示允许响应中断；关中断，即EFLAGS的IF位置0，表示不允许响应中断。</p>
 <p>上半部分是刻不容缓的，需要立即执行的部分，所以要在关中断的状态下执行。</p>
@@ -475,11 +498,68 @@
 <p>此时的栈顶指针ESP应指向EIP_old，剩余栈中的信息使用iret指令弹出，CPU执行到iret指令时再次检查和比较特权级是否变化。</p>
 <p>弹出EIP_old, CS_old</p>
 <p>若特权级变化，将ESP_old, SS_old, 加载到ESP，SS寄存器。</p>
-<h3 id="中断处理程序"><a href="#中断处理程序" class="headerlink" title="中断处理程序"></a>中断处理程序</h3><p>由kernel实现中断处理程序</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (vec_nr == <span class="number">0x27</span> || vec_nr == <span class="number">0x2f</span>) &#123;</span><br><span class="line">    <span class="comment">// 伪中断，无需处理</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在屏幕的左上角打印异常信息</span></span><br><span class="line">set_cursor(<span class="number">0</span>);</span><br><span class="line"><span class="type">int</span> cursor_pos = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (cursor_pos &lt; <span class="number">320</span>) &#123;</span><br><span class="line">    put_char(<span class="string">&#x27; &#x27;</span>);</span><br><span class="line">    ++cursor_pos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">set_cursor(<span class="number">0</span>);</span><br><span class="line">put_str(<span class="string">&quot;---------------Exception message:\n&quot;</span>);</span><br><span class="line">set_cursor(<span class="number">88</span>);</span><br><span class="line">put_str(intr_name[vec_nr]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (vec_nr == <span class="number">14</span>) &#123;</span><br><span class="line">    <span class="comment">// Pagefault，打印缺失的地址</span></span><br><span class="line">    <span class="type">int</span> page_fault_vaddr = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">asm</span> (<span class="string">&quot;movl %%cr2, %0&quot;</span> : <span class="string">&quot;=r&quot;</span> (page_fault_vaddr));</span><br><span class="line">    put_str(<span class="string">&quot;\nPage fault address is: &quot;</span>);</span><br><span class="line">    put_int(page_fault_vaddr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">put_str(<span class="string">&quot;\n---------------Exception message end.\n&quot;</span>);</span><br><span class="line"><span class="comment">// 不再继续向下执行，以便于查看异常信息</span></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="中断处理程序"><a href="#中断处理程序" class="headerlink" title="中断处理程序"></a>中断处理程序</h3><p>Linux: asm.s, traps.c</p>
+<p>asm.s</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240702102514943.png" class="" title="image-20240702102514943">
 
+<p><strong>一阶中断处理程序</strong>将C函数地址(二阶中断处理程序)压栈，后将该值交换写入eax, eax入栈</p>
+<p>上下文(ebx,ecx,edx,edi,esi,ebp,ds,es,fs)压栈，</p>
+<p>压入错误码，压入执行一阶中断程序前的栈指针(esp0)，作为<strong>二阶中断处理程序参数</strong></p>
+<p>改变段寄存器ds, es, fs</p>
+<p>call<strong>二阶中断处理程序</strong>,</p>
+<p>并在<strong>二阶中断处理程序</strong>执行完成后，弹出错误码和esp0，弹出上下文</p>
+<p>traps.c</p>
+<p><strong>二阶中断处理程序</strong>, 打印出错信息</p>
+<p>初始化，设置中断调用门，传入<strong>一阶中断处理程序</strong>(函数)的地址</p>
+<h3 id="系统调用处理程序与信号"><a href="#系统调用处理程序与信号" class="headerlink" title="系统调用处理程序与信号"></a>系统调用处理程序与信号</h3><p>Linux: system.c</p>
+<p><strong>含时钟中断!!!</strong></p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240704153835415.png" class="" title="image-20240704153835415">
 
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240704190208804.png" class="" title="image-20240704190208804">
 
+<p>对于系统调用处理程序(一阶中断处理程序)：</p>
+<p>判断调用号范围</p>
+<p>压栈ds, es, fs, edx, ecx, ebx, </p>
+<p>修改ds, es, fs,</p>
+<p>call 对应的C处理函数(二阶中断处理程序)</p>
+<p>压栈eax(二阶中断处理程序返回值)</p>
+<p>if(任务非就绪&#x2F;时间片耗尽):</p>
+<p>​	执行调度程序</p>
+<p>​	执行ret_from_sys_call</p>
+<p>else:</p>
+<p>​	执行ret_from_sys_call</p>
+<p>对于函数ret_from_sys_call：</p>
+<p>if(非初始任务&#x2F;非超级用户程序&#x2F;?):</p>
+<p>​	取当前任务结构的信号位图，取信号屏蔽码，得到可行信号图，复位信号图并写回</p>
+<p>​	将可行信号图中最小的信号压栈，call do_signal，</p>
+<p>弹出信号值signr, eax, ebx, ecx, edx, fs, es, ds</p>
+<blockquote>
+<p>此时cs为用户代码段选择子，eip为信号处理程序；内核栈中的ss和esp将在cpu检查段选择子的rpl部分时发现进入低特权级，弹出并写入；</p>
+<p>后续执行信号处理程序，ret时将用户栈顶的restorer写入eip，执行restorer；</p>
+<p>restorer丢弃用户栈顶的信号值signr, 设置信号屏蔽码, 丢弃block, 弹出eax, ecx, edx, eflags, ret将用户栈顶的原eip写入eip，恢复系统调用前状态</p>
+</blockquote>
+<p>​	</p>
+<p>对于函数do_signal：</p>
+<blockquote>
+<p>sys_signal和sys_sigaction修改进程task_struct的sigaction[32]，用于修改在接收信号时的处理函数，返回原对应信号的处理函数指针</p>
+<p>sigaction[32]的项：</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240704193952350.png" class="" title="image-20240704193952350">
+
+<p>sys_sigaction是sys_signal的超集</p>
+</blockquote>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240704190208804.png" class="" title="image-20240704190208804">
+
+<p>从task_struct-&gt;sigaction[32]中获取信号signr对应的sigaction</p>
+<p>if(非忽略句柄&#x2F;非默认句柄):</p>
+<p>​	若sigaction-&gt;sa_flag为oneshot, 将句柄置空</p>
+<p>​	修改内核堆栈中eip的值为信号处理程序句柄</p>
+<p>​	下移用户堆栈对应esp，并向用户堆栈写入图示值</p>
+<blockquote>
+<p>sa_restorer</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240704195323779.png" class="" title="image-20240704195323779">
+</blockquote>
+<p><strong>信号</strong></p>
+<p>有上可知，信号将在系统调用结束时检查</p>
 <h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><h3 id="TSS"><a href="#TSS" class="headerlink" title="TSS"></a>TSS</h3><p>TR(Task Register)保存TSS虚拟地址</p>
 <p>Task State Segment	</p>
 <p>TSS描述符保存于GDT</p>
@@ -617,7 +697,10 @@
 <p>2.中断入口程序保护线程上下文，将寄存器ds, es, fs, gs压入当前线程的中断栈，根据中断向量号前往中断服务程序</p>
 <p>3.中断服务程序提供服务：进行线程调度</p>
 <p>此时已内核，中断服务程序进行判断：若时间片耗尽，将该线程加入就绪队列；若未耗尽，时间片自减；</p>
-<p>根据调度链表获得下一个线程，修改CR3为该线程所属进程的页表物理地址<a href="%E6%AD%A4%E6%97%B6%E9%A1%B5%E8%A1%A8%E5%B7%B2%E7%BB%8F%E4%BB%8E%E5%8E%9F%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2%E4%B8%BA%E4%B8%8B%E4%B8%80%E7%BA%BF%E7%A8%8B%EF%BC%8C%E4%BD%86%E7%94%B1%E4%BA%8E%E6%89%80%E6%9C%89%E8%BF%9B%E7%A8%8B%E5%85%B1%E4%BA%AB%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%EF%BC%8C%E6%95%85%E9%A1%B5%E8%A1%A8%E7%9A%84%E5%88%87%E6%8D%A2%E4%B8%8D%E5%BD%B1%E5%93%8D%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%AD%E5%AF%B9PCB%E7%9A%84%E6%93%8D%E4%BD%9C">^注</a></p>
+<p>根据调度链表获得下一个线程，修改CR3为该线程所属进程的页表物理地址</p>
+<blockquote>
+<p>此时页表已经从原线程切换为下一线程，但由于所有进程共享内核空间，故页表的切换不影响内核空间中对PCB的操作</p>
+</blockquote>
 <p>4.开始任务切换</p>
 <p>中断服务程序call函数swith_to</p>
 <p>swith_to函数保护内核上下文，将寄存器esi, edi, ebx, ebp压入被中断线程PCB的内核栈，将当前栈指针esp写入被中断线程PCB的self_kstack；</p>
@@ -896,20 +979,6 @@
       <tags>
         <tag>command</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
   </entry>
   <entry>
     <title>pytorch_learning_record</title>
