@@ -1,83 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Algo Learning Record</title>
-    <url>/2024/04/25/Algo-Learning-Record/</url>
-    <content><![CDATA[<p>算法相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><h3 id="DP问题分析"><a href="#DP问题分析" class="headerlink" title="DP问题分析"></a>DP问题分析</h3><p>递归&amp;动态规划</p>
-<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
-
-<p>递归会重复进入状态，DP不会</p>
-<p>递归一个起点，多个终点；</p>
-<p>DP多个起点，一个终点；</p>
-<p>DP核心：</p>
-<p>1.确定状态和动作</p>
-<p>2.确定起点和终点</p>
-<h3 id="无权图两点间路径数"><a href="#无权图两点间路径数" class="headerlink" title="无权图两点间路径数"></a>无权图两点间<strong>路径数</strong></h3><p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果相加。</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
-<p>3.到达起点，当前递归结束，返回；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>邻接点</strong>的走法已知；</p>
-<p>2.到达<strong>次邻接点</strong>的走法为从<strong>邻接点</strong>到<strong>次邻接点</strong>的走法之和；</p>
-<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的走法之和；</p>
-<p>实例：</p>
-<img src="/2024/04/25/Algo-Learning-Record/image-20240426101614103.png" class="" title="image-20240426101614103">
-
-<p>递归</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCount</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">1</span> || n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> pathsCount(m - <span class="number">1</span>, n) + pathsCount(m , n -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>DP</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCounts</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="有权图两点间最大路径"><a href="#有权图两点间最大路径" class="headerlink" title="有权图两点间最大路径"></a>有权图两点间<strong>最大路径</strong></h3><p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果取最大。</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
-<p>3.到达起点，当前递归结束，返回当前节点值；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>邻接点</strong>的距离可知；</p>
-<p>2.到达<strong>次邻接点</strong>的最大距离为从<strong>邻接点</strong>到<strong>次邻接点</strong>的最大距离；</p>
-<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的最大距离；</p>
-<p>实例：</p>
-<img src="/2024/04/25/Algo-Learning-Record/image-20240426102031155.png" class="" title="image-20240426102031155">
-
-<p>递归</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> getMin(grid, m-<span class="number">1</span>, n-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getMin</span><span class="params">(<span class="type">int</span>[][] grid, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">minRow</span> <span class="operator">=</span> getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    <span class="type">int</span> <span class="variable">minColumn</span> <span class="operator">=</span> getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grid[i][j] + Math.min(minRow, minColumn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>DP</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m ;i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n;i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = grid[i][j] + Math.min(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>algorithm</category>
-      </categories>
-      <tags>
-        <tag>algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
     <title>Op_sys Learning Record</title>
     <url>/2024/04/12/Op-sys-Learning-Record/</url>
     <content><![CDATA[<p>操作系统相关学习记录</p>
@@ -89,7 +12,7 @@
 <p>intel 8086：20根地址线，16位寄存器</p>
 <h3 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h3><p>XV6：操作系统</p>
 <p><a href="https://github.com/seaswalker/tiny-os">tiny-os</a></p>
-<h2 id="系统启动"><a href="#系统启动" class="headerlink" title="系统启动"></a>系统启动</h2><h3 id="基础信息"><a href="#基础信息" class="headerlink" title="基础信息"></a>基础信息</h3><h4 id="地址空间"><a href="#地址空间" class="headerlink" title="?地址空间"></a>?地址空间</h4><p>20根地址线，16位寄存器，可访问1MB的内存空间</p>
+<h2 id="系统启动"><a href="#系统启动" class="headerlink" title="系统启动"></a>系统启动</h2><h3 id="基础信息"><a href="#基础信息" class="headerlink" title="基础信息"></a>基础信息</h3><h4 id="物理地址空间"><a href="#物理地址空间" class="headerlink" title="物理地址空间"></a>物理地址空间</h4><p>20根地址线，16位寄存器，可访问1MB的内存空间</p>
 <p>0x00000-0x9FFFF: DRAM</p>
 <p>0xF0000-0xFFFFF: ROM，BIOS代码位置</p>
 <p>通过段寄存器左移4位+偏移地址</p>
@@ -101,7 +24,7 @@
 
 
 
-<h4 id="SiFive-FU540地址空间"><a href="#SiFive-FU540地址空间" class="headerlink" title="SiFive FU540地址空间"></a>SiFive FU540地址空间</h4><p>物理地址0x80000000以前的部分由主板上非DRAM组成（例如：boot ROM，PLIC等）</p>
+<h4 id="SiFive-FU540物理地址空间"><a href="#SiFive-FU540物理地址空间" class="headerlink" title="SiFive FU540物理地址空间"></a>SiFive FU540物理地址空间</h4><p>物理地址0x80000000以前的部分由主板上非DRAM组成（例如：boot ROM，PLIC等）</p>
 <p>物理地址对应的硬件（图例为SiFive主板，仅截取部分，物理地址0x80000000以前的部分非DRAM）</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240413150852809.png" class="" title="image-20240413150852809">
 
@@ -143,7 +66,7 @@
 
 <p>通用寄存器组，Eflag和EIP变为32位</p>
 <p>段寄存器仍为16位宽！！内容为段选择子</p>
-<h4 id="Intel汇编语法"><a href="#Intel汇编语法" class="headerlink" title="Intel汇编语法"></a>Intel汇编语法</h4><p>右 -&gt; 左</p>
+<h4 id="Intel语法风格"><a href="#Intel语法风格" class="headerlink" title="Intel语法风格"></a>Intel语法风格</h4><p>右 -&gt; 左</p>
 <p>实模式</p>
 <p>段内偏移默认基于DS进行偏移</p>
 <p>基址寄存器：bx寄存器默认基于DS进行偏移，bp寄存器默认基于SS进行偏移</p>
@@ -161,13 +84,17 @@
 <p>segment与section</p>
 <p>section称为节，是指在汇编源码中经由关键字section或segment修饰、逻辑划分的指令或数据区域，汇编器会将这两个关键字修饰的区域在目标文件中编译成节，也就是说“节”最初诞生于目标文件中。</p>
 <p>segment称为段，是链接器根据目标文件中属性相同的多个section合并后的section集合，这个集合称为segment，也就是段，链接器把目标文件链接成可执行文件，因此段最终诞生于可执行文件中。我们平时所说的可执行程序内存空间中的代码段和数据段就是指的segment。</p>
-<h4 id="AT-T汇编语法"><a href="#AT-T汇编语法" class="headerlink" title="AT&amp;T汇编语法"></a>AT&amp;T汇编语法</h4><p>左 -&gt; 右</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">movl %eax, immed32(%ebx, %esi,2)	</span><br><span class="line">	#将eax的值写入内存immed32+ebx+esi*2处</span><br><span class="line">	#()括号表示取内的值作为内存地址</span><br><span class="line">	#寄存器前必须有%</span><br><span class="line"></span><br><span class="line">movl $123, %eax	#将立即数123写入寄存器eax</span><br><span class="line"></span><br><span class="line">xchgl %eax, (%esp) #交换寄存器eax和栈顶位置的值</span><br><span class="line"></span><br><span class="line">popl %eax #指从栈顶弹出数据，并将弹出的数据写入 %eax 寄存器。</span><br><span class="line"></span><br><span class="line">ret #弹出栈顶值写入PC</span><br><span class="line">iret #弹出eip并写入，弹出cs并写入，弹出eflags并写入</span><br></pre></td></tr></table></figure>
+<h4 id="AT-T语法风格"><a href="#AT-T语法风格" class="headerlink" title="AT&amp;T语法风格"></a>AT&amp;T语法风格</h4><p>左 -&gt; 右</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">movl %eax, immed32(%ebx, %esi,2)	</span><br><span class="line">	#将eax的值写入内存immed32+ebx+esi*2处</span><br><span class="line">	#()括号表示取内的值作为内存地址</span><br><span class="line">	#寄存器前必须有%</span><br><span class="line"></span><br><span class="line">movl $123, %eax	#将立即数123写入寄存器eax</span><br><span class="line"></span><br><span class="line">andl %ebx, %ecx #对寄存器 %ebx 和 %ecx 的内容执行按位与操作，并将结果存储到 %ecx 寄存器中。</span><br><span class="line"></span><br><span class="line">xchgl %eax, (%esp) #交换寄存器eax和栈顶位置的值</span><br><span class="line"></span><br><span class="line">popl %eax #指从栈顶弹出数据，并将弹出的数据写入 %eax 寄存器。</span><br><span class="line"></span><br><span class="line">ret #弹出栈顶值写入PC</span><br><span class="line">iret #弹出eip并写入，弹出cs并写入，弹出eflags并写入</span><br></pre></td></tr></table></figure>
 
 
 
 <p>内联汇编</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">asm</span> [<span class="keyword">volatile</span>] (<span class="string">&quot;&quot;</span>)	<span class="comment">//volatile为可选项，表示此处代码不得修改</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;movl $9, %eax;&quot;</span> <span class="string">&quot;pushl %eax&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">asm</span> [<span class="keyword">volatile</span>] (<span class="string">&quot;&quot;</span>:output :input :clobber/modify)</span><br><span class="line">	<span class="comment">//output和input为c语言变量，clobber/modify可能存在寄存器破坏</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;addl %%ebx, %%eax;&quot;</span>:<span class="string">&quot;=a&quot;</span>(out_sum):<span class="string">&quot;a&quot;</span>(in_a),<span class="string">&quot;b&quot;</span>(in_b))</span><br><span class="line">	<span class="comment">//&quot;a&quot;为约束名，约束c语言变量in_a使用寄存器eax</span></span><br><span class="line">	<span class="comment">//&quot;b&quot;为约束名，约束c语言变量in_b使用寄存器ebx</span></span><br><span class="line">	<span class="comment">//&quot;=a&quot;为约束名，将寄存器eax的值写入c语言变量out_sum</span></span><br><span class="line">	<span class="comment">//=为只写，+为读写，&amp;为独占所约束的寄存器</span></span><br><span class="line">	<span class="comment">//由于扩展内联汇编中，%0为占位符符号，故修改寄存器表示为%%eax</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;movb %0 %1;&quot;</span>::<span class="string">&quot;a&quot;</span>(in_a),<span class="string">&quot;m&quot;</span>(in_b))</span><br><span class="line">	<span class="comment">//&quot;a&quot;为约束名，约束c语言变量in_a使用寄存器eax</span></span><br><span class="line">	<span class="comment">//&quot;m&quot;为约束名，使用c语言变量in_b的内存地址</span></span><br><span class="line">	<span class="comment">//%0,%1为序号占位符，所有input和output从左至右被标序号，代表对应的		input/output</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;divb %[divisor]; movb %%al, %[result]&quot;</span>\</span><br><span class="line">		:[result]<span class="string">&quot;=m&quot;</span>(out)\</span><br><span class="line">		:<span class="string">&quot;a&quot;</span>(in_a),[divisor]<span class="string">&quot;m&quot;</span>(in_b)\</span><br><span class="line">		);</span><br><span class="line">	<span class="comment">//[divisor]为in_b的内存地址，通过%[divisor]获取内存的值</span></span><br><span class="line">	<span class="comment">//[result]为out的内存地址，</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">asm</span> [<span class="keyword">volatile</span>] (<span class="string">&quot;&quot;</span>)	<span class="comment">//volatile为可选项，表示此处代码不得修改</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;movl $9, %eax;&quot;</span> <span class="string">&quot;pushl %eax&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">asm</span> [<span class="keyword">volatile</span>] (<span class="string">&quot;&quot;</span>:<span class="string">&quot;&quot;</span>(output) :<span class="string">&quot;&quot;</span>(input) :clobber/modify)</span><br><span class="line">	<span class="comment">//&quot;&quot; 内部为汇编代码</span></span><br><span class="line">    <span class="comment">//output, input为c变量，它们前面的&quot;&quot;为约束</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;addl %%ebx, %%eax;&quot;</span>:<span class="string">&quot;=a&quot;</span>(out_sum):<span class="string">&quot;a&quot;</span>(in_a),<span class="string">&quot;b&quot;</span>(in_b))</span><br><span class="line">	<span class="comment">//&quot;a&quot;为约束名，约束c语言变量in_a使用寄存器eax</span></span><br><span class="line">	<span class="comment">//&quot;b&quot;为约束名，约束c语言变量in_b使用寄存器ebx</span></span><br><span class="line">	<span class="comment">//&quot;=a&quot;为约束名，将寄存器eax的值写入c语言变量out_sum</span></span><br><span class="line">	<span class="comment">//=为只写，+为读写，&amp;为独占所约束的寄存器</span></span><br><span class="line">	<span class="comment">//由于扩展内联汇编中，%0为占位符符号，故修改寄存器表示为%%eax</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;movb %0 %1;&quot;</span>::<span class="string">&quot;a&quot;</span>(in_a),<span class="string">&quot;m&quot;</span>(in_b))</span><br><span class="line">	<span class="comment">//&quot;a&quot;为约束名，约束c语言变量in_a使用寄存器eax</span></span><br><span class="line">	<span class="comment">//&quot;m&quot;为约束名，使用c语言变量in_b的内存地址</span></span><br><span class="line">	<span class="comment">//%0,%1为序号占位符，所有input和output从左至右被标序号，这里对应in_a, in_b</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;divb %[divisor]; movb %%al, %[result]&quot;</span>\</span><br><span class="line">		:[result]<span class="string">&quot;=m&quot;</span>(out)\</span><br><span class="line">		:<span class="string">&quot;a&quot;</span>(in_a),[divisor]<span class="string">&quot;m&quot;</span>(in_b)\</span><br><span class="line">		);</span><br><span class="line">	<span class="comment">//[divisor]为in_b的内存地址，通过%[divisor]获取内存的值</span></span><br><span class="line">	<span class="comment">//[result]为out的内存地址，</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="C宏函数与inline"><a href="#C宏函数与inline" class="headerlink" title="C宏函数与inline"></a>C宏函数与inline</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> SQUARE(x) ((x) * (x))</span></span><br><span class="line">#  (x) * (x)外的一层括号是为了展开时不改变运输优先级</span><br><span class="line"># 对比 define <span class="title function_">ADD</span><span class="params">(x)</span> <span class="params">(x)</span> + <span class="params">(x)</span></span><br><span class="line"># 在使用 4 / <span class="title function_">ADD</span><span class="params">(<span class="number">2</span>)</span> 时，展开式</span><br><span class="line">#  4 / <span class="params">(<span class="number">2</span>)</span> * <span class="params">(<span class="number">2</span>)</span> 导致运算优先级错误</span><br><span class="line"># 对比 define <span class="title function_">SQUARE</span><span class="params">(x)</span> x * x</span><br><span class="line"># 在使用 <span class="title function_">SQUARE</span><span class="params">(<span class="number">2</span> + <span class="number">3</span>)</span> 时，展开式</span><br><span class="line"># 2 + 3 * 2 + 3 导致运算优先级错误</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MY_FUNC(x) &#123; \</span></span><br><span class="line"><span class="meta">    int result = (x) * 2; \</span></span><br><span class="line"><span class="meta">    printf(<span class="string">&quot;result: %d\n&quot;</span>, result); \</span></span><br><span class="line"><span class="meta">&#125;</span></span><br><span class="line"># 使用 &#123;&#125; 可以为宏函数创建一个独立的作用域，避免宏函数内部定义的变量与外部代码中的变量发生冲突。</span><br><span class="line"># 故在使用宏函数的时候使用括号 <span class="meta">#<span class="keyword">define</span> func() (&#123;函数体&#125;)</span></span><br></pre></td></tr></table></figure>
 
 
 
@@ -175,10 +102,7 @@
 
 <p>硬件厂商推荐通过每个任务拥有一个LDT和一个TSS的方式实现多任务</p>
 <p>LDT保存任务的代码和数据，TSS保存任务的上下文（各寄存器的值）和不同权限下的栈指针</p>
-<img src="/2024/04/12/Op-sys-Learning-Record/image-20240506191638362.png" class="" title="image-20240506191638362">
-
-
-
+<p>？存疑 </p>
 <p>实际使用中Linux，每个CPU上的所有任务共享一个TSS，并由该CPU的TR保存；进程切换时，改变TSS中SS0和esp0的值，任务的上下文（即部分寄存器值）压入该任务的<strong>内核中断栈</strong>保存 —– 出自操作系统真相还原</p>
 <p>所有进程的代码段，数据段等描述符均保存在GDT中</p>
 <p>eg: call 0x0018:0x1234 使用在GDT中索引0x0018的选择子获得段基址，偏移0x1234</p>
@@ -188,7 +112,7 @@
 
 <p>门描述符中包含了段选择子，指向段描述符</p>
 <p>门描述符包含了偏移量！！！</p>
-<h4 id="部分地址空间"><a href="#部分地址空间" class="headerlink" title="部分地址空间"></a>部分地址空间</h4><p>tiny-os kernel地址空间</p>
+<h4 id="物理地址空间使用情况"><a href="#物理地址空间使用情况" class="headerlink" title="物理地址空间使用情况"></a>物理地址空间使用情况</h4><p>tiny-os kernel地址空间</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240421151156773.png" class="" title="image-20240421151156773">
 
 <p>地址空间：</p>
@@ -223,6 +147,15 @@
 
 
 
+<p>Linux 0.11</p>
+<p>虚拟地址空间使用情况</p>
+<p>每个进程最大虚拟空间为64MB（巨大差异</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240706102456745.png" class="" title="image-20240706102456745">
+
+
+
+
+
 <h4 id="会话session"><a href="#会话session" class="headerlink" title="会话session"></a>会话session</h4><p>进程通过fork创建新的子进程，进程与创建出的子进程同属一个进程组</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> main.c | grep <span class="keyword">for</span> | more</span><br></pre></td></tr></table></figure>
 
@@ -254,9 +187,16 @@
 <p>tiny_os</p>
 <p>MBR程序将loader程序写入0x90000处</p>
 <h4 id="setup-loader"><a href="#setup-loader" class="headerlink" title="setup&amp;loader"></a>setup&amp;loader</h4><p>Linux: boot&#x2F;setup.s</p>
-<p>使用实模式下的中断向量表读取机器数据，写入0x90000处（覆盖bootsect）</p>
-<p>整体下移内核至0x00000处，</p>
-<p>设置临时ldt和gdt，进入保护模式，跳转至地址0x00000</p>
+<p>使用实模式下的中断向量表读取机器数据（读取屏幕光标位置，读取扩展内存大小，读取显卡显示模式，检查显示方式并取参数，取硬盘0信息，取硬盘1信息，检查硬盘2信息），写入0x90000及以后处（覆盖bootsect）</p>
+<p>将内核从0x10000<del>0x8ffff移动至0x00000</del>0x7ffff处，</p>
+<p>开启A20地址线</p>
+<p>修改控制寄存器CR0，进入保护模式</p>
+<p>跳转至地址0x00000（通过段选择子2，偏移0转移）</p>
+<p>临时gdt已通过data段形式实现在setup.s程序尾部</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240706144702481.png" class="" title="image-20240706144702481">
+
+
+
 <p>tiny_os</p>
 <p>loader程序位于0x90000，使用0x90000以下部分作为程序栈</p>
 <p>loader设置gdt，进入保护模式，并在保护模式加载内核</p>
@@ -351,16 +291,24 @@
 <p>建立页表</p>
 <p>在物理地址0x101000建立，一个页表含1024个页表项，每个页表项4B，占4KB，可表示4KB*1024&#x3D;4MB的地址空间</p>
 <p>该页表指向的物理地址为0-0x3fffff</p>
-<h5 id="页表构建与进入分页模式"><a href="#页表构建与进入分页模式" class="headerlink" title="页表构建与进入分页模式"></a>页表构建与进入分页模式</h5><p>Linux: boot&#x2F;head.s</p>
+<h5 id="head-s-页表构建与进入分页模式"><a href="#head-s-页表构建与进入分页模式" class="headerlink" title="head.s &#x2F; 页表构建与进入分页模式"></a>head.s &#x2F; 页表构建与进入分页模式</h5><p>Linux: boot&#x2F;head.s</p>
 <p><img src="file://D:/github/blog/source/_posts/Op-sys-Learning-Record/image-20240609161606117.png?lastModify=1717920885" alt="image-20240609161606117"></p>
 <p>位于物理地址0x00000处</p>
 <p>加载数据段寄存器，</p>
-<p>重新设置中断描述符表idt，256项全部指向哑中断处理程序</p>
-<p>重新设置gdt</p>
+<p>重新设置idtr，循环创建256项中断描述符，全部指向哑中断处理程序（该程序位于0x6000~中断描述符表前，图中的head.s部分代码）</p>
+<p>重新设置gdtr</p>
 <p>检查A20地址线是否开启</p>
 <p>检查机器是否含有数学协处理器，修改CR0寄存器标志位</p>
+<p>将main代码的地址压入位于(ss: 内核数据段选择符, esp: 内核sched模块user_stack处 )的栈，</p>
 <p>设置页目录表（为全体进程使用）与页表，4个页表（内核专用页表，新的进程的页表会在主内存区申请）位于页目录表之后，寻址16Mb空间（4KB&#x2F;页表大小，4B&#x2F;页表项，1024*4KB&#x3D;4MB每项寻址空间）</p>
-<p>将main代码的地址压入位于0x10处的<strong>内核的栈</strong>，使用iret跳转main代码执行</p>
+<p>iret弹出入栈的main函数地址，跳转前往执行main函数</p>
+<blockquote>
+<p>这段汇编先从0x0000开始运行，然后运行到设置内存页表的时候使用.org向后跳，空出内存页表的空间0x1000~0x5000，一直跳到0x6000处继续，将main参数和地址压栈，然后跳过哑中断处理程序，开始创建页内存目录表和写入刚才空出来的内存页表（页内存目录表创建在0x0000，这意味着原本位于这里的head.s的代码将被覆盖</p>
+<p>idt是循环创建的，gdt是预先手写好的</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240706163733389.png" class="" title="image-20240706163733389">
+
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240706163716837.png" class="" title="image-20240706163716837">
+</blockquote>
 <p>tiny_os</p>
 <p>loader中实现页表的构建与进入分页模式</p>
 <p>loader程序</p>
@@ -375,11 +323,12 @@
 <p>程序<strong>此时</strong>已进入虚拟地址运行，</p>
 <p>当前虚拟地址0x0000xxxx，仍处于低1M地址空间中(页目录表第一项指向第一个页表的原因)；</p>
 <p>从gdt中获得的段描述符的值为虚拟地址；</p>
-<p>​	</p>
-<h4 id="初始化程序-loader"><a href="#初始化程序-loader" class="headerlink" title="初始化程序&amp;loader"></a>初始化程序&amp;loader</h4><img src="/2024/04/12/Op-sys-Learning-Record/image-20240609163346462.png" class="" title="image-20240609163346462">
+<h4 id="内存分段机制"><a href="#内存分段机制" class="headerlink" title="内存分段机制"></a>内存分段机制</h4><p>​	<img src="/2024/04/12/Op-sys-Learning-Record/image-20240706103147318.png" class="" title="image-20240706103147318"></p>
+<p>从该图可以看出，偏移值(IP)和段选择子(CS&#x2F;DS&#x2F;…)中的地址为虚拟地址，</p>
+<p>通过段选择子读取段描述符表中的段描述符获取完整虚拟地址基址，得到线性地址；</p>
+<p>使用线性地址根据页目录表和页表得到物理地址</p>
+<h4 id="main-c-loader"><a href="#main-c-loader" class="headerlink" title="main.c&amp;loader"></a>main.c&amp;loader</h4><img src="/2024/04/12/Op-sys-Learning-Record/image-20240609163346462.png" class="" title="image-20240609163346462">
 
-<p>进入保护模式时，<strong>内核的栈</strong>位于0x10</p>
-<p>初始化时，main.c被切换至任务0执行，此时main代码获得了PCB，main.c的用户态栈仍为起始于0x10的栈，内核栈为PCB中的栈</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240609180508264.png" class="" title="image-20240609180508264">
 
 <p>Linux: main.c &amp; 任务0</p>
@@ -387,6 +336,7 @@
 <p>​	根设备号，高速缓存末端地址，机器内存数，主内存开始地址；</p>
 <p>调用内核中初始化函数初始化各功能部分；</p>
 <ul>
+<li>主内存区初始化</li>
 <li>硬件中断向量初始化</li>
 <li>块设备初始化</li>
 <li>字符设备初始化</li>
@@ -397,7 +347,20 @@
 <li>硬盘初始化</li>
 <li>软驱初始化</li>
 </ul>
-<p>进入用户模式，fork创建出任务1(init())</p>
+<p>移动到用户模式下执行</p>
+<blockquote>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240706162745211.png" class="" title="image-20240706162745211">
+
+<p>此处的宏函数move_to_user_mode展开后，实际上是原地跳转，但是在执行过程中修改了 </p>
+<p>cs段选择符-&gt;(ldtr寄存器)LDT表的RPL&#x3D;3的第一个段选择子，任务0代码段</p>
+<p>eip-&gt;下一条指令的地址(原地跳转)</p>
+<p>ds, es, fs, gs -&gt; (ldtr寄存器)LDT表的RPL&#x3D;3的第二个段选择子，任务0数据段</p>
+<p>ss未变更？</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240706163156118.png" class="" title="image-20240706163156118">
+
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240706163204640.png" class="" title="image-20240706163204640">
+</blockquote>
+<p>fork创建出任务1(init())</p>
 <p>循环pause状态—</p>
 <p>​	ps: 程序进入interruptible状态（闲置进程），无任务可调度时调度任务0</p>
 <p>​	ps:任务0为所有进程的父进程，故不使用堆栈</p>
@@ -405,7 +368,8 @@
 <p>读取硬盘参数，包含分区表信息，加载虚拟盘（若存在），安装根文件系统设备</p>
 <p>以读写方式打开tty0，得到文件句柄0stdin，复制两次得到stdout和stderr</p>
 <p>fork产生任务2，等待任务2退出</p>
-<p>循环，产生更多任务</p>
+<p>循环</p>
+<p>若产生的子进程死亡，重新产生新的进程并进入wait</p>
 <p>Linux: main.c&#x2F;init() 任务2</p>
 <p>关闭从任务1所继承的stdin，stdout和stderr；创建新的会话期</p>
 <p>tiny_os</p>
@@ -559,7 +523,12 @@
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240704195323779.png" class="" title="image-20240704195323779">
 </blockquote>
 <p><strong>信号</strong></p>
-<p>有上可知，信号将在系统调用结束时检查</p>
+<p>有上可知，信号将在系统调用结束时检查，并使用该程序task_struct中sigaction[32]中设置的处理函数进行处理</p>
+<p>向某程序发信息 -&gt; 修改该程序task_struct的signal</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240705101522972.png" class="" title="image-20240705101522972">
+
+
+
 <h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><h3 id="TSS"><a href="#TSS" class="headerlink" title="TSS"></a>TSS</h3><p>TR(Task Register)保存TSS虚拟地址</p>
 <p>Task State Segment	</p>
 <p>TSS描述符保存于GDT</p>
@@ -571,75 +540,20 @@
 
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240428111029824.png" class="" title="image-20240428111029824">
 
-<p>Linux系统不通过切换TSS实现任务切换</p>
-<p>每个CPU上的所有任务共享一个TSS，并由该CPU的TR保存；</p>
-<p>进程切换时，改变TSS中SS0和esp0的值，任务上下文压入<strong>内核中断栈</strong>保存。</p>
-<p>ss0, esp0对应0特权级的段选择子和偏移量，ss3, esp3对应3特权级的段选择子和偏移量（实际上不记录），Linux系统仅使用该部分。</p>
-<p>所有进程的代码段，数据段等描述符均保存在GDT中</p>
-<h3 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h3><p>进程&#x3D;线程+资源</p>
-<img src="/2024/04/12/Op-sys-Learning-Record/image-20240424100100197.png" class="" title="image-20240424100100197">
 
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>self_kstack</td>
-<td>内核栈指针</td>
-</tr>
-<tr>
-<td>pid</td>
-<td></td>
-</tr>
-<tr>
-<td>status</td>
-<td>线程状态</td>
-</tr>
-<tr>
-<td>name</td>
-<td>线程名</td>
-</tr>
-<tr>
-<td>priority</td>
-<td>优先级</td>
-</tr>
-<tr>
-<td>tick</td>
-<td>每次在处理器上运行的时钟数</td>
-</tr>
-<tr>
-<td>elapsed_tick</td>
-<td>已使用时钟数</td>
-</tr>
-<tr>
-<td>general_tag</td>
-<td>线程在队列上的tag</td>
-</tr>
-<tr>
-<td>all_list_tag</td>
-<td>线程队列</td>
-</tr>
-<tr>
-<td>pgdir</td>
-<td>页表</td>
-</tr>
-<tr>
-<td>userprog_vaddr</td>
-<td>用户进程虚拟地址池</td>
-</tr>
-<tr>
-<td>u_block_desc[DESC_CNT]</td>
-<td>用户内存块描述符表</td>
-</tr>
-<tr>
-<td>stack_magic</td>
-<td>栈溢出标记，位于内核栈下方</td>
-</tr>
-</tbody></table>
-<h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>进程创建过程</p>
+
+
+
+<h3 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h3><img src="/2024/04/12/Op-sys-Learning-Record/image-20240705104639547.png" class="" title="image-20240705104639547">
+
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240705104656011.png" class="" title="image-20240705104656011">
+
+
+
+<h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>Linux</p>
+<p>通过fork从task0创建</p>
+<p>tiny_os</p>
+<p>进程创建过程</p>
 <p>kernel启动进程，传入进程参数（进程文件名和进程名），启动进程。</p>
 <p>1.初始化线程</p>
 <p>从内核空间申请页面，清洗页面，初始化线程名为线程&#x2F;进程名；</p>
@@ -688,28 +602,57 @@
 <p>将esp设置为中断栈栈顶指针thread-&gt;self_kstack，</p>
 <p>jmp intr_exit，跳过压入的中断向量号vec_no，popad弹出所有通用寄存器值，pop gs，fs，es，ds，跳过错误码；此时栈顶为：eip值为filename（指向用户进程入口地址），cs值为SELECTOR_U_CODE，eflag为(EFLAGS_IOPL_0 | EFLAGS_MBS | EFLAGS_IF_1);</p>
 <p>前往执行对应函数，进入特权级3；</p>
-<h3 id="基于线程的调度"><a href="#基于线程的调度" class="headerlink" title="基于线程的调度"></a>基于线程的调度</h3><img src="/2024/04/12/Op-sys-Learning-Record/image-20240608144715684.png" class="" title="image-20240608144715684">
+<h3 id="调度"><a href="#调度" class="headerlink" title="调度"></a>调度</h3><p>调度发生在：</p>
+<p>1.系统调用(包括时间中断)-目标中断处理函数后，若当前进程时间片为0或任务未就绪</p>
+<p>2.切换当前进程为其他态后</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240608144715684.png" class="" title="image-20240608144715684">
 
-<p>每一个线程均拥有一个PCB，PCB是调度的基础</p>
-<img src="/2024/04/12/Op-sys-Learning-Record/image-20240507170811516.png" class="" title="image-20240507170811516">
+<p>Linux: system_call.s</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.align 2</span><br><span class="line">_timer_interrupt:</span><br><span class="line">	push %ds		# save ds,es and put kernel data space</span><br><span class="line">	push %es		# into them. %fs is used by _system_call</span><br><span class="line">	push %fs</span><br><span class="line">	pushl %edx		# we save %eax,%ecx,%edx as gcc doesn&#x27;t</span><br><span class="line">	pushl %ecx		# save those across function calls. %ebx</span><br><span class="line">	pushl %ebx		# is saved as we use that in ret_sys_call</span><br><span class="line">	pushl %eax</span><br><span class="line">	movl $0x10,%eax</span><br><span class="line">	mov %ax,%ds</span><br><span class="line">	mov %ax,%es</span><br><span class="line">	movl $0x17,%eax</span><br><span class="line">	mov %ax,%fs</span><br><span class="line">	incl _jiffies  #发生时间中断时将jiffies自增</span><br><span class="line">	movb $0x20,%al		# EOI to interrupt controller #1</span><br><span class="line">	outb %al,$0x20</span><br><span class="line">	movl CS(%esp),%eax</span><br><span class="line">	andl $3,%eax		# %eax is CPL (0 or 3, 0=supervisor)</span><br><span class="line">	pushl %eax</span><br><span class="line">	call _do_timer		# &#x27;do_timer(long CPL)&#x27; does everything from PS: 其实就是修改计时器和调度</span><br><span class="line">	addl $4,%esp		# task switching to accounting ...</span><br><span class="line">	jmp ret_from_sys_call</span><br></pre></td></tr></table></figure>
 
-<p>1.发生中断时，CPU根据中断向量号和IDTR给出中断入口程序的段选择子和偏移：段选择子-&gt;GDT-&gt;页表+偏移得到物理地址；</p>
-<p>2.中断入口程序保护线程上下文，将寄存器ds, es, fs, gs压入当前线程的中断栈，根据中断向量号前往中断服务程序</p>
-<p>3.中断服务程序提供服务：进行线程调度</p>
-<p>此时已内核，中断服务程序进行判断：若时间片耗尽，将该线程加入就绪队列；若未耗尽，时间片自减；</p>
-<p>根据调度链表获得下一个线程，修改CR3为该线程所属进程的页表物理地址</p>
+<p>Linux: sched.c</p>
+<p>jiffies</p>
 <blockquote>
-<p>此时页表已经从原线程切换为下一线程，但由于所有进程共享内核空间，故页表的切换不影响内核空间中对PCB的操作</p>
+<p>include&#x2F;sched.h 定义为变量</p>
 </blockquote>
-<p>4.开始任务切换</p>
-<p>中断服务程序call函数swith_to</p>
-<p>swith_to函数保护内核上下文，将寄存器esi, edi, ebx, ebp压入被中断线程PCB的内核栈，将当前栈指针esp写入被中断线程PCB的self_kstack；</p>
-<img src="/2024/04/12/Op-sys-Learning-Record/image-20240507173112800.png" class="" title="image-20240507173112800">
+<p>schedule()</p>
+<blockquote>
+<p>该函数在修改当前任务state后调用</p>
+<p>在系统调用处理完成当前中断后调用</p>
+</blockquote>
+<p>从任务数组中最后一个任务开始向前扫描直到第一个任务前(跳过空)：</p>
+<p>​	若task_struct-&gt;alarm &lt; jiffies, 修改signal并置alarm为0</p>
+<p>​	若任务除去屏蔽信号外存在信号且为interruptible, 修改task_struct-&gt;state为running</p>
+<p>next &#x3D; 0 </p>
+<p>while(1)</p>
+<p>​	从任务数组中最后一个任务开始向前扫描直到第一个任务前(跳过空)：</p>
+<p>​		next 当前task_struct-&gt;counter最大的任务；</p>
+<p>​		if(counter最大的任务的counter&gt;0):break;</p>
+<p>​		else:使用任务优先级更新所有任务的counter</p>
+<p>switch_to(next)</p>
+<p>% next默认为0，即在没有可执行任务时系统切换至任务0(idle任务)执行</p>
+<p>sleep_on(struct task_struct **p)</p>
+<blockquote>
+<p>将当前任务state置为uninterruptible并加入睡眠队列</p>
+<p>传入的p指向睡眠队列头，该函数将当前task置为睡眠队列头</p>
+</blockquote>
+<p>do_timer(long cpl)</p>
+<blockquote>
+<p>时钟中断二阶处理程序</p>
+</blockquote>
+<p>增加内核&#x2F;用户代码运行时间</p>
+<p>定时器链中定时器的值减少，若为0调用处理函数并移除该定时器</p>
+<p>减少当前程序的counter值，若为0则call schedule()</p>
+<p>switch_to()</p>
+<blockquote>
+<p>switch_to修改current指针指向传入的task任务</p>
+</blockquote>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240705161507324.png" class="" title="image-20240705161507324">
 
-<p>将下一个线程的self_kstack写入esp，切换内核栈从原线程到下一线程，将下一线程内核栈中的寄存器值esi, edi, ebx, ebp出栈，根据栈顶返回地址执行ret指令；</p>
-<p>5.ret执行返回至中断入口程序，中断入口程序jmp至intr_exit，将下一线程的上下文恢复至寄存器中，</p>
-<p>&#x2F;&#x2F;4.返回中断入口程序，中断入口程序恢复原线程上下文</p>
-<p>&#x2F;&#x2F;5.中断返回程序</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240705155902092.png" class="" title="image-20240705155902092">
+
+
+
 <h2 id="特权级"><a href="#特权级" class="headerlink" title="特权级"></a>特权级</h2><p>CPL(Current Privilege Level)  当前代码特权级</p>
 <p>为当前运行代码段的特权级，保存于CS寄存器中段选择子的RPL(2位)处</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416193845119.png" class="" title="image-20240416193845119">
@@ -795,6 +738,14 @@
       <tags>
         <tag>operation system</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
   </entry>
   <entry>
     <title>common-commands</title>
@@ -979,6 +930,12 @@
       <tags>
         <tag>command</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
   </entry>
   <entry>
     <title>pytorch_learning_record</title>
@@ -1399,6 +1356,69 @@
 ]]></content>
       <tags>
         <tag>python, reinforce learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Algo Learning Record</title>
+    <url>/2024/04/25/Algo-Learning-Record/</url>
+    <content><![CDATA[<p>算法相关学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><h3 id="DP问题分析"><a href="#DP问题分析" class="headerlink" title="DP问题分析"></a>DP问题分析</h3><p>递归&amp;动态规划</p>
+<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
+
+<p>递归会重复进入状态，DP不会</p>
+<p>递归一个起点，多个终点；</p>
+<p>DP多个起点，一个终点；</p>
+<p>DP核心：</p>
+<p>1.确定状态和动作</p>
+<p>2.确定起点和终点</p>
+<h3 id="无权图两点间路径数"><a href="#无权图两点间路径数" class="headerlink" title="无权图两点间路径数"></a>无权图两点间<strong>路径数</strong></h3><p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果相加。</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
+<p>3.到达起点，当前递归结束，返回；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>邻接点</strong>的走法已知；</p>
+<p>2.到达<strong>次邻接点</strong>的走法为从<strong>邻接点</strong>到<strong>次邻接点</strong>的走法之和；</p>
+<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的走法之和；</p>
+<p>实例：</p>
+<img src="/2024/04/25/Algo-Learning-Record/image-20240426101614103.png" class="" title="image-20240426101614103">
+
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCount</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">1</span> || n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> pathsCount(m - <span class="number">1</span>, n) + pathsCount(m , n -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>DP</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCounts</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="有权图两点间最大路径"><a href="#有权图两点间最大路径" class="headerlink" title="有权图两点间最大路径"></a>有权图两点间<strong>最大路径</strong></h3><p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果取最大。</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
+<p>3.到达起点，当前递归结束，返回当前节点值；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>邻接点</strong>的距离可知；</p>
+<p>2.到达<strong>次邻接点</strong>的最大距离为从<strong>邻接点</strong>到<strong>次邻接点</strong>的最大距离；</p>
+<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的最大距离；</p>
+<p>实例：</p>
+<img src="/2024/04/25/Algo-Learning-Record/image-20240426102031155.png" class="" title="image-20240426102031155">
+
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> getMin(grid, m-<span class="number">1</span>, n-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getMin</span><span class="params">(<span class="type">int</span>[][] grid, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">minRow</span> <span class="operator">=</span> getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    <span class="type">int</span> <span class="variable">minColumn</span> <span class="operator">=</span> getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grid[i][j] + Math.min(minRow, minColumn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>DP</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m ;i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n;i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = grid[i][j] + Math.min(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
       </tags>
   </entry>
 </search>
