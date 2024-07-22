@@ -64,402 +64,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Android-learning-record</title>
-    <url>/2024/07/14/Android-learning-record/</url>
-    <content><![CDATA[<p>Android学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="Android-Learning-Record"><a href="#Android-Learning-Record" class="headerlink" title="Android Learning Record"></a>Android Learning Record</h1><h2 id="Android系统"><a href="#Android系统" class="headerlink" title="Android系统"></a>Android系统</h2><h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>Android系统启动过程中，会先启动linux内核，然后加载init.rc文件，启动init进程。然后，init进程通过解析init.rc文件fork生成Zygote进程，该进程也是Android系统的首个Java进程。之后Zygote进程负责孵化System Server进程和APP进程。</p>
-<img src="/2024/07/14/Android-learning-record/image-20240714103234291.png" class="" title="image-20240714103234291">
-
-<h3 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h3><h3 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h3><ul>
-<li>由Zygote进程fork生成，SystemServer是Zygote孵化的第一个进程。</li>
-<li>负责启动、管理整个Java Framework，系统里面重要的服务都是在这个进程里面开启的，比如ActivityManagerService、PackageManagerService、WindowManagerService。</li>
-</ul>
-<h3 id="APP进程"><a href="#APP进程" class="headerlink" title="APP进程"></a>APP进程</h3><ul>
-<li>Zygote进程在App层中孵化出的第一个进程是Launcher进程，即手机的桌面APP。</li>
-<li>Zygote还会孵化出Browser、Email、Phone等APP进程，每个APP至少运行在一个进程上。</li>
-<li>所有APP进程都由Zygote进程fork生成。</li>
-</ul>
-<h2 id="Android系统中进程的交互"><a href="#Android系统中进程的交互" class="headerlink" title="Android系统中进程的交互"></a>Android系统中进程的交互</h2><p>平时我们所熟知的前端（Web\Android\iOS）通过网络与服务器通信是客户端-服务端模式的体现，而在Android Framework中，四大组件的创建、生命周期也是通过这样的模式进行通信：</p>
-<ul>
-<li>服务器端(server)指的就是SystemServer进程，这个进程提供了很多服务，比如AMS、PMS、WMS等等，所有的APP进程都可以与其通信。</li>
-<li>客户端(client)指的就是各个独立的APP进程。</li>
-</ul>
-<p>Android开发中，我们可以通过Package包名和Activity类名，来打开一个APP。实际上，项目里的业务代码startActivity()方法并不是直接创建进程、拉起APP的。而是通过一系列的调用，把请求传递给SystemServer的AMS。AMS收到来自客户端的请求后，再通知zygote进程来fork一个新进程，来开启我们的目标APP。APP中所有Activity的生命周期过程，都由AMS（SystemServer进程）统一调度，并在APP自身进程中具体完成。</p>
-<p>这个过程涉及到3个进程：APP进程、SystemServer进程、Zygote进程。</p>
-<ul>
-<li>APP进程与SystemServer进程通过Binder机制，进行跨进程通信。</li>
-<li>SystemServer进程与Zygote进程通过Socket，进行跨进程通信。</li>
-</ul>
-<h3 id="Binder机制"><a href="#Binder机制" class="headerlink" title="Binder机制"></a>Binder机制</h3><h3 id="Socket机制"><a href="#Socket机制" class="headerlink" title="Socket机制"></a>Socket机制</h3>]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-      <tags>
-        <tag>Android</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>common-commands</title>
-    <url>/2024/06/22/common-commands/</url>
-    <content><![CDATA[<p>常用指令</p>
-<span id="more"></span>
-
-
-
-<h1 id="Common-Commands"><a href="#Common-Commands" class="headerlink" title="Common Commands"></a>Common Commands</h1><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p><a href="https://zhuanlan.zhihu.com/p/69746955">https://zhuanlan.zhihu.com/p/69746955</a></p>
-<p>python变量，函数均为对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>() : </span><br><span class="line">    <span class="comment">#函数在创建时同时生成变量对象hello和函数对象（函数对象名为hello）</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    x=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(test())<span class="comment">#函数默认返回值为None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">say = hello</span><br><span class="line"> </span><br><span class="line"><span class="keyword">del</span> hello <span class="comment">#del删除了hello变量对象</span></span><br><span class="line">say()</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say)<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say.__name__) <span class="comment">##对象属性,查看对象名</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>python类</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    def my_method(self, arg1, arg2):</span><br><span class="line">    #类的方法第一个参数为self</span><br><span class="line">        # 方法体</span><br><span class="line"></span><br><span class="line">#Bound Method</span><br><span class="line">obj = MyClass()#类 实例化</span><br><span class="line">obj.my_method(arg1, arg2)#实例对象调用方法</span><br><span class="line"></span><br><span class="line">#Unbound Method</span><br><span class="line">MyClass.my_method(obj, arg1, arg2)</span><br><span class="line">	#原因：可以直接通过类访问方法，但是必须指定类的实例</span><br></pre></td></tr></table></figure>
-
-
-
-<p>函数内部函数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> test</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hello()())</span><br><span class="line"><span class="comment">#首先hello()返回函数对象test，然后调用 test()</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>函数装饰器</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">f</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">f</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inn</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;inner&quot;</span>)</span><br><span class="line">        f()</span><br><span class="line">    <span class="keyword">return</span> inn</span><br><span class="line"></span><br><span class="line"><span class="meta">@hello</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#等价于</span></span><br><span class="line">test=hello(test)<span class="comment">#原函数对象test仍存在，变量对象test指向新函数hello(test)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#test &lt;function test at 0x000001821AE551C0&gt;</span></span><br><span class="line"><span class="comment">#test() None</span></span><br><span class="line"><span class="comment">#test为函数对象，test()为（执行函数对象后的）返回值</span></span><br><span class="line">test()</span><br><span class="line"><span class="built_in">print</span>(test.__name__)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>with语句 上下文对象管理</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">with open(&#x27;myfile.txt&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">    contents = f.read()</span><br><span class="line">    print(contents)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>**open(‘myfile.txt’, ‘r’)**：这是一个上下文管理器，它打开文件并返回一个文件对象。</li>
-<li><strong>as f</strong>：将文件对象赋值给变量 f，以便在 with 代码块中使用。</li>
-<li>在 with 代码块中，我们可以使用 f 读取文件内容。</li>
-<li>当 with 代码块执行完毕后，文件会自动关闭，即使在读取过程中发生异常。</li>
-</ul>
-<p>Python类型注解</p>
-<p><a href="https://zhuanlan.zhihu.com/p/419955374">https://zhuanlan.zhihu.com/p/419955374</a></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment">#规定函数传入参数为str类型，返回值为str类型</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Hello <span class="subst">&#123;name&#125;</span>!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mix</span>(<span class="params">scores: <span class="built_in">list</span>[<span class="built_in">int</span>], ages: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]</span>) -&gt; <span class="built_in">tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>]:</span><br><span class="line">    <span class="comment">#容器注解</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">seq: Seq1[<span class="built_in">str</span>]</span>):</span><br><span class="line">    <span class="comment">#传入参数为（列表+元组）的泛化：序列Seq</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> seq:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="type">Optional</span>[<span class="built_in">str</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为None或为str</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Yeah&#x27;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>() -&gt; <span class="type">Union</span>[<span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为str，int，float 三选一</span></span><br><span class="line">    <span class="comment">#Optional[int] 和 Union[int, None] 是等价的。</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#T为泛型，T必须为str或int</span></span><br><span class="line">T = TypeVar(<span class="string">&#x27;T&#x27;</span>, <span class="built_in">str</span>, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">a: T, b: T</span>) -&gt; <span class="type">List</span>[T]:</span><br><span class="line">    <span class="keyword">return</span> [a, b]</span><br><span class="line"></span><br><span class="line"><span class="comment"># K的具体类型没有限制</span></span><br><span class="line">K = TypeVar(<span class="string">&quot;K&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="python-环境"><a href="#python-环境" class="headerlink" title="python 环境"></a>python 环境</h2><p>sudo apt-get update  # 更新包管理器</p>
-<p>sudo apt-get install python3-venv  # 安装Python虚拟环境工具</p>
-<p>cd &#x2F;path&#x2F;to&#x2F;your&#x2F;project</p>
-<p>python3 -m venv venv</p>
-<p>source venv&#x2F;bin&#x2F;activate</p>
-<p>pip install -r requirements.txt</p>
-<p>deactivate</p>
-<p>conda指令</p>
-<p>conda env list</p>
-<p>conda create –name your_env_name python&#x3D;3.5 numpy scipy</p>
-<p>conda remove –<em>name</em> <em>your_env_name</em> –all</p>
-<p>conda install</p>
-<p>​	conda install numpy&#x3D;1.9.3</p>
-<p>activate your_env_name</p>
-<p>deactivate</p>
-<p>conda clean –all</p>
-<p>当前conda虚拟环境中存在pip时，使用pip指令将优先使用环境中pip而非全局pip，可通过pip list（当前环境必须已安装pip）和 conda list 查看当前环境包列表</p>
-<p>出现报错</p>
-<p>PackagesNotFoundError: The following packages are not available from current channels</p>
-<p>尝试在<a href="https://anaconda.org直接搜索该包并使用网站所提供的指令安装/">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
-<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ol>
-<li><p>**<code>docker pull</code>**：用于从 Docker 镜像仓库下载镜像到本地主机。</p>
-<ul>
-<li>语法：<code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></li>
-<li>示例：<code>docker pull ubuntu:20.04</code></li>
-</ul>
-<p>这个命令用于获取 Docker 镜像，其中 <code>NAME</code> 表示镜像的名称，<code>TAG</code> 表示镜像的标签，或者可以使用 <code>@DIGEST</code> 来指定镜像的摘要。如果不指定标签，将默认获取 <code>latest</code> 标签的镜像。</p>
-</li>
-<li><p>**<code>docker load</code>**：用于从文件加载镜像，通常是以 tar 归档文件的形式。</p>
-<ul>
-<li>语法：<code>docker load [OPTIONS]</code></li>
-<li>示例：<code>docker load -i myimage.tar</code></li>
-</ul>
-<p>这个命令用于加载以 tar 归档文件格式存储的 Docker 镜像。通常用于将镜像从一个环境传输到另一个环境。</p>
-</li>
-<li><p>**<code>docker save</code>**：用于将 Docker 镜像保存为 tar 归档文件。</p>
-<ul>
-<li>语法：<code>docker save [OPTIONS] IMAGE [IMAGE...]</code></li>
-<li>示例：<code>docker save -o myimage.tar myimage:tag</code></li>
-</ul>
-<p>这个命令允许你将一个或多个 Docker 镜像保存为 tar 归档文件，通常用于导出镜像以便在不同环境中使用。</p>
-</li>
-<li><p>**<code>docker run</code>**：用于创建和启动 Docker 容器。</p>
-<ul>
-<li>语法：<code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></li>
-<li>示例：<code>docker run -d -p 8080:80 my-web-app</code></li>
-</ul>
-<p>这个命令用于在 Docker 容器中运行一个镜像，你需要指定镜像的名称、容器选项（如端口映射、环境变量、容器名称等），以及容器内要执行的命令。</p>
-</li>
-<li><p>**<code>docker build</code>**：用于构建自定义 Docker 镜像，通常通过 Dockerfile 文件定义构建步骤。</p>
-<ul>
-<li>语法：<code>docker build [OPTIONS] PATH | URL | -</code></li>
-<li>示例：<code>docker build -t my-custom-image .</code></li>
-</ul>
-<p><code>docker build</code> 命令用于基于 Dockerfile 构建自定义镜像。你需要提供包含 Dockerfile 的路径，以及可选的选项和标签。</p>
-<p>Dockerfile</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 使用官方 Python 3 镜像作为基础镜像</span><br><span class="line">FROM python:3.8</span><br><span class="line"></span><br><span class="line"># 设置工作目录</span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"># 复制本地项目到容器中</span><br><span class="line">COPY ./myproject /app</span><br><span class="line"></span><br><span class="line"># 安装项目依赖</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 指定容器启动命令</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-</li>
-<li><p>**<code>docker rm</code>**：用于删除已停止的容器。</p>
-<ul>
-<li>语法：<code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></li>
-<li>示例：<code>docker rm my-container</code></li>
-</ul>
-<p>这个命令用于删除一个或多个已经停止的容器，释放资源并清理系统。</p>
-</li>
-<li><p>**<code>docker stop</code>**：用于停止运行中的容器。</p>
-<ul>
-<li>语法：<code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></li>
-<li>示例：<code>docker stop my-container</code></li>
-</ul>
-<p>这个命令用于停止一个或多个正在运行的容器，使它们从运行状态转换为停止状态。</p>
-</li>
-<li><p>**<code>docker ps</code>**：用于列出正在运行的容器。</p>
-<ul>
-<li>语法：<code>docker ps [OPTIONS]</code></li>
-<li>示例：<code>docker ps -a</code></li>
-</ul>
-<p><code>docker ps</code> 命令用于列出当前正在运行的容器，包括容器的 ID、状态、端口映射等信息。加上 <code>-a</code> 选项可以列出所有容器，包括已停止的容器。</p>
-</li>
-</ol>
-<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p><a href="https://blog.csdn.net/qq_34021712/article/details/117260462">https://blog.csdn.net/qq_34021712/article/details/117260462</a></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在桌面创建test目录</span><br><span class="line">mkdir /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 切换到test目录</span><br><span class="line">cd /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 创建并初始化git库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 链接到远程git仓库 -t main 使用 main 分支</span><br><span class="line">git remote add origin -t main https://github.com/Helloworld-7558/git-demo.git</span><br><span class="line"></span><br><span class="line"># 将远程git库下载到本地</span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line">#修改</span><br><span class="line"></span><br><span class="line"># 将目录下所有文件都增加到本地库中。</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"># 提交更改到本地仓库</span><br><span class="line">git commit -am &#x27;提交注释&#x27;</span><br><span class="line"></span><br><span class="line"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span><br><span class="line"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"># 将本地修改推到github上</span><br><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure>
-
-
-
-<ol>
-<li>什么是主分支<br>主分支是<em>默认分支</em>,当执行<code>git clone</code>时，克隆的就是默认分支。<code>git init</code>初始化时，会以<strong>master</strong>分支作为主分支，主分支可以改成其他分支。</li>
-<li>什么是origin<br><strong>origin</strong>代表远程分支，比如gitlab上保存的分支。Git作为分布式版本控制工具，本地分支与远程分支并无不同。假如远程服务器上有一个<strong>develop</strong>分支，那么在本地以<strong>origin&#x2F;develop</strong>代表远程分支</li>
-<li>如何创建新分支<br># 方法一<br>git branch branch_name<br># 此方法以当前所在分支为基础来创建<br># e.g. git branch feature&#x2F;test<br>​<br># 方法二<br>git branch branch_name base_branch_name<br># 此方法忽略当前所在的分支，以指定的base_branch_name为基础来创建分支<br># e.g. git branch feature&#x2F;test develop<br># e.g. git branch feature&#x2F;test origin&#x2F;develop<br>​<br># 方法三<br>git checkout -b branch_name<br># 此方法是一个快捷操作，创建并切换分支。checkout本是用来切换分支的，增加“-b”选项指：当分支不存在时创建，同样支持指定base_branch_name<br># e.g. git checkout -b feature&#x2F;test<br># e.g. git checkout -b feature&#x2F;test develop<br># e.g. git checkout -b feature&#x2F;test origin&#x2F;develop</li>
-<li>如何切换分支<br>git checkout branch_name</li>
-<li>查看所有分支<br># 列出本地所有分支<br>git branch</li>
-<li>如何删除分支<br>当使用gitflow工作流时，本地分支会越来越多，不用的分支可以删除<br># 删除单个分支<br>git branch -d branch_name<br>​<br># 删除多个分支<br>git branch | grep feature&#x2F; | xargs git branch -d<br># git branch命令不支持管道操作，所获得的列表不能作为git branch -d的参数，所以需要使用xargs做一个辅助</li>
-<li>如何提交修改<br># 第一步：将修改进行暂存(Stage)<br>git add .&#x2F; # 添加所有本地修改<br># 添加特定文件 git add file1 file2<br># 添加特定文件夹下的所有文件 git add .&#x2F;dir1&#x2F;dir2&#x2F;<br>​<br># 第二步：执行commit<br>git commit -m ‘commit message’<br># 使用编辑器编写提交说明 git commit ,Git将自动打开默认编辑器，通常是Vim，可以自定义<br># 在上一条提交上追加提交 git commit –amend，本次提交不会生成一条新的提交记录。应该保证每次提交都是一次完整的功能修改，当发现上次提交的内容不完整时，应该采用此种方法进行追加提交。</li>
-<li>如何取消本地修改<br># 将文件从暂存区中去除,文件的修改不会丢失<br>git reset – filename<br>​<br># 将文件(未暂存)的修改取消，文件的修改将丢失<br>git checkout – filename<br>​<br># 将所有文件(未暂存)修改取消,文件的修改将丢失<br>git checkout – .&#x2F;<br>​<br># 将所有文件(包括已暂存)的修改取消，文件的修改将丢失<br>git reset –hard HEAD</li>
-<li><code>checkout</code>命令为什么可以用来<em>取消文件修改</em><br><code>checkout</code>命令翻译为”检出”，他的实际作用是将版本库中的内容拿出来放到工作区。<br>当执行<code>git checkout branch_name</code>时相当于把<code>brach_name</code>分支的内容拿出来放到工作区，表象就是切换了分支<br>当执行<code>git checkout -- filename</code>时，相当于把该文件版本库中的内容拿出来放到工作区，表象就是覆盖了该文件在工作区中的修改</li>
-<li><code>rebase</code>命令什么时候用<br><code>rebase</code>命令翻译为<em>变基</em>。我们在创建任何分支时，都有一个基分支，比如：<br><code>git branch feature/test develop</code>创建一个<code>feature/test</code>分支，他的基分支就是<code>develop</code>。Git会记录每个分支的基分支，变基就是改变分支的基分支。变基的表象就是基分支上改动会合并到当前分支，但不会生成合并记录。所以其使用场景就是：当develop上有别人提交的新内容，并且我们需要这些新内容时，执行一次变基，这样别人提交的最新代码就会出现在当前分支上。<br># 第一种用法：完全变基<br>git rebase –onto base_branch_name branch_name<br># 此种不常用<br>​<br># 第二种用法：通过变基获取最新代码<br>git rebase base_branch_name<br># 在向服务器推送自己的代码前，执行一遍rebase能提前知道自己的代码是否和别人的有冲突，便于提前解决冲突，当有冲突时需要手动解决冲突，然后执行：git rebase –continue</li>
-<li>向服务器推送代码<br>在使用gitflow工作流时，会经常执行<code>git push origin branch_name</code>命令。比简单的<code>git push</code>命令多了两个参数。此处之所以需要多传两个参数是因为，<code>branch_name</code>是我们本地创建的分支，服务器上没有该分支，且本地Git也并不知道本地<code>branch_name</code>与远程的哪个分支对应。所以需要显式传参。<br>同时我们可以告诉Git，本地与远程如何对应，在第一次推送代码时执行：<code>git push -u origin branch_name</code> 或<code>git push --set-upstream origin branch_name</code>，会告诉Git，本地<code>branch_name</code>分支与<code>origin/branch_name</code>对应，之后就可以直接执行<code>git pussh</code>, 而无需显式传参。</li>
-</ol>
-<h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h2><p>hello.c -预处理 -E-&gt; hello.i -编译 -S-&gt; hello.s -汇编 -c-&gt; hello.o -链接 -&gt; hello</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc  main.cpp hello.cpp factorial.cpp -o hello</span><br></pre></td></tr></table></figure>
-
-<p>使用gcc 将多个文件 <strong>生成</strong> 为 hello可执行文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">	gcc test.c</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件。这里未指定输出文件，默认输出为 a.out。</span><br><span class="line"></span><br><span class="line">-o：指定生成的输出文件；</span><br><span class="line">	gcc test.c -o test</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件 test。-o 选项用来指定输出文件的文件名。</span><br><span class="line">	</span><br><span class="line">-E：仅执行编译预处理；</span><br><span class="line">	gcc -E test.c -o test.i</span><br><span class="line">	将 test.c 预处理输出 test.i 文件。</span><br><span class="line"></span><br><span class="line">-S：将C代码转换为汇编代码；</span><br><span class="line">	gcc -S test.i</span><br><span class="line">	将预处理输出文件 test.i 汇编成 test.s 文件。</span><br><span class="line"></span><br><span class="line">-wall：显示警告信息；</span><br><span class="line"></span><br><span class="line">-c：仅执行编译操作，不进行连接操作。</span><br><span class="line">	gcc -c test.s</span><br><span class="line">	将汇编输出文件 test.s 编译输出 test.o 文件。</span><br><span class="line"></span><br><span class="line">-l：用来指定程序要链接的库，-l参数紧接着就是库名</span><br><span class="line"></span><br><span class="line">-I：寻找头文件的目录</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">make main</span><br><span class="line">make -f config.txt //指定makefile文件</span><br><span class="line">make --file=config.txt</span><br></pre></td></tr></table></figure>
-
-<p>使用Make指令执行Makefile文件(make指令自动寻找当前文件夹下的Makefile文件)</p>
-<p>Makefile文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;target&gt; : &lt;prerequisites&gt;	//目标，前置条件</span><br><span class="line">[tab] &lt;commands&gt;	//命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.PHONY: clean	//声明目标clean为伪目标</span><br><span class="line">clean:</span><br><span class="line">    rm -rf *.o</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个简单的实例</span><br><span class="line">main:main.o fun0.o fun1.o fun2.0	</span><br><span class="line">	gcc -o main main.o fun0.o fun1.o fun2.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个复杂的实例</span><br><span class="line"># Define required macros here</span><br><span class="line">SHELL = /bin/sh		//宏定义</span><br><span class="line">OBJS =  main.o factorial.o hello.o</span><br><span class="line">CFLAG = -Wall -g</span><br><span class="line">CC = gcc</span><br><span class="line">INCLUDE =</span><br><span class="line">LIBS = -lm</span><br><span class="line">hello:$&#123;OBJ&#125;	//$&#123;&#125;表示变量</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -o $@ $&#123;OBJS&#125; $&#123;LIBS&#125;</span><br><span class="line">clean:</span><br><span class="line">   -rm -f *.o core *.core	//类似于bash,?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意个字符，&#123;a,b,c&#125;表示匹配a或b或c</span><br><span class="line">.cpp.o:</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -c</span><br></pre></td></tr></table></figure>
-
-<p>冒号左侧：目标文件</p>
-<p>冒号右侧：被依赖文件，前置条件</p>
-<p>前置条件决定 “目标” 是否需要重新构建。只要前置条件中列出的文件中，有任何一个文件被更新（即前置条件列出的文件的最后修改时间比目标的最后修改时间新），或者 “目标” 不存在，那 “目标” 就需要重新构建。</p>
-<p>如果前置条件中列出的文件中有任何一个文件不存在，那么 Make 就需要在 Makefile 文件中寻找并执行能够生成该文件的规则，也就是说缺失文件本身也是一个 “目标”，需要先将该 “目标” 构建出来才能利用它去构建当前 “目标”（构建 A 时发现 A 需要依赖 B，所以要先构建 B 才能继续构建 A，简称递归生成依赖）。</p>
-<p><code>$@</code>，<code>$^</code>，<code>$&lt;</code> 这种符号，这种符号称为自动变量。自动变量是局部变量，作用域范围在当前的规则内（即自动化变量只应该出现在 Makefile 目标规则中）</p>
-<p><code>$@</code> 指代当前目标， Make 命令意图构建的目标</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hello: hello.o</span><br><span class="line">    gcc hello.o -o $@	//$@为hello</span><br></pre></td></tr></table></figure>
-
-<p><code>$&lt;</code> 指代第一个前置条件。比如规则为 hello: a b，那么 <code>$&lt;</code> 就指代 a。</p>
-<p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 hello: a b，那么 <code>$^</code> 就指代 a 和 b。</p>
-]]></content>
-      <tags>
-        <tag>command</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>pytorch_learning_record</title>
-    <url>/2024/05/08/pytorch-learning-record/</url>
-    <content><![CDATA[<p>dqn与pytorch</p>
-<span id="more"></span>
-
-<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
-<p>主要属性</p>
-<ul>
-<li><p>T: dimensions reversed</p>
-</li>
-<li><p>H: 共轭转置</p>
-</li>
-<li><p>data: 值</p>
-</li>
-<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
-</li>
-<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
-</li>
-<li><p>is_leaf: 指示是否叶子节点</p>
-</li>
-<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
-</li>
-<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
-</li>
-<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
-</li>
-<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
-<p>Sub代表减法；</p>
-<p>Mul代表乘法；</p>
-<p>Mm代表矩阵乘法；</p>
-<p>Div代表除法；</p>
-<p>T代表矩阵转置；</p>
-<p>Pow代表乘方；</p>
-<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
-<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
-<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
-<p>y &#x3D; (x + w) * (w + 1)</p>
-<p>a &#x3D; x+w</p>
-<p>b &#x3D; w + 1</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
-
-
-
-<p>通常</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>自动梯度</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>torchviz</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
-
-<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
-<ul>
-<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
-<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
-<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
-<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
-<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
-<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
-<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
-</ul>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
-
-
-
-<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>optimizer.step()</p>
-<p>优化器执行一次梯度更新</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
-
-<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
-<p>optimizer.zero_grad()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
-
-<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
-
-
-
-<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
-<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
-<p> tensor的requires_grad的属性默认为False。</p>
-<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>.grad_fn 属性</p>
-<p>tensor在计算图中的父运算函数</p>
-<p>.detach()与.detach_()</p>
-<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
-<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
-<p>相同：</p>
-<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
-<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
-<p>不同：</p>
-<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
-<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
-<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-<p>torch.no_grad()</p>
-<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
-<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
-<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>.backward()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
-
-<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
-<p>.backward()方法仅适用于标量</p>
-<p>.register_hook()</p>
-<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
-<p>获取中间tensor的grad值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <tags>
-        <tag>python, pytorch</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Op_sys Learning Record</title>
     <url>/2024/04/12/Op-sys-Learning-Record/</url>
     <content><![CDATA[<p>操作系统相关学习记录</p>
@@ -796,7 +400,7 @@
 
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240609180508264.png" class="" title="image-20240609180508264">
 
-<p>Linux: main.c &amp; 任务0</p>
+<p>Linux: main.c &amp; 任务0（idle进程）</p>
 <p>初始化设备与内存信息：</p>
 <p>​	根设备号，高速缓存末端地址，机器内存量，主内存开始地址；</p>
 <p>调用内核中初始化函数初始化各功能部分；</p>
@@ -830,7 +434,7 @@
 <p>​	ps: 程序进入interruptible状态（闲置进程），无任务可调度时调度任务0</p>
 <p>​	ps:任务0为所有进程的父进程，故不使用堆栈</p>
 <p>Linux: main.c&#x2F;init() 任务1</p>
-<p>读取硬盘参数，包含分区表信息，加载虚拟盘（若存在），安装根文件系统设备</p>
+<p>读取硬盘参数（包含分区表信息），加载虚拟盘（若存在），安装根文件系统设备</p>
 <p>以读写方式打开tty0，得到文件句柄0stdin，复制两次得到stdout和stderr</p>
 <p>fork产生任务2，等待任务2退出</p>
 <p>循环</p>
@@ -1053,7 +657,8 @@
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714144419322.png" class="" title="image-20240714144419322">
 
 <blockquote>
-<p>被fork出来的子进程将复制父进程的页目录表和页表，创建新进程需要在fork后在子进程内执行execve</p>
+<p>被fork出来的子进程将复制父进程的页目录表和页表，fork()后，子进程将获得自己的PCB，其中PCB的页目录表基址和父进程不一致，指向自己的页目录表。该页目录表对应页表中的页表项指向的物理地址与父进程的一致，直至子进程发生写行为时分配新内存页（写时复制技术）</p>
+<p>创建新进程需要在fork后在子进程内执行execve切换执行内容</p>
 <p>fork的核心工作是复制出新的PCB，并修改PCB中的各值(包括对TSS的修改)</p>
 </blockquote>
 <h4 id="execve"><a href="#execve" class="headerlink" title="execve"></a>execve</h4><img src="/2024/04/12/Op-sys-Learning-Record/image-20240715111107866.png" class="" title="image-20240715111107866">
@@ -1241,7 +846,7 @@
 <h3 id="内存管理启动"><a href="#内存管理启动" class="headerlink" title="内存管理启动"></a>内存管理启动</h3><p>Linux</p>
 <p>内存池创建</p>
 <p>Linux不对主内存(物理内存)进行内核使用和用户使用的划分；</p>
-<p>所有物理内存的申请均在主内存实现</p>
+<p>所有物理内存的申请均在主内存实现；</p>
 <p>tiny_os</p>
 <p>内存池创建：</p>
 <p>1.kernel创建内核内存池和用户内存池，两个池均位于物理地址0x0009a000；分别管理物理内存的0x00102000~?和0x?(大小为物理内存剩下的一半)</p>
@@ -1342,6 +947,179 @@
       </categories>
       <tags>
         <tag>operation system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>pytorch_learning_record</title>
+    <url>/2024/05/08/pytorch-learning-record/</url>
+    <content><![CDATA[<p>dqn与pytorch</p>
+<span id="more"></span>
+
+<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
+<p>主要属性</p>
+<ul>
+<li><p>T: dimensions reversed</p>
+</li>
+<li><p>H: 共轭转置</p>
+</li>
+<li><p>data: 值</p>
+</li>
+<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
+</li>
+<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
+</li>
+<li><p>is_leaf: 指示是否叶子节点</p>
+</li>
+<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
+</li>
+<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
+</li>
+<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
+</li>
+<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
+<p>Sub代表减法；</p>
+<p>Mul代表乘法；</p>
+<p>Mm代表矩阵乘法；</p>
+<p>Div代表除法；</p>
+<p>T代表矩阵转置；</p>
+<p>Pow代表乘方；</p>
+<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
+<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
+<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
+<p>y &#x3D; (x + w) * (w + 1)</p>
+<p>a &#x3D; x+w</p>
+<p>b &#x3D; w + 1</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
+
+
+
+<p>通常</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>自动梯度</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>torchviz</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
+
+<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
+<ul>
+<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
+<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
+<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
+<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
+<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
+<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
+<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
+</ul>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
+
+
+
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>optimizer.step()</p>
+<p>优化器执行一次梯度更新</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
+
+<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
+<p>optimizer.zero_grad()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
+
+<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
+
+
+
+<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
+<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
+<p> tensor的requires_grad的属性默认为False。</p>
+<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>.grad_fn 属性</p>
+<p>tensor在计算图中的父运算函数</p>
+<p>.detach()与.detach_()</p>
+<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
+<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
+<p>相同：</p>
+<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
+<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
+<p>不同：</p>
+<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
+<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
+<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p>torch.no_grad()</p>
+<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
+<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
+<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>.backward()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
+
+<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
+<p>.backward()方法仅适用于标量</p>
+<p>.register_hook()</p>
+<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
+<p>获取中间tensor的grad值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <tags>
+        <tag>python, pytorch</tag>
       </tags>
   </entry>
   <entry>
@@ -1604,6 +1382,266 @@
 ]]></content>
       <tags>
         <tag>python, reinforce learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>common-commands</title>
+    <url>/2024/06/22/common-commands/</url>
+    <content><![CDATA[<p>常用指令</p>
+<span id="more"></span>
+
+
+
+<h1 id="Common-Commands"><a href="#Common-Commands" class="headerlink" title="Common Commands"></a>Common Commands</h1><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p><a href="https://zhuanlan.zhihu.com/p/69746955">https://zhuanlan.zhihu.com/p/69746955</a></p>
+<p>python变量，函数均为对象</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>() : </span><br><span class="line">    <span class="comment">#函数在创建时同时生成变量对象hello和函数对象（函数对象名为hello）</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    x=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(test())<span class="comment">#函数默认返回值为None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">say = hello</span><br><span class="line"> </span><br><span class="line"><span class="keyword">del</span> hello <span class="comment">#del删除了hello变量对象</span></span><br><span class="line">say()</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say)<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say.__name__) <span class="comment">##对象属性,查看对象名</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>python类</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    def my_method(self, arg1, arg2):</span><br><span class="line">    #类的方法第一个参数为self</span><br><span class="line">        # 方法体</span><br><span class="line"></span><br><span class="line">#Bound Method</span><br><span class="line">obj = MyClass()#类 实例化</span><br><span class="line">obj.my_method(arg1, arg2)#实例对象调用方法</span><br><span class="line"></span><br><span class="line">#Unbound Method</span><br><span class="line">MyClass.my_method(obj, arg1, arg2)</span><br><span class="line">	#原因：可以直接通过类访问方法，但是必须指定类的实例</span><br></pre></td></tr></table></figure>
+
+
+
+<p>函数内部函数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> test</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hello()())</span><br><span class="line"><span class="comment">#首先hello()返回函数对象test，然后调用 test()</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>函数装饰器</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">f</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">f</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inn</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;inner&quot;</span>)</span><br><span class="line">        f()</span><br><span class="line">    <span class="keyword">return</span> inn</span><br><span class="line"></span><br><span class="line"><span class="meta">@hello</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#等价于</span></span><br><span class="line">test=hello(test)<span class="comment">#原函数对象test仍存在，变量对象test指向新函数hello(test)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#test &lt;function test at 0x000001821AE551C0&gt;</span></span><br><span class="line"><span class="comment">#test() None</span></span><br><span class="line"><span class="comment">#test为函数对象，test()为（执行函数对象后的）返回值</span></span><br><span class="line">test()</span><br><span class="line"><span class="built_in">print</span>(test.__name__)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>with语句 上下文对象管理</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">with open(&#x27;myfile.txt&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">    contents = f.read()</span><br><span class="line">    print(contents)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**open(‘myfile.txt’, ‘r’)**：这是一个上下文管理器，它打开文件并返回一个文件对象。</li>
+<li><strong>as f</strong>：将文件对象赋值给变量 f，以便在 with 代码块中使用。</li>
+<li>在 with 代码块中，我们可以使用 f 读取文件内容。</li>
+<li>当 with 代码块执行完毕后，文件会自动关闭，即使在读取过程中发生异常。</li>
+</ul>
+<p>Python类型注解</p>
+<p><a href="https://zhuanlan.zhihu.com/p/419955374">https://zhuanlan.zhihu.com/p/419955374</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment">#规定函数传入参数为str类型，返回值为str类型</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Hello <span class="subst">&#123;name&#125;</span>!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mix</span>(<span class="params">scores: <span class="built_in">list</span>[<span class="built_in">int</span>], ages: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]</span>) -&gt; <span class="built_in">tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>]:</span><br><span class="line">    <span class="comment">#容器注解</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">seq: Seq1[<span class="built_in">str</span>]</span>):</span><br><span class="line">    <span class="comment">#传入参数为（列表+元组）的泛化：序列Seq</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> seq:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="type">Optional</span>[<span class="built_in">str</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为None或为str</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Yeah&#x27;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>() -&gt; <span class="type">Union</span>[<span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为str，int，float 三选一</span></span><br><span class="line">    <span class="comment">#Optional[int] 和 Union[int, None] 是等价的。</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#T为泛型，T必须为str或int</span></span><br><span class="line">T = TypeVar(<span class="string">&#x27;T&#x27;</span>, <span class="built_in">str</span>, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">a: T, b: T</span>) -&gt; <span class="type">List</span>[T]:</span><br><span class="line">    <span class="keyword">return</span> [a, b]</span><br><span class="line"></span><br><span class="line"><span class="comment"># K的具体类型没有限制</span></span><br><span class="line">K = TypeVar(<span class="string">&quot;K&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="python-环境"><a href="#python-环境" class="headerlink" title="python 环境"></a>python 环境</h2><p>sudo apt-get update  # 更新包管理器</p>
+<p>sudo apt-get install python3-venv  # 安装Python虚拟环境工具</p>
+<p>cd &#x2F;path&#x2F;to&#x2F;your&#x2F;project</p>
+<p>python3 -m venv venv</p>
+<p>source venv&#x2F;bin&#x2F;activate</p>
+<p>pip install -r requirements.txt</p>
+<p>deactivate</p>
+<p>conda指令</p>
+<p>conda env list</p>
+<p>conda create –name your_env_name python&#x3D;3.5 numpy scipy</p>
+<p>conda remove –<em>name</em> <em>your_env_name</em> –all</p>
+<p>conda install</p>
+<p>​	conda install numpy&#x3D;1.9.3</p>
+<p>activate your_env_name</p>
+<p>deactivate</p>
+<p>conda clean –all</p>
+<p>当前conda虚拟环境中存在pip时，使用pip指令将优先使用环境中pip而非全局pip，可通过pip list（当前环境必须已安装pip）和 conda list 查看当前环境包列表</p>
+<p>出现报错</p>
+<p>PackagesNotFoundError: The following packages are not available from current channels</p>
+<p>尝试在<a href="https://anaconda.org直接搜索该包并使用网站所提供的指令安装/">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ol>
+<li><p>**<code>docker pull</code>**：用于从 Docker 镜像仓库下载镜像到本地主机。</p>
+<ul>
+<li>语法：<code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></li>
+<li>示例：<code>docker pull ubuntu:20.04</code></li>
+</ul>
+<p>这个命令用于获取 Docker 镜像，其中 <code>NAME</code> 表示镜像的名称，<code>TAG</code> 表示镜像的标签，或者可以使用 <code>@DIGEST</code> 来指定镜像的摘要。如果不指定标签，将默认获取 <code>latest</code> 标签的镜像。</p>
+</li>
+<li><p>**<code>docker load</code>**：用于从文件加载镜像，通常是以 tar 归档文件的形式。</p>
+<ul>
+<li>语法：<code>docker load [OPTIONS]</code></li>
+<li>示例：<code>docker load -i myimage.tar</code></li>
+</ul>
+<p>这个命令用于加载以 tar 归档文件格式存储的 Docker 镜像。通常用于将镜像从一个环境传输到另一个环境。</p>
+</li>
+<li><p>**<code>docker save</code>**：用于将 Docker 镜像保存为 tar 归档文件。</p>
+<ul>
+<li>语法：<code>docker save [OPTIONS] IMAGE [IMAGE...]</code></li>
+<li>示例：<code>docker save -o myimage.tar myimage:tag</code></li>
+</ul>
+<p>这个命令允许你将一个或多个 Docker 镜像保存为 tar 归档文件，通常用于导出镜像以便在不同环境中使用。</p>
+</li>
+<li><p>**<code>docker run</code>**：用于创建和启动 Docker 容器。</p>
+<ul>
+<li>语法：<code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></li>
+<li>示例：<code>docker run -d -p 8080:80 my-web-app</code></li>
+</ul>
+<p>这个命令用于在 Docker 容器中运行一个镜像，你需要指定镜像的名称、容器选项（如端口映射、环境变量、容器名称等），以及容器内要执行的命令。</p>
+</li>
+<li><p>**<code>docker build</code>**：用于构建自定义 Docker 镜像，通常通过 Dockerfile 文件定义构建步骤。</p>
+<ul>
+<li>语法：<code>docker build [OPTIONS] PATH | URL | -</code></li>
+<li>示例：<code>docker build -t my-custom-image .</code></li>
+</ul>
+<p><code>docker build</code> 命令用于基于 Dockerfile 构建自定义镜像。你需要提供包含 Dockerfile 的路径，以及可选的选项和标签。</p>
+<p>Dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 使用官方 Python 3 镜像作为基础镜像</span><br><span class="line">FROM python:3.8</span><br><span class="line"></span><br><span class="line"># 设置工作目录</span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"># 复制本地项目到容器中</span><br><span class="line">COPY ./myproject /app</span><br><span class="line"></span><br><span class="line"># 安装项目依赖</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 指定容器启动命令</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+<li><p>**<code>docker rm</code>**：用于删除已停止的容器。</p>
+<ul>
+<li>语法：<code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></li>
+<li>示例：<code>docker rm my-container</code></li>
+</ul>
+<p>这个命令用于删除一个或多个已经停止的容器，释放资源并清理系统。</p>
+</li>
+<li><p>**<code>docker stop</code>**：用于停止运行中的容器。</p>
+<ul>
+<li>语法：<code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></li>
+<li>示例：<code>docker stop my-container</code></li>
+</ul>
+<p>这个命令用于停止一个或多个正在运行的容器，使它们从运行状态转换为停止状态。</p>
+</li>
+<li><p>**<code>docker ps</code>**：用于列出正在运行的容器。</p>
+<ul>
+<li>语法：<code>docker ps [OPTIONS]</code></li>
+<li>示例：<code>docker ps -a</code></li>
+</ul>
+<p><code>docker ps</code> 命令用于列出当前正在运行的容器，包括容器的 ID、状态、端口映射等信息。加上 <code>-a</code> 选项可以列出所有容器，包括已停止的容器。</p>
+</li>
+</ol>
+<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p><a href="https://blog.csdn.net/qq_34021712/article/details/117260462">https://blog.csdn.net/qq_34021712/article/details/117260462</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在桌面创建test目录</span><br><span class="line">mkdir /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 切换到test目录</span><br><span class="line">cd /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 创建并初始化git库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 链接到远程git仓库 -t main 使用 main 分支</span><br><span class="line">git remote add origin -t main https://github.com/Helloworld-7558/git-demo.git</span><br><span class="line"></span><br><span class="line"># 将远程git库下载到本地</span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line">#修改</span><br><span class="line"></span><br><span class="line"># 将目录下所有文件都增加到本地库中。</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"># 提交更改到本地仓库</span><br><span class="line">git commit -am &#x27;提交注释&#x27;</span><br><span class="line"></span><br><span class="line"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span><br><span class="line"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"># 将本地修改推到github上</span><br><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure>
+
+
+
+<ol>
+<li>什么是主分支<br>主分支是<em>默认分支</em>,当执行<code>git clone</code>时，克隆的就是默认分支。<code>git init</code>初始化时，会以<strong>master</strong>分支作为主分支，主分支可以改成其他分支。</li>
+<li>什么是origin<br><strong>origin</strong>代表远程分支，比如gitlab上保存的分支。Git作为分布式版本控制工具，本地分支与远程分支并无不同。假如远程服务器上有一个<strong>develop</strong>分支，那么在本地以<strong>origin&#x2F;develop</strong>代表远程分支</li>
+<li>如何创建新分支<br># 方法一<br>git branch branch_name<br># 此方法以当前所在分支为基础来创建<br># e.g. git branch feature&#x2F;test<br>​<br># 方法二<br>git branch branch_name base_branch_name<br># 此方法忽略当前所在的分支，以指定的base_branch_name为基础来创建分支<br># e.g. git branch feature&#x2F;test develop<br># e.g. git branch feature&#x2F;test origin&#x2F;develop<br>​<br># 方法三<br>git checkout -b branch_name<br># 此方法是一个快捷操作，创建并切换分支。checkout本是用来切换分支的，增加“-b”选项指：当分支不存在时创建，同样支持指定base_branch_name<br># e.g. git checkout -b feature&#x2F;test<br># e.g. git checkout -b feature&#x2F;test develop<br># e.g. git checkout -b feature&#x2F;test origin&#x2F;develop</li>
+<li>如何切换分支<br>git checkout branch_name</li>
+<li>查看所有分支<br># 列出本地所有分支<br>git branch</li>
+<li>如何删除分支<br>当使用gitflow工作流时，本地分支会越来越多，不用的分支可以删除<br># 删除单个分支<br>git branch -d branch_name<br>​<br># 删除多个分支<br>git branch | grep feature&#x2F; | xargs git branch -d<br># git branch命令不支持管道操作，所获得的列表不能作为git branch -d的参数，所以需要使用xargs做一个辅助</li>
+<li>如何提交修改<br># 第一步：将修改进行暂存(Stage)<br>git add .&#x2F; # 添加所有本地修改<br># 添加特定文件 git add file1 file2<br># 添加特定文件夹下的所有文件 git add .&#x2F;dir1&#x2F;dir2&#x2F;<br>​<br># 第二步：执行commit<br>git commit -m ‘commit message’<br># 使用编辑器编写提交说明 git commit ,Git将自动打开默认编辑器，通常是Vim，可以自定义<br># 在上一条提交上追加提交 git commit –amend，本次提交不会生成一条新的提交记录。应该保证每次提交都是一次完整的功能修改，当发现上次提交的内容不完整时，应该采用此种方法进行追加提交。</li>
+<li>如何取消本地修改<br># 将文件从暂存区中去除,文件的修改不会丢失<br>git reset – filename<br>​<br># 将文件(未暂存)的修改取消，文件的修改将丢失<br>git checkout – filename<br>​<br># 将所有文件(未暂存)修改取消,文件的修改将丢失<br>git checkout – .&#x2F;<br>​<br># 将所有文件(包括已暂存)的修改取消，文件的修改将丢失<br>git reset –hard HEAD</li>
+<li><code>checkout</code>命令为什么可以用来<em>取消文件修改</em><br><code>checkout</code>命令翻译为”检出”，他的实际作用是将版本库中的内容拿出来放到工作区。<br>当执行<code>git checkout branch_name</code>时相当于把<code>brach_name</code>分支的内容拿出来放到工作区，表象就是切换了分支<br>当执行<code>git checkout -- filename</code>时，相当于把该文件版本库中的内容拿出来放到工作区，表象就是覆盖了该文件在工作区中的修改</li>
+<li><code>rebase</code>命令什么时候用<br><code>rebase</code>命令翻译为<em>变基</em>。我们在创建任何分支时，都有一个基分支，比如：<br><code>git branch feature/test develop</code>创建一个<code>feature/test</code>分支，他的基分支就是<code>develop</code>。Git会记录每个分支的基分支，变基就是改变分支的基分支。变基的表象就是基分支上改动会合并到当前分支，但不会生成合并记录。所以其使用场景就是：当develop上有别人提交的新内容，并且我们需要这些新内容时，执行一次变基，这样别人提交的最新代码就会出现在当前分支上。<br># 第一种用法：完全变基<br>git rebase –onto base_branch_name branch_name<br># 此种不常用<br>​<br># 第二种用法：通过变基获取最新代码<br>git rebase base_branch_name<br># 在向服务器推送自己的代码前，执行一遍rebase能提前知道自己的代码是否和别人的有冲突，便于提前解决冲突，当有冲突时需要手动解决冲突，然后执行：git rebase –continue</li>
+<li>向服务器推送代码<br>在使用gitflow工作流时，会经常执行<code>git push origin branch_name</code>命令。比简单的<code>git push</code>命令多了两个参数。此处之所以需要多传两个参数是因为，<code>branch_name</code>是我们本地创建的分支，服务器上没有该分支，且本地Git也并不知道本地<code>branch_name</code>与远程的哪个分支对应。所以需要显式传参。<br>同时我们可以告诉Git，本地与远程如何对应，在第一次推送代码时执行：<code>git push -u origin branch_name</code> 或<code>git push --set-upstream origin branch_name</code>，会告诉Git，本地<code>branch_name</code>分支与<code>origin/branch_name</code>对应，之后就可以直接执行<code>git pussh</code>, 而无需显式传参。</li>
+</ol>
+<h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h2><p>hello.c -预处理 -E-&gt; hello.i -编译 -S-&gt; hello.s -汇编 -c-&gt; hello.o -链接 -&gt; hello</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc  main.cpp hello.cpp factorial.cpp -o hello</span><br></pre></td></tr></table></figure>
+
+<p>使用gcc 将多个文件 <strong>生成</strong> 为 hello可执行文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">	gcc test.c</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件。这里未指定输出文件，默认输出为 a.out。</span><br><span class="line"></span><br><span class="line">-o：指定生成的输出文件；</span><br><span class="line">	gcc test.c -o test</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件 test。-o 选项用来指定输出文件的文件名。</span><br><span class="line">	</span><br><span class="line">-E：仅执行编译预处理；</span><br><span class="line">	gcc -E test.c -o test.i</span><br><span class="line">	将 test.c 预处理输出 test.i 文件。</span><br><span class="line"></span><br><span class="line">-S：将C代码转换为汇编代码；</span><br><span class="line">	gcc -S test.i</span><br><span class="line">	将预处理输出文件 test.i 汇编成 test.s 文件。</span><br><span class="line"></span><br><span class="line">-wall：显示警告信息；</span><br><span class="line"></span><br><span class="line">-c：仅执行编译操作，不进行连接操作。</span><br><span class="line">	gcc -c test.s</span><br><span class="line">	将汇编输出文件 test.s 编译输出 test.o 文件。</span><br><span class="line"></span><br><span class="line">-l：用来指定程序要链接的库，-l参数紧接着就是库名</span><br><span class="line"></span><br><span class="line">-I：寻找头文件的目录</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">make main</span><br><span class="line">make -f config.txt //指定makefile文件</span><br><span class="line">make --file=config.txt</span><br></pre></td></tr></table></figure>
+
+<p>使用Make指令执行Makefile文件(make指令自动寻找当前文件夹下的Makefile文件)</p>
+<p>Makefile文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;target&gt; : &lt;prerequisites&gt;	//目标，前置条件</span><br><span class="line">[tab] &lt;commands&gt;	//命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.PHONY: clean	//声明目标clean为伪目标</span><br><span class="line">clean:</span><br><span class="line">    rm -rf *.o</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个简单的实例</span><br><span class="line">main:main.o fun0.o fun1.o fun2.0	</span><br><span class="line">	gcc -o main main.o fun0.o fun1.o fun2.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个复杂的实例</span><br><span class="line"># Define required macros here</span><br><span class="line">SHELL = /bin/sh		//宏定义</span><br><span class="line">OBJS =  main.o factorial.o hello.o</span><br><span class="line">CFLAG = -Wall -g</span><br><span class="line">CC = gcc</span><br><span class="line">INCLUDE =</span><br><span class="line">LIBS = -lm</span><br><span class="line">hello:$&#123;OBJ&#125;	//$&#123;&#125;表示变量</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -o $@ $&#123;OBJS&#125; $&#123;LIBS&#125;</span><br><span class="line">clean:</span><br><span class="line">   -rm -f *.o core *.core	//类似于bash,?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意个字符，&#123;a,b,c&#125;表示匹配a或b或c</span><br><span class="line">.cpp.o:</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -c</span><br></pre></td></tr></table></figure>
+
+<p>冒号左侧：目标文件</p>
+<p>冒号右侧：被依赖文件，前置条件</p>
+<p>前置条件决定 “目标” 是否需要重新构建。只要前置条件中列出的文件中，有任何一个文件被更新（即前置条件列出的文件的最后修改时间比目标的最后修改时间新），或者 “目标” 不存在，那 “目标” 就需要重新构建。</p>
+<p>如果前置条件中列出的文件中有任何一个文件不存在，那么 Make 就需要在 Makefile 文件中寻找并执行能够生成该文件的规则，也就是说缺失文件本身也是一个 “目标”，需要先将该 “目标” 构建出来才能利用它去构建当前 “目标”（构建 A 时发现 A 需要依赖 B，所以要先构建 B 才能继续构建 A，简称递归生成依赖）。</p>
+<p><code>$@</code>，<code>$^</code>，<code>$&lt;</code> 这种符号，这种符号称为自动变量。自动变量是局部变量，作用域范围在当前的规则内（即自动化变量只应该出现在 Makefile 目标规则中）</p>
+<p><code>$@</code> 指代当前目标， Make 命令意图构建的目标</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hello: hello.o</span><br><span class="line">    gcc hello.o -o $@	//$@为hello</span><br></pre></td></tr></table></figure>
+
+<p><code>$&lt;</code> 指代第一个前置条件。比如规则为 hello: a b，那么 <code>$&lt;</code> 就指代 a。</p>
+<p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 hello: a b，那么 <code>$^</code> 就指代 a 和 b。</p>
+]]></content>
+      <tags>
+        <tag>command</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Android-learning-record</title>
+    <url>/2024/07/14/Android-learning-record/</url>
+    <content><![CDATA[<p>Android学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="Android-Learning-Record"><a href="#Android-Learning-Record" class="headerlink" title="Android Learning Record"></a>Android Learning Record</h1><h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[访问修饰符] [非访问修饰符] 数据类型 变量名 [= 初始值];</span><br><span class="line"></span><br><span class="line">[访问修饰符] [非访问修饰符] 返回值类型 方法名(参数列表) [<span class="keyword">throws</span> 异常列表] &#123;</span><br><span class="line">    <span class="comment">// 方法体</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>访问修饰符 (可选):</strong></p>
+<ul>
+<li>public：任何地方都可以访问。</li>
+<li>protected：同一个包内和子类可以访问。</li>
+<li>private：只有同一个类内可以访问。</li>
+<li>默认 (不写)：同一个包内可以访问。</li>
+</ul>
+<p><strong>非访问修饰符 (可选):</strong></p>
+<ul>
+<li>static：静态变量，属于类本身。</li>
+<li>final：常量，值一旦初始化后不可改变。</li>
+<li>transient：序列化时忽略该字段。</li>
+<li>volatile：保证多线程环境下变量的可见性。</li>
+<li>native：</li>
+</ul>
+<h3 id="static"><a href="#static" class="headerlink" title="static"></a>static</h3><p><strong>类静态变量</strong></p>
+<p><strong>类静态方法</strong></p>
+<p><strong>静态代码块</strong>：静态代码块在类加载时执行，仅执行移除，多用于初始化静态变量，加载配置文件，初始化资源</p>
+<h3 id="包"><a href="#包" class="headerlink" title="包"></a>包</h3><p>对于com.example.project</p>
+<p>其中， <code>com</code> 是顶层包, <code>example</code> 是 <code>com</code> 包的子包, <code>project</code> 是 <code>com.example</code> 包的子包。</p>
+<p>在文件系统中，存在以下的层次结构：</p>
+<p>com&#x2F;<br>    example&#x2F;<br>        project&#x2F;<br>            MyClass.java </p>
+<h2 id="Android系统"><a href="#Android系统" class="headerlink" title="Android系统"></a>Android系统</h2><h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>Android系统启动过程中，会先启动linux内核，然后加载init.rc文件，启动init进程。然后，init进程通过解析init.rc文件fork生成Zygote进程，该进程也是Android系统的首个Java进程。之后Zygote进程负责孵化System Server进程和APP进程。</p>
+<img src="/2024/07/14/Android-learning-record/image-20240714103234291.png" class="" title="image-20240714103234291">
+
+<h3 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h3><h3 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h3><ul>
+<li>由Zygote进程fork生成，SystemServer是Zygote孵化的第一个进程。</li>
+<li>负责启动、管理整个Java Framework，系统里面重要的服务都是在这个进程里面开启的，比如ActivityManagerService、PackageManagerService、WindowManagerService。</li>
+</ul>
+<h3 id="APP进程"><a href="#APP进程" class="headerlink" title="APP进程"></a>APP进程</h3><ul>
+<li>Zygote进程在App层中孵化出的第一个进程是Launcher进程，即手机的桌面APP。</li>
+<li>Zygote还会孵化出Browser、Email、Phone等APP进程，每个APP至少运行在一个进程上。</li>
+<li>所有APP进程都由Zygote进程fork生成。</li>
+</ul>
+<h2 id="Android系统中进程的交互"><a href="#Android系统中进程的交互" class="headerlink" title="Android系统中进程的交互"></a>Android系统中进程的交互</h2><p>平时我们所熟知的前端（Web\Android\iOS）通过网络与服务器通信是客户端-服务端模式的体现，而在Android Framework中，四大组件的创建、生命周期也是通过这样的模式进行通信：</p>
+<ul>
+<li>服务器端(server)指的就是SystemServer进程，这个进程提供了很多服务，比如AMS、PMS、WMS等等，所有的APP进程都可以与其通信。</li>
+<li>客户端(client)指的就是各个独立的APP进程。</li>
+</ul>
+<p>Android开发中，我们可以通过Package包名和Activity类名，来打开一个APP。实际上，项目里的业务代码startActivity()方法并不是直接创建进程、拉起APP的。而是通过一系列的调用，把请求传递给SystemServer的AMS。AMS收到来自客户端的请求后，再通知zygote进程来fork一个新进程，来开启我们的目标APP。APP中所有Activity的生命周期过程，都由AMS（SystemServer进程）统一调度，并在APP自身进程中具体完成。</p>
+<p>这个过程涉及到3个进程：APP进程、SystemServer进程、Zygote进程。</p>
+<ul>
+<li>APP进程与SystemServer进程通过Binder机制，进行跨进程通信。</li>
+<li>SystemServer进程与Zygote进程通过Socket，进行跨进程通信。</li>
+</ul>
+<h3 id="Binder机制"><a href="#Binder机制" class="headerlink" title="Binder机制"></a>Binder机制</h3><img src="/2024/07/14/Android-learning-record/image-20240721154206067.png" class="" title="image-20240721154206067">
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binder_proc</span> &#123;</span></span><br><span class="line">	<span class="comment">// 存储所有binder_proc的链表</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_node</span> <span class="title">proc_node</span>;</span></span><br><span class="line">	<span class="comment">// binder_thread红黑树</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">threads</span>;</span></span><br><span class="line">	<span class="comment">// binder_proc进程内的binder实体组成的红黑树</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">nodes</span>;</span></span><br><span class="line">	......</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 驱动函数映射</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">binder_fops</span> =</span> &#123;</span><br><span class="line">	.owner = THIS_MODULE,</span><br><span class="line">	.poll = binder_poll,</span><br><span class="line">	.unlocked_ioctl = binder_ioctl,</span><br><span class="line">	.compat_ioctl = binder_ioctl,</span><br><span class="line">	.mmap = binder_mmap,</span><br><span class="line">	.open = binder_open,</span><br><span class="line">	.flush = binder_flush,</span><br><span class="line">	.release = binder_release,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册驱动参数结构体</span></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">miscdevice</span> <span class="title">binder_miscdev</span> =</span> &#123;</span><br><span class="line">	.minor = MISC_DYNAMIC_MINOR,</span><br><span class="line">    <span class="comment">// 驱动名称</span></span><br><span class="line">	.name = <span class="string">&quot;binder&quot;</span>,</span><br><span class="line">	.fops = &amp;binder_fops</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_open</span><span class="params">(<span class="keyword">struct</span> inode *nodp, <span class="keyword">struct</span> file *filp)</span>&#123;......&#125;</span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_mmap</span><span class="params">(<span class="keyword">struct</span> file *filp, <span class="keyword">struct</span> vm_area_struct *vma)</span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> __init <span class="title function_">binder_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="comment">// 创建名为binder的单线程的工作队列</span></span><br><span class="line">    binder_deferred_workqueue = create_singlethread_workqueue(<span class="string">&quot;binder&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!binder_deferred_workqueue)</span><br><span class="line">            <span class="keyword">return</span> -ENOMEM;</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">// 注册驱动，misc设备其实也就是特殊的字符设备</span></span><br><span class="line">    ret = misc_register(&amp;binder_miscdev);</span><br><span class="line">    ......</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 驱动注册函数</span></span><br><span class="line">device_initcall(binder_init);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>接收端进程开启一个专门的线程，通过系统调用在binder驱动（内核）中先注册此进程（创建保存一个bidner_proc），驱动为接收端进程创建一个任务队列（biner_proc.todo）</p>
+</li>
+<li><p>接收端线程开始无限循环，通过系统调用不停访问binder驱动，如果该进程对应的任务队列有任务则返回处理，否则阻塞该线程直到有新任务入队</p>
+</li>
+<li><p>发送端也通过系统调用访问，找到目标进程，将任务丢到目标进程的队列中，然后唤醒目标进程中休眠的线程处理该任务，即完成通讯</p>
+</li>
+</ul>
+<p>作者：北野青阳<br>链接：<a href="https://juejin.cn/post/6987595923543031821">https://juejin.cn/post/6987595923543031821</a></p>
+<h3 id="Socket机制"><a href="#Socket机制" class="headerlink" title="Socket机制"></a>Socket机制</h3><img src="/2024/07/14/Android-learning-record/image-20240721155920403.png" class="" title="image-20240721155920403">]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
       </tags>
   </entry>
 </search>
