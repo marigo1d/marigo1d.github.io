@@ -1,161 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Android-learning-record</title>
-    <url>/2024/07/14/Android-learning-record/</url>
-    <content><![CDATA[<p>Android学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="Android-Learning-Record"><a href="#Android-Learning-Record" class="headerlink" title="Android Learning Record"></a>Android Learning Record</h1><h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[访问修饰符] [非访问修饰符] 数据类型 变量名 [= 初始值];</span><br><span class="line"></span><br><span class="line">[访问修饰符] [非访问修饰符] 返回值类型 方法名(参数列表) [<span class="keyword">throws</span> 异常列表] &#123;</span><br><span class="line">    <span class="comment">// 方法体</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>访问修饰符 (可选):</strong></p>
-<ul>
-<li>public：任何地方都可以访问。</li>
-<li>protected：同一个包内和子类可以访问。</li>
-<li>private：只有同一个类内可以访问。</li>
-<li>默认 (不写)：同一个包内可以访问。</li>
-</ul>
-<p><strong>非访问修饰符 (可选):</strong></p>
-<ul>
-<li>static：静态变量，属于类本身。</li>
-<li>final：常量，值一旦初始化后不可改变。</li>
-<li>transient：序列化时忽略该字段。</li>
-<li>volatile：保证多线程环境下变量的可见性。</li>
-<li>native：</li>
-</ul>
-<h3 id="static"><a href="#static" class="headerlink" title="static"></a>static</h3><p><strong>类静态变量</strong>：</p>
-<p><strong>类静态方法</strong>：</p>
-<p><strong>静态代码块</strong>：静态代码块在类加载时执行，仅执行一次，多用于初始化静态变量，加载配置文件，初始化资源</p>
-<p><strong>静态类</strong>：</p>
-<p><strong>声明位置:</strong> 静态类只能在另一个类的内部进行声明，使用 static 关键字修饰。</p>
-<p><strong>与外部类的关系:</strong></p>
-<ul>
-<li>静态类不持有对其外部类实例的引用。</li>
-<li>静态类的实例化不需要依赖外部类的实例，可以直接通过 OuterClass.StaticNestedClass 的方式创建。</li>
-</ul>
-<h3 id="包"><a href="#包" class="headerlink" title="包"></a>包</h3><p>对于com.example.project</p>
-<p>其中， <code>com</code> 是顶层包, <code>example</code> 是 <code>com</code> 包的子包, <code>project</code> 是 <code>com.example</code> 包的子包。</p>
-<p>在文件系统中，存在以下的层次结构：</p>
-<p>com&#x2F;<br>    example&#x2F;<br>        project&#x2F;<br>            MyClass.java </p>
-<h2 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h2><p>为了解决手动内存管理带来的问题而设计的。它们通过引用计数来跟踪有多少个指针指向同一个对象。</p>
-<ul>
-<li>当你创建一个指向对象的智能指针时，对象的引用计数加 1。</li>
-<li>当智能指针超出作用域或被赋值为其他值时，引用计数减 1。</li>
-<li>当引用计数变为 0 时，智能指针会自动销毁对象，释放内存。</li>
-</ul>
-<p><strong>循环引用问题</strong>： 对象A中存在智能指针指向对象B，对象B中存在智能指针指向对象A；</p>
-<p>由于智能指针的引用计数始终不为0，对象A和对象B将始终不能被释放。</p>
-<p><strong>解决方案</strong>：使用弱引用；对某对象使用弱引用将不增加引用计数。</p>
-<h2 id="Android系统"><a href="#Android系统" class="headerlink" title="Android系统"></a>Android系统</h2><h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>Android系统启动过程中，会先启动linux内核，然后加载init.rc文件，启动init进程。然后，init进程通过解析init.rc文件fork生成Zygote进程，该进程也是Android系统的首个Java进程。之后Zygote进程负责孵化System Server进程和APP进程。</p>
-<img src="/2024/07/14/Android-learning-record/image-20240714103234291.png" class="" title="image-20240714103234291">
-
-<h3 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h3><h3 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h3><ul>
-<li>由Zygote进程fork生成，SystemServer是Zygote孵化的第一个进程。</li>
-<li>负责启动、管理整个Java Framework，系统里面重要的服务都是在这个进程里面开启的，比如ActivityManagerService、PackageManagerService、WindowManagerService。</li>
-</ul>
-<h3 id="APP进程"><a href="#APP进程" class="headerlink" title="APP进程"></a>APP进程</h3><ul>
-<li>Zygote进程在App层中孵化出的第一个进程是Launcher进程，即手机的桌面APP。</li>
-<li>Zygote还会孵化出Browser、Email、Phone等APP进程，每个APP至少运行在一个进程上。</li>
-<li>所有APP进程都由Zygote进程fork生成。</li>
-</ul>
-<h2 id="Android系统中进程的交互"><a href="#Android系统中进程的交互" class="headerlink" title="Android系统中进程的交互"></a>Android系统中进程的交互</h2><p>平时我们所熟知的前端（Web\Android\iOS）通过网络与服务器通信是客户端-服务端模式的体现，而在Android Framework中，四大组件的创建、生命周期也是通过这样的模式进行通信：</p>
-<ul>
-<li>服务器端(server)指的就是SystemServer进程，这个进程提供了很多服务，比如AMS、PMS、WMS等等，所有的APP进程都可以与其通信。</li>
-<li>客户端(client)指的就是各个独立的APP进程。</li>
-</ul>
-<p>Android开发中，我们可以通过Package包名和Activity类名，来打开一个APP。实际上，项目里的业务代码startActivity()方法并不是直接创建进程、拉起APP的。而是通过一系列的调用，把请求传递给SystemServer的AMS。AMS收到来自客户端的请求后，再通知zygote进程来fork一个新进程，来开启我们的目标APP。APP中所有Activity的生命周期过程，都由AMS（SystemServer进程）统一调度，并在APP自身进程中具体完成。</p>
-<p>这个过程涉及到3个进程：APP进程、SystemServer进程、Zygote进程。</p>
-<ul>
-<li>APP进程与SystemServer进程通过Binder机制，进行跨进程通信。</li>
-<li>SystemServer进程与Zygote进程通过Socket，进行跨进程通信。</li>
-</ul>
-<h3 id="Binder机制"><a href="#Binder机制" class="headerlink" title="Binder机制"></a>Binder机制</h3><img src="/2024/07/14/Android-learning-record/image-20240721154206067.png" class="" title="image-20240721154206067">
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binder_proc</span> &#123;</span></span><br><span class="line">	<span class="comment">// 存储所有binder_proc的链表</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_node</span> <span class="title">proc_node</span>;</span></span><br><span class="line">	<span class="comment">// binder_thread红黑树</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">threads</span>;</span></span><br><span class="line">	<span class="comment">// binder_proc进程内的binder实体组成的红黑树</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">nodes</span>;</span></span><br><span class="line">	......</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 驱动函数映射</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">binder_fops</span> =</span> &#123;</span><br><span class="line">	.owner = THIS_MODULE,</span><br><span class="line">	.poll = binder_poll,</span><br><span class="line">	.unlocked_ioctl = binder_ioctl,</span><br><span class="line">	.compat_ioctl = binder_ioctl,</span><br><span class="line">	.mmap = binder_mmap,</span><br><span class="line">	.open = binder_open,</span><br><span class="line">	.flush = binder_flush,</span><br><span class="line">	.release = binder_release,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册驱动参数结构体</span></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">miscdevice</span> <span class="title">binder_miscdev</span> =</span> &#123;</span><br><span class="line">	.minor = MISC_DYNAMIC_MINOR,</span><br><span class="line">    <span class="comment">// 驱动名称</span></span><br><span class="line">	.name = <span class="string">&quot;binder&quot;</span>,</span><br><span class="line">	.fops = &amp;binder_fops</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_open</span><span class="params">(<span class="keyword">struct</span> inode *nodp, <span class="keyword">struct</span> file *filp)</span>&#123;......&#125;</span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_mmap</span><span class="params">(<span class="keyword">struct</span> file *filp, <span class="keyword">struct</span> vm_area_struct *vma)</span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> __init <span class="title function_">binder_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="comment">// 创建名为binder的单线程的工作队列</span></span><br><span class="line">    binder_deferred_workqueue = create_singlethread_workqueue(<span class="string">&quot;binder&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!binder_deferred_workqueue)</span><br><span class="line">            <span class="keyword">return</span> -ENOMEM;</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">// 注册驱动，misc设备其实也就是特殊的字符设备</span></span><br><span class="line">    ret = misc_register(&amp;binder_miscdev);</span><br><span class="line">    ......</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 驱动注册函数</span></span><br><span class="line">device_initcall(binder_init);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>接收端进程开启一个专门的线程，通过系统调用在binder驱动（内核）中先注册此进程（创建保存一个bidner_proc），驱动为接收端进程创建一个任务队列（biner_proc.todo）</p>
-</li>
-<li><p>接收端线程开始无限循环，通过系统调用不停访问binder驱动，如果该进程对应的任务队列有任务则返回处理，否则阻塞该线程直到有新任务入队</p>
-</li>
-<li><p>发送端也通过系统调用访问，找到目标进程，将任务丢到目标进程的队列中，然后唤醒目标进程中休眠的线程处理该任务，即完成通讯</p>
-</li>
-</ul>
-<p>作者：北野青阳<br>链接：<a href="https://juejin.cn/post/6987595923543031821">https://juejin.cn/post/6987595923543031821</a></p>
-<h3 id="Socket机制"><a href="#Socket机制" class="headerlink" title="Socket机制"></a>Socket机制</h3><img src="/2024/07/14/Android-learning-record/image-20240721155920403.png" class="" title="image-20240721155920403">]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-      <tags>
-        <tag>Android</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Algo Learning Record</title>
-    <url>/2024/04/25/Algo-Learning-Record/</url>
-    <content><![CDATA[<p>算法相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><h3 id="DP问题分析"><a href="#DP问题分析" class="headerlink" title="DP问题分析"></a>DP问题分析</h3><p>递归&amp;动态规划</p>
-<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
-
-<p>递归会重复进入状态，DP不会</p>
-<p>递归一个起点，多个终点；</p>
-<p>DP多个起点，一个终点；</p>
-<p>DP核心：</p>
-<p>1.确定状态和动作</p>
-<p>2.确定起点和终点</p>
-<h3 id="无权图两点间路径数"><a href="#无权图两点间路径数" class="headerlink" title="无权图两点间路径数"></a>无权图两点间<strong>路径数</strong></h3><p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果相加。</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
-<p>3.到达起点，当前递归结束，返回；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>邻接点</strong>的走法已知；</p>
-<p>2.到达<strong>次邻接点</strong>的走法为从<strong>邻接点</strong>到<strong>次邻接点</strong>的走法之和；</p>
-<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的走法之和；</p>
-<p>实例：</p>
-<img src="/2024/04/25/Algo-Learning-Record/image-20240426101614103.png" class="" title="image-20240426101614103">
-
-<p>递归</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCount</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">1</span> || n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> pathsCount(m - <span class="number">1</span>, n) + pathsCount(m , n -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>DP</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCounts</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="有权图两点间最大路径"><a href="#有权图两点间最大路径" class="headerlink" title="有权图两点间最大路径"></a>有权图两点间<strong>最大路径</strong></h3><p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果取最大。</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
-<p>3.到达起点，当前递归结束，返回当前节点值；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>邻接点</strong>的距离可知；</p>
-<p>2.到达<strong>次邻接点</strong>的最大距离为从<strong>邻接点</strong>到<strong>次邻接点</strong>的最大距离；</p>
-<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的最大距离；</p>
-<p>实例：</p>
-<img src="/2024/04/25/Algo-Learning-Record/image-20240426102031155.png" class="" title="image-20240426102031155">
-
-<p>递归</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> getMin(grid, m-<span class="number">1</span>, n-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getMin</span><span class="params">(<span class="type">int</span>[][] grid, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">minRow</span> <span class="operator">=</span> getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    <span class="type">int</span> <span class="variable">minColumn</span> <span class="operator">=</span> getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grid[i][j] + Math.min(minRow, minColumn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>DP</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m ;i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n;i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = grid[i][j] + Math.min(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>algorithm</category>
-      </categories>
-      <tags>
-        <tag>algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>common-commands</title>
     <url>/2024/06/22/common-commands/</url>
     <content><![CDATA[<p>常用指令</p>
@@ -288,7 +133,7 @@
 </li>
 </ol>
 <h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p><a href="https://blog.csdn.net/qq_34021712/article/details/117260462">https://blog.csdn.net/qq_34021712/article/details/117260462</a></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在桌面创建test目录</span><br><span class="line">mkdir /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 切换到test目录</span><br><span class="line">cd /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 创建并初始化git库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 链接到远程git仓库 -t main 使用 main 分支</span><br><span class="line">git remote add origin -t main https://github.com/Helloworld-7558/git-demo.git</span><br><span class="line"></span><br><span class="line"># 将远程git库下载到本地</span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line">#修改</span><br><span class="line"></span><br><span class="line"># 将目录下所有文件都增加到本地库中。</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"># 提交更改到本地仓库</span><br><span class="line">git commit -am &#x27;提交注释&#x27;</span><br><span class="line"></span><br><span class="line"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span><br><span class="line"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"># 将本地修改推到github上</span><br><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在桌面创建test目录</span><br><span class="line">mkdir /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 切换到test目录</span><br><span class="line">cd /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 创建并初始化git库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 链接到远程git仓库 </span><br><span class="line"># -t 默认使用 main 分支，origin为远程仓库别名（替换链接）</span><br><span class="line">git remote add origin -t main https://github.com/Helloworld-7558/git-demo.git</span><br><span class="line"></span><br><span class="line"># 将远程git库下载到本地</span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line">#修改</span><br><span class="line"></span><br><span class="line"># 将目录下所有文件都增加到本地库中。</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"># 提交更改到本地仓库</span><br><span class="line">git commit -m &#x27;提交注释&#x27;</span><br><span class="line"></span><br><span class="line"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span><br><span class="line"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"># 将本地修改推到github上</span><br><span class="line">git push -u origin main  # 首次</span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
 
 
 
@@ -340,12 +185,196 @@
       </tags>
   </entry>
   <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
     <title>第一篇博客</title>
     <url>/2024/04/11/first_post/</url>
     <content><![CDATA[<p>写一个测试试一下</p>
 <p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
 <p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>Algo Learning Record</title>
+    <url>/2024/04/25/Algo-Learning-Record/</url>
+    <content><![CDATA[<p>算法相关学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><h3 id="DP问题分析"><a href="#DP问题分析" class="headerlink" title="DP问题分析"></a>DP问题分析</h3><p>递归&amp;动态规划</p>
+<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
+
+<p>递归会重复进入状态，DP不会</p>
+<p>递归一个起点，多个终点；</p>
+<p>DP多个起点，一个终点；</p>
+<p>DP核心：</p>
+<p>1.确定状态和动作</p>
+<p>2.确定起点和终点</p>
+<h3 id="无权图两点间路径数"><a href="#无权图两点间路径数" class="headerlink" title="无权图两点间路径数"></a>无权图两点间<strong>路径数</strong></h3><p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果相加。</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
+<p>3.到达起点，当前递归结束，返回；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>邻接点</strong>的走法已知；</p>
+<p>2.到达<strong>次邻接点</strong>的走法为从<strong>邻接点</strong>到<strong>次邻接点</strong>的走法之和；</p>
+<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的走法之和；</p>
+<p>实例：</p>
+<img src="/2024/04/25/Algo-Learning-Record/image-20240426101614103.png" class="" title="image-20240426101614103">
+
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCount</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">1</span> || n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> pathsCount(m - <span class="number">1</span>, n) + pathsCount(m , n -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>DP</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCounts</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="有权图两点间最大路径"><a href="#有权图两点间最大路径" class="headerlink" title="有权图两点间最大路径"></a>有权图两点间<strong>最大路径</strong></h3><p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果取最大。</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
+<p>3.到达起点，当前递归结束，返回当前节点值；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>邻接点</strong>的距离可知；</p>
+<p>2.到达<strong>次邻接点</strong>的最大距离为从<strong>邻接点</strong>到<strong>次邻接点</strong>的最大距离；</p>
+<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的最大距离；</p>
+<p>实例：</p>
+<img src="/2024/04/25/Algo-Learning-Record/image-20240426102031155.png" class="" title="image-20240426102031155">
+
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> getMin(grid, m-<span class="number">1</span>, n-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getMin</span><span class="params">(<span class="type">int</span>[][] grid, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">minRow</span> <span class="operator">=</span> getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    <span class="type">int</span> <span class="variable">minColumn</span> <span class="operator">=</span> getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grid[i][j] + Math.min(minRow, minColumn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>DP</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m ;i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n;i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = grid[i][j] + Math.min(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Android-learning-record</title>
+    <url>/2024/07/14/Android-learning-record/</url>
+    <content><![CDATA[<p>Android学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="Android-Learning-Record"><a href="#Android-Learning-Record" class="headerlink" title="Android Learning Record"></a>Android Learning Record</h1><h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[访问修饰符] [非访问修饰符] 数据类型 变量名 [= 初始值];</span><br><span class="line"></span><br><span class="line">[访问修饰符] [非访问修饰符] 返回值类型 方法名(参数列表) [<span class="keyword">throws</span> 异常列表] &#123;</span><br><span class="line">    <span class="comment">// 方法体</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>访问修饰符 (可选):</strong></p>
+<ul>
+<li>public：任何地方都可以访问。</li>
+<li>protected：同一个包内和子类可以访问。</li>
+<li>private：只有同一个类内可以访问。</li>
+<li>默认 (不写)：同一个包内可以访问。</li>
+</ul>
+<p><strong>非访问修饰符 (可选):</strong></p>
+<ul>
+<li>static：静态变量，属于类本身。</li>
+<li>final：常量，值一旦初始化后不可改变。</li>
+<li>transient：序列化时忽略该字段。</li>
+<li>volatile：保证多线程环境下变量的可见性。</li>
+<li>native：</li>
+</ul>
+<h4 id="static"><a href="#static" class="headerlink" title="static"></a>static</h4><p><strong>类静态变量</strong>：</p>
+<p><strong>类静态方法</strong>：</p>
+<p><strong>静态代码块</strong>：静态代码块在类加载时执行，仅执行一次，多用于初始化静态变量，加载配置文件，初始化资源</p>
+<p><strong>静态类</strong>：</p>
+<p><strong>声明位置:</strong> 静态类只能在另一个类的内部进行声明，使用 static 关键字修饰。</p>
+<p><strong>与外部类的关系:</strong></p>
+<ul>
+<li>静态类不持有对其外部类实例的引用。</li>
+<li>静态类的实例化不需要依赖外部类的实例，可以直接通过 OuterClass.StaticNestedClass 的方式创建。</li>
+</ul>
+<h3 id="包"><a href="#包" class="headerlink" title="包"></a>包</h3><p>对于com.example.project</p>
+<p>其中， <code>com</code> 是顶层包, <code>example</code> 是 <code>com</code> 包的子包, <code>project</code> 是 <code>com.example</code> 包的子包。</p>
+<p>在文件系统中，存在以下的层次结构：</p>
+<p>com&#x2F;<br>    example&#x2F;<br>        project&#x2F;<br>            MyClass.java </p>
+<h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2>.JPG)
+
+<p><strong>Method Area (方法区):</strong></p>
+<p><strong>Heap (堆):</strong></p>
+<p><strong>Thread Stack (线程栈):</strong></p>
+<h2 id="Android程序"><a href="#Android程序" class="headerlink" title="Android程序"></a>Android程序</h2><h3 id="View"><a href="#View" class="headerlink" title="View"></a>View</h3><h3 id="context"><a href="#context" class="headerlink" title="context"></a>context</h3><ul>
+<li><strong>资源访问:</strong> 获取字符串、颜色、尺寸、图片等资源。</li>
+<li><strong>组件启动:</strong> 启动 Activity、Service、BroadcastReceiver 等组件。</li>
+<li><strong>系统服务获取:</strong> 获取布局服务 (LayoutInflater)、包管理器 (PackageManager)、通知服务 (NotificationManager) 等系统服务。</li>
+<li><strong>文件操作:</strong> 访问设备存储、缓存目录等。</li>
+<li><strong>数据库操作:</strong> 使用 SQLite 数据库。</li>
+<li><strong>网络操作:</strong> 发送网络请求。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 获取字符串资源</span></span><br><span class="line"><span class="type">String</span> <span class="variable">appName</span> <span class="operator">=</span> context.getString(R.string.app_name);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取颜色资源</span></span><br><span class="line"><span class="type">int</span> <span class="variable">primaryColor</span> <span class="operator">=</span> context.getColor(R.color.colorPrimary);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动 Activity</span></span><br><span class="line"><span class="type">Intent</span> <span class="variable">intent</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Intent</span>(context, SecondActivity.class);</span><br><span class="line">context.startActivity(intent);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取布局加载器</span></span><br><span class="line"><span class="type">LayoutInflater</span> <span class="variable">inflater</span> <span class="operator">=</span> LayoutInflater.from(context);</span><br><span class="line"><span class="type">View</span> <span class="variable">view</span> <span class="operator">=</span> inflater.inflate(R.layout.my_layout, parent, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取包管理器</span></span><br><span class="line"><span class="type">PackageManager</span> <span class="variable">packageManager</span> <span class="operator">=</span> context.getPackageManager();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取通知服务</span></span><br><span class="line"><span class="type">NotificationManager</span> <span class="variable">notificationManager</span> <span class="operator">=</span> </span><br><span class="line">    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h2><h3 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h3><p>为了解决手动内存管理带来的问题而设计的。它们通过引用计数来跟踪有多少个指针指向同一个对象。</p>
+<ul>
+<li>当你创建一个指向对象的智能指针时，对象的引用计数加 1。</li>
+<li>当智能指针超出作用域或被赋值为其他值时，引用计数减 1。</li>
+<li>当引用计数变为 0 时，智能指针会自动销毁对象，释放内存。</li>
+</ul>
+<p><strong>循环引用问题</strong>： 对象A中存在智能指针指向对象B，对象B中存在智能指针指向对象A；</p>
+<p>由于智能指针的引用计数始终不为0，对象A和对象B将始终不能被释放。</p>
+<p><strong>解决方案</strong>：使用弱引用；对某对象使用弱引用将不增加引用计数。</p>
+<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><p>JVM负责java线程的调度</p>
+<h3 id="Android启动"><a href="#Android启动" class="headerlink" title="Android启动"></a>Android启动</h3><p>Android系统启动过程中，会先启动linux内核，然后加载init.rc文件，启动init进程。然后，init进程通过解析init.rc文件fork生成Zygote进程，该进程也是Android系统的首个Java进程。之后Zygote进程负责孵化System Server进程和APP进程。</p>
+<img src="/2024/07/14/Android-learning-record/image-20240714103234291.png" class="" title="image-20240714103234291">
+
+<h4 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h4><h4 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h4><ul>
+<li>由Zygote进程fork生成，SystemServer是Zygote孵化的第一个进程。</li>
+<li>负责启动、管理整个Java Framework，系统里面重要的服务都是在这个进程里面开启的，比如ActivityManagerService、PackageManagerService、WindowManagerService。</li>
+</ul>
+<h4 id="APP进程"><a href="#APP进程" class="headerlink" title="APP进程"></a>APP进程</h4><ul>
+<li>Zygote进程在App层中孵化出的第一个进程是Launcher进程，即手机的桌面APP。</li>
+<li>Zygote还会孵化出Browser、Email、Phone等APP进程，每个APP至少运行在一个进程上。</li>
+<li>所有APP进程都由Zygote进程fork生成。</li>
+</ul>
+<h2 id="Android系统中进程的交互"><a href="#Android系统中进程的交互" class="headerlink" title="Android系统中进程的交互"></a>Android系统中进程的交互</h2><p>平时我们所熟知的前端（Web\Android\iOS）通过网络与服务器通信是客户端-服务端模式的体现，而在Android Framework中，四大组件的创建、生命周期也是通过这样的模式进行通信：</p>
+<ul>
+<li>服务器端(server)指的就是SystemServer进程，这个进程提供了很多服务，比如AMS、PMS、WMS等等，所有的APP进程都可以与其通信。</li>
+<li>客户端(client)指的就是各个独立的APP进程。</li>
+</ul>
+<p>Android开发中，我们可以通过Package包名和Activity类名，来打开一个APP。实际上，项目里的业务代码startActivity()方法并不是直接创建进程、拉起APP的。而是通过一系列的调用，把请求传递给SystemServer的AMS。AMS收到来自客户端的请求后，再通知zygote进程来fork一个新进程，来开启我们的目标APP。APP中所有Activity的生命周期过程，都由AMS（SystemServer进程）统一调度，并在APP自身进程中具体完成。</p>
+<p>这个过程涉及到3个进程：APP进程、SystemServer进程、Zygote进程。</p>
+<ul>
+<li>APP进程与SystemServer进程通过Binder机制，进行跨进程通信。</li>
+<li>SystemServer进程与Zygote进程通过Socket，进行跨进程通信。</li>
+</ul>
+<img src="/2024/07/14/Android-learning-record/image-20240723153011448.png" class="" title="image-20240723153011448">
+
+
+
+<h3 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h3><p>进程使用Binder与System_Server通信，例如：AlarmManagerService、BluetoothService 和 BatteryService，</p>
+<img src="/2024/07/14/Android-learning-record/image-20240721154206067.png" class="" title="image-20240721154206067">
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binder_proc</span> &#123;</span></span><br><span class="line">	<span class="comment">// 存储所有binder_proc的链表</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_node</span> <span class="title">proc_node</span>;</span></span><br><span class="line">	<span class="comment">// binder_thread红黑树</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">threads</span>;</span></span><br><span class="line">	<span class="comment">// binder_proc进程内的binder实体组成的红黑树</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">nodes</span>;</span></span><br><span class="line">	......</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 驱动函数映射</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">binder_fops</span> =</span> &#123;</span><br><span class="line">	.owner = THIS_MODULE,</span><br><span class="line">	.poll = binder_poll,</span><br><span class="line">	.unlocked_ioctl = binder_ioctl,</span><br><span class="line">	.compat_ioctl = binder_ioctl,</span><br><span class="line">	.mmap = binder_mmap,</span><br><span class="line">	.open = binder_open,</span><br><span class="line">	.flush = binder_flush,</span><br><span class="line">	.release = binder_release,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册驱动参数结构体</span></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">miscdevice</span> <span class="title">binder_miscdev</span> =</span> &#123;</span><br><span class="line">	.minor = MISC_DYNAMIC_MINOR,</span><br><span class="line">    <span class="comment">// 驱动名称</span></span><br><span class="line">	.name = <span class="string">&quot;binder&quot;</span>,</span><br><span class="line">	.fops = &amp;binder_fops</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_open</span><span class="params">(<span class="keyword">struct</span> inode *nodp, <span class="keyword">struct</span> file *filp)</span>&#123;......&#125;</span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_mmap</span><span class="params">(<span class="keyword">struct</span> file *filp, <span class="keyword">struct</span> vm_area_struct *vma)</span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> __init <span class="title function_">binder_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="comment">// 创建名为binder的单线程的工作队列</span></span><br><span class="line">    binder_deferred_workqueue = create_singlethread_workqueue(<span class="string">&quot;binder&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!binder_deferred_workqueue)</span><br><span class="line">            <span class="keyword">return</span> -ENOMEM;</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">// 注册驱动，misc设备其实也就是特殊的字符设备</span></span><br><span class="line">    ret = misc_register(&amp;binder_miscdev);</span><br><span class="line">    ......</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 驱动注册函数</span></span><br><span class="line">device_initcall(binder_init);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>接收端进程开启一个专门的线程，通过系统调用在binder驱动（内核）中先注册此进程（创建保存一个bidner_proc），驱动为接收端进程创建一个任务队列（biner_proc.todo）</p>
+</li>
+<li><p>接收端线程开始无限循环，通过系统调用不停访问binder驱动，如果该进程对应的任务队列有任务则返回处理，否则阻塞该线程直到有新任务入队</p>
+</li>
+<li><p>发送端也通过系统调用访问，找到目标进程，将任务丢到目标进程的队列中，然后唤醒目标进程中休眠的线程处理该任务，即完成通讯</p>
+</li>
+</ul>
+<p>作者：北野青阳<br>链接：<a href="https://juejin.cn/post/6987595923543031821">https://juejin.cn/post/6987595923543031821</a></p>
+<h3 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h3><img src="/2024/07/14/Android-learning-record/image-20240721155920403.png" class="" title="image-20240721155920403">]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+      </tags>
   </entry>
   <entry>
     <title>pytorch_learning_record</title>
@@ -507,10 +536,266 @@
       </tags>
   </entry>
   <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+    <title>reinforce-learning-record</title>
+    <url>/2024/06/10/reinforce-learning-record/</url>
+    <content><![CDATA[<p>reinforce learning</p>
+<span id="more"></span>
+
+<h1 id="reinforce-learning-record"><a href="#reinforce-learning-record" class="headerlink" title="reinforce learning record"></a>reinforce learning record</h1><h2 id="MRP"><a href="#MRP" class="headerlink" title="MRP"></a>MRP</h2><img src="/2024/06/10/reinforce-learning-record/image-20240610205131367.png" class="" title="image-20240610205131367">
+
+<h3 id="回报"><a href="#回报" class="headerlink" title="回报"></a>回报</h3><p>在一个马尔可夫奖励过程中，从第t时刻状态S_t开始，直到终止状态时，所有奖励的衰减之和称为<strong>回报</strong>（Return）</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203108806.png" class="" title="image-20240610203108806">
+
+<ul>
+<li>Rt表示在时刻t获得的奖励</li>
+<li><strong>到达状态Si</strong>，得到奖励r(s)；若在时刻t到达状态Si，则<strong>Rt&#x3D;r(Si)</strong></li>
+<li>对于某状态序列<img src="/2024/06/10/reinforce-learning-record/image-20240610203423677.png" class="" title="image-20240610203423677">我们有对应于该状态序列的奖励G<img src="/2024/06/10/reinforce-learning-record/image-20240610203434567.png" class="" title="image-20240610203434567"></li>
+</ul>
+<h3 id="价值函数"><a href="#价值函数" class="headerlink" title="价值函数"></a>价值函数</h3><p>在马尔可夫奖励过程中，一个状态的期望回报（即从这个状态出发的未来累积奖励的期望）被称为这个状态的<strong>价值</strong>（value）。所有状态的价值就组成了<strong>价值函数</strong>（value function），价值函数的输入为某个状态，输出为这个状态的价值。</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203509585.png" class="" title="image-20240610203509585">
+
+<ul>
+<li>对于某个状态s，从该状态出发可得到的状态序列有很多条</li>
+<li>对于某个状态s，价值函数为<strong>从该状态出发，可能存在的所有状态序列的奖励的均值</strong></li>
+</ul>
+<p>贝尔曼方程</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203841177.png" class="" title="image-20240610203841177">
+
+<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><p>与MRP相比，奖励与状态和动作相关</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610205112917.png" class="" title="image-20240610205112917">
+
+<h3 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h3><p>策略表示在状态s下采取动作a的<strong>概率</strong>，概率可能为1</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204522539.png" class="" title="image-20240610204522539">
+
+<h3 id="状态价值函数"><a href="#状态价值函数" class="headerlink" title="状态价值函数"></a>状态价值函数</h3><p>在 MDP 中基于策略Π的状态价值函数（state-value function），定义为从状态s出发遵循策略Π能获得的期望回报</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204014373.png" class="" title="image-20240610204014373">
+
+<h3 id="动作价值函数"><a href="#动作价值函数" class="headerlink" title="动作价值函数"></a>动作价值函数</h3><p>在 MDP 中，由于动作的存在，我们额外定义一个<strong>动作价值函数</strong>（action-value function）。表示在 MDP 遵循策略Π时，对当前状态s执行动作a得到的期望回报</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204152914.png" class="" title="image-20240610204152914">
+
+<ul>
+<li><strong>采取动作a到达状态s</strong>，得到奖励R</li>
+</ul>
+<h3 id="状态价值函数与动作价值函数关系"><a href="#状态价值函数与动作价值函数关系" class="headerlink" title="状态价值函数与动作价值函数关系"></a>状态价值函数与动作价值函数关系</h3><img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<ul>
+<li>从状态s出发，可能采取动作a1, a2, a3, …;对于每个可能采取的动作，均有动作价值Q，则状态s的状态价值为所有动作价值的期望</li>
+</ul>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<ul>
+<li>在状态s执行动作a后，得到奖励r(s,a)；由于可能到达多个不同的状态s’，动作价值为即时奖励r(s,a)+可能到达的所有状态的价值的期望</li>
+</ul>
+<h3 id="最优策略"><a href="#最优策略" class="headerlink" title="最优策略"></a>最优策略</h3><p>策略之间的偏序关系</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093758370.png" class="" title="image-20240612093758370">
+
+<p>最优策略为 对于任意的策略，均有最优策略优于或不差于其他策略</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093948192.png" class="" title="image-20240612093948192">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093958259.png" class="" title="image-20240612093958259">
+
+<p>最优状态价值与最优动作价值的关系</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612094048209.png" class="" title="image-20240612094048209">
+
+
+
+<h3 id="贝尔曼期望方程"><a href="#贝尔曼期望方程" class="headerlink" title="贝尔曼期望方程"></a>贝尔曼期望方程</h3><p>采取策略Π</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204627264.png" class="" title="image-20240610204627264">
+
+<ul>
+<li>对于状态s，s的状态价值为 ( 折损的 <strong>所有可达的下一状态的价值的期望</strong> + <strong>到达所有可达的下一状态的r(s’,a)的期望</strong> )</li>
+<li>对于状态s和动作a，在状态s进行动作a的价值为 ( <strong>在状态s执行动作a的r(s,a)的期望</strong>(实际上就是r(s,a)) + 折损的 <strong>在执行动作a后所有可达的下一状态的所有可执行动作的价值的期望</strong> )</li>
+</ul>
+<img src="/2024/06/10/reinforce-learning-record/shiow.PNG" class="" title="shiow">
+
+<p>图中情况为每个动作只会到达一个状态&amp;应该直接将动作视为一个节点，图为树</p>
+<h3 id="贝尔曼最优方程"><a href="#贝尔曼最优方程" class="headerlink" title="贝尔曼最优方程"></a>贝尔曼最优方程</h3><p>存在策略*，使对于任意的状态s，均有基于策略*状态价值函数大于基于策略Π的状态价值函数</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610205402396.png" class="" title="image-20240610205402396">
+
+<ul>
+<li>对于状态价值：非最优形式是求期望，最优形式是直接选取当前状态，所有动作中，未来状态序列中价值最大的</li>
+<li>对于动作价值：非最优形式是求期望，最优形式是直接选取下一状态，所有动作中，未来状态序列中动作价值最大的</li>
+</ul>
+<h2 id="策略迭代算法-基于策略函数的"><a href="#策略迭代算法-基于策略函数的" class="headerlink" title="策略迭代算法&#x2F;基于策略函数的"></a>策略迭代算法&#x2F;基于策略函数的</h2><p>策略评估：</p>
+<p>基于当前策略Π，在已知状态转移函数的情况下（即我们可以知道采取动作a后有多高的几率到达哪个状态），使用<strong>贝尔曼期望方程</strong>迭代更新状态价值函数</p>
+<p>ps: 原文中迭代更新状态价值函数是通过</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<p>以上两个公式实现的，也即</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">		qsa = <span class="number">0</span>  <span class="comment"># 当前动作的动作价值</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:  <span class="comment"># 有模型，即状态转移函数已知</span></span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))  <span class="comment"># 第一个公式，计算该动作的价值(开头的p为动作成功概率)</span></span><br><span class="line">         qsa_list.append(self.pi[s][a] * qsa)  <span class="comment"># 乘采取该动作的几率</span></span><br><span class="line">	new_v[s] = <span class="built_in">sum</span>(qsa_list)  <span class="comment"># 第二个公式，根据所有动作的价值计算状态价值</span></span><br></pre></td></tr></table></figure>
+
+<p>target: 更新<strong>状态价值函数</strong>，使之收敛</p>
+<p>策略提升：</p>
+<p>由于</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<p>故修改策略，使得动作价值最大的动作以更高的概率(若最大值唯一，该动作将成为唯一被选取动作；若不唯一，这些动作将均分概率1)被选取，可使新策略下的状态价值函数增大，也即<img src="/2024/06/10/reinforce-learning-record/image-20240611150030644.png" class="" title="image-20240611150030644"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">    	qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)</span><br><span class="line">     maxq = <span class="built_in">max</span>(qsa_list)</span><br><span class="line">     cntq = qsa_list.count(maxq)  <span class="comment"># 计算有几个动作得到了最大的Q值</span></span><br><span class="line">     <span class="comment"># 让这些动作均分概率</span></span><br><span class="line">     self.pi[s] = [<span class="number">1</span> / cntq <span class="keyword">if</span> q == maxq <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> q <span class="keyword">in</span> qsa_list]</span><br></pre></td></tr></table></figure>
+
+<p>target: 修改<strong>策略</strong>，使在新策略下，有基于新策略的状态价值函数大于原策略的状态价值函数</p>
+<h2 id="价值迭代算法-基于价值函数的"><a href="#价值迭代算法-基于价值函数的" class="headerlink" title="价值迭代算法&#x2F;基于价值函数的"></a>价值迭代算法&#x2F;基于价值函数的</h2><p>使用贝尔曼最优方程</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611191853492.png" class="" title="image-20240611191853492">
+
+<p>迭代形式</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611152610430.png" class="" title="image-20240611152610430">
+
+<p>进行价值迭代；</p>
+<p>使用</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611152643864.png" class="" title="image-20240611152643864">
+
+<p>从迭代完成的状态价值函数中获取策略，即 从当前状态出发，哪个动作的 (即时奖励+下一状态价值) 最大，策略就为哪个动作</p>
+<p>ps: 程序实际使用公式</p>
+<p>最优状态价值是选择此时使最优动作价值最大的那一个动作时的状态价值</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611153610316.png" class="" title="image-20240611153610316">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">max_diff = <span class="number">0</span></span><br><span class="line">new_v = [<span class="number">0</span>] * self.env.ncol * self.env.nrow  <span class="comment"># 迷宫环境，初始化状态价值</span></span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> <span class="built_in">range</span>(self.env.ncol * self.env.nrow):</span><br><span class="line">    qsa_list = []</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">            p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)  <span class="comment"># 记录状态s下的所有Q(s,a)价值</span></span><br><span class="line">     new_v[s] = <span class="built_in">max</span>(qsa_list)  <span class="comment"># 取最大作为新状态价值</span></span><br><span class="line">     max_diff = <span class="built_in">max</span>(max_diff, <span class="built_in">abs</span>(new_v[s] - self.v[s]))</span><br><span class="line">self.v = new_v</span><br><span class="line"><span class="keyword">if</span> max_diff &lt; self.theta: <span class="keyword">break</span>  <span class="comment"># 满足收敛条件,退出评估迭代</span></span><br><span class="line">cnt += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="有模型-无模型-在线策略-离线策略"><a href="#有模型-无模型-在线策略-离线策略" class="headerlink" title="有模型&amp;无模型+在线策略&amp;离线策略"></a>有模型&amp;无模型+在线策略&amp;离线策略</h2><p><strong>有模型强化学习：</strong></p>
+<p>智能体学习环境的状态转移函数</p>
+<p>环境的状态转移函数已知</p>
+<p>智能体可以直接根据状态转移函数得到在对环境进行动作a后环境的下一状态</p>
+<p># 状态转移函数P[state][action] &#x3D; [(p, next_state, reward, done)]包含转移成功概率，下一个状态，奖励和是否完成</p>
+<ul>
+<li>Dyna-Q</li>
+<li>Monte Carlo Tree Search (MCTS)</li>
+<li>PILCO (Probabilistic Inference for Learning Control)</li>
+</ul>
+<p><strong>无模型强化学习：</strong></p>
+<p>智能体通过与环境交互学习状态和奖励之间的映射关系</p>
+<p>环境的状态转移函数未知</p>
+<p>智能体必须通过与环境的交互才能得到环境的下一状态</p>
+<ul>
+<li>Q-learning</li>
+<li>SARSA</li>
+<li>Deep Q-Network (DQN)</li>
+<li>Policy Gradient methods (e.g., REINFORCE, A2C, PPO)</li>
+</ul>
+<p>样本：当前状态，下一状态，采取动作，奖励</p>
+<p><strong>在线策略学习：</strong></p>
+<p>不保存样本</p>
+<p><strong>离线策略学习：</strong></p>
+<p>使用经验回放池保存样本</p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="蒙特卡洛方法"><a href="#蒙特卡洛方法" class="headerlink" title="蒙特卡洛方法"></a>蒙特卡洛方法</h3><p>Value-based + online</p>
+<p>从某状态s出发，基于策略Π，获得一条状态序列，该状态序列对应一个回报G；该过程为一次采样。</p>
+<p>反复采样，得到N个状态序列+回报和M，由大数定律，可得该状态的状态价值</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161858965.png" class="" title="image-20240611161858965">
+
+<p>使用增量更新方法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161157050.png" class="" title="image-20240611161157050">
+
+<p>补：增量更新原理</p>
+<p>新均值 &#x3D; 旧均值 + 1&#x2F;总量 * (新值 - 旧均值) ？</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161942958.png" class="" title="image-20240611161942958">
+
+<h3 id="时序差分算法"><a href="#时序差分算法" class="headerlink" title="时序差分算法"></a>时序差分算法</h3><p>Value-based + online</p>
+<p>类似于蒙特卡洛，更新状态s的状态价值时，不使用完整的状态序列，在得到下一状态时立即对状态s的状态价值进行更新</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611162513650.png" class="" title="image-20240611162513650">
+
+<p>蒙特卡洛使用第三行对状态价值进行更新，时序差分使用第四行对状态价值进行更新</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611162624769.png" class="" title="image-20240611162624769">
+
+<ul>
+<li>只向前走了一步的蒙特卡洛</li>
+<li>使用下一状态的状态价值代替了很长的状态序列的回报(状态价值本身就是所有未来时刻的回报期望和)</li>
+<li>增量更新体现在 减号前部分为 (新 状态s的状态价值)，减号后部分为 (旧 状态s的状态价值)</li>
+</ul>
+<h3 id="Sarsa算法"><a href="#Sarsa算法" class="headerlink" title="Sarsa算法"></a>Sarsa算法</h3><p>Value-based + online</p>
+<p>类似于时序差分算法，对动作价值进行更新，目标是估计 <strong>ε-greedy策略的动作价值函数</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611191221769.png" class="" title="image-20240611191221769">
+
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100452913.png" class="" title="image-20240612100452913">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1, a1] - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Q-learning算法"><a href="#Q-learning算法" class="headerlink" title="Q-learning算法"></a>Q-learning算法</h3><p>Value-based + offline</p>
+<p>对动作价值进行更新，目标是估计 <strong>最优策略的动作价值函数</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611194333945.png" class="" title="image-20240611194333945">
+
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100509915.png" class="" title="image-20240612100509915">
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1].max() - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="DQN-DDQN"><a href="#DQN-DDQN" class="headerlink" title="DQN&#x2F;DDQN"></a>DQN&#x2F;DDQN</h3><p>Value-based + offline</p>
+<p>将Q-learning的Q表换成net</p>
+<h3 id="策略梯度算法-REINFORCE"><a href="#策略梯度算法-REINFORCE" class="headerlink" title="策略梯度算法(REINFORCE)"></a>策略梯度算法(REINFORCE)</h3><p>Policy-based + online</p>
+<p>定义策略学习的目标函数为，s0为初始状态</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100629893.png" class="" title="image-20240612100629893">
+
+<p>目标是修改参数θ，使J(θ)取最大；即对θ求导</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100732404.png" class="" title="image-20240612100732404">
+
+<p>where 第一行第一个求和符号后的对象为 策略的<strong>状态访问分布</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612102026769.png" class="" title="image-20240612102026769">
+
+<p>策略的状态访问分布表示该策略和在环境中会访问到的状态的分布情况(即到达每个状态的概率)</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612102256431.png" class="" title="image-20240612102256431">
+
+<p>故该求导表示 对于每个状态，我们有一定的概率在该状态，从该状态出发，策略决定了我们能获得的价值的期望</p>
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611200059062.png" class="" title="image-20240611200059062">
+
+<p>时刻t向后的回报即为(动作)价值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">reward_list = transition_dict[<span class="string">&#x27;rewards&#x27;</span>]</span><br><span class="line">state_list = transition_dict[<span class="string">&#x27;states&#x27;</span>]</span><br><span class="line">action_list = transition_dict[<span class="string">&#x27;actions&#x27;</span>]</span><br><span class="line"></span><br><span class="line">G = <span class="number">0</span></span><br><span class="line">self.optimizer.zero_grad()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(<span class="built_in">len</span>(reward_list))):  <span class="comment"># 从最后一步算起</span></span><br><span class="line">    reward = reward_list[i]  <span class="comment"># 取时间步i获得的奖励</span></span><br><span class="line">    state = torch.tensor([state_list[i]],</span><br><span class="line">                         dtype=torch.<span class="built_in">float</span>).to(self.device)  <span class="comment"># 取时间步i的状态</span></span><br><span class="line">    action = torch.tensor([action_list[i]]).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)  <span class="comment"># 取时间步i的动作</span></span><br><span class="line">    log_prob = torch.log(self.policy_net(state).gather(<span class="number">1</span>, action))</span><br><span class="line">    <span class="comment"># self.policy_net(state)： 将状态输入策略网络，得到所有可能动作的概率分布。</span></span><br><span class="line">	<span class="comment"># .gather(1, action): 从概率分布中选取实际执行动作对应的概率值。</span></span><br><span class="line">	<span class="comment"># torch.log(...): 对选取的概率值取对数，得到对数概率</span></span><br><span class="line">    G = self.gamma * G + reward  <span class="comment"># G累计了从当前时间步i到episode结束的所有奖励</span></span><br><span class="line">    loss = -log_prob * G  <span class="comment"># loss对应公式中符号α后的部分</span></span><br><span class="line">    loss.backward()  <span class="comment"># 反向传播计算梯度</span></span><br><span class="line">self.optimizer.step()  <span class="comment"># 梯度下降，实际上是对策略进行求导</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3><p>(Value + Policy)-based + offline</p>
+<p>策略函数梯度</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110026419.png" class="" title="image-20240612110026419">
+
+<p>ψ_t可为不同值，表示不同的方法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110241521.png" class="" title="image-20240612110241521">
+
+
+
+<p>价值函数的损失函数与梯度</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110951796.png" class="" title="image-20240612110951796">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612111022161.png" class="" title="image-20240612111022161">
+
+
+
+<p>Actor（策略网络）和 Critic（价值网络）</p>
+<ul>
+<li><p>Actor 要做的是与环境交互，并在 Critic 价值函数的指导下用策略梯度学习一个更好的策略。</p>
+</li>
+<li><p>Critic 要做的是通过 Actor 与环境交互收集的数据学习一个价值函数，这个价值函数会用于判断在当前状态什么动作是好的，什么动作不是好的，进而帮助 Actor 进行策略更新。</p>
+</li>
+</ul>
+<p>基于<strong>时序差分(TD)<strong>方法的</strong>Actor-Critic</strong>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110750284.png" class="" title="image-20240612110750284">
+
+<p>价值网络使用时序差分(TD)更新，策略网络使用</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络(critic)</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络(critic)预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络(actor)</span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数。(价值网络给出的当前状态价值)和(r+价值网络给出的下一状态的状态价值)的均方误差，即((a-b)^2)/2</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。策略函数梯度</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="强化学习设置小心得"><a href="#强化学习设置小心得" class="headerlink" title="强化学习设置小心得"></a>强化学习设置小心得</h2><p>控制状态空间大小，尽量选择有限状态空间</p>
+<p>eg: 将state中的一些值int化</p>
+<p>状态空间的表示值尽量接近</p>
+<p>采用标准化技术将state内的值均一化</p>
+<p>eg: [1, 200, 9999] -&gt; [0.001, 0.99, 0.9999]</p>
+<p>reward设置</p>
+<p>惩罚和奖励设置插值不要过大, 防止惩罚拟合过快</p>
+<p>+2, -200 -&gt; +2, 0</p>
+]]></content>
+      <tags>
+        <tag>python, reinforce learning</tag>
+      </tags>
   </entry>
   <entry>
     <title>Op_sys Learning Record</title>
@@ -606,7 +891,7 @@
 
 
 
-<h4 id="C-宏函数-inline-const与函数指针"><a href="#C-宏函数-inline-const与函数指针" class="headerlink" title="C 宏函数, inline, const与函数指针"></a>C 宏函数, inline, const与函数指针</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> SQUARE(x) ((x) * (x))</span></span><br><span class="line"><span class="comment">//  (x) * (x)外的一层括号是为了展开时不改变运输优先级</span></span><br><span class="line"><span class="comment">// 对比 </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ADD(x) (x) + (x)</span></span><br><span class="line"><span class="comment">// 在使用 4 / ADD(2) 时，展开式</span></span><br><span class="line"><span class="comment">// 4 / (2) * (2) 导致运算优先级错误</span></span><br><span class="line"><span class="comment">// 对比 </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SQUARE(x) x * x</span></span><br><span class="line"><span class="comment">// 在使用 SQUARE(2 + 3) 时，展开式</span></span><br><span class="line"><span class="comment">// 2 + 3 * 2 + 3 导致运算优先级错误</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MY_FUNC(x) &#123; \</span></span><br><span class="line"><span class="meta">    int result = (x) * 2; \</span></span><br><span class="line"><span class="meta">    printf(<span class="string">&quot;result: %d\n&quot;</span>, result); \</span></span><br><span class="line"><span class="meta">&#125;</span></span><br><span class="line"><span class="comment">// 使用 &#123;&#125; 可以为宏函数创建一个独立的作用域，避免宏函数内部定义的变量与外部代码中的变量发生冲突。</span></span><br><span class="line"><span class="comment">// 故在使用宏函数的时候使用括号 #define func() (&#123;函数体&#125;)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 宏函数</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a, b) ((a) &gt; (b) ? (a) : (b))</span></span><br><span class="line"><span class="comment">//预处理器会将代码中所有出现宏函数名的地方，替换成宏函数定义的代码段。文本替换</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 内联函数</span></span><br><span class="line"><span class="keyword">inline</span> <span class="type">int</span> <span class="title function_">max</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> a &gt; b ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//内联函数在编译阶段由编译器决定是否进行内联展开。如果编译器认为函数体积较小，且调用频率较高，就会将函数代码直接插入到调用点，不使用函数调用的方式。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//MAX 是一个宏函数，而 max 是一个内联函数。两者都可以用来计算两个数的最大值，但 max 函数更安全，因为它有类型检查，并且不会造成变量名污染。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">func</span><span class="params">()</span> <span class="type">const</span>;	<span class="comment">//声明该函数不会修改调用该函数的对象</span></span><br><span class="line"><span class="comment">//例如</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Complex</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line">  	Complex(<span class="type">double</span> real, <span class="type">double</span> imag) : real_(real), imag_(imag) &#123;&#125; <span class="comment">// 构造函数初始化列表，冒号标志着初始化列表的开始，将构造函数参数 real 的值赋给成员变量 real_</span></span><br><span class="line">    </span><br><span class="line">    Complex operator+(<span class="type">const</span> Complex&amp; other) <span class="type">const</span> &#123;  <span class="comment">// 版本1: const 成员函数</span></span><br><span class="line">        <span class="keyword">return</span> Complex(real_ + other.real_, imag_ + other.imag_);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Complex operator+(<span class="type">const</span> Complex&amp; other) &#123;       <span class="comment">// 版本2: 非 const 成员函数</span></span><br><span class="line">        real_ += other.real_; <span class="comment">// 修改了调用该函数的对象</span></span><br><span class="line">        imag_ += other.imag_;</span><br><span class="line">        <span class="keyword">return</span> *this; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private:</span><br><span class="line">  		<span class="type">double</span> real_;</span><br><span class="line">  		<span class="type">double</span> imag_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    Complex <span class="title function_">c1</span><span class="params">(<span class="number">1.0</span>, <span class="number">2.0</span>)</span>;</span><br><span class="line">    Complex <span class="title function_">c2</span><span class="params">(<span class="number">3.0</span>, <span class="number">4.0</span>)</span>;</span><br><span class="line"></span><br><span class="line">    c1 = c1 + c2;  <span class="comment">// 调用版本1或版本2都可以</span></span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> Complex <span class="title function_">c3</span><span class="params">(<span class="number">5.0</span>, <span class="number">6.0</span>)</span>;</span><br><span class="line">    c3 = c3 + c2;  <span class="comment">// 只能调用版本1 (const 成员函数)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">void</span> <span class="title function_">func</span><span class="params">()</span>;	<span class="comment">//该函数返回值为const</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">greet</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Hello from greet function!\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// returnType (*pointerName)(parameter1Type, parameter2Type, ...);</span></span><br><span class="line"><span class="type">void</span> (*ptr)() = greet; <span class="comment">// 定义函数指针并初始化</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 两种调用方式是等效的</span></span><br><span class="line">ptr();         <span class="comment">// 简洁写法，ptr实际为地址</span></span><br><span class="line">(*ptr)();     <span class="comment">// 更明确的写法，强调解引用</span></span><br><span class="line">(<span class="type">void</span> *)<span class="number">1234</span>	<span class="comment">//表示一个未知类型的地址</span></span><br><span class="line">(<span class="type">void</span> (*)())<span class="number">1234</span>  <span class="comment">//将1234强制类型转换为函数指针（函数的地址</span></span><br><span class="line">(*((<span class="type">void</span> (*)())<span class="number">1234</span>))()  <span class="comment">//调用位于地址1234处的函数</span></span><br></pre></td></tr></table></figure>
+<h4 id="C-宏函数-inline-const与函数指针"><a href="#C-宏函数-inline-const与函数指针" class="headerlink" title="C 宏函数, inline, const与函数指针"></a>C 宏函数, inline, const与函数指针</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//:: (作用域解析运算符) 用于指定访问哪个命名空间、类或结构体的成员。</span></span><br><span class="line"><span class="comment">//: 在继承和初始化列表中使用，用于定义类之间的关系和初始化成员变量。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SQUARE(x) ((x) * (x))</span></span><br><span class="line"><span class="comment">//  (x) * (x)外的一层括号是为了展开时不改变运输优先级</span></span><br><span class="line"><span class="comment">// 对比 </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ADD(x) (x) + (x)</span></span><br><span class="line"><span class="comment">// 在使用 4 / ADD(2) 时，展开式</span></span><br><span class="line"><span class="comment">// 4 / (2) * (2) 导致运算优先级错误</span></span><br><span class="line"><span class="comment">// 对比 </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SQUARE(x) x * x</span></span><br><span class="line"><span class="comment">// 在使用 SQUARE(2 + 3) 时，展开式</span></span><br><span class="line"><span class="comment">// 2 + 3 * 2 + 3 导致运算优先级错误</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MY_FUNC(x) &#123; \</span></span><br><span class="line"><span class="meta">    int result = (x) * 2; \</span></span><br><span class="line"><span class="meta">    printf(<span class="string">&quot;result: %d\n&quot;</span>, result); \</span></span><br><span class="line"><span class="meta">&#125;</span></span><br><span class="line"><span class="comment">// 使用 &#123;&#125; 可以为宏函数创建一个独立的作用域，避免宏函数内部定义的变量与外部代码中的变量发生冲突。</span></span><br><span class="line"><span class="comment">// 故在使用宏函数的时候使用括号 #define func() (&#123;函数体&#125;)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 宏函数</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a, b) ((a) &gt; (b) ? (a) : (b))</span></span><br><span class="line"><span class="comment">//预处理器会将代码中所有出现宏函数名的地方，替换成宏函数定义的代码段。文本替换</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 内联函数</span></span><br><span class="line"><span class="keyword">inline</span> <span class="type">int</span> <span class="title function_">max</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> a &gt; b ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//内联函数在编译阶段由编译器决定是否进行内联展开。如果编译器认为函数体积较小，且调用频率较高，就会将函数代码直接插入到调用点，不使用函数调用的方式。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//MAX 是一个宏函数，而 max 是一个内联函数。两者都可以用来计算两个数的最大值，但 max 函数更安全，因为它有类型检查，并且不会造成变量名污染。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">func</span><span class="params">()</span> <span class="type">const</span>;	<span class="comment">//声明该函数不会修改调用该函数的对象</span></span><br><span class="line"><span class="comment">//例如</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Complex</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line">  	Complex(<span class="type">double</span> real, <span class="type">double</span> imag) : real_(real), imag_(imag) &#123;&#125; <span class="comment">// 构造函数初始化列表，冒号标志着初始化列表的开始，将构造函数参数 real 的值赋给成员变量 real_</span></span><br><span class="line">    </span><br><span class="line">    Complex operator+(<span class="type">const</span> Complex&amp; other) <span class="type">const</span> &#123;  <span class="comment">// 版本1: const 成员函数</span></span><br><span class="line">        <span class="keyword">return</span> Complex(real_ + other.real_, imag_ + other.imag_);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Complex operator+(<span class="type">const</span> Complex&amp; other) &#123;       <span class="comment">// 版本2: 非 const 成员函数</span></span><br><span class="line">        real_ += other.real_; <span class="comment">// 修改了调用该函数的对象</span></span><br><span class="line">        imag_ += other.imag_;</span><br><span class="line">        <span class="keyword">return</span> *this; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private:</span><br><span class="line">  		<span class="type">double</span> real_;</span><br><span class="line">  		<span class="type">double</span> imag_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    Complex <span class="title function_">c1</span><span class="params">(<span class="number">1.0</span>, <span class="number">2.0</span>)</span>;</span><br><span class="line">    Complex <span class="title function_">c2</span><span class="params">(<span class="number">3.0</span>, <span class="number">4.0</span>)</span>;</span><br><span class="line"></span><br><span class="line">    c1 = c1 + c2;  <span class="comment">// 调用版本1或版本2都可以</span></span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> Complex <span class="title function_">c3</span><span class="params">(<span class="number">5.0</span>, <span class="number">6.0</span>)</span>;</span><br><span class="line">    c3 = c3 + c2;  <span class="comment">// 只能调用版本1 (const 成员函数)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">void</span> <span class="title function_">func</span><span class="params">()</span>;	<span class="comment">//该函数返回值为const</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">greet</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Hello from greet function!\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// returnType (*pointerName)(parameter1Type, parameter2Type, ...);</span></span><br><span class="line"><span class="type">void</span> (*ptr)() = greet; <span class="comment">// 定义函数指针并初始化</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 两种调用方式是等效的</span></span><br><span class="line">ptr();         <span class="comment">// 简洁写法，ptr实际为地址</span></span><br><span class="line">(*ptr)();     <span class="comment">// 更明确的写法，强调解引用</span></span><br><span class="line">(<span class="type">void</span> *)<span class="number">1234</span>	<span class="comment">//表示一个未知类型的地址</span></span><br><span class="line">(<span class="type">void</span> (*)())<span class="number">1234</span>  <span class="comment">//将1234强制类型转换为函数指针（函数的地址</span></span><br><span class="line">(*((<span class="type">void</span> (*)())<span class="number">1234</span>))()  <span class="comment">//调用位于地址1234处的函数</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="comment">// 虚函数与纯虚函数</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line">    virtual <span class="type">void</span> <span class="title function_">makeSound</span><span class="params">()</span> &#123;  <span class="comment">// 普通虚函数，有默认实现</span></span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Animal making sound\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> :</span> public Animal &#123;</span><br><span class="line">public:</span><br><span class="line">    <span class="type">void</span> <span class="title function_">makeSound</span><span class="params">()</span> override &#123; <span class="comment">// 重写基类的虚函数</span></span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Woof!\n&quot;</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Shape</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line">    virtual <span class="type">void</span> <span class="title function_">draw</span><span class="params">()</span> = <span class="number">0</span>;  <span class="comment">// 纯虚函数，没有函数体</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Circle</span> :</span> public Shape &#123;</span><br><span class="line">public:</span><br><span class="line">    <span class="type">void</span> <span class="title function_">draw</span><span class="params">()</span> override &#123;  <span class="comment">// 派生类必须实现 draw() 函数</span></span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Drawing a circle.\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -1396,268 +1681,6 @@
       </categories>
       <tags>
         <tag>operation system</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>reinforce-learning-record</title>
-    <url>/2024/06/10/reinforce-learning-record/</url>
-    <content><![CDATA[<p>reinforce learning</p>
-<span id="more"></span>
-
-<h1 id="reinforce-learning-record"><a href="#reinforce-learning-record" class="headerlink" title="reinforce learning record"></a>reinforce learning record</h1><h2 id="MRP"><a href="#MRP" class="headerlink" title="MRP"></a>MRP</h2><img src="/2024/06/10/reinforce-learning-record/image-20240610205131367.png" class="" title="image-20240610205131367">
-
-<h3 id="回报"><a href="#回报" class="headerlink" title="回报"></a>回报</h3><p>在一个马尔可夫奖励过程中，从第t时刻状态S_t开始，直到终止状态时，所有奖励的衰减之和称为<strong>回报</strong>（Return）</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203108806.png" class="" title="image-20240610203108806">
-
-<ul>
-<li>Rt表示在时刻t获得的奖励</li>
-<li><strong>到达状态Si</strong>，得到奖励r(s)；若在时刻t到达状态Si，则<strong>Rt&#x3D;r(Si)</strong></li>
-<li>对于某状态序列<img src="/2024/06/10/reinforce-learning-record/image-20240610203423677.png" class="" title="image-20240610203423677">我们有对应于该状态序列的奖励G<img src="/2024/06/10/reinforce-learning-record/image-20240610203434567.png" class="" title="image-20240610203434567"></li>
-</ul>
-<h3 id="价值函数"><a href="#价值函数" class="headerlink" title="价值函数"></a>价值函数</h3><p>在马尔可夫奖励过程中，一个状态的期望回报（即从这个状态出发的未来累积奖励的期望）被称为这个状态的<strong>价值</strong>（value）。所有状态的价值就组成了<strong>价值函数</strong>（value function），价值函数的输入为某个状态，输出为这个状态的价值。</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203509585.png" class="" title="image-20240610203509585">
-
-<ul>
-<li>对于某个状态s，从该状态出发可得到的状态序列有很多条</li>
-<li>对于某个状态s，价值函数为<strong>从该状态出发，可能存在的所有状态序列的奖励的均值</strong></li>
-</ul>
-<p>贝尔曼方程</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203841177.png" class="" title="image-20240610203841177">
-
-<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><p>与MRP相比，奖励与状态和动作相关</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610205112917.png" class="" title="image-20240610205112917">
-
-<h3 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h3><p>策略表示在状态s下采取动作a的<strong>概率</strong>，概率可能为1</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204522539.png" class="" title="image-20240610204522539">
-
-<h3 id="状态价值函数"><a href="#状态价值函数" class="headerlink" title="状态价值函数"></a>状态价值函数</h3><p>在 MDP 中基于策略Π的状态价值函数（state-value function），定义为从状态s出发遵循策略Π能获得的期望回报</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204014373.png" class="" title="image-20240610204014373">
-
-<h3 id="动作价值函数"><a href="#动作价值函数" class="headerlink" title="动作价值函数"></a>动作价值函数</h3><p>在 MDP 中，由于动作的存在，我们额外定义一个<strong>动作价值函数</strong>（action-value function）。表示在 MDP 遵循策略Π时，对当前状态s执行动作a得到的期望回报</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204152914.png" class="" title="image-20240610204152914">
-
-<ul>
-<li><strong>采取动作a到达状态s</strong>，得到奖励R</li>
-</ul>
-<h3 id="状态价值函数与动作价值函数关系"><a href="#状态价值函数与动作价值函数关系" class="headerlink" title="状态价值函数与动作价值函数关系"></a>状态价值函数与动作价值函数关系</h3><img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<ul>
-<li>从状态s出发，可能采取动作a1, a2, a3, …;对于每个可能采取的动作，均有动作价值Q，则状态s的状态价值为所有动作价值的期望</li>
-</ul>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<ul>
-<li>在状态s执行动作a后，得到奖励r(s,a)；由于可能到达多个不同的状态s’，动作价值为即时奖励r(s,a)+可能到达的所有状态的价值的期望</li>
-</ul>
-<h3 id="最优策略"><a href="#最优策略" class="headerlink" title="最优策略"></a>最优策略</h3><p>策略之间的偏序关系</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612093758370.png" class="" title="image-20240612093758370">
-
-<p>最优策略为 对于任意的策略，均有最优策略优于或不差于其他策略</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612093948192.png" class="" title="image-20240612093948192">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240612093958259.png" class="" title="image-20240612093958259">
-
-<p>最优状态价值与最优动作价值的关系</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612094048209.png" class="" title="image-20240612094048209">
-
-
-
-<h3 id="贝尔曼期望方程"><a href="#贝尔曼期望方程" class="headerlink" title="贝尔曼期望方程"></a>贝尔曼期望方程</h3><p>采取策略Π</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204627264.png" class="" title="image-20240610204627264">
-
-<ul>
-<li>对于状态s，s的状态价值为 ( 折损的 <strong>所有可达的下一状态的价值的期望</strong> + <strong>到达所有可达的下一状态的r(s’,a)的期望</strong> )</li>
-<li>对于状态s和动作a，在状态s进行动作a的价值为 ( <strong>在状态s执行动作a的r(s,a)的期望</strong>(实际上就是r(s,a)) + 折损的 <strong>在执行动作a后所有可达的下一状态的所有可执行动作的价值的期望</strong> )</li>
-</ul>
-<img src="/2024/06/10/reinforce-learning-record/shiow.PNG" class="" title="shiow">
-
-<p>图中情况为每个动作只会到达一个状态&amp;应该直接将动作视为一个节点，图为树</p>
-<h3 id="贝尔曼最优方程"><a href="#贝尔曼最优方程" class="headerlink" title="贝尔曼最优方程"></a>贝尔曼最优方程</h3><p>存在策略*，使对于任意的状态s，均有基于策略*状态价值函数大于基于策略Π的状态价值函数</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610205402396.png" class="" title="image-20240610205402396">
-
-<ul>
-<li>对于状态价值：非最优形式是求期望，最优形式是直接选取当前状态，所有动作中，未来状态序列中价值最大的</li>
-<li>对于动作价值：非最优形式是求期望，最优形式是直接选取下一状态，所有动作中，未来状态序列中动作价值最大的</li>
-</ul>
-<h2 id="策略迭代算法-基于策略函数的"><a href="#策略迭代算法-基于策略函数的" class="headerlink" title="策略迭代算法&#x2F;基于策略函数的"></a>策略迭代算法&#x2F;基于策略函数的</h2><p>策略评估：</p>
-<p>基于当前策略Π，在已知状态转移函数的情况下（即我们可以知道采取动作a后有多高的几率到达哪个状态），使用<strong>贝尔曼期望方程</strong>迭代更新状态价值函数</p>
-<p>ps: 原文中迭代更新状态价值函数是通过</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<p>以上两个公式实现的，也即</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">		qsa = <span class="number">0</span>  <span class="comment"># 当前动作的动作价值</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:  <span class="comment"># 有模型，即状态转移函数已知</span></span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))  <span class="comment"># 第一个公式，计算该动作的价值(开头的p为动作成功概率)</span></span><br><span class="line">         qsa_list.append(self.pi[s][a] * qsa)  <span class="comment"># 乘采取该动作的几率</span></span><br><span class="line">	new_v[s] = <span class="built_in">sum</span>(qsa_list)  <span class="comment"># 第二个公式，根据所有动作的价值计算状态价值</span></span><br></pre></td></tr></table></figure>
-
-<p>target: 更新<strong>状态价值函数</strong>，使之收敛</p>
-<p>策略提升：</p>
-<p>由于</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<p>故修改策略，使得动作价值最大的动作以更高的概率(若最大值唯一，该动作将成为唯一被选取动作；若不唯一，这些动作将均分概率1)被选取，可使新策略下的状态价值函数增大，也即<img src="/2024/06/10/reinforce-learning-record/image-20240611150030644.png" class="" title="image-20240611150030644"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">    	qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)</span><br><span class="line">     maxq = <span class="built_in">max</span>(qsa_list)</span><br><span class="line">     cntq = qsa_list.count(maxq)  <span class="comment"># 计算有几个动作得到了最大的Q值</span></span><br><span class="line">     <span class="comment"># 让这些动作均分概率</span></span><br><span class="line">     self.pi[s] = [<span class="number">1</span> / cntq <span class="keyword">if</span> q == maxq <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> q <span class="keyword">in</span> qsa_list]</span><br></pre></td></tr></table></figure>
-
-<p>target: 修改<strong>策略</strong>，使在新策略下，有基于新策略的状态价值函数大于原策略的状态价值函数</p>
-<h2 id="价值迭代算法-基于价值函数的"><a href="#价值迭代算法-基于价值函数的" class="headerlink" title="价值迭代算法&#x2F;基于价值函数的"></a>价值迭代算法&#x2F;基于价值函数的</h2><p>使用贝尔曼最优方程</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611191853492.png" class="" title="image-20240611191853492">
-
-<p>迭代形式</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611152610430.png" class="" title="image-20240611152610430">
-
-<p>进行价值迭代；</p>
-<p>使用</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611152643864.png" class="" title="image-20240611152643864">
-
-<p>从迭代完成的状态价值函数中获取策略，即 从当前状态出发，哪个动作的 (即时奖励+下一状态价值) 最大，策略就为哪个动作</p>
-<p>ps: 程序实际使用公式</p>
-<p>最优状态价值是选择此时使最优动作价值最大的那一个动作时的状态价值</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611153610316.png" class="" title="image-20240611153610316">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">max_diff = <span class="number">0</span></span><br><span class="line">new_v = [<span class="number">0</span>] * self.env.ncol * self.env.nrow  <span class="comment"># 迷宫环境，初始化状态价值</span></span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> <span class="built_in">range</span>(self.env.ncol * self.env.nrow):</span><br><span class="line">    qsa_list = []</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">            p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)  <span class="comment"># 记录状态s下的所有Q(s,a)价值</span></span><br><span class="line">     new_v[s] = <span class="built_in">max</span>(qsa_list)  <span class="comment"># 取最大作为新状态价值</span></span><br><span class="line">     max_diff = <span class="built_in">max</span>(max_diff, <span class="built_in">abs</span>(new_v[s] - self.v[s]))</span><br><span class="line">self.v = new_v</span><br><span class="line"><span class="keyword">if</span> max_diff &lt; self.theta: <span class="keyword">break</span>  <span class="comment"># 满足收敛条件,退出评估迭代</span></span><br><span class="line">cnt += <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="有模型-无模型-在线策略-离线策略"><a href="#有模型-无模型-在线策略-离线策略" class="headerlink" title="有模型&amp;无模型+在线策略&amp;离线策略"></a>有模型&amp;无模型+在线策略&amp;离线策略</h2><p><strong>有模型强化学习：</strong></p>
-<p>智能体学习环境的状态转移函数</p>
-<p>环境的状态转移函数已知</p>
-<p>智能体可以直接根据状态转移函数得到在对环境进行动作a后环境的下一状态</p>
-<p># 状态转移函数P[state][action] &#x3D; [(p, next_state, reward, done)]包含转移成功概率，下一个状态，奖励和是否完成</p>
-<ul>
-<li>Dyna-Q</li>
-<li>Monte Carlo Tree Search (MCTS)</li>
-<li>PILCO (Probabilistic Inference for Learning Control)</li>
-</ul>
-<p><strong>无模型强化学习：</strong></p>
-<p>智能体通过与环境交互学习状态和奖励之间的映射关系</p>
-<p>环境的状态转移函数未知</p>
-<p>智能体必须通过与环境的交互才能得到环境的下一状态</p>
-<ul>
-<li>Q-learning</li>
-<li>SARSA</li>
-<li>Deep Q-Network (DQN)</li>
-<li>Policy Gradient methods (e.g., REINFORCE, A2C, PPO)</li>
-</ul>
-<p>样本：当前状态，下一状态，采取动作，奖励</p>
-<p><strong>在线策略学习：</strong></p>
-<p>不保存样本</p>
-<p><strong>离线策略学习：</strong></p>
-<p>使用经验回放池保存样本</p>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="蒙特卡洛方法"><a href="#蒙特卡洛方法" class="headerlink" title="蒙特卡洛方法"></a>蒙特卡洛方法</h3><p>Value-based + online</p>
-<p>从某状态s出发，基于策略Π，获得一条状态序列，该状态序列对应一个回报G；该过程为一次采样。</p>
-<p>反复采样，得到N个状态序列+回报和M，由大数定律，可得该状态的状态价值</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161858965.png" class="" title="image-20240611161858965">
-
-<p>使用增量更新方法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161157050.png" class="" title="image-20240611161157050">
-
-<p>补：增量更新原理</p>
-<p>新均值 &#x3D; 旧均值 + 1&#x2F;总量 * (新值 - 旧均值) ？</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161942958.png" class="" title="image-20240611161942958">
-
-<h3 id="时序差分算法"><a href="#时序差分算法" class="headerlink" title="时序差分算法"></a>时序差分算法</h3><p>Value-based + online</p>
-<p>类似于蒙特卡洛，更新状态s的状态价值时，不使用完整的状态序列，在得到下一状态时立即对状态s的状态价值进行更新</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611162513650.png" class="" title="image-20240611162513650">
-
-<p>蒙特卡洛使用第三行对状态价值进行更新，时序差分使用第四行对状态价值进行更新</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611162624769.png" class="" title="image-20240611162624769">
-
-<ul>
-<li>只向前走了一步的蒙特卡洛</li>
-<li>使用下一状态的状态价值代替了很长的状态序列的回报(状态价值本身就是所有未来时刻的回报期望和)</li>
-<li>增量更新体现在 减号前部分为 (新 状态s的状态价值)，减号后部分为 (旧 状态s的状态价值)</li>
-</ul>
-<h3 id="Sarsa算法"><a href="#Sarsa算法" class="headerlink" title="Sarsa算法"></a>Sarsa算法</h3><p>Value-based + online</p>
-<p>类似于时序差分算法，对动作价值进行更新，目标是估计 <strong>ε-greedy策略的动作价值函数</strong></p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611191221769.png" class="" title="image-20240611191221769">
-
-<p>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100452913.png" class="" title="image-20240612100452913">
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1, a1] - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="Q-learning算法"><a href="#Q-learning算法" class="headerlink" title="Q-learning算法"></a>Q-learning算法</h3><p>Value-based + offline</p>
-<p>对动作价值进行更新，目标是估计 <strong>最优策略的动作价值函数</strong></p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611194333945.png" class="" title="image-20240611194333945">
-
-<p>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100509915.png" class="" title="image-20240612100509915">
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1].max() - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="DQN-DDQN"><a href="#DQN-DDQN" class="headerlink" title="DQN&#x2F;DDQN"></a>DQN&#x2F;DDQN</h3><p>Value-based + offline</p>
-<p>将Q-learning的Q表换成net</p>
-<h3 id="策略梯度算法-REINFORCE"><a href="#策略梯度算法-REINFORCE" class="headerlink" title="策略梯度算法(REINFORCE)"></a>策略梯度算法(REINFORCE)</h3><p>Policy-based + online</p>
-<p>定义策略学习的目标函数为，s0为初始状态</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100629893.png" class="" title="image-20240612100629893">
-
-<p>目标是修改参数θ，使J(θ)取最大；即对θ求导</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100732404.png" class="" title="image-20240612100732404">
-
-<p>where 第一行第一个求和符号后的对象为 策略的<strong>状态访问分布</strong></p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612102026769.png" class="" title="image-20240612102026769">
-
-<p>策略的状态访问分布表示该策略和在环境中会访问到的状态的分布情况(即到达每个状态的概率)</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612102256431.png" class="" title="image-20240612102256431">
-
-<p>故该求导表示 对于每个状态，我们有一定的概率在该状态，从该状态出发，策略决定了我们能获得的价值的期望</p>
-<p>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611200059062.png" class="" title="image-20240611200059062">
-
-<p>时刻t向后的回报即为(动作)价值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">reward_list = transition_dict[<span class="string">&#x27;rewards&#x27;</span>]</span><br><span class="line">state_list = transition_dict[<span class="string">&#x27;states&#x27;</span>]</span><br><span class="line">action_list = transition_dict[<span class="string">&#x27;actions&#x27;</span>]</span><br><span class="line"></span><br><span class="line">G = <span class="number">0</span></span><br><span class="line">self.optimizer.zero_grad()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(<span class="built_in">len</span>(reward_list))):  <span class="comment"># 从最后一步算起</span></span><br><span class="line">    reward = reward_list[i]  <span class="comment"># 取时间步i获得的奖励</span></span><br><span class="line">    state = torch.tensor([state_list[i]],</span><br><span class="line">                         dtype=torch.<span class="built_in">float</span>).to(self.device)  <span class="comment"># 取时间步i的状态</span></span><br><span class="line">    action = torch.tensor([action_list[i]]).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)  <span class="comment"># 取时间步i的动作</span></span><br><span class="line">    log_prob = torch.log(self.policy_net(state).gather(<span class="number">1</span>, action))</span><br><span class="line">    <span class="comment"># self.policy_net(state)： 将状态输入策略网络，得到所有可能动作的概率分布。</span></span><br><span class="line">	<span class="comment"># .gather(1, action): 从概率分布中选取实际执行动作对应的概率值。</span></span><br><span class="line">	<span class="comment"># torch.log(...): 对选取的概率值取对数，得到对数概率</span></span><br><span class="line">    G = self.gamma * G + reward  <span class="comment"># G累计了从当前时间步i到episode结束的所有奖励</span></span><br><span class="line">    loss = -log_prob * G  <span class="comment"># loss对应公式中符号α后的部分</span></span><br><span class="line">    loss.backward()  <span class="comment"># 反向传播计算梯度</span></span><br><span class="line">self.optimizer.step()  <span class="comment"># 梯度下降，实际上是对策略进行求导</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3><p>(Value + Policy)-based + offline</p>
-<p>策略函数梯度</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110026419.png" class="" title="image-20240612110026419">
-
-<p>ψ_t可为不同值，表示不同的方法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110241521.png" class="" title="image-20240612110241521">
-
-
-
-<p>价值函数的损失函数与梯度</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110951796.png" class="" title="image-20240612110951796">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240612111022161.png" class="" title="image-20240612111022161">
-
-
-
-<p>Actor（策略网络）和 Critic（价值网络）</p>
-<ul>
-<li><p>Actor 要做的是与环境交互，并在 Critic 价值函数的指导下用策略梯度学习一个更好的策略。</p>
-</li>
-<li><p>Critic 要做的是通过 Actor 与环境交互收集的数据学习一个价值函数，这个价值函数会用于判断在当前状态什么动作是好的，什么动作不是好的，进而帮助 Actor 进行策略更新。</p>
-</li>
-</ul>
-<p>基于<strong>时序差分(TD)<strong>方法的</strong>Actor-Critic</strong>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110750284.png" class="" title="image-20240612110750284">
-
-<p>价值网络使用时序差分(TD)更新，策略网络使用</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络(critic)</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络(critic)预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络(actor)</span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数。(价值网络给出的当前状态价值)和(r+价值网络给出的下一状态的状态价值)的均方误差，即((a-b)^2)/2</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。策略函数梯度</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="强化学习设置小心得"><a href="#强化学习设置小心得" class="headerlink" title="强化学习设置小心得"></a>强化学习设置小心得</h2><p>控制状态空间大小，尽量选择有限状态空间</p>
-<p>eg: 将state中的一些值int化</p>
-<p>状态空间的表示值尽量接近</p>
-<p>采用标准化技术将state内的值均一化</p>
-<p>eg: [1, 200, 9999] -&gt; [0.001, 0.99, 0.9999]</p>
-<p>reward设置</p>
-<p>惩罚和奖励设置插值不要过大, 防止惩罚拟合过快</p>
-<p>+2, -200 -&gt; +2, 0</p>
-]]></content>
-      <tags>
-        <tag>python, reinforce learning</tag>
       </tags>
   </entry>
 </search>
