@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/21/Android-learning-record/image-20240721154206067.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/21/Android-learning-record/image-20240721155920403.png">
 <meta property="article:published_time" content="2024-07-21T14:15:45.392Z">
-<meta property="article:modified_time" content="2024-07-27T03:31:01.864Z">
+<meta property="article:modified_time" content="2024-07-27T08:03:58.572Z">
 <meta property="article:author" content="marigo1d">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://marigo1d.github.io/2024/07/21/Android-learning-record/image-20240714103234291.png">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-07-27 11:31:01" itemprop="dateModified" datetime="2024-07-27T11:31:01+08:00">2024-07-27</time>
+                <time title="Modified: 2024-07-27 16:03:58" itemprop="dateModified" datetime="2024-07-27T16:03:58+08:00">2024-07-27</time>
               </span>
 
           
@@ -285,7 +285,7 @@
 <p>其中， <code>com</code> 是顶层包, <code>example</code> 是 <code>com</code> 包的子包, <code>project</code> 是 <code>com.example</code> 包的子包。</p>
 <p>在文件系统中，存在以下的层次结构：</p>
 <p>com&#x2F;<br>    example&#x2F;<br>        project&#x2F;<br>            MyClass.java </p>
-<h3 id="泛型与通配符"><a href="#泛型与通配符" class="headerlink" title="泛型与通配符"></a>泛型与通配符</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IResponse</span>&lt;T&gt; &#123; <span class="comment">//使用泛型</span></span><br><span class="line">	</span><br><span class="line">	T <span class="title function_">getData</span><span class="params">()</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T t)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringResponse</span> <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(String t)</span> &#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Response</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;T&gt;&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> T <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> data;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T data)</span> &#123;</span><br><span class="line">		<span class="built_in">this</span>.data = data;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Response</span>&lt;T <span class="keyword">extends</span> <span class="title class_">BaseData</span>&gt; <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;T&gt;&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getToken</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">if</span>(data!=<span class="literal">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> data.getToken();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>();</span><br><span class="line"><span class="type">Teacher</span> <span class="variable">teacher</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Teacher</span>();</span><br><span class="line"></span><br><span class="line">Person person;	</span><br><span class="line">person = student; <span class="comment">// 多态</span></span><br><span class="line">person = teacher; <span class="comment">// 多态</span></span><br><span class="line"></span><br><span class="line">List&lt;? <span class="keyword">extends</span> <span class="title class_">Person</span>&gt; personList; <span class="comment">//只接收Person或Person子类</span></span><br><span class="line">List&lt;? <span class="built_in">super</span> Student&gt; personList <span class="comment">//只接收Student或Student父类</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="泛型与通配符"><a href="#泛型与通配符" class="headerlink" title="泛型与通配符"></a>泛型与通配符</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IResponse</span>&lt;T&gt; &#123; <span class="comment">//使用泛型</span></span><br><span class="line">	</span><br><span class="line">	T <span class="title function_">getData</span><span class="params">()</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T t)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringResponse</span> <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(String t)</span> &#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Response</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;T&gt;&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> T <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> data;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T data)</span> &#123;</span><br><span class="line">		<span class="built_in">this</span>.data = data;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Response</span>&lt;T <span class="keyword">extends</span> <span class="title class_">BaseData</span>&gt; <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;T&gt;&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getToken</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">if</span>(data!=<span class="literal">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> data.getToken();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>();</span><br><span class="line"><span class="type">Teacher</span> <span class="variable">teacher</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Teacher</span>();</span><br><span class="line"></span><br><span class="line">Person person;	</span><br><span class="line">person = student; <span class="comment">// 多态</span></span><br><span class="line">person = teacher; <span class="comment">// 多态</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printList</span><span class="params">(List&lt;?&gt; list)</span> &#123; <span class="comment">//通配符</span></span><br><span class="line">    <span class="keyword">for</span> (Object o : list) &#123;</span><br><span class="line">        System.out.println(o);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="comment">// 该方法可以接收任何类型的List,例如 List&lt;String&gt;、List&lt;Integer&gt; 等</span></span><br><span class="line"></span><br><span class="line">List&lt;? <span class="keyword">extends</span> <span class="title class_">Person</span>&gt; personList; <span class="comment">//只接收Person或Person子类</span></span><br><span class="line">List&lt;? <span class="built_in">super</span> Student&gt; personList <span class="comment">//只接收Student或Student父类</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p><strong>泛型擦除</strong>：编译器在对源代码进行编译的时候将泛型换成了泛型指定的上限类&lt;T extends 上限类型&gt;，如果没有指定泛型的上限，编译器则会使用Object类替代。简单的说在编译完成后的字节码文件中其实是没有泛型的概念的，源代码中的泛型被编译器用Object或者泛型指定的类给替换掉了。</p>
@@ -304,7 +304,7 @@
 <li><p>**加载 (Loading)**：</p>
 <ul>
 <li>通过类的全限定名（例如 java.lang.String）查找并读取类的二进制数据（.class 文件）。</li>
-<li>将类的静态结构信息（例如类名、方法名、字段名、访问权限等）<strong>存储在方法区中，并创建一个代表该类的 Class 对象。</strong></li>
+<li>将类的静态结构信息（例如类名、方法名、字段名、访问权限等）<strong>存储在方法区中，并创建一个代表该类的 Class 对象，该对象唯一。</strong></li>
 <li>加载阶段通常由类加载器完成，Java 提供三种内置的类加载器：<ul>
 <li><strong>Bootstrap ClassLoader</strong>：负责加载 Java 核心类库（rt.jar 等）。</li>
 <li><strong>Extension ClassLoader</strong>：负责加载 Java 扩展类库（jre&#x2F;lib&#x2F;ext 目录下的类）。</li>
@@ -328,24 +328,113 @@
 </li>
 <li><p>**初始化 (Initialization)**：</p>
 <ul>
-<li><p>执行类的静态初始化代码块（static {}）和静态变量的初始化语句。</p>
-</li>
-<li><p>初始化阶段类变量才会被赋予我们在代码中声明的值。JVM会根据语句执行顺序对类对象进行初始化。</p>
-</li>
-<li><p>只有在类被主动使用时才会进行初始化，例如：</p>
-<ul>
+<li>执行类的静态初始化代码块（static {}）和静态变量的初始化语句。</li>
+<li>初始化阶段类变量才会被赋予我们在代码中声明的值。JVM会根据语句执行顺序对类对象进行初始化。</li>
+<li>只有在类被主动使用时才会进行初始化，例如：<ul>
 <li>创建类的实例。</li>
 <li><strong>访问类的静态变量。</strong></li>
 <li><strong>调用类的静态方法。</strong></li>
 <li>反射调用 Test 类。</li>
-<li>当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
+<p>初始化发生条件：</p>
+<p>① 遇到 new、getstatic、putstatic、invokestatic 这四条字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。生成这4条指令的最常见的Java代码场景是：使用new关键字实例化对象的时候、读取或设置一个类的静态字段（被final修饰、已在编译器把结果放入常量池的静态字段除外）的时候，以及调用一个类的静态方法的时候。</p>
+<p>② 使用 java.lang.reflect 包的方法对类进行反射调用的时候，如果类没有进行过初始化，则需要先触发其初始化。</p>
+<p>③ 当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</p>
+<p>④ 当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类。</p>
+<p>⑤ 当使用 JDK1.7 动态语言支持时，如果一个 java.lang.invoke.MethodHandle实例最后的解析结果 REF_getstatic,REF_putstatic,REF_invokeStatic 的方法句柄，并且这个方法句柄所对应的类没有进行初始化，则需要先出触发其初始化。</p>
+<p>⑥ 当一个接口中定义了JDK8新加入的默认方法（被default关键字修饰的接口方法）时，如果有这个接口的实现类发生了初始化，那该接口要在其之前被初始化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Singleton</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Singleton</span> <span class="variable">singleton</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> x;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">y</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span> &#123;</span><br><span class="line">        ++x;</span><br><span class="line">        ++y;</span><br><span class="line">        System.out.println(<span class="string">&quot;Singleton构造方法执行，x = &quot;</span> + x +<span class="string">&quot;,y = &quot;</span> + y);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;singleton.x = &quot;</span> + singleton.x);</span><br><span class="line">        System.out.println(<span class="string">&quot;singleton.x = &quot;</span> + singleton.y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>执行顺序和输出结果分析：</strong></p>
+<ol>
+<li><p><strong>类加载：</strong> 当执行到 <code>main</code> 方法时，会触发 <code>Singleton</code> 类的加载，执行顺序如下：</p>
+<ul>
+<li><p>主类<code>Singleton</code>的加载：读取<code>Singleton.class</code>文件，获取类的结构信息，在方法区创建<code>Singleton</code>类的 Class 对象</p>
+</li>
+<li><p>主类<code>Singleton</code>的链接：验证，准备和解析。准备阶段将为静态变量<code>singleton</code>, <code>x</code>, <code>y</code>分配内存空间，并设置默认值。其中，<code>singleton</code>：引用类型的默认值为 <code>null</code>。<code>x</code>：<code>int</code> 类型的默认值为 <code>0</code>。<code>y</code>： 虽然 <code>y</code> 被显式初始化为 <code>0</code>，但在准备阶段，只会赋予默认值，所以 <code>y</code> 也会被初始化为 <code>0</code>。</p>
+<blockquote>
+<p>这三个静态变量存放在方法区<code>Singleton</code>类 class 对象中</p>
+</blockquote>
+</li>
+<li><p>主类<code>Singleton</code>的初始化：</p>
+<ul>
+<li>静态变量 <code>singleton</code> 初始化：<code>private static Singleton singleton = new Singleton();</code><ul>
+<li>这行代码会创建一个 <code>Singleton</code> 实例，进而调用 <code>Singleton</code> 的构造方法。</li>
+</ul>
+</li>
+<li>构造方法执行：<ul>
+<li><code>++x;</code>  &#x2F;&#x2F; 此时 x 还没有初始化，默认值为 0，所以 x 变为 1</li>
+<li><code>++y;</code>  &#x2F;&#x2F; y 已初始化为 0，所以 y 变为 1</li>
+<li><code>System.out.println(&quot;Singleton构造方法执行，x = &quot; + x +&quot;,y = &quot; + y);</code> </li>
+<li>输出：<code>Singleton构造方法执行，x = 1,y = 1</code></li>
+</ul>
+</li>
+<li>静态变量 <code>x</code> 和 <code>y</code> 初始化：<ul>
+<li><code>public static int x;</code>  &#x2F;&#x2F; 无动作 (构造方法中已经修改)</li>
+<li><code>public static int y = 0;</code> &#x2F;&#x2F; y 被赋值为 0 (覆盖了构造方法中的修改)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>main 方法执行：</strong></p>
+<ul>
+<li><code>System.out.println(&quot;singleton.x = &quot; + singleton.x);</code> <ul>
+<li>输出：<code>singleton.x = 1</code></li>
+</ul>
+</li>
+<li><code>System.out.println(&quot;singleton.x = &quot; + singleton.y);</code><ul>
+<li>输出：<code>singleton.y = 0</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>最终输出结果：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Singleton构造方法执行，x = 1,y = 1</span><br><span class="line">singleton.x = 1</span><br><span class="line">singleton.y = 0</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h3><p>类的Class对象在<strong>类加载的加载部分</strong>时被创建，保存于<strong>方法区</strong>。</p>
+<p><strong>反射的核心 API</strong></p>
+<p>Java 反射机制主要由 java.lang.reflect 包中的类和接口提供支持，其中最常用的类包括：</p>
+<ul>
+<li><strong>Class 类:</strong> 代表一个类的类型信息，可以通过 Class 对象获取类的所有信息。</li>
+<li><strong>Field 类:</strong> 代表类的成员变量，可以通过 Field 对象获取和设置变量的值。</li>
+<li><strong>Method 类:</strong> 代表类的方法，可以通过 Method 对象调用方法。</li>
+<li><strong>Constructor 类:</strong> 代表类的构造函数，可以通过 Constructor 对象创建类的实例。</li>
+</ul>
+<p><strong>获取方式：</strong></p>
+<ol>
+<li><strong>通过类名获取:</strong></li>
+</ol>
+<p>Class&lt;?&gt; clazz &#x3D; Class.forName(“com.example.MyClass”);</p>
+<ol start="2">
+<li><strong>通过对象获取:</strong></li>
+</ol>
+<p>MyClass obj &#x3D; new MyClass(); </p>
+<p>Class&lt;?&gt; clazz &#x3D; obj.getClass();</p>
+<p>Class<Person> personClass&#x3D;(Class<Person>)person.getClass();</p>
+<ol start="3">
+<li><strong>通过类字面量获取:</strong></li>
+</ol>
+<p>Class&lt;?&gt; clazz &#x3D; MyClass.class;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyClass</span><span class="params">(String name, <span class="type">int</span> age)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printInfo</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Name: &quot;</span> + name + <span class="string">&quot;, Age: &quot;</span> + age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReflectionExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 获取 Class 对象</span></span><br><span class="line">        Class&lt;?&gt; clazz = Class.forName(<span class="string">&quot;com.example.MyClass&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取构造函数并创建实例</span></span><br><span class="line">        Constructor&lt;?&gt; constructor = clazz.getConstructor(String.class, <span class="type">int</span>.class);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> constructor.newInstance(<span class="string">&quot;John Doe&quot;</span>, <span class="number">30</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取成员变量并设置值</span></span><br><span class="line">        <span class="type">Field</span> <span class="variable">nameField</span> <span class="operator">=</span> clazz.getDeclaredField(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        nameField.setAccessible(<span class="literal">true</span>); <span class="comment">// 允许访问私有变量</span></span><br><span class="line">        nameField.set(obj, <span class="string">&quot;Jane Doe&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取方法并调用</span></span><br><span class="line">        <span class="type">Method</span> <span class="variable">printInfoMethod</span> <span class="operator">=</span> clazz.getMethod(<span class="string">&quot;printInfo&quot;</span>);</span><br><span class="line">        printInfoMethod.invoke(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <blockquote>
 <p>import 类将告知编译器该类的位置，<strong>不会触发类加载</strong></p>
+<p><strong>对于一个 Test.java 文件：</strong></p>
+<ul>
+<li><strong>只有被主类（包含 main() 方法的类）直接或间接使用到的类才会被加载、链接(和初始化)。</strong> 主类将默认进行加载、链接和初始化。</li>
+<li><strong>如果 Test.java 中的其他类没有被主类直接或间接使用，那么这些类</strong> <strong>不会被加载</strong> <strong>。</strong></li>
+</ul>
 <p>触发类加载的时候一般为：</p>
 <ol>
 <li><p><strong>创建 <code>Test</code> 类的实例：</strong></p>
@@ -383,8 +472,12 @@
 </li>
 </ol>
 </blockquote>
-<h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2>.JPG)
+<h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><p><a target="_blank" rel="noopener" href="https://tangxman.github.io/2015/07/27/the-difference-of-java-string-pool/">https://tangxman.github.io/2015/07/27/the-difference-of-java-string-pool/</a></p>
+.JPG)
 
+<blockquote>
+<p>示意图，存在问题</p>
+</blockquote>
 <p><strong>Method Area (方法区):</strong></p>
 <p><strong>Heap (堆):</strong></p>
 <p><strong>Thread Stack (线程栈):</strong></p>
@@ -528,7 +621,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Learning-Record"><span class="nav-text">Android Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java"><span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85"><span class="nav-text">包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">泛型与通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">类加载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%A8%8B%E5%BA%8F"><span class="nav-text">Android程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#context"><span class="nav-text">context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E5%90%AF%E5%8A%A8"><span class="nav-text">Android启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Zygote%E8%BF%9B%E7%A8%8B"><span class="nav-text">Zygote进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SystemServer%E8%BF%9B%E7%A8%8B"><span class="nav-text">SystemServer进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP%E8%BF%9B%E7%A8%8B"><span class="nav-text">APP进程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%BA%A4%E4%BA%92"><span class="nav-text">Android系统中进程的交互</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder"><span class="nav-text">Binder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Learning-Record"><span class="nav-text">Android Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java"><span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85"><span class="nav-text">包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">泛型与通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-text">反射</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%A8%8B%E5%BA%8F"><span class="nav-text">Android程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#context"><span class="nav-text">context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E5%90%AF%E5%8A%A8"><span class="nav-text">Android启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Zygote%E8%BF%9B%E7%A8%8B"><span class="nav-text">Zygote进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SystemServer%E8%BF%9B%E7%A8%8B"><span class="nav-text">SystemServer进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP%E8%BF%9B%E7%A8%8B"><span class="nav-text">APP进程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%BA%A4%E4%BA%92"><span class="nav-text">Android系统中进程的交互</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder"><span class="nav-text">Binder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

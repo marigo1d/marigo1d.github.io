@@ -1,176 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>pytorch_learning_record</title>
-    <url>/2024/05/08/pytorch-learning-record/</url>
-    <content><![CDATA[<p>dqn与pytorch</p>
+    <title>Algo Learning Record</title>
+    <url>/2024/04/25/Algo-Learning-Record/</url>
+    <content><![CDATA[<p>算法相关学习记录</p>
 <span id="more"></span>
 
-<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
-<p>主要属性</p>
-<ul>
-<li><p>T: dimensions reversed</p>
-</li>
-<li><p>H: 共轭转置</p>
-</li>
-<li><p>data: 值</p>
-</li>
-<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
-</li>
-<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
-</li>
-<li><p>is_leaf: 指示是否叶子节点</p>
-</li>
-<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
-</li>
-<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
-</li>
-<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
-</li>
-<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
 
 
+<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><h3 id="DP问题分析"><a href="#DP问题分析" class="headerlink" title="DP问题分析"></a>DP问题分析</h3><p>递归&amp;动态规划</p>
+<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
 
-<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
-<p>Sub代表减法；</p>
-<p>Mul代表乘法；</p>
-<p>Mm代表矩阵乘法；</p>
-<p>Div代表除法；</p>
-<p>T代表矩阵转置；</p>
-<p>Pow代表乘方；</p>
-<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
-<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
-<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
-<p>y &#x3D; (x + w) * (w + 1)</p>
-<p>a &#x3D; x+w</p>
-<p>b &#x3D; w + 1</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
+<p>递归会重复进入状态，DP不会</p>
+<p>递归一个起点，多个终点；</p>
+<p>DP多个起点，一个终点；</p>
+<p>DP核心：</p>
+<p>1.确定状态和动作</p>
+<p>2.确定起点和终点</p>
+<h3 id="无权图两点间路径数"><a href="#无权图两点间路径数" class="headerlink" title="无权图两点间路径数"></a>无权图两点间<strong>路径数</strong></h3><p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果相加。</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
+<p>3.到达起点，当前递归结束，返回；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>邻接点</strong>的走法已知；</p>
+<p>2.到达<strong>次邻接点</strong>的走法为从<strong>邻接点</strong>到<strong>次邻接点</strong>的走法之和；</p>
+<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的走法之和；</p>
+<p>实例：</p>
+<img src="/2024/04/25/Algo-Learning-Record/image-20240426101614103.png" class="" title="image-20240426101614103">
 
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCount</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">1</span> || n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> pathsCount(m - <span class="number">1</span>, n) + pathsCount(m , n -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-<p>通常</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>自动梯度</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>torchviz</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
-
-<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
-<ul>
-<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
-<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
-<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
-<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
-<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
-<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
-<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
-</ul>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
-
-
-
-<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>optimizer.step()</p>
-<p>优化器执行一次梯度更新</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
-
-<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
-<p>optimizer.zero_grad()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
+<p>DP</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCounts</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 
 
-<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
+<h3 id="有权图两点间最大路径"><a href="#有权图两点间最大路径" class="headerlink" title="有权图两点间最大路径"></a>有权图两点间<strong>最大路径</strong></h3><p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果取最大。</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
+<p>3.到达起点，当前递归结束，返回当前节点值；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>邻接点</strong>的距离可知；</p>
+<p>2.到达<strong>次邻接点</strong>的最大距离为从<strong>邻接点</strong>到<strong>次邻接点</strong>的最大距离；</p>
+<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的最大距离；</p>
+<p>实例：</p>
+<img src="/2024/04/25/Algo-Learning-Record/image-20240426102031155.png" class="" title="image-20240426102031155">
 
-<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> getMin(grid, m-<span class="number">1</span>, n-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getMin</span><span class="params">(<span class="type">int</span>[][] grid, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">minRow</span> <span class="operator">=</span> getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    <span class="type">int</span> <span class="variable">minColumn</span> <span class="operator">=</span> getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grid[i][j] + Math.min(minRow, minColumn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
-<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
-<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
-<p> tensor的requires_grad的属性默认为False。</p>
-<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>.grad_fn 属性</p>
-<p>tensor在计算图中的父运算函数</p>
-<p>.detach()与.detach_()</p>
-<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
-<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
-<p>相同：</p>
-<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
-<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
-<p>不同：</p>
-<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
-<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
-<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-<p>torch.no_grad()</p>
-<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
-<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
-<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>.backward()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
-
-<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
-<p>.backward()方法仅适用于标量</p>
-<p>.register_hook()</p>
-<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
-<p>获取中间tensor的grad值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
-
-
+<p>DP</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m ;i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n;i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = grid[i][j] + Math.min(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 ]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
       <tags>
-        <tag>python, pytorch</tag>
+        <tag>algorithm</tag>
       </tags>
   </entry>
   <entry>
@@ -223,7 +113,7 @@
 <p>其中， <code>com</code> 是顶层包, <code>example</code> 是 <code>com</code> 包的子包, <code>project</code> 是 <code>com.example</code> 包的子包。</p>
 <p>在文件系统中，存在以下的层次结构：</p>
 <p>com&#x2F;<br>    example&#x2F;<br>        project&#x2F;<br>            MyClass.java </p>
-<h3 id="泛型与通配符"><a href="#泛型与通配符" class="headerlink" title="泛型与通配符"></a>泛型与通配符</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IResponse</span>&lt;T&gt; &#123; <span class="comment">//使用泛型</span></span><br><span class="line">	</span><br><span class="line">	T <span class="title function_">getData</span><span class="params">()</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T t)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringResponse</span> <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(String t)</span> &#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Response</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;T&gt;&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> T <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> data;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T data)</span> &#123;</span><br><span class="line">		<span class="built_in">this</span>.data = data;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Response</span>&lt;T <span class="keyword">extends</span> <span class="title class_">BaseData</span>&gt; <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;T&gt;&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getToken</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">if</span>(data!=<span class="literal">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> data.getToken();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>();</span><br><span class="line"><span class="type">Teacher</span> <span class="variable">teacher</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Teacher</span>();</span><br><span class="line"></span><br><span class="line">Person person;	</span><br><span class="line">person = student; <span class="comment">// 多态</span></span><br><span class="line">person = teacher; <span class="comment">// 多态</span></span><br><span class="line"></span><br><span class="line">List&lt;? <span class="keyword">extends</span> <span class="title class_">Person</span>&gt; personList; <span class="comment">//只接收Person或Person子类</span></span><br><span class="line">List&lt;? <span class="built_in">super</span> Student&gt; personList <span class="comment">//只接收Student或Student父类</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="泛型与通配符"><a href="#泛型与通配符" class="headerlink" title="泛型与通配符"></a>泛型与通配符</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IResponse</span>&lt;T&gt; &#123; <span class="comment">//使用泛型</span></span><br><span class="line">	</span><br><span class="line">	T <span class="title function_">getData</span><span class="params">()</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T t)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringResponse</span> <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(String t)</span> &#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Response</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;T&gt;&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> T <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> data;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T data)</span> &#123;</span><br><span class="line">		<span class="built_in">this</span>.data = data;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Response</span>&lt;T <span class="keyword">extends</span> <span class="title class_">BaseData</span>&gt; <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;T&gt;&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getToken</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">if</span>(data!=<span class="literal">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> data.getToken();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>();</span><br><span class="line"><span class="type">Teacher</span> <span class="variable">teacher</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Teacher</span>();</span><br><span class="line"></span><br><span class="line">Person person;	</span><br><span class="line">person = student; <span class="comment">// 多态</span></span><br><span class="line">person = teacher; <span class="comment">// 多态</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printList</span><span class="params">(List&lt;?&gt; list)</span> &#123; <span class="comment">//通配符</span></span><br><span class="line">    <span class="keyword">for</span> (Object o : list) &#123;</span><br><span class="line">        System.out.println(o);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="comment">// 该方法可以接收任何类型的List,例如 List&lt;String&gt;、List&lt;Integer&gt; 等</span></span><br><span class="line"></span><br><span class="line">List&lt;? <span class="keyword">extends</span> <span class="title class_">Person</span>&gt; personList; <span class="comment">//只接收Person或Person子类</span></span><br><span class="line">List&lt;? <span class="built_in">super</span> Student&gt; personList <span class="comment">//只接收Student或Student父类</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p><strong>泛型擦除</strong>：编译器在对源代码进行编译的时候将泛型换成了泛型指定的上限类&lt;T extends 上限类型&gt;，如果没有指定泛型的上限，编译器则会使用Object类替代。简单的说在编译完成后的字节码文件中其实是没有泛型的概念的，源代码中的泛型被编译器用Object或者泛型指定的类给替换掉了。</p>
@@ -242,7 +132,7 @@
 <li><p>**加载 (Loading)**：</p>
 <ul>
 <li>通过类的全限定名（例如 java.lang.String）查找并读取类的二进制数据（.class 文件）。</li>
-<li>将类的静态结构信息（例如类名、方法名、字段名、访问权限等）<strong>存储在方法区中，并创建一个代表该类的 Class 对象。</strong></li>
+<li>将类的静态结构信息（例如类名、方法名、字段名、访问权限等）<strong>存储在方法区中，并创建一个代表该类的 Class 对象，该对象唯一。</strong></li>
 <li>加载阶段通常由类加载器完成，Java 提供三种内置的类加载器：<ul>
 <li><strong>Bootstrap ClassLoader</strong>：负责加载 Java 核心类库（rt.jar 等）。</li>
 <li><strong>Extension ClassLoader</strong>：负责加载 Java 扩展类库（jre&#x2F;lib&#x2F;ext 目录下的类）。</li>
@@ -266,24 +156,113 @@
 </li>
 <li><p>**初始化 (Initialization)**：</p>
 <ul>
-<li><p>执行类的静态初始化代码块（static {}）和静态变量的初始化语句。</p>
-</li>
-<li><p>初始化阶段类变量才会被赋予我们在代码中声明的值。JVM会根据语句执行顺序对类对象进行初始化。</p>
-</li>
-<li><p>只有在类被主动使用时才会进行初始化，例如：</p>
-<ul>
+<li>执行类的静态初始化代码块（static {}）和静态变量的初始化语句。</li>
+<li>初始化阶段类变量才会被赋予我们在代码中声明的值。JVM会根据语句执行顺序对类对象进行初始化。</li>
+<li>只有在类被主动使用时才会进行初始化，例如：<ul>
 <li>创建类的实例。</li>
 <li><strong>访问类的静态变量。</strong></li>
 <li><strong>调用类的静态方法。</strong></li>
 <li>反射调用 Test 类。</li>
-<li>当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
+<p>初始化发生条件：</p>
+<p>① 遇到 new、getstatic、putstatic、invokestatic 这四条字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。生成这4条指令的最常见的Java代码场景是：使用new关键字实例化对象的时候、读取或设置一个类的静态字段（被final修饰、已在编译器把结果放入常量池的静态字段除外）的时候，以及调用一个类的静态方法的时候。</p>
+<p>② 使用 java.lang.reflect 包的方法对类进行反射调用的时候，如果类没有进行过初始化，则需要先触发其初始化。</p>
+<p>③ 当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</p>
+<p>④ 当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类。</p>
+<p>⑤ 当使用 JDK1.7 动态语言支持时，如果一个 java.lang.invoke.MethodHandle实例最后的解析结果 REF_getstatic,REF_putstatic,REF_invokeStatic 的方法句柄，并且这个方法句柄所对应的类没有进行初始化，则需要先出触发其初始化。</p>
+<p>⑥ 当一个接口中定义了JDK8新加入的默认方法（被default关键字修饰的接口方法）时，如果有这个接口的实现类发生了初始化，那该接口要在其之前被初始化。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Singleton</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Singleton</span> <span class="variable">singleton</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> x;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">y</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span> &#123;</span><br><span class="line">        ++x;</span><br><span class="line">        ++y;</span><br><span class="line">        System.out.println(<span class="string">&quot;Singleton构造方法执行，x = &quot;</span> + x +<span class="string">&quot;,y = &quot;</span> + y);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;singleton.x = &quot;</span> + singleton.x);</span><br><span class="line">        System.out.println(<span class="string">&quot;singleton.x = &quot;</span> + singleton.y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>执行顺序和输出结果分析：</strong></p>
+<ol>
+<li><p><strong>类加载：</strong> 当执行到 <code>main</code> 方法时，会触发 <code>Singleton</code> 类的加载，执行顺序如下：</p>
+<ul>
+<li><p>主类<code>Singleton</code>的加载：读取<code>Singleton.class</code>文件，获取类的结构信息，在方法区创建<code>Singleton</code>类的 Class 对象</p>
+</li>
+<li><p>主类<code>Singleton</code>的链接：验证，准备和解析。准备阶段将为静态变量<code>singleton</code>, <code>x</code>, <code>y</code>分配内存空间，并设置默认值。其中，<code>singleton</code>：引用类型的默认值为 <code>null</code>。<code>x</code>：<code>int</code> 类型的默认值为 <code>0</code>。<code>y</code>： 虽然 <code>y</code> 被显式初始化为 <code>0</code>，但在准备阶段，只会赋予默认值，所以 <code>y</code> 也会被初始化为 <code>0</code>。</p>
+<blockquote>
+<p>这三个静态变量存放在方法区<code>Singleton</code>类 class 对象中</p>
+</blockquote>
+</li>
+<li><p>主类<code>Singleton</code>的初始化：</p>
+<ul>
+<li>静态变量 <code>singleton</code> 初始化：<code>private static Singleton singleton = new Singleton();</code><ul>
+<li>这行代码会创建一个 <code>Singleton</code> 实例，进而调用 <code>Singleton</code> 的构造方法。</li>
+</ul>
+</li>
+<li>构造方法执行：<ul>
+<li><code>++x;</code>  &#x2F;&#x2F; 此时 x 还没有初始化，默认值为 0，所以 x 变为 1</li>
+<li><code>++y;</code>  &#x2F;&#x2F; y 已初始化为 0，所以 y 变为 1</li>
+<li><code>System.out.println(&quot;Singleton构造方法执行，x = &quot; + x +&quot;,y = &quot; + y);</code> </li>
+<li>输出：<code>Singleton构造方法执行，x = 1,y = 1</code></li>
+</ul>
+</li>
+<li>静态变量 <code>x</code> 和 <code>y</code> 初始化：<ul>
+<li><code>public static int x;</code>  &#x2F;&#x2F; 无动作 (构造方法中已经修改)</li>
+<li><code>public static int y = 0;</code> &#x2F;&#x2F; y 被赋值为 0 (覆盖了构造方法中的修改)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>main 方法执行：</strong></p>
+<ul>
+<li><code>System.out.println(&quot;singleton.x = &quot; + singleton.x);</code> <ul>
+<li>输出：<code>singleton.x = 1</code></li>
+</ul>
+</li>
+<li><code>System.out.println(&quot;singleton.x = &quot; + singleton.y);</code><ul>
+<li>输出：<code>singleton.y = 0</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>最终输出结果：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Singleton构造方法执行，x = 1,y = 1</span><br><span class="line">singleton.x = 1</span><br><span class="line">singleton.y = 0</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h3><p>类的Class对象在<strong>类加载的加载部分</strong>时被创建，保存于<strong>方法区</strong>。</p>
+<p><strong>反射的核心 API</strong></p>
+<p>Java 反射机制主要由 java.lang.reflect 包中的类和接口提供支持，其中最常用的类包括：</p>
+<ul>
+<li><strong>Class 类:</strong> 代表一个类的类型信息，可以通过 Class 对象获取类的所有信息。</li>
+<li><strong>Field 类:</strong> 代表类的成员变量，可以通过 Field 对象获取和设置变量的值。</li>
+<li><strong>Method 类:</strong> 代表类的方法，可以通过 Method 对象调用方法。</li>
+<li><strong>Constructor 类:</strong> 代表类的构造函数，可以通过 Constructor 对象创建类的实例。</li>
+</ul>
+<p><strong>获取方式：</strong></p>
+<ol>
+<li><strong>通过类名获取:</strong></li>
+</ol>
+<p>Class&lt;?&gt; clazz &#x3D; Class.forName(“com.example.MyClass”);</p>
+<ol start="2">
+<li><strong>通过对象获取:</strong></li>
+</ol>
+<p>MyClass obj &#x3D; new MyClass(); </p>
+<p>Class&lt;?&gt; clazz &#x3D; obj.getClass();</p>
+<p>Class<Person> personClass&#x3D;(Class<Person>)person.getClass();</p>
+<ol start="3">
+<li><strong>通过类字面量获取:</strong></li>
+</ol>
+<p>Class&lt;?&gt; clazz &#x3D; MyClass.class;</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyClass</span><span class="params">(String name, <span class="type">int</span> age)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printInfo</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Name: &quot;</span> + name + <span class="string">&quot;, Age: &quot;</span> + age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReflectionExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 获取 Class 对象</span></span><br><span class="line">        Class&lt;?&gt; clazz = Class.forName(<span class="string">&quot;com.example.MyClass&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取构造函数并创建实例</span></span><br><span class="line">        Constructor&lt;?&gt; constructor = clazz.getConstructor(String.class, <span class="type">int</span>.class);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> constructor.newInstance(<span class="string">&quot;John Doe&quot;</span>, <span class="number">30</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取成员变量并设置值</span></span><br><span class="line">        <span class="type">Field</span> <span class="variable">nameField</span> <span class="operator">=</span> clazz.getDeclaredField(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        nameField.setAccessible(<span class="literal">true</span>); <span class="comment">// 允许访问私有变量</span></span><br><span class="line">        nameField.set(obj, <span class="string">&quot;Jane Doe&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取方法并调用</span></span><br><span class="line">        <span class="type">Method</span> <span class="variable">printInfoMethod</span> <span class="operator">=</span> clazz.getMethod(<span class="string">&quot;printInfo&quot;</span>);</span><br><span class="line">        printInfoMethod.invoke(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <blockquote>
 <p>import 类将告知编译器该类的位置，<strong>不会触发类加载</strong></p>
+<p><strong>对于一个 Test.java 文件：</strong></p>
+<ul>
+<li><strong>只有被主类（包含 main() 方法的类）直接或间接使用到的类才会被加载、链接(和初始化)。</strong> 主类将默认进行加载、链接和初始化。</li>
+<li><strong>如果 Test.java 中的其他类没有被主类直接或间接使用，那么这些类</strong> <strong>不会被加载</strong> <strong>。</strong></li>
+</ul>
 <p>触发类加载的时候一般为：</p>
 <ol>
 <li><p><strong>创建 <code>Test</code> 类的实例：</strong></p>
@@ -321,8 +300,12 @@
 </li>
 </ol>
 </blockquote>
-<h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2>.JPG)
+<h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><p><a href="https://tangxman.github.io/2015/07/27/the-difference-of-java-string-pool/">https://tangxman.github.io/2015/07/27/the-difference-of-java-string-pool/</a></p>
+.JPG)
 
+<blockquote>
+<p>示意图，存在问题</p>
+</blockquote>
 <p><strong>Method Area (方法区):</strong></p>
 <p><strong>Heap (堆):</strong></p>
 <p><strong>Thread Stack (线程栈):</strong></p>
@@ -390,6 +373,20 @@
 </ul>
 <p>作者：北野青阳<br>链接：<a href="https://juejin.cn/post/6987595923543031821">https://juejin.cn/post/6987595923543031821</a></p>
 <h3 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h3><img src="/2024/07/21/Android-learning-record/image-20240721155920403.png" class="" title="image-20240721155920403">]]></content>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
   </entry>
   <entry>
     <title>common-commands</title>
@@ -835,69 +832,6 @@
 ]]></content>
       <tags>
         <tag>python, reinforce learning</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Algo Learning Record</title>
-    <url>/2024/04/25/Algo-Learning-Record/</url>
-    <content><![CDATA[<p>算法相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="らくがき-about-Algorithm"><a href="#らくがき-about-Algorithm" class="headerlink" title="らくがき about Algorithm"></a>らくがき about Algorithm</h1><h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><h3 id="DP问题分析"><a href="#DP问题分析" class="headerlink" title="DP问题分析"></a>DP问题分析</h3><p>递归&amp;动态规划</p>
-<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
-
-<p>递归会重复进入状态，DP不会</p>
-<p>递归一个起点，多个终点；</p>
-<p>DP多个起点，一个终点；</p>
-<p>DP核心：</p>
-<p>1.确定状态和动作</p>
-<p>2.确定起点和终点</p>
-<h3 id="无权图两点间路径数"><a href="#无权图两点间路径数" class="headerlink" title="无权图两点间路径数"></a>无权图两点间<strong>路径数</strong></h3><p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果相加。</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
-<p>3.到达起点，当前递归结束，返回；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>邻接点</strong>的走法已知；</p>
-<p>2.到达<strong>次邻接点</strong>的走法为从<strong>邻接点</strong>到<strong>次邻接点</strong>的走法之和；</p>
-<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的走法之和；</p>
-<p>实例：</p>
-<img src="/2024/04/25/Algo-Learning-Record/image-20240426101614103.png" class="" title="image-20240426101614103">
-
-<p>递归</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCount</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">1</span> || n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> pathsCount(m - <span class="number">1</span>, n) + pathsCount(m , n -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>DP</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCounts</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="有权图两点间最大路径"><a href="#有权图两点间最大路径" class="headerlink" title="有权图两点间最大路径"></a>有权图两点间<strong>最大路径</strong></h3><p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果取最大。</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
-<p>3.到达起点，当前递归结束，返回当前节点值；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>邻接点</strong>的距离可知；</p>
-<p>2.到达<strong>次邻接点</strong>的最大距离为从<strong>邻接点</strong>到<strong>次邻接点</strong>的最大距离；</p>
-<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的最大距离；</p>
-<p>实例：</p>
-<img src="/2024/04/25/Algo-Learning-Record/image-20240426102031155.png" class="" title="image-20240426102031155">
-
-<p>递归</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> getMin(grid, m-<span class="number">1</span>, n-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getMin</span><span class="params">(<span class="type">int</span>[][] grid, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">minRow</span> <span class="operator">=</span> getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    <span class="type">int</span> <span class="variable">minColumn</span> <span class="operator">=</span> getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grid[i][j] + Math.min(minRow, minColumn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>DP</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m ;i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n;i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = grid[i][j] + Math.min(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>algorithm</category>
-      </categories>
-      <tags>
-        <tag>algorithm</tag>
       </tags>
   </entry>
   <entry>
@@ -1784,6 +1718,165 @@
       </categories>
       <tags>
         <tag>operation system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pytorch_learning_record</title>
+    <url>/2024/05/08/pytorch-learning-record/</url>
+    <content><![CDATA[<p>dqn与pytorch</p>
+<span id="more"></span>
+
+<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
+<p>主要属性</p>
+<ul>
+<li><p>T: dimensions reversed</p>
+</li>
+<li><p>H: 共轭转置</p>
+</li>
+<li><p>data: 值</p>
+</li>
+<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
+</li>
+<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
+</li>
+<li><p>is_leaf: 指示是否叶子节点</p>
+</li>
+<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
+</li>
+<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
+</li>
+<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
+</li>
+<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
+<p>Sub代表减法；</p>
+<p>Mul代表乘法；</p>
+<p>Mm代表矩阵乘法；</p>
+<p>Div代表除法；</p>
+<p>T代表矩阵转置；</p>
+<p>Pow代表乘方；</p>
+<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
+<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
+<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
+<p>y &#x3D; (x + w) * (w + 1)</p>
+<p>a &#x3D; x+w</p>
+<p>b &#x3D; w + 1</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
+
+
+
+<p>通常</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>自动梯度</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>torchviz</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
+
+<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
+<ul>
+<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
+<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
+<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
+<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
+<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
+<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
+<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
+</ul>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
+
+
+
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>optimizer.step()</p>
+<p>优化器执行一次梯度更新</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
+
+<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
+<p>optimizer.zero_grad()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
+
+<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
+
+
+
+<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
+<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
+<p> tensor的requires_grad的属性默认为False。</p>
+<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>.grad_fn 属性</p>
+<p>tensor在计算图中的父运算函数</p>
+<p>.detach()与.detach_()</p>
+<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
+<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
+<p>相同：</p>
+<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
+<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
+<p>不同：</p>
+<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
+<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
+<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p>torch.no_grad()</p>
+<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
+<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
+<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>.backward()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
+
+<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
+<p>.backward()方法仅适用于标量</p>
+<p>.register_hook()</p>
+<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
+<p>获取中间tensor的grad值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <tags>
+        <tag>python, pytorch</tag>
       </tags>
   </entry>
 </search>
