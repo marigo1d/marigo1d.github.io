@@ -950,6 +950,14 @@
       </tags>
   </entry>
   <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
+  </entry>
+  <entry>
     <title>common-commands</title>
     <url>/2024/06/22/common-commands/</url>
     <content><![CDATA[<p>常用指令</p>
@@ -1140,12 +1148,163 @@
 <img src="/2024/04/12/pic-test/img.png" class="">]]></content>
   </entry>
   <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+    <title>pytorch_learning_record</title>
+    <url>/2024/05/08/pytorch-learning-record/</url>
+    <content><![CDATA[<p>dqn与pytorch</p>
+<span id="more"></span>
+
+<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
+<p>主要属性</p>
+<ul>
+<li><p>T: dimensions reversed</p>
+</li>
+<li><p>H: 共轭转置</p>
+</li>
+<li><p>data: 值</p>
+</li>
+<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
+</li>
+<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
+</li>
+<li><p>is_leaf: 指示是否叶子节点</p>
+</li>
+<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
+</li>
+<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
+</li>
+<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
+</li>
+<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
+<p>Sub代表减法；</p>
+<p>Mul代表乘法；</p>
+<p>Mm代表矩阵乘法；</p>
+<p>Div代表除法；</p>
+<p>T代表矩阵转置；</p>
+<p>Pow代表乘方；</p>
+<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
+<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
+<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
+<p>y &#x3D; (x + w) * (w + 1)</p>
+<p>a &#x3D; x+w</p>
+<p>b &#x3D; w + 1</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
+
+
+
+<p>通常</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>自动梯度</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>torchviz</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
+
+<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
+<ul>
+<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
+<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
+<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
+<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
+<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
+<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
+<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
+</ul>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
+
+
+
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>optimizer.step()</p>
+<p>优化器执行一次梯度更新</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
+
+<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
+<p>optimizer.zero_grad()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
+
+<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
+
+
+
+<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
+<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
+<p> tensor的requires_grad的属性默认为False。</p>
+<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>.grad_fn 属性</p>
+<p>tensor在计算图中的父运算函数</p>
+<p>.detach()与.detach_()</p>
+<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
+<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
+<p>相同：</p>
+<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
+<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
+<p>不同：</p>
+<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
+<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
+<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p>torch.no_grad()</p>
+<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
+<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
+<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>.backward()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
+
+<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
+<p>.backward()方法仅适用于标量</p>
+<p>.register_hook()</p>
+<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
+<p>获取中间tensor的grad值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
+
+
+
 ]]></content>
+      <tags>
+        <tag>python, pytorch</tag>
+      </tags>
   </entry>
   <entry>
     <title>reinforce-learning-record</title>
@@ -1714,7 +1873,153 @@
 <li><strong>Types:</strong> 提供类型相关的操作，例如获取类型的父类、接口等。</li>
 <li><strong>Filer:</strong> 用于创建新的源文件或资源文件。</li>
 </ul>
-<h3 id="线程与同步"><a href="#线程与同步" class="headerlink" title="线程与同步"></a>线程与同步</h3><p><strong>volatile</strong>  </p>
+<h3 id="线程与同步"><a href="#线程与同步" class="headerlink" title="线程与同步"></a>线程与同步</h3><img src="/2024/07/28/Android-Learning-Record/image-20240729104740287.png" class="" title="image-20240729104740287">
+
+<blockquote>
+<p><strong>LockSupport, wait()&#x2F;notify() 和 join()</strong></p>
+<p><strong>机制区别</strong></p>
+<ul>
+<li><strong>LockSupport:</strong> 基于<strong>许可证</strong>机制，每个线程都有一个许可证，park() 消耗许可证，unpark() 颁发许可证。</li>
+<li><strong>wait()&#x2F;notify():</strong> 基于<strong>锁对象</strong>，线程需要先获取锁对象的监视器锁，才能调用 wait() 进入等待，notify() 唤醒等待相同锁对象的线程。</li>
+<li><strong>join():</strong> 基于<strong>线程生命周期</strong>，让一个线程等待另一个线程执行完毕。</li>
+</ul>
+<p><strong>锁依赖</strong></p>
+<ul>
+<li><strong>LockSupport:</strong> 不依赖于任何锁，可以直接阻塞和唤醒线程。</li>
+<li>**wait()&#x2F;notify() 和 join(): ** 都需要在获取锁的前提下才能使用，并且 wait()&#x2F;notify() 还要求操作相同的锁对象。</li>
+</ul>
+<p><strong>精确性</strong></p>
+<ul>
+<li><strong>LockSupport:</strong> 可以更精确地控制线程的阻塞和唤醒，例如可以指定要唤醒的线程。</li>
+<li><strong>wait()&#x2F;notify():</strong> notify() 方法随机唤醒一个线程，不够精确。</li>
+<li><strong>join():</strong> 只能等待目标线程执行完毕，无法实现更细粒度的控制。</li>
+</ul>
+<p><strong>使用场景</strong></p>
+<ul>
+<li><strong>LockSupport:</strong> 适用于更底层的线程同步场景，例如实现自定义同步工具类。</li>
+<li><strong>wait()&#x2F;notify():</strong> 适用于经典的生产者-消费者模型等场景。</li>
+<li><strong>join():</strong> 适用于需要等待某个线程执行完毕后再继续执行的场景。</li>
+</ul>
+<p><strong>对于线程 ThreadA 和线程 ThreadB</strong> </p>
+<p><strong>Thread.join()</strong></p>
+<p>若 ThreadA 在运行过程中执行 ThreadB.join()，</p>
+<p><strong>ThreadA 进入 WAITING 状态:</strong> ThreadB.join() 会让 ThreadA 立即进入 WAITING 状态，<strong>并且ThreadA 会无限期地等待 ThreadB 完成，直到 ThreadB 执行完毕才会继续执行</strong>。<strong>ThreadA 将释放任何已持有的锁</strong>。</p>
+<p><strong>ThreadB 状态可能不变:</strong> 和之前一样，ThreadB.join() 的调用不会直接改变 ThreadB 的状态。ThreadB 会按照其自身逻辑和状态继续执行或等待。</p>
+<p><strong>ThreadB 执行完毕:</strong> 当 ThreadB 执行完毕后，ThreadA 会被唤醒，从 WAITING 状态恢复到 RUNNABLE 状态，<strong>并尝试重新获取之前释放的锁（如果有）</strong>，然后继续执行 ThreadB.join() 之后的代码。</p>
+<p><strong>Thread.join(1000)</strong></p>
+<p>若 ThreadA 在运行过程中执行 ThreadB.join(1000)，</p>
+<p><strong>ThreadA 进入 TIMED_WAITING 状态：</strong> join(1000) 会让 ThreadA 立即进入 TIMED_WAITING（超时等待）状态，最多等待 1000 毫秒（1 秒）。<strong>ThreadA 将释放任何已持有的锁</strong>。</p>
+<p><strong>ThreadB 状态可能不变：</strong> ThreadB.join(1000) 的调用不会直接改变 ThreadB 的状态。ThreadB 会按照其自身逻辑和状态继续执行或等待。</p>
+<p><strong>两种情况后的 ThreadA：</strong></p>
+<ul>
+<li><strong>情况一： ThreadB 在 1000 毫秒内执行完毕:</strong> ThreadA 会被唤醒，从 TIMED_WAITING 状态恢复到 RUNNABLE 状态，<strong>并尝试重新获取之前释放的锁（如果有）</strong>，然后继续执行 ThreadB.join(1000) 之后的代码。</li>
+<li><strong>情况二： ThreadB 在 1000 毫秒内没有执行完毕:</strong> 1000 毫秒后，ThreadA 会自动被唤醒，从 TIMED_WAITING 状态恢复到 RUNNABLE 状态，<strong>并尝试重新获取之前释放的锁（如果有）</strong>，继续执行 ThreadB.join(1000) 之后的代码。</li>
+</ul>
+<p><strong>wait() 和 notify()</strong></p>
+<ul>
+<li><p><strong>wait() 和 notify() 方法必须在同步代码块 (synchronized) 或同步方法中使用。</strong></p>
+</li>
+<li><p><strong>调用 wait() 和 notify() 方法的对象必须是该同步代码块或同步方法所对应的锁对象。</strong></p>
+</li>
+</ul>
+<p><strong>Object.wait()</strong></p>
+<p>让当前线程（假设是 ThreadA）<strong>无限期地释放锁对象，并进入 WAITING 状态</strong>，直到其他线程（例如 ThreadB）调用 notify() 或 notifyAll() 方法唤醒它。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 当前线程为 ThreadA</span></span><br><span class="line"><span class="keyword">synchronized</span>(lockObject) &#123; <span class="comment">// lockObject 是共享锁对象</span></span><br><span class="line">  <span class="keyword">while</span> (!someCondition) &#123; <span class="comment">// someCondition 是线程等待的条件</span></span><br><span class="line">    lockObject.wait(); <span class="comment">// ThreadA 释放锁，进入 WAITING 状态</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// someCondition 为 true，ThreadA 被唤醒后，会重新尝试获取锁</span></span><br><span class="line">  <span class="comment">// ... 执行操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Object.wait(1000)</strong></p>
+<p>让当前线程（假设是 ThreadA）释放锁对象，并进入 TIMED_WAITING（超时等待）状态，<strong>最多等待 1000 毫秒</strong>。在这段时间内，有两种情况可以让 ThreadA 被唤醒：</p>
+<ul>
+<li><strong>其他线程调用 notify() 或 notifyAll() 方法</strong></li>
+<li><strong>等待时间超过 1000 毫秒</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 当前线程为 ThreadA</span></span><br><span class="line"><span class="keyword">synchronized</span>(lockObject) &#123; <span class="comment">// lockObject 是共享锁对象</span></span><br><span class="line">  <span class="keyword">while</span> (!someCondition) &#123; <span class="comment">// someCondition 是线程等待的条件</span></span><br><span class="line">    lockObject.wait(<span class="number">1000</span>); <span class="comment">// ThreadA 释放锁，进入 TIMED_WAITING 状态</span></span><br><span class="line">  <span class="comment">// someCondition 为 true 或等待超时，ThreadA 会重新尝试获取锁</span></span><br><span class="line">  <span class="comment">// 若此时该锁无法获取到，ThreadA将进入block状态等待获取lockObject对象的锁</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Object.notify()</strong></p>
+<ul>
+<li><strong>作用:</strong> 随机唤醒<strong>一个</strong>正在等待<strong>相同锁对象</strong>的线程。</li>
+<li><strong>注意：</strong><ul>
+<li>notify() 方法<strong>不会立即释放锁</strong>。被唤醒的线程需要等待调用 notify() 的线程释放锁之后，才能真正地获取锁并继续执行。</li>
+<li>如果有多个线程正在等待同一个锁对象，notify() 方法只会随机唤醒其中一个，而其他线程仍然会继续等待。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 假设 ThreadA 调用 wait() 进入等待状态</span></span><br><span class="line"><span class="comment">// 当前线程为 ThreadB</span></span><br><span class="line"><span class="keyword">synchronized</span>(lockObject) &#123;</span><br><span class="line">  <span class="comment">// ... 其他线程执行的操作 ... </span></span><br><span class="line"></span><br><span class="line">  lockObject.notify(); <span class="comment">// 随机唤醒一个等待 lockObject 的线程 (可能是 ThreadA)</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// ... 调用 notify() 的线程继续执行，直到释放锁 ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Object.notifyAll()</strong></p>
+<ul>
+<li><strong>作用:</strong> 唤醒<strong>所有</strong>正在等待<strong>相同锁对象</strong>的线程。</li>
+<li><strong>注意：</strong><ul>
+<li>和 notify() 方法一样，notifyAll() 方法<strong>也不会立即释放锁</strong>。</li>
+<li>被唤醒的线程需要竞争锁，只有成功获取锁的线程才能继续执行。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 假设 ThreadA 和其他线程都在等待 lockObject</span></span><br><span class="line"><span class="comment">// 当前线程为 ThreadB</span></span><br><span class="line"><span class="keyword">synchronized</span>(lockObject) &#123;</span><br><span class="line">  <span class="comment">// ... 其他线程执行的操作 ... </span></span><br><span class="line"></span><br><span class="line">  lockObject.notifyAll(); <span class="comment">// 唤醒所有等待 lockObject 的线程</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// ... 调用 notifyAll() 的线程继续执行，直到释放锁 ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>LockSupport</strong></p>
+<p><strong>许可证机制</strong></p>
+<p>LockSupport 的许可证机制可以理解为每个线程都拥有一个虚拟的 “许可证”，每个线程最多只有一个许可证：</p>
+<ul>
+<li><strong>初始状态：</strong> 线程刚创建时，默认<strong>没有</strong>许可证。</li>
+<li><strong>park() 行为：</strong><ul>
+<li>如果线程<strong>有</strong>许可证，调用 park() 会<strong>立即返回</strong>，并<strong>消耗</strong>掉这个许可证。</li>
+<li>如果线程<strong>没有</strong>许可证，调用 park() 会<strong>阻塞线程</strong>，直到获得许可证。</li>
+</ul>
+</li>
+<li><strong>unpark() 行为：</strong><ul>
+<li>如果线程<strong>没有</strong>许可证，调用 unpark() 会<strong>颁发</strong>一个许可证给该线程。</li>
+<li>如果线程<strong>已经</strong>有许可证，调用 unpark() <strong>不会</strong>产生任何效果，许可证<strong>不会累积</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>LockSupport 的阻塞和唤醒</strong></p>
+<p>LockSupport 通过操作线程的 <strong>Parker</strong> 对象来实现阻塞和唤醒。每个线程都有一个 Parker 对象，它内部维护了线程的阻塞状态和许可证信息。</p>
+<ul>
+<li><strong>park() 阻塞线程：</strong> park() 方法会调用 Parker 对象的 park() 方法，将线程的状态设置为 WAITING 或 PARKED，并挂起线程，直到获得许可证。</li>
+<li><strong>unpark() 唤醒线程：</strong> unpark() 方法会调用 Parker 对象的 unpark() 方法，将线程的状态设置为 RUNNABLE，并通知操作系统调度该线程</li>
+</ul>
+<p><strong>状态与中断</strong></p>
+<p><strong>BLOCKED 状态 (阻塞状态)</strong></p>
+<ul>
+<li><strong>成因:</strong> 线程在尝试获取某个锁时，如果该锁已经被其他线程持有，则当前线程会进入 BLOCKED 状态。</li>
+<li><strong>中断的影响:</strong> BLOCKED 状态的线程<strong>不会</strong>响应中断请求。即使调用了 interrupt() 方法，线程也不会立即退出阻塞状态。只有当线程获取到锁之后，才会检查中断状态。</li>
+</ul>
+<p><strong>WAITING 状态 (等待状态)</strong></p>
+<ul>
+<li><strong>成因:</strong> 线程调用了 wait()、join()（无超时） 或 park() 方法，进入无限期等待状态。</li>
+<li><strong>中断的影响:</strong> WAITING 状态的线程<strong>可以</strong>被中断唤醒。当调用 interrupt() 方法时，线程会抛出 InterruptedException，并退出等待状态。进入 <strong>RUNNABLE (可运行)</strong> 状态</li>
+</ul>
+<p><strong>TIMED_WAITING 状态 (超时等待状态)</strong></p>
+<ul>
+<li><strong>成因:</strong> 线程调用了 wait(timeout)、join(timeout)、sleep(timeout) 或 parkNanos(nanos) 方法，进入有限时间等待状态。</li>
+<li><strong>中断的影响:</strong> TIMED_WAITING 状态的线程<strong>可以</strong>被中断唤醒。 当调用 interrupt() 方法时，线程会抛出 InterruptedException，并退出等待状态。进入 <strong>RUNNABLE (可运行)</strong> 状态</li>
+</ul>
+<p><strong>中断后状态</strong></p>
+<p>中断后程序会进入 <strong>RUNNABLE (可运行)</strong> 状态，但是不意味着程序可以立即向后执行代码</p>
+<ul>
+<li><strong>需要获取资源:</strong> 线程需要重新获取之前释放的资源，例如：<ul>
+<li>如果是通过 wait() 进入 WAITING 状态的，需要重新获取 wait() 方法所属对象的锁。此时线程若在 synchronized 块中，会等待获取对象的锁，若获取不到，会进入 BLOCKED 状态。</li>
+<li>如果是通过 join() 进入 WAITING 状态的，需要等待 join() 的目标线程执行完毕。</li>
+</ul>
+</li>
+<li><strong>需要 CPU 调度:</strong> 线程还需要等待 CPU 的调度，才能真正地执行代码。</li>
+</ul>
+</blockquote>
+<p><strong>Lock</strong></p>
+<p><strong>公平锁与非公平锁</strong></p>
+<p><strong>公平锁</strong>是指多个线程按照申请锁的顺序来获取锁，线程直接进入同步队列中排队，队列中最先到的线程先获得锁。<strong>非公平锁</strong>是多个线程加锁时每个线程都会先去尝试获取锁，如果刚好获取到锁，那么线程无需等待，直接执行，如果获取不到锁才会被加入同步队列的队尾等待执行。</p>
+<p><strong>排他锁与共享锁</strong></p>
+<p><strong>排他锁</strong>也叫独占锁，是指该锁一次只能被一个线程所持有。如果线程T对数据A加上排它锁后，则其他线程不能再对A加任何类型的锁。获得排它锁的线程即能读数据又能修改数据。<strong>共享锁</strong>是指该锁可被多个线程所持有。如果线程T对数据A加上共享锁后，则其他线程只能对A再加共享锁，不能加排它锁。获得共享锁的线程只能读数据，不能修改数据。</p>
+<p><strong>可重入锁与非可重入锁</strong></p>
+<p><strong>volatile</strong>  </p>
 <p>取变量值将从主内存获取</p>
 <p><strong>synchronized</strong></p>
 <p>修饰<strong>实例方法</strong>&#x2F;修饰静态方法  锁目标：该方法对应的<strong>对象</strong>&#x2F;<strong>Class对象</strong></p>
@@ -1728,14 +2033,68 @@
 
 
 
-<p><strong>Lock</strong></p>
-<p><strong>公平锁与非公平锁</strong></p>
-<p><strong>公平锁</strong>是指多个线程按照申请锁的顺序来获取锁，线程直接进入同步队列中排队，队列中最先到的线程先获得锁。<strong>非公平锁</strong>是多个线程加锁时每个线程都会先去尝试获取锁，如果刚好获取到锁，那么线程无需等待，直接执行，如果获取不到锁才会被加入同步队列的队尾等待执行。</p>
-<p><strong>排他锁与共享锁</strong></p>
-<p><strong>排他锁</strong>也叫独占锁，是指该锁一次只能被一个线程所持有。如果线程T对数据A加上排它锁后，则其他线程不能再对A加任何类型的锁。获得排它锁的线程即能读数据又能修改数据。<strong>共享锁</strong>是指该锁可被多个线程所持有。如果线程T对数据A加上共享锁后，则其他线程只能对A再加共享锁，不能加排它锁。获得共享锁的线程只能读数据，不能修改数据。</p>
-<p><strong>可重入锁与非可重入锁</strong></p>
+<p><strong>ReentrantLock</strong></p>
 <p>ReentrantLock 是可重入锁：允许线程多次获取同一个锁，每次获取都会增加锁的持有计数，只有当持有计数归零时，锁才会真正释放。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LockCounter</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">increment</span><span class="params">()</span> &#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            count++;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getCount</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="type">LockCounter</span> <span class="variable">counter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LockCounter</span>();</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">                counter.increment();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">                counter.increment();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line">        thread1.join();  <span class="comment">// 确保主线程会等待线程1 执行完毕 后再继续执行</span></span><br><span class="line">        <span class="comment">// 如果线程1已经执行完毕，join() 方法会立即返回，主线程继续执行。</span></span><br><span class="line">		<span class="comment">// 如果线程1还在执行中，join() 方法会阻塞主线程，直到线程1执行完毕。</span></span><br><span class="line">        thread2.join();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;Count: &quot;</span> + counter.getCount()); <span class="comment">// 预期输出：20000</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>可重入锁：</strong> 同一个线程可以多次获取同一个 ReentrantLock，而不会发生死锁。</li>
+<li><strong>公平性选择：</strong> 可以选择创建公平锁或非公平锁。<ul>
+<li><strong>公平锁：</strong> 按照线程请求锁的顺序分配锁，保证公平性，但吞吐量较低。</li>
+<li><strong>非公平锁：</strong> 允许线程 “插队” 获取锁，吞吐量较高，但可能导致线程饥饿。</li>
+</ul>
+</li>
+<li><strong>条件变量：</strong> 支持多个条件变量，可以实现更复杂的线程协作逻辑。</li>
+</ul>
+<p><strong>获取锁</strong></p>
+<ul>
+<li><p>**lock(): ** 获取锁。如果锁已被其他线程持有，则当前线程会阻塞，直到获取到锁。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">lock.lock(); <span class="comment">// 获取锁</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// ... 执行需要同步的代码 ...</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    lock.unlock(); <span class="comment">// 释放锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>**tryLock(): ** 尝试获取锁，如果成功获取则返回 true，否则立即返回 false。该方法不会阻塞线程。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (lock.tryLock()) &#123; <span class="comment">// 尝试获取锁</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// ... 执行需要同步的代码 ...</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock(); <span class="comment">// 释放锁</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 获取锁失败，执行其他逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p><strong>tryLock(long time, TimeUnit unit):</strong> 尝试在指定时间内获取锁，如果成功获取则返回 true，否则超时返回 false。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (lock.tryLock(<span class="number">1</span>, TimeUnit.SECONDS)) &#123; <span class="comment">// 尝试在 1 秒内获取锁</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// ... 执行需要同步的代码 ...</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock(); <span class="comment">// 释放锁</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 获取锁超时，执行其他逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>释放锁</strong></p>
+<ul>
+<li>**unlock(): ** 释放锁。必须与 lock() 或 tryLock() 方法成对出现，确保锁的正确释放。</li>
+</ul>
+<p><strong>条件变量</strong></p>
+<p>一个 ReentrantLock 可以关联多个 Condition 对象，可以实现更复杂的线程协作逻辑，例如 “消费者-多生产者” 模型。</p>
+<ul>
+<li><p>**newCondition(): ** 创建一个与该锁关联的条件变量。条件变量允许线程在满足特定条件时等待，并在条件满足时被唤醒。</p>
+</li>
+<li><p>**await(): ** 使当前线程进入等待状态，并释放锁，直到被其他线程唤醒或中断。</p>
+</li>
+<li><p>**signal(): ** 唤醒一个正在等待该 Condition 的线程。</p>
+</li>
+<li><p>**signalAll(): ** 唤醒所有正在等待该 Condition 的线程。</p>
+</li>
+<li><p><strong>await(long time, TimeUnit unit):</strong> 使当前线程在指定时间内进入等待状态，如果超时则自动返回。</p>
+</li>
+<li><p><strong>awaitNanos(long nanosTimeout):</strong> 使当前线程在指定的纳秒数内进入等待状态，如果超时则自动返回。</p>
+</li>
+<li><p>**awaitUninterruptibly(): ** 使当前线程进入不可中断的等待状态，直到被其他线程唤醒。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConditionExample</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">notFull</span> <span class="operator">=</span> lock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">notEmpty</span> <span class="operator">=</span> lock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">BUFFER_SIZE</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">producer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">                lock.lock();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">while</span> (count == BUFFER_SIZE) &#123; <span class="comment">// 缓冲区满，等待</span></span><br><span class="line">                        notFull.await();</span><br><span class="line">                    &#125;</span><br><span class="line">                    count++;</span><br><span class="line">                    System.out.println(<span class="string">&quot;生产者生产了数据，当前数量：&quot;</span> + count);</span><br><span class="line">                    notEmpty.signal(); <span class="comment">// 唤醒消费者</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    lock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">consumer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">                lock.lock();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">while</span> (count == <span class="number">0</span>) &#123; <span class="comment">// 缓冲区空，等待</span></span><br><span class="line">                        notEmpty.await();</span><br><span class="line">                    &#125;</span><br><span class="line">                    count--;</span><br><span class="line">                    System.out.println(<span class="string">&quot;消费者消费了数据，当前数量：&quot;</span> + count);</span><br><span class="line">                    notFull.signal(); <span class="comment">// 唤醒生产者</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    lock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        producer.start();</span><br><span class="line">        consumer.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>其他方法</strong></p>
+<ul>
+<li>**getHoldCount(): ** 返回当前线程持有该锁的次数。可重入锁允许同一个线程多次获取锁。</li>
+<li>**isHeldByCurrentThread(): ** 判断当前线程是否持有该锁。</li>
+<li>**isLocked(): ** 判断该锁是否被任何线程持有。</li>
+<li>**hasQueuedThreads(): ** 判断是否有线程在等待获取该锁。</li>
+<li>**getQueueLength(): ** 返回等待获取该锁的线程数。</li>
+</ul>
+<p>实例</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReentrantLockExample</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">condition</span> <span class="operator">=</span> lock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            lock.lock();  <span class="comment">// 获取锁，如果锁已被其他线程持有，则当前线程会阻塞，直到获取到锁。</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">while</span> (count &lt; <span class="number">5</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;线程 1 增加计数：&quot;</span> + ++count);</span><br><span class="line">                    condition.signal(); <span class="comment">// 唤醒其他线程</span></span><br><span class="line">                    condition.await(); <span class="comment">// 等待</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();  <span class="comment">// 释放锁</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">while</span> (count &lt; <span class="number">5</span>) &#123;</span><br><span class="line">                    condition.await(); <span class="comment">// 等待</span></span><br><span class="line">                    System.out.println(<span class="string">&quot;线程 2 增加计数：&quot;</span> + ++count);</span><br><span class="line">                    condition.signal(); <span class="comment">// 唤醒其他线程</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -1910,7 +2269,43 @@
 <p><strong>循环引用问题</strong>： 对象A中存在智能指针指向对象B，对象B中存在智能指针指向对象A；</p>
 <p>由于智能指针的引用计数始终不为0，对象A和对象B将始终不能被释放。</p>
 <p><strong>解决方案</strong>：使用弱引用；对某对象使用弱引用将不增加引用计数。</p>
-<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><p>JVM负责java线程的调度</p>
+<h3 id="Handler与MessageQueue"><a href="#Handler与MessageQueue" class="headerlink" title="Handler与MessageQueue"></a>Handler与MessageQueue</h3><p><strong>Looper&amp;MessageQueue</strong></p>
+<p>主线程有且只有一个 Looper，它是在应用启动时由系统自动创建并启动的。</p>
+<p>子线程默认没有Looper，需要手动创建和启动。</p>
+<blockquote>
+<p>一般情况下子线程也不会创建Looper</p>
+</blockquote>
+<p>Looper与MessageQueue</p>
+<ul>
+<li><p><strong>一对一关系</strong>: 每个 Looper 都会关联一个唯一的 MessageQueue。Looper 对象创建时，会自动创建一个 MessageQueue 对象。</p>
+</li>
+<li><p><strong>消息存储</strong>: MessageQueue 就像一个消息容器，负责存储消息。当我们使用 Handler 发送消息时，消息并不会直接被处理，而是会被添加到 Looper 关联的 MessageQueue 中。</p>
+</li>
+<li><p><strong>消息循环</strong>: Looper 通过一个无限循环不断地从 MessageQueue 中读取消息。当 Looper 发现 MessageQueue 中没有消息可处理时，就会判断是否有 IdleHandler 需要执行；若没有， Looper 就会进入休眠状态，等待新的消息到来。</p>
+</li>
+<li><p><strong>消息分发</strong>: 当 Looper 从 MessageQueue 中读取到消息后，会根据消息的 target 属性（即发送消息时使用的 Handler 对象），将消息分发给对应的 Handler 进行处理。</p>
+</li>
+</ul>
+<p><strong>Handler</strong></p>
+<p>Handler不会被默认创建，需手动创建</p>
+<p><strong>多个 Handler 可绑定同一个 Looper</strong>，在创建 Handler 时，若未指定 Looper，则默认绑定当前线程的 Looper</p>
+<p>使用 Handler 对象的 send 或 post 方法，向 Handler 对象绑定的 Looper 对应的 MessageQueue 发送Msg</p>
+<p>通过重写 Handler 对象的 handleMessage 方法，当 Looper 从 MessageQueue 中读取到消息后，会根据消息的 target 属性（即发送消息时使用的 Handler 对象），调用 对应 Handler handleMessage 方法处理。</p>
+<p>在通常情况下，主线程创建 Handler 对象并绑定mainLooper，子线程使用该 Handler 对象发送信息到主线程的MessageQueue ，当 Looper 从 MessageQueue 中读取到消息后，调用发送该 Msg 的 Handler handleMessage 方法处理。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainActivity</span> <span class="keyword">extends</span> <span class="title class_">AppCompatActivity</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Handler networkHandler;</span><br><span class="line">    <span class="keyword">private</span> Handler uiHandler;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建处理网络请求的 Handler</span></span><br><span class="line">        networkHandler = <span class="keyword">new</span> <span class="title class_">Handler</span>(Looper.getMainLooper()) &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleMessage</span><span class="params">(<span class="meta">@NonNull</span> Message msg)</span> &#123;</span><br><span class="line">                <span class="comment">// 处理网络请求结果</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> (String) msg.obj;</span><br><span class="line">                Toast.makeText(MainActivity.<span class="built_in">this</span>, <span class="string">&quot;网络请求结果: &quot;</span> + result, Toast.LENGTH_SHORT).show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建处理用户输入事件的 Handler</span></span><br><span class="line">        uiHandler = <span class="keyword">new</span> <span class="title class_">Handler</span>(Looper.getMainLooper()) &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleMessage</span><span class="params">(<span class="meta">@NonNull</span> Message msg)</span> &#123;</span><br><span class="line">                <span class="comment">// 处理用户输入事件</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">input</span> <span class="operator">=</span> (String) msg.obj;</span><br><span class="line">                Toast.makeText(MainActivity.<span class="built_in">this</span>, <span class="string">&quot;用户输入: &quot;</span> + input, Toast.LENGTH_SHORT).show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟网络请求</span></span><br><span class="line">        simulateNetworkRequest();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟用户输入事件</span></span><br><span class="line">        simulateUserInput();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">simulateNetworkRequest</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="comment">// 模拟耗时操作</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 发送网络请求结果</span></span><br><span class="line">            <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> Message.obtain();</span><br><span class="line">            message.obj = <span class="string">&quot;成功!&quot;</span>;</span><br><span class="line">            networkHandler.sendMessage(message);</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">simulateUserInput</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 发送用户输入事件</span></span><br><span class="line">        <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> Message.obtain();</span><br><span class="line">        message.obj = <span class="string">&quot;Hello!&quot;</span>;</span><br><span class="line">        uiHandler.sendMessageDelayed(message, <span class="number">3000</span>); <span class="comment">// 延迟 3 秒发送</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>IdleHandler</strong></p>
+<p><strong>消息队列中有消息</strong>: Looper 会取出消息并分发给对应的 Handler 处理。</p>
+<p><strong>消息队列为空</strong>: Looper 会检查是否有 IdleHandler 需要执行。如果有，就依次执行 IdleHandler 的 queueIdle() 方法；如果没有，Looper 就会进入休眠状态，等待新的消息到来。</p>
+<p>queueIdle() 方法的返回值是一个boolean值，返回true会将IdleHandler保留，否则会将其移除。重写Idle的 queueIdle 方法实现在消息队列为空时进行的任务。</p>
+<p>在MessageQueue中维护了一个IdleHandler集合<code>mIdleHandlers</code>，并且提供了添加IdleHandler和移除IdleHandler的方法。可以通过 <code>Looper.myQueue().addIdleHandler(new Idler())</code> 添加一个IdleHandler。</p>
+<p><strong>HandlerThread</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> android.graphics.Bitmap;</span><br><span class="line"><span class="keyword">import</span> android.graphics.BitmapFactory;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.os.Handler;</span><br><span class="line"><span class="keyword">import</span> android.os.HandlerThread;</span><br><span class="line"><span class="keyword">import</span> android.os.Message;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.annotation.NonNull;</span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainActivity</span> <span class="keyword">extends</span> <span class="title class_">AppCompatActivity</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">TAG</span> <span class="operator">=</span> <span class="string">&quot;MainActivity&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> HandlerThread mCompressThread;</span><br><span class="line">    <span class="keyword">private</span> Handler mCompressHandler;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建 HandlerThread</span></span><br><span class="line">        mCompressThread = <span class="keyword">new</span> <span class="title class_">HandlerThread</span>(<span class="string">&quot;CompressThread&quot;</span>);</span><br><span class="line">        mCompressThread.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建 Handler，绑定到 HandlerThread 的 Looper</span></span><br><span class="line">        mCompressHandler = <span class="keyword">new</span> <span class="title class_">Handler</span>(mCompressThread.getLooper()) &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleMessage</span><span class="params">(<span class="meta">@NonNull</span> Message msg)</span> &#123;</span><br><span class="line">                <span class="comment">// 模拟图片压缩操作</span></span><br><span class="line">                <span class="type">Bitmap</span> <span class="variable">bitmap</span> <span class="operator">=</span> (Bitmap) msg.obj;</span><br><span class="line">                compressImage(bitmap);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 任务完成，计数器减一</span></span><br><span class="line">                ((CountDownLatch) msg.getData().getParcelable(<span class="string">&quot;latch&quot;</span>)).countDown();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟添加多个图片压缩任务</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">imageCount</span> <span class="operator">=</span> <span class="number">3</span>;</span><br><span class="line">        <span class="type">CountDownLatch</span> <span class="variable">latch</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CountDownLatch</span>(imageCount);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; imageCount; i++) &#123;</span><br><span class="line">            <span class="type">Bitmap</span> <span class="variable">bitmap</span> <span class="operator">=</span> BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background);</span><br><span class="line">            addTaskToQueue(bitmap, latch);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 等待所有任务完成</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            latch.await();</span><br><span class="line">            Log.d(TAG, <span class="string">&quot;所有图片压缩任务已完成&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加压缩任务到消息队列</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">addTaskToQueue</span><span class="params">(Bitmap bitmap, CountDownLatch latch)</span> &#123;</span><br><span class="line">        <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> Message.obtain();</span><br><span class="line">        message.obj = bitmap;</span><br><span class="line">        <span class="type">Bundle</span> <span class="variable">data</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Bundle</span>();</span><br><span class="line">        data.putParcelable(<span class="string">&quot;latch&quot;</span>, latch);</span><br><span class="line">        message.setData(data);</span><br><span class="line">        mCompressHandler.sendMessage(message);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模拟图片压缩操作</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">compressImage</span><span class="params">(Bitmap bitmap)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">ByteArrayOutputStream</span> <span class="variable">baos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ByteArrayOutputStream</span>();</span><br><span class="line">            bitmap.compress(Bitmap.CompressFormat.JPEG, <span class="number">80</span>, baos);</span><br><span class="line">            Thread.sleep(<span class="number">2000</span>); <span class="comment">// 模拟耗时操作</span></span><br><span class="line">            Log.d(TAG, <span class="string">&quot;图片压缩完成，线程：&quot;</span> + Thread.currentThread().getName());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onDestroy</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onDestroy();</span><br><span class="line">        <span class="comment">// 退出 HandlerThread</span></span><br><span class="line">        mCompressThread.quitSafely();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="Android启动"><a href="#Android启动" class="headerlink" title="Android启动"></a>Android启动</h3><p>Android系统启动过程中，会先启动linux内核，然后加载init.rc文件，启动init进程。然后，init进程通过解析init.rc文件fork生成Zygote进程，该进程也是Android系统的首个Java进程。之后Zygote进程负责孵化System Server进程和APP进程。</p>
 <p><img src="/Android-learning-record/image-20240714103234291.png" alt="image-20240714103234291"></p>
 <h4 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h4><h4 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h4><ul>
@@ -1956,165 +2351,6 @@
       </categories>
       <tags>
         <tag>Android, Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pytorch_learning_record</title>
-    <url>/2024/05/08/pytorch-learning-record/</url>
-    <content><![CDATA[<p>dqn与pytorch</p>
-<span id="more"></span>
-
-<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
-<p>主要属性</p>
-<ul>
-<li><p>T: dimensions reversed</p>
-</li>
-<li><p>H: 共轭转置</p>
-</li>
-<li><p>data: 值</p>
-</li>
-<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
-</li>
-<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
-</li>
-<li><p>is_leaf: 指示是否叶子节点</p>
-</li>
-<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
-</li>
-<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
-</li>
-<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
-</li>
-<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
-<p>Sub代表减法；</p>
-<p>Mul代表乘法；</p>
-<p>Mm代表矩阵乘法；</p>
-<p>Div代表除法；</p>
-<p>T代表矩阵转置；</p>
-<p>Pow代表乘方；</p>
-<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
-<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
-<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
-<p>y &#x3D; (x + w) * (w + 1)</p>
-<p>a &#x3D; x+w</p>
-<p>b &#x3D; w + 1</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
-
-
-
-<p>通常</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>自动梯度</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>torchviz</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
-
-<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
-<ul>
-<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
-<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
-<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
-<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
-<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
-<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
-<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
-</ul>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
-
-
-
-<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>optimizer.step()</p>
-<p>优化器执行一次梯度更新</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
-
-<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
-<p>optimizer.zero_grad()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
-
-<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
-
-
-
-<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
-<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
-<p> tensor的requires_grad的属性默认为False。</p>
-<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>.grad_fn 属性</p>
-<p>tensor在计算图中的父运算函数</p>
-<p>.detach()与.detach_()</p>
-<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
-<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
-<p>相同：</p>
-<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
-<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
-<p>不同：</p>
-<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
-<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
-<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-<p>torch.no_grad()</p>
-<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
-<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
-<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>.backward()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
-
-<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
-<p>.backward()方法仅适用于标量</p>
-<p>.register_hook()</p>
-<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
-<p>获取中间tensor的grad值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <tags>
-        <tag>python, pytorch</tag>
       </tags>
   </entry>
 </search>
