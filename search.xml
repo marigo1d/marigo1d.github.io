@@ -875,8 +875,39 @@
 
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714155718673.png" class="" title="image-20240714155718673">
 
+<p> <code>open()</code> 函数返回的指针是进程数据结构中文件指针数组的一个索引。具体来说，当一个文件被打开时，<code>open()</code> 函数会在进程的数据结构中分配一个文件指针数组的索引（在图的最左边），并将其指向文件表（<code>file_table</code>）中的一个条目。在文件表条目中包含了文件的状态标志、引用计数、inode指针和文件位置等信息。</p>
+<p>在实际使用中，<code>open()</code> 函数返回的值是文件描述符（file descriptor），它是一个非负整数，通常从0开始递增。这个文件描述符对应于进程数据结构中文件指针数组的一个索引。</p>
+<p><strong>文件描述符的值</strong></p>
+<p>在一个典型的UNIX系统中，文件描述符的值可能是：</p>
+<ul>
+<li><code>0</code> 对应标准输入（stdin）</li>
+<li><code>1</code> 对应标准输出（stdout）</li>
+<li><code>2</code> 对应标准错误（stderr）</li>
+</ul>
+<p>其他文件描述符值将分配给用户打开的文件。例如，<code>open()</code> 函数第一次被调用时，可能返回 <code>3</code>，表示第一个用户打开的文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">进程</span><br><span class="line">+--------------------+</span><br><span class="line">| FD Table (进程)    |</span><br><span class="line">| +-----+------------|</span><br><span class="line">| | 0   | stdin      |</span><br><span class="line">| | 1   | stdout     |</span><br><span class="line">| | 2   | stderr     |</span><br><span class="line">| | ... | ...        |</span><br><span class="line">| | 3   | device_fd  | --&gt; 文件表项 --&gt; inode (device)</span><br><span class="line">| | 4   | property_fd| --&gt; 文件表项 --&gt; inode (property)</span><br><span class="line">| | 5   | socket_fd  | --&gt; 文件表项 --&gt; 套接字结构</span><br><span class="line">| | 6   | pipe_read_fd | --&gt; 文件表项 --&gt; 管道缓冲区</span><br><span class="line">| | 7   | pipe_write_fd| --&gt; 文件表项 --&gt; 管道缓冲区</span><br><span class="line">+-----+--------------+</span><br></pre></td></tr></table></figure>
 
+<blockquote>
+<p>在一个进程中创建一个管道时，使用 <code>pipe</code> 系统调用会返回两个文件描述符，一个用于读端 (<code>pipe_read_fd</code>)，一个用于写端 (<code>pipe_write_fd</code>)。这两个文件描述符指向不同的文件表项，但文件表项指向相同的管道缓冲区。</p>
+</blockquote>
+<p><strong>文件表中的值</strong></p>
+<p>文件表（<code>file_table</code>）中的每个条目（<code>struct file</code>）可能包含以下信息：</p>
+<ul>
+<li><code>f_flags</code>：文件状态标志，如只读、只写或读写。</li>
+<li><code>f_count</code>：引用计数，表示当前有多少进程共享此文件。</li>
+<li><code>f_inode</code>：指向内存中i节点结构的指针，包含文件的元数据。</li>
+<li><code>f_pos</code>：文件位置指针，表示当前文件的读写位置。</li>
+</ul>
+<p>文件表在系统中的组织方式如下：</p>
+<ul>
+<li><strong>每个进程有自己的文件指针数组</strong>：每个进程都有一个文件指针数组，存储文件描述符到文件表条目的映射。</li>
+<li><strong>全局文件表</strong>：文件表是内核中的全局结构，所有进程共享一个文件表。文件表中的每个条目存储了文件的状态和位置信息。</li>
+</ul>
+<p>示例</p>
+<p>假设有两个进程A和B，同时打开了同一个文件。文件表和文件指针数组可能如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">进程A的文件指针数组:</span><br><span class="line">[0] -&gt; stdin</span><br><span class="line">[1] -&gt; stdout</span><br><span class="line">[2] -&gt; stderr</span><br><span class="line">[3] -&gt; file_table[5]</span><br><span class="line"></span><br><span class="line">进程B的文件指针数组:</span><br><span class="line">[0] -&gt; stdin</span><br><span class="line">[1] -&gt; stdout</span><br><span class="line">[2] -&gt; stderr</span><br><span class="line">[3] -&gt; file_table[5]</span><br><span class="line"></span><br><span class="line">全局文件表(file_table):</span><br><span class="line">[0] - 空闲</span><br><span class="line">[1] - 空闲</span><br><span class="line">...</span><br><span class="line">[5] -&gt; &#123;</span><br><span class="line">    f_flags: O_RDWR,  // 读写标志</span><br><span class="line">    f_count: 2,      // 引用计数为2，因为两个进程都打开了这个文件</span><br><span class="line">    f_inode: 指向i节点,</span><br><span class="line">    f_pos: 0         // 文件位置</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">[63] - 空闲</span><br></pre></td></tr></table></figure>
 
+<p>在这个例子中，<code>open()</code> 函数在进程A和B中分别返回了 <code>3</code>，指向了文件表中的同一个条目（<code>file_table[5]</code>），并且引用计数为 <code>2</code>。</p>
 <h2 id="字符设备与块设备"><a href="#字符设备与块设备" class="headerlink" title="字符设备与块设备"></a>字符设备与块设备</h2><p>控制设备的<strong>内核模块</strong>被成为<strong>设备驱动程序</strong>，一个设备驱动程序控制一类设备</p>
 <p>e.g.: 一个磁盘驱动程序控制所有的磁盘设备</p>
 <p>部分驱动程序控制的是<strong>软设备</strong>，软设备不存在对应的物理设备</p>
@@ -947,198 +978,6 @@
       </categories>
       <tags>
         <tag>operation system</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>common-commands</title>
-    <url>/2024/06/22/common-commands/</url>
-    <content><![CDATA[<p>常用指令</p>
-<span id="more"></span>
-
-
-
-<h1 id="Common-Commands"><a href="#Common-Commands" class="headerlink" title="Common Commands"></a>Common Commands</h1><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p><a href="https://zhuanlan.zhihu.com/p/69746955">https://zhuanlan.zhihu.com/p/69746955</a></p>
-<p>python变量，函数均为对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>() : </span><br><span class="line">    <span class="comment">#函数在创建时同时生成变量对象hello和函数对象（函数对象名为hello）</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    x=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(test())<span class="comment">#函数默认返回值为None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">say = hello</span><br><span class="line"> </span><br><span class="line"><span class="keyword">del</span> hello <span class="comment">#del删除了hello变量对象</span></span><br><span class="line">say()</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say)<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say.__name__) <span class="comment">##对象属性,查看对象名</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>python类</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    def my_method(self, arg1, arg2):</span><br><span class="line">    #类的方法第一个参数为self</span><br><span class="line">        # 方法体</span><br><span class="line"></span><br><span class="line">#Bound Method</span><br><span class="line">obj = MyClass()#类 实例化</span><br><span class="line">obj.my_method(arg1, arg2)#实例对象调用方法</span><br><span class="line"></span><br><span class="line">#Unbound Method</span><br><span class="line">MyClass.my_method(obj, arg1, arg2)</span><br><span class="line">	#原因：可以直接通过类访问方法，但是必须指定类的实例</span><br></pre></td></tr></table></figure>
-
-
-
-<p>函数内部函数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> test</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hello()())</span><br><span class="line"><span class="comment">#首先hello()返回函数对象test，然后调用 test()</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>函数装饰器</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">f</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">f</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inn</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;inner&quot;</span>)</span><br><span class="line">        f()</span><br><span class="line">    <span class="keyword">return</span> inn</span><br><span class="line"></span><br><span class="line"><span class="meta">@hello</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#等价于</span></span><br><span class="line">test=hello(test)<span class="comment">#原函数对象test仍存在，变量对象test指向新函数hello(test)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#test &lt;function test at 0x000001821AE551C0&gt;</span></span><br><span class="line"><span class="comment">#test() None</span></span><br><span class="line"><span class="comment">#test为函数对象，test()为（执行函数对象后的）返回值</span></span><br><span class="line">test()</span><br><span class="line"><span class="built_in">print</span>(test.__name__)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>with语句 上下文对象管理</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">with open(&#x27;myfile.txt&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">    contents = f.read()</span><br><span class="line">    print(contents)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>**open(‘myfile.txt’, ‘r’)**：这是一个上下文管理器，它打开文件并返回一个文件对象。</li>
-<li><strong>as f</strong>：将文件对象赋值给变量 f，以便在 with 代码块中使用。</li>
-<li>在 with 代码块中，我们可以使用 f 读取文件内容。</li>
-<li>当 with 代码块执行完毕后，文件会自动关闭，即使在读取过程中发生异常。</li>
-</ul>
-<p>Python类型注解</p>
-<p><a href="https://zhuanlan.zhihu.com/p/419955374">https://zhuanlan.zhihu.com/p/419955374</a></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment">#规定函数传入参数为str类型，返回值为str类型</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Hello <span class="subst">&#123;name&#125;</span>!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mix</span>(<span class="params">scores: <span class="built_in">list</span>[<span class="built_in">int</span>], ages: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]</span>) -&gt; <span class="built_in">tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>]:</span><br><span class="line">    <span class="comment">#容器注解</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">seq: Seq1[<span class="built_in">str</span>]</span>):</span><br><span class="line">    <span class="comment">#传入参数为（列表+元组）的泛化：序列Seq</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> seq:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="type">Optional</span>[<span class="built_in">str</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为None或为str</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Yeah&#x27;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>() -&gt; <span class="type">Union</span>[<span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为str，int，float 三选一</span></span><br><span class="line">    <span class="comment">#Optional[int] 和 Union[int, None] 是等价的。</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#T为泛型，T必须为str或int</span></span><br><span class="line">T = TypeVar(<span class="string">&#x27;T&#x27;</span>, <span class="built_in">str</span>, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">a: T, b: T</span>) -&gt; <span class="type">List</span>[T]:</span><br><span class="line">    <span class="keyword">return</span> [a, b]</span><br><span class="line"></span><br><span class="line"><span class="comment"># K的具体类型没有限制</span></span><br><span class="line">K = TypeVar(<span class="string">&quot;K&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="python-环境"><a href="#python-环境" class="headerlink" title="python 环境"></a>python 环境</h2><p>sudo apt-get update  # 更新包管理器</p>
-<p>sudo apt-get install python3-venv  # 安装Python虚拟环境工具</p>
-<p>cd &#x2F;path&#x2F;to&#x2F;your&#x2F;project</p>
-<p>python3 -m venv venv</p>
-<p>source venv&#x2F;bin&#x2F;activate</p>
-<p>pip install -r requirements.txt</p>
-<p>deactivate</p>
-<p>conda指令</p>
-<p>conda env list</p>
-<p>conda create –name your_env_name python&#x3D;3.5 numpy scipy</p>
-<p>conda remove –<em>name</em> <em>your_env_name</em> –all</p>
-<p>conda install</p>
-<p>​	conda install numpy&#x3D;1.9.3</p>
-<p>activate your_env_name</p>
-<p>deactivate</p>
-<p>conda clean –all</p>
-<p>当前conda虚拟环境中存在pip时，使用pip指令将优先使用环境中pip而非全局pip，可通过pip list（当前环境必须已安装pip）和 conda list 查看当前环境包列表</p>
-<p>出现报错</p>
-<p>PackagesNotFoundError: The following packages are not available from current channels</p>
-<p>尝试在<a href="https://anaconda.org直接搜索该包并使用网站所提供的指令安装/">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
-<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ol>
-<li><p>**<code>docker pull</code>**：用于从 Docker 镜像仓库下载镜像到本地主机。</p>
-<ul>
-<li>语法：<code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></li>
-<li>示例：<code>docker pull ubuntu:20.04</code></li>
-</ul>
-<p>这个命令用于获取 Docker 镜像，其中 <code>NAME</code> 表示镜像的名称，<code>TAG</code> 表示镜像的标签，或者可以使用 <code>@DIGEST</code> 来指定镜像的摘要。如果不指定标签，将默认获取 <code>latest</code> 标签的镜像。</p>
-</li>
-<li><p>**<code>docker load</code>**：用于从文件加载镜像，通常是以 tar 归档文件的形式。</p>
-<ul>
-<li>语法：<code>docker load [OPTIONS]</code></li>
-<li>示例：<code>docker load -i myimage.tar</code></li>
-</ul>
-<p>这个命令用于加载以 tar 归档文件格式存储的 Docker 镜像。通常用于将镜像从一个环境传输到另一个环境。</p>
-</li>
-<li><p>**<code>docker save</code>**：用于将 Docker 镜像保存为 tar 归档文件。</p>
-<ul>
-<li>语法：<code>docker save [OPTIONS] IMAGE [IMAGE...]</code></li>
-<li>示例：<code>docker save -o myimage.tar myimage:tag</code></li>
-</ul>
-<p>这个命令允许你将一个或多个 Docker 镜像保存为 tar 归档文件，通常用于导出镜像以便在不同环境中使用。</p>
-</li>
-<li><p>**<code>docker run</code>**：用于创建和启动 Docker 容器。</p>
-<ul>
-<li>语法：<code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></li>
-<li>示例：<code>docker run -d -p 8080:80 my-web-app</code></li>
-</ul>
-<p>这个命令用于在 Docker 容器中运行一个镜像，你需要指定镜像的名称、容器选项（如端口映射、环境变量、容器名称等），以及容器内要执行的命令。</p>
-</li>
-<li><p>**<code>docker build</code>**：用于构建自定义 Docker 镜像，通常通过 Dockerfile 文件定义构建步骤。</p>
-<ul>
-<li>语法：<code>docker build [OPTIONS] PATH | URL | -</code></li>
-<li>示例：<code>docker build -t my-custom-image .</code></li>
-</ul>
-<p><code>docker build</code> 命令用于基于 Dockerfile 构建自定义镜像。你需要提供包含 Dockerfile 的路径，以及可选的选项和标签。</p>
-<p>Dockerfile</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 使用官方 Python 3 镜像作为基础镜像</span><br><span class="line">FROM python:3.8</span><br><span class="line"></span><br><span class="line"># 设置工作目录</span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"># 复制本地项目到容器中</span><br><span class="line">COPY ./myproject /app</span><br><span class="line"></span><br><span class="line"># 安装项目依赖</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 指定容器启动命令</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-</li>
-<li><p>**<code>docker rm</code>**：用于删除已停止的容器。</p>
-<ul>
-<li>语法：<code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></li>
-<li>示例：<code>docker rm my-container</code></li>
-</ul>
-<p>这个命令用于删除一个或多个已经停止的容器，释放资源并清理系统。</p>
-</li>
-<li><p>**<code>docker stop</code>**：用于停止运行中的容器。</p>
-<ul>
-<li>语法：<code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></li>
-<li>示例：<code>docker stop my-container</code></li>
-</ul>
-<p>这个命令用于停止一个或多个正在运行的容器，使它们从运行状态转换为停止状态。</p>
-</li>
-<li><p>**<code>docker ps</code>**：用于列出正在运行的容器。</p>
-<ul>
-<li>语法：<code>docker ps [OPTIONS]</code></li>
-<li>示例：<code>docker ps -a</code></li>
-</ul>
-<p><code>docker ps</code> 命令用于列出当前正在运行的容器，包括容器的 ID、状态、端口映射等信息。加上 <code>-a</code> 选项可以列出所有容器，包括已停止的容器。</p>
-</li>
-</ol>
-<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p><a href="https://blog.csdn.net/qq_34021712/article/details/117260462">https://blog.csdn.net/qq_34021712/article/details/117260462</a></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在桌面创建test目录</span><br><span class="line">mkdir /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 切换到test目录</span><br><span class="line">cd /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 创建并初始化git库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 链接到远程git仓库 </span><br><span class="line"># -t 默认使用 main 分支，origin为远程仓库别名（替换链接）</span><br><span class="line">git remote add origin -t main https://github.com/Helloworld-7558/git-demo.git</span><br><span class="line"></span><br><span class="line"># 将远程git库下载到本地</span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line">#修改</span><br><span class="line"></span><br><span class="line"># 将目录下所有文件都增加到本地库中。</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"># 提交更改到本地仓库</span><br><span class="line">git commit -m &#x27;提交注释&#x27;</span><br><span class="line"></span><br><span class="line"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span><br><span class="line"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"># 将本地修改推到github上</span><br><span class="line">git push -u origin main  # 首次</span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
-
-
-
-<ol>
-<li>什么是主分支<br>主分支是<em>默认分支</em>,当执行<code>git clone</code>时，克隆的就是默认分支。<code>git init</code>初始化时，会以<strong>master</strong>分支作为主分支，主分支可以改成其他分支。</li>
-<li>什么是origin<br><strong>origin</strong>代表远程分支，比如gitlab上保存的分支。Git作为分布式版本控制工具，本地分支与远程分支并无不同。假如远程服务器上有一个<strong>develop</strong>分支，那么在本地以<strong>origin&#x2F;develop</strong>代表远程分支</li>
-<li>如何创建新分支<br># 方法一<br>git branch branch_name<br># 此方法以当前所在分支为基础来创建<br># e.g. git branch feature&#x2F;test<br>​<br># 方法二<br>git branch branch_name base_branch_name<br># 此方法忽略当前所在的分支，以指定的base_branch_name为基础来创建分支<br># e.g. git branch feature&#x2F;test develop<br># e.g. git branch feature&#x2F;test origin&#x2F;develop<br>​<br># 方法三<br>git checkout -b branch_name<br># 此方法是一个快捷操作，创建并切换分支。checkout本是用来切换分支的，增加“-b”选项指：当分支不存在时创建，同样支持指定base_branch_name<br># e.g. git checkout -b feature&#x2F;test<br># e.g. git checkout -b feature&#x2F;test develop<br># e.g. git checkout -b feature&#x2F;test origin&#x2F;develop</li>
-<li>如何切换分支<br>git checkout branch_name</li>
-<li>查看所有分支<br># 列出本地所有分支<br>git branch</li>
-<li>如何删除分支<br>当使用gitflow工作流时，本地分支会越来越多，不用的分支可以删除<br># 删除单个分支<br>git branch -d branch_name<br>​<br># 删除多个分支<br>git branch | grep feature&#x2F; | xargs git branch -d<br># git branch命令不支持管道操作，所获得的列表不能作为git branch -d的参数，所以需要使用xargs做一个辅助</li>
-<li>如何提交修改<br># 第一步：将修改进行暂存(Stage)<br>git add .&#x2F; # 添加所有本地修改<br># 添加特定文件 git add file1 file2<br># 添加特定文件夹下的所有文件 git add .&#x2F;dir1&#x2F;dir2&#x2F;<br>​<br># 第二步：执行commit<br>git commit -m ‘commit message’<br># 使用编辑器编写提交说明 git commit ,Git将自动打开默认编辑器，通常是Vim，可以自定义<br># 在上一条提交上追加提交 git commit –amend，本次提交不会生成一条新的提交记录。应该保证每次提交都是一次完整的功能修改，当发现上次提交的内容不完整时，应该采用此种方法进行追加提交。</li>
-<li>如何取消本地修改<br># 将文件从暂存区中去除,文件的修改不会丢失<br>git reset – filename<br>​<br># 将文件(未暂存)的修改取消，文件的修改将丢失<br>git checkout – filename<br>​<br># 将所有文件(未暂存)修改取消,文件的修改将丢失<br>git checkout – .&#x2F;<br>​<br># 将所有文件(包括已暂存)的修改取消，文件的修改将丢失<br>git reset –hard HEAD</li>
-<li><code>checkout</code>命令为什么可以用来<em>取消文件修改</em><br><code>checkout</code>命令翻译为”检出”，他的实际作用是将版本库中的内容拿出来放到工作区。<br>当执行<code>git checkout branch_name</code>时相当于把<code>brach_name</code>分支的内容拿出来放到工作区，表象就是切换了分支<br>当执行<code>git checkout -- filename</code>时，相当于把该文件版本库中的内容拿出来放到工作区，表象就是覆盖了该文件在工作区中的修改</li>
-<li><code>rebase</code>命令什么时候用<br><code>rebase</code>命令翻译为<em>变基</em>。我们在创建任何分支时，都有一个基分支，比如：<br><code>git branch feature/test develop</code>创建一个<code>feature/test</code>分支，他的基分支就是<code>develop</code>。Git会记录每个分支的基分支，变基就是改变分支的基分支。变基的表象就是基分支上改动会合并到当前分支，但不会生成合并记录。所以其使用场景就是：当develop上有别人提交的新内容，并且我们需要这些新内容时，执行一次变基，这样别人提交的最新代码就会出现在当前分支上。<br># 第一种用法：完全变基<br>git rebase –onto base_branch_name branch_name<br># 此种不常用<br>​<br># 第二种用法：通过变基获取最新代码<br>git rebase base_branch_name<br># 在向服务器推送自己的代码前，执行一遍rebase能提前知道自己的代码是否和别人的有冲突，便于提前解决冲突，当有冲突时需要手动解决冲突，然后执行：git rebase –continue</li>
-<li>向服务器推送代码<br>在使用gitflow工作流时，会经常执行<code>git push origin branch_name</code>命令。比简单的<code>git push</code>命令多了两个参数。此处之所以需要多传两个参数是因为，<code>branch_name</code>是我们本地创建的分支，服务器上没有该分支，且本地Git也并不知道本地<code>branch_name</code>与远程的哪个分支对应。所以需要显式传参。<br>同时我们可以告诉Git，本地与远程如何对应，在第一次推送代码时执行：<code>git push -u origin branch_name</code> 或<code>git push --set-upstream origin branch_name</code>，会告诉Git，本地<code>branch_name</code>分支与<code>origin/branch_name</code>对应，之后就可以直接执行<code>git pussh</code>, 而无需显式传参。</li>
-</ol>
-<h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h2><p>hello.c -预处理 -E-&gt; hello.i -编译 -S-&gt; hello.s -汇编 -c-&gt; hello.o -链接 -&gt; hello</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc  main.cpp hello.cpp factorial.cpp -o hello</span><br></pre></td></tr></table></figure>
-
-<p>使用gcc 将多个文件 <strong>生成</strong> 为 hello可执行文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">	gcc test.c</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件。这里未指定输出文件，默认输出为 a.out。</span><br><span class="line"></span><br><span class="line">-o：指定生成的输出文件；</span><br><span class="line">	gcc test.c -o test</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件 test。-o 选项用来指定输出文件的文件名。</span><br><span class="line">	</span><br><span class="line">-E：仅执行编译预处理；</span><br><span class="line">	gcc -E test.c -o test.i</span><br><span class="line">	将 test.c 预处理输出 test.i 文件。</span><br><span class="line"></span><br><span class="line">-S：将C代码转换为汇编代码；</span><br><span class="line">	gcc -S test.i</span><br><span class="line">	将预处理输出文件 test.i 汇编成 test.s 文件。</span><br><span class="line"></span><br><span class="line">-wall：显示警告信息；</span><br><span class="line"></span><br><span class="line">-c：仅执行编译操作，不进行连接操作。</span><br><span class="line">	gcc -c test.s</span><br><span class="line">	将汇编输出文件 test.s 编译输出 test.o 文件。</span><br><span class="line"></span><br><span class="line">-l：用来指定程序要链接的库，-l参数紧接着就是库名</span><br><span class="line"></span><br><span class="line">-I：寻找头文件的目录</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">make main</span><br><span class="line">make -f config.txt //指定makefile文件</span><br><span class="line">make --file=config.txt</span><br></pre></td></tr></table></figure>
-
-<p>使用Make指令执行Makefile文件(make指令自动寻找当前文件夹下的Makefile文件)</p>
-<p>Makefile文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;target&gt; : &lt;prerequisites&gt;	//目标，前置条件</span><br><span class="line">[tab] &lt;commands&gt;	//命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.PHONY: clean	//声明目标clean为伪目标</span><br><span class="line">clean:</span><br><span class="line">    rm -rf *.o</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个简单的实例</span><br><span class="line">main:main.o fun0.o fun1.o fun2.0	</span><br><span class="line">	gcc -o main main.o fun0.o fun1.o fun2.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个复杂的实例</span><br><span class="line"># Define required macros here</span><br><span class="line">SHELL = /bin/sh		//宏定义</span><br><span class="line">OBJS =  main.o factorial.o hello.o</span><br><span class="line">CFLAG = -Wall -g</span><br><span class="line">CC = gcc</span><br><span class="line">INCLUDE =</span><br><span class="line">LIBS = -lm</span><br><span class="line">hello:$&#123;OBJ&#125;	//$&#123;&#125;表示变量</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -o $@ $&#123;OBJS&#125; $&#123;LIBS&#125;</span><br><span class="line">clean:</span><br><span class="line">   -rm -f *.o core *.core	//类似于bash,?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意个字符，&#123;a,b,c&#125;表示匹配a或b或c</span><br><span class="line">.cpp.o:</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -c</span><br></pre></td></tr></table></figure>
-
-<p>冒号左侧：目标文件</p>
-<p>冒号右侧：被依赖文件，前置条件</p>
-<p>前置条件决定 “目标” 是否需要重新构建。只要前置条件中列出的文件中，有任何一个文件被更新（即前置条件列出的文件的最后修改时间比目标的最后修改时间新），或者 “目标” 不存在，那 “目标” 就需要重新构建。</p>
-<p>如果前置条件中列出的文件中有任何一个文件不存在，那么 Make 就需要在 Makefile 文件中寻找并执行能够生成该文件的规则，也就是说缺失文件本身也是一个 “目标”，需要先将该 “目标” 构建出来才能利用它去构建当前 “目标”（构建 A 时发现 A 需要依赖 B，所以要先构建 B 才能继续构建 A，简称递归生成依赖）。</p>
-<p><code>$@</code>，<code>$^</code>，<code>$&lt;</code> 这种符号，这种符号称为自动变量。自动变量是局部变量，作用域范围在当前的规则内（即自动化变量只应该出现在 Makefile 目标规则中）</p>
-<p><code>$@</code> 指代当前目标， Make 命令意图构建的目标</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hello: hello.o</span><br><span class="line">    gcc hello.o -o $@	//$@为hello</span><br></pre></td></tr></table></figure>
-
-<p><code>$&lt;</code> 指代第一个前置条件。比如规则为 hello: a b，那么 <code>$&lt;</code> 就指代 a。</p>
-<p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 hello: a b，那么 <code>$^</code> 就指代 a 和 b。</p>
-]]></content>
-      <tags>
-        <tag>command</tag>
       </tags>
   </entry>
   <entry>
@@ -1305,6 +1144,14 @@
       <tags>
         <tag>python, pytorch</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
   </entry>
   <entry>
     <title>reinforce-learning-record</title>
@@ -1566,6 +1413,190 @@
 ]]></content>
       <tags>
         <tag>python, reinforce learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>common-commands</title>
+    <url>/2024/06/22/common-commands/</url>
+    <content><![CDATA[<p>常用指令</p>
+<span id="more"></span>
+
+
+
+<h1 id="Common-Commands"><a href="#Common-Commands" class="headerlink" title="Common Commands"></a>Common Commands</h1><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p><a href="https://zhuanlan.zhihu.com/p/69746955">https://zhuanlan.zhihu.com/p/69746955</a></p>
+<p>python变量，函数均为对象</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>() : </span><br><span class="line">    <span class="comment">#函数在创建时同时生成变量对象hello和函数对象（函数对象名为hello）</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    x=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(test())<span class="comment">#函数默认返回值为None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">say = hello</span><br><span class="line"> </span><br><span class="line"><span class="keyword">del</span> hello <span class="comment">#del删除了hello变量对象</span></span><br><span class="line">say()</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say)<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say.__name__) <span class="comment">##对象属性,查看对象名</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>python类</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    def my_method(self, arg1, arg2):</span><br><span class="line">    #类的方法第一个参数为self</span><br><span class="line">        # 方法体</span><br><span class="line"></span><br><span class="line">#Bound Method</span><br><span class="line">obj = MyClass()#类 实例化</span><br><span class="line">obj.my_method(arg1, arg2)#实例对象调用方法</span><br><span class="line"></span><br><span class="line">#Unbound Method</span><br><span class="line">MyClass.my_method(obj, arg1, arg2)</span><br><span class="line">	#原因：可以直接通过类访问方法，但是必须指定类的实例</span><br></pre></td></tr></table></figure>
+
+
+
+<p>函数内部函数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> test</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hello()())</span><br><span class="line"><span class="comment">#首先hello()返回函数对象test，然后调用 test()</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>函数装饰器</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">f</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">f</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inn</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;inner&quot;</span>)</span><br><span class="line">        f()</span><br><span class="line">    <span class="keyword">return</span> inn</span><br><span class="line"></span><br><span class="line"><span class="meta">@hello</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#等价于</span></span><br><span class="line">test=hello(test)<span class="comment">#原函数对象test仍存在，变量对象test指向新函数hello(test)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#test &lt;function test at 0x000001821AE551C0&gt;</span></span><br><span class="line"><span class="comment">#test() None</span></span><br><span class="line"><span class="comment">#test为函数对象，test()为（执行函数对象后的）返回值</span></span><br><span class="line">test()</span><br><span class="line"><span class="built_in">print</span>(test.__name__)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>with语句 上下文对象管理</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">with open(&#x27;myfile.txt&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">    contents = f.read()</span><br><span class="line">    print(contents)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**open(‘myfile.txt’, ‘r’)**：这是一个上下文管理器，它打开文件并返回一个文件对象。</li>
+<li><strong>as f</strong>：将文件对象赋值给变量 f，以便在 with 代码块中使用。</li>
+<li>在 with 代码块中，我们可以使用 f 读取文件内容。</li>
+<li>当 with 代码块执行完毕后，文件会自动关闭，即使在读取过程中发生异常。</li>
+</ul>
+<p>Python类型注解</p>
+<p><a href="https://zhuanlan.zhihu.com/p/419955374">https://zhuanlan.zhihu.com/p/419955374</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment">#规定函数传入参数为str类型，返回值为str类型</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Hello <span class="subst">&#123;name&#125;</span>!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mix</span>(<span class="params">scores: <span class="built_in">list</span>[<span class="built_in">int</span>], ages: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]</span>) -&gt; <span class="built_in">tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>]:</span><br><span class="line">    <span class="comment">#容器注解</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">seq: Seq1[<span class="built_in">str</span>]</span>):</span><br><span class="line">    <span class="comment">#传入参数为（列表+元组）的泛化：序列Seq</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> seq:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="type">Optional</span>[<span class="built_in">str</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为None或为str</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Yeah&#x27;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>() -&gt; <span class="type">Union</span>[<span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为str，int，float 三选一</span></span><br><span class="line">    <span class="comment">#Optional[int] 和 Union[int, None] 是等价的。</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#T为泛型，T必须为str或int</span></span><br><span class="line">T = TypeVar(<span class="string">&#x27;T&#x27;</span>, <span class="built_in">str</span>, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">a: T, b: T</span>) -&gt; <span class="type">List</span>[T]:</span><br><span class="line">    <span class="keyword">return</span> [a, b]</span><br><span class="line"></span><br><span class="line"><span class="comment"># K的具体类型没有限制</span></span><br><span class="line">K = TypeVar(<span class="string">&quot;K&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="python-环境"><a href="#python-环境" class="headerlink" title="python 环境"></a>python 环境</h2><p>sudo apt-get update  # 更新包管理器</p>
+<p>sudo apt-get install python3-venv  # 安装Python虚拟环境工具</p>
+<p>cd &#x2F;path&#x2F;to&#x2F;your&#x2F;project</p>
+<p>python3 -m venv venv</p>
+<p>source venv&#x2F;bin&#x2F;activate</p>
+<p>pip install -r requirements.txt</p>
+<p>deactivate</p>
+<p>conda指令</p>
+<p>conda env list</p>
+<p>conda create –name your_env_name python&#x3D;3.5 numpy scipy</p>
+<p>conda remove –<em>name</em> <em>your_env_name</em> –all</p>
+<p>conda install</p>
+<p>​	conda install numpy&#x3D;1.9.3</p>
+<p>activate your_env_name</p>
+<p>deactivate</p>
+<p>conda clean –all</p>
+<p>当前conda虚拟环境中存在pip时，使用pip指令将优先使用环境中pip而非全局pip，可通过pip list（当前环境必须已安装pip）和 conda list 查看当前环境包列表</p>
+<p>出现报错</p>
+<p>PackagesNotFoundError: The following packages are not available from current channels</p>
+<p>尝试在<a href="https://anaconda.org直接搜索该包并使用网站所提供的指令安装/">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ol>
+<li><p>**<code>docker pull</code>**：用于从 Docker 镜像仓库下载镜像到本地主机。</p>
+<ul>
+<li>语法：<code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></li>
+<li>示例：<code>docker pull ubuntu:20.04</code></li>
+</ul>
+<p>这个命令用于获取 Docker 镜像，其中 <code>NAME</code> 表示镜像的名称，<code>TAG</code> 表示镜像的标签，或者可以使用 <code>@DIGEST</code> 来指定镜像的摘要。如果不指定标签，将默认获取 <code>latest</code> 标签的镜像。</p>
+</li>
+<li><p>**<code>docker load</code>**：用于从文件加载镜像，通常是以 tar 归档文件的形式。</p>
+<ul>
+<li>语法：<code>docker load [OPTIONS]</code></li>
+<li>示例：<code>docker load -i myimage.tar</code></li>
+</ul>
+<p>这个命令用于加载以 tar 归档文件格式存储的 Docker 镜像。通常用于将镜像从一个环境传输到另一个环境。</p>
+</li>
+<li><p>**<code>docker save</code>**：用于将 Docker 镜像保存为 tar 归档文件。</p>
+<ul>
+<li>语法：<code>docker save [OPTIONS] IMAGE [IMAGE...]</code></li>
+<li>示例：<code>docker save -o myimage.tar myimage:tag</code></li>
+</ul>
+<p>这个命令允许你将一个或多个 Docker 镜像保存为 tar 归档文件，通常用于导出镜像以便在不同环境中使用。</p>
+</li>
+<li><p>**<code>docker run</code>**：用于创建和启动 Docker 容器。</p>
+<ul>
+<li>语法：<code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></li>
+<li>示例：<code>docker run -d -p 8080:80 my-web-app</code></li>
+</ul>
+<p>这个命令用于在 Docker 容器中运行一个镜像，你需要指定镜像的名称、容器选项（如端口映射、环境变量、容器名称等），以及容器内要执行的命令。</p>
+</li>
+<li><p>**<code>docker build</code>**：用于构建自定义 Docker 镜像，通常通过 Dockerfile 文件定义构建步骤。</p>
+<ul>
+<li>语法：<code>docker build [OPTIONS] PATH | URL | -</code></li>
+<li>示例：<code>docker build -t my-custom-image .</code></li>
+</ul>
+<p><code>docker build</code> 命令用于基于 Dockerfile 构建自定义镜像。你需要提供包含 Dockerfile 的路径，以及可选的选项和标签。</p>
+<p>Dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 使用官方 Python 3 镜像作为基础镜像</span><br><span class="line">FROM python:3.8</span><br><span class="line"></span><br><span class="line"># 设置工作目录</span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"># 复制本地项目到容器中</span><br><span class="line">COPY ./myproject /app</span><br><span class="line"></span><br><span class="line"># 安装项目依赖</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 指定容器启动命令</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+<li><p>**<code>docker rm</code>**：用于删除已停止的容器。</p>
+<ul>
+<li>语法：<code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></li>
+<li>示例：<code>docker rm my-container</code></li>
+</ul>
+<p>这个命令用于删除一个或多个已经停止的容器，释放资源并清理系统。</p>
+</li>
+<li><p>**<code>docker stop</code>**：用于停止运行中的容器。</p>
+<ul>
+<li>语法：<code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></li>
+<li>示例：<code>docker stop my-container</code></li>
+</ul>
+<p>这个命令用于停止一个或多个正在运行的容器，使它们从运行状态转换为停止状态。</p>
+</li>
+<li><p>**<code>docker ps</code>**：用于列出正在运行的容器。</p>
+<ul>
+<li>语法：<code>docker ps [OPTIONS]</code></li>
+<li>示例：<code>docker ps -a</code></li>
+</ul>
+<p><code>docker ps</code> 命令用于列出当前正在运行的容器，包括容器的 ID、状态、端口映射等信息。加上 <code>-a</code> 选项可以列出所有容器，包括已停止的容器。</p>
+</li>
+</ol>
+<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p><a href="https://blog.csdn.net/qq_34021712/article/details/117260462">https://blog.csdn.net/qq_34021712/article/details/117260462</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在桌面创建test目录</span><br><span class="line">mkdir /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 切换到test目录</span><br><span class="line">cd /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 创建并初始化git库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 链接到远程git仓库 </span><br><span class="line"># -t 默认使用 main 分支，origin为远程仓库别名（替换链接）</span><br><span class="line">git remote add origin -t main https://github.com/Helloworld-7558/git-demo.git</span><br><span class="line"></span><br><span class="line"># 将远程git库下载到本地</span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line">#修改</span><br><span class="line"></span><br><span class="line"># 将目录下所有文件都增加到本地库中。</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"># 提交更改到本地仓库</span><br><span class="line">git commit -m &#x27;提交注释&#x27;</span><br><span class="line"></span><br><span class="line"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span><br><span class="line"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"># 将本地修改推到github上</span><br><span class="line">git push -u origin main  # 首次</span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
+
+
+
+<ol>
+<li>什么是主分支<br>主分支是<em>默认分支</em>,当执行<code>git clone</code>时，克隆的就是默认分支。<code>git init</code>初始化时，会以<strong>master</strong>分支作为主分支，主分支可以改成其他分支。</li>
+<li>什么是origin<br><strong>origin</strong>代表远程分支，比如gitlab上保存的分支。Git作为分布式版本控制工具，本地分支与远程分支并无不同。假如远程服务器上有一个<strong>develop</strong>分支，那么在本地以<strong>origin&#x2F;develop</strong>代表远程分支</li>
+<li>如何创建新分支<br># 方法一<br>git branch branch_name<br># 此方法以当前所在分支为基础来创建<br># e.g. git branch feature&#x2F;test<br>​<br># 方法二<br>git branch branch_name base_branch_name<br># 此方法忽略当前所在的分支，以指定的base_branch_name为基础来创建分支<br># e.g. git branch feature&#x2F;test develop<br># e.g. git branch feature&#x2F;test origin&#x2F;develop<br>​<br># 方法三<br>git checkout -b branch_name<br># 此方法是一个快捷操作，创建并切换分支。checkout本是用来切换分支的，增加“-b”选项指：当分支不存在时创建，同样支持指定base_branch_name<br># e.g. git checkout -b feature&#x2F;test<br># e.g. git checkout -b feature&#x2F;test develop<br># e.g. git checkout -b feature&#x2F;test origin&#x2F;develop</li>
+<li>如何切换分支<br>git checkout branch_name</li>
+<li>查看所有分支<br># 列出本地所有分支<br>git branch</li>
+<li>如何删除分支<br>当使用gitflow工作流时，本地分支会越来越多，不用的分支可以删除<br># 删除单个分支<br>git branch -d branch_name<br>​<br># 删除多个分支<br>git branch | grep feature&#x2F; | xargs git branch -d<br># git branch命令不支持管道操作，所获得的列表不能作为git branch -d的参数，所以需要使用xargs做一个辅助</li>
+<li>如何提交修改<br># 第一步：将修改进行暂存(Stage)<br>git add .&#x2F; # 添加所有本地修改<br># 添加特定文件 git add file1 file2<br># 添加特定文件夹下的所有文件 git add .&#x2F;dir1&#x2F;dir2&#x2F;<br>​<br># 第二步：执行commit<br>git commit -m ‘commit message’<br># 使用编辑器编写提交说明 git commit ,Git将自动打开默认编辑器，通常是Vim，可以自定义<br># 在上一条提交上追加提交 git commit –amend，本次提交不会生成一条新的提交记录。应该保证每次提交都是一次完整的功能修改，当发现上次提交的内容不完整时，应该采用此种方法进行追加提交。</li>
+<li>如何取消本地修改<br># 将文件从暂存区中去除,文件的修改不会丢失<br>git reset – filename<br>​<br># 将文件(未暂存)的修改取消，文件的修改将丢失<br>git checkout – filename<br>​<br># 将所有文件(未暂存)修改取消,文件的修改将丢失<br>git checkout – .&#x2F;<br>​<br># 将所有文件(包括已暂存)的修改取消，文件的修改将丢失<br>git reset –hard HEAD</li>
+<li><code>checkout</code>命令为什么可以用来<em>取消文件修改</em><br><code>checkout</code>命令翻译为”检出”，他的实际作用是将版本库中的内容拿出来放到工作区。<br>当执行<code>git checkout branch_name</code>时相当于把<code>brach_name</code>分支的内容拿出来放到工作区，表象就是切换了分支<br>当执行<code>git checkout -- filename</code>时，相当于把该文件版本库中的内容拿出来放到工作区，表象就是覆盖了该文件在工作区中的修改</li>
+<li><code>rebase</code>命令什么时候用<br><code>rebase</code>命令翻译为<em>变基</em>。我们在创建任何分支时，都有一个基分支，比如：<br><code>git branch feature/test develop</code>创建一个<code>feature/test</code>分支，他的基分支就是<code>develop</code>。Git会记录每个分支的基分支，变基就是改变分支的基分支。变基的表象就是基分支上改动会合并到当前分支，但不会生成合并记录。所以其使用场景就是：当develop上有别人提交的新内容，并且我们需要这些新内容时，执行一次变基，这样别人提交的最新代码就会出现在当前分支上。<br># 第一种用法：完全变基<br>git rebase –onto base_branch_name branch_name<br># 此种不常用<br>​<br># 第二种用法：通过变基获取最新代码<br>git rebase base_branch_name<br># 在向服务器推送自己的代码前，执行一遍rebase能提前知道自己的代码是否和别人的有冲突，便于提前解决冲突，当有冲突时需要手动解决冲突，然后执行：git rebase –continue</li>
+<li>向服务器推送代码<br>在使用gitflow工作流时，会经常执行<code>git push origin branch_name</code>命令。比简单的<code>git push</code>命令多了两个参数。此处之所以需要多传两个参数是因为，<code>branch_name</code>是我们本地创建的分支，服务器上没有该分支，且本地Git也并不知道本地<code>branch_name</code>与远程的哪个分支对应。所以需要显式传参。<br>同时我们可以告诉Git，本地与远程如何对应，在第一次推送代码时执行：<code>git push -u origin branch_name</code> 或<code>git push --set-upstream origin branch_name</code>，会告诉Git，本地<code>branch_name</code>分支与<code>origin/branch_name</code>对应，之后就可以直接执行<code>git pussh</code>, 而无需显式传参。</li>
+</ol>
+<h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h2><p>hello.c -预处理 -E-&gt; hello.i -编译 -S-&gt; hello.s -汇编 -c-&gt; hello.o -链接 -&gt; hello</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc  main.cpp hello.cpp factorial.cpp -o hello</span><br></pre></td></tr></table></figure>
+
+<p>使用gcc 将多个文件 <strong>生成</strong> 为 hello可执行文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">	gcc test.c</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件。这里未指定输出文件，默认输出为 a.out。</span><br><span class="line"></span><br><span class="line">-o：指定生成的输出文件；</span><br><span class="line">	gcc test.c -o test</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件 test。-o 选项用来指定输出文件的文件名。</span><br><span class="line">	</span><br><span class="line">-E：仅执行编译预处理；</span><br><span class="line">	gcc -E test.c -o test.i</span><br><span class="line">	将 test.c 预处理输出 test.i 文件。</span><br><span class="line"></span><br><span class="line">-S：将C代码转换为汇编代码；</span><br><span class="line">	gcc -S test.i</span><br><span class="line">	将预处理输出文件 test.i 汇编成 test.s 文件。</span><br><span class="line"></span><br><span class="line">-wall：显示警告信息；</span><br><span class="line"></span><br><span class="line">-c：仅执行编译操作，不进行连接操作。</span><br><span class="line">	gcc -c test.s</span><br><span class="line">	将汇编输出文件 test.s 编译输出 test.o 文件。</span><br><span class="line"></span><br><span class="line">-l：用来指定程序要链接的库，-l参数紧接着就是库名</span><br><span class="line"></span><br><span class="line">-I：寻找头文件的目录</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">make main</span><br><span class="line">make -f config.txt //指定makefile文件</span><br><span class="line">make --file=config.txt</span><br></pre></td></tr></table></figure>
+
+<p>使用Make指令执行Makefile文件(make指令自动寻找当前文件夹下的Makefile文件)</p>
+<p>Makefile文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;target&gt; : &lt;prerequisites&gt;	//目标，前置条件</span><br><span class="line">[tab] &lt;commands&gt;	//命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.PHONY: clean	//声明目标clean为伪目标</span><br><span class="line">clean:</span><br><span class="line">    rm -rf *.o</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个简单的实例</span><br><span class="line">main:main.o fun0.o fun1.o fun2.0	</span><br><span class="line">	gcc -o main main.o fun0.o fun1.o fun2.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个复杂的实例</span><br><span class="line"># Define required macros here</span><br><span class="line">SHELL = /bin/sh		//宏定义</span><br><span class="line">OBJS =  main.o factorial.o hello.o</span><br><span class="line">CFLAG = -Wall -g</span><br><span class="line">CC = gcc</span><br><span class="line">INCLUDE =</span><br><span class="line">LIBS = -lm</span><br><span class="line">hello:$&#123;OBJ&#125;	//$&#123;&#125;表示变量</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -o $@ $&#123;OBJS&#125; $&#123;LIBS&#125;</span><br><span class="line">clean:</span><br><span class="line">   -rm -f *.o core *.core	//类似于bash,?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意个字符，&#123;a,b,c&#125;表示匹配a或b或c</span><br><span class="line">.cpp.o:</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -c</span><br></pre></td></tr></table></figure>
+
+<p>冒号左侧：目标文件</p>
+<p>冒号右侧：被依赖文件，前置条件</p>
+<p>前置条件决定 “目标” 是否需要重新构建。只要前置条件中列出的文件中，有任何一个文件被更新（即前置条件列出的文件的最后修改时间比目标的最后修改时间新），或者 “目标” 不存在，那 “目标” 就需要重新构建。</p>
+<p>如果前置条件中列出的文件中有任何一个文件不存在，那么 Make 就需要在 Makefile 文件中寻找并执行能够生成该文件的规则，也就是说缺失文件本身也是一个 “目标”，需要先将该 “目标” 构建出来才能利用它去构建当前 “目标”（构建 A 时发现 A 需要依赖 B，所以要先构建 B 才能继续构建 A，简称递归生成依赖）。</p>
+<p><code>$@</code>，<code>$^</code>，<code>$&lt;</code> 这种符号，这种符号称为自动变量。自动变量是局部变量，作用域范围在当前的规则内（即自动化变量只应该出现在 Makefile 目标规则中）</p>
+<p><code>$@</code> 指代当前目标， Make 命令意图构建的目标</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hello: hello.o</span><br><span class="line">    gcc hello.o -o $@	//$@为hello</span><br></pre></td></tr></table></figure>
+
+<p><code>$&lt;</code> 指代第一个前置条件。比如规则为 hello: a b，那么 <code>$&lt;</code> 就指代 a。</p>
+<p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 hello: a b，那么 <code>$^</code> 就指代 a 和 b。</p>
+]]></content>
+      <tags>
+        <tag>command</tag>
       </tags>
   </entry>
   <entry>
@@ -2269,12 +2300,51 @@
 <p><strong>循环引用问题</strong>： 对象A中存在智能指针指向对象B，对象B中存在智能指针指向对象A；</p>
 <p>由于智能指针的引用计数始终不为0，对象A和对象B将始终不能被释放。</p>
 <p><strong>解决方案</strong>：使用弱引用；对某对象使用弱引用将不增加引用计数。</p>
-<h3 id="Handler与MessageQueue"><a href="#Handler与MessageQueue" class="headerlink" title="Handler与MessageQueue"></a>Handler与MessageQueue</h3><p><strong>Looper&amp;MessageQueue</strong></p>
+<h3 id="常见内存泄露情况"><a href="#常见内存泄露情况" class="headerlink" title="常见内存泄露情况"></a>常见内存泄露情况</h3><p><strong>非静态的内部类默认持有外部类的引用</strong></p>
+<p>将一个长时间运行的（匿名）内部类对象传递给其他对象，而这些对象的生命周期比外部类更长，就会导致外部类无法被垃圾回收，从而造成内存泄漏。</p>
+<p><strong>静态内部类不持有外部类引用！！！</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LeakyActivity</span> <span class="keyword">extends</span> <span class="title class_">Activity</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> TextView textView;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_leaky);</span><br><span class="line"></span><br><span class="line">        textView = findViewById(R.id.text_view);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟耗时操作</span></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">10000</span>); <span class="comment">// 模拟耗时 10 秒</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 尝试更新 UI，但此时 Activity 可能已经销毁</span></span><br><span class="line">                textView.setText(<span class="string">&quot;更新 UI&quot;</span>); <span class="comment">// 这里会造成内存泄漏</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 解决方案，使用静态内部类 + 弱引用</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainActivity</span> <span class="keyword">extends</span> <span class="title class_">AppCompatActivity</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">MyHandler</span> <span class="variable">mMyHandler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyHandler</span>(<span class="built_in">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">handleMessage</span><span class="params">(Message msg)</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">MyHandler</span> <span class="keyword">extends</span> <span class="title class_">Handler</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> WeakReference&lt;Activity&gt; mReference;</span><br><span class="line"></span><br><span class="line">        MyHandler(Activity reference) &#123;</span><br><span class="line">            mReference = <span class="keyword">new</span> <span class="title class_">WeakReference</span>&lt;&gt;(reference);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleMessage</span><span class="params">(Message msg)</span> &#123;</span><br><span class="line">            <span class="type">MainActivity</span> <span class="variable">activity</span> <span class="operator">=</span> (MainActivity) mReference.get();</span><br><span class="line">            <span class="keyword">if</span> (activity != <span class="literal">null</span>) &#123;</span><br><span class="line">                activity.handleMessage(msg);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onDestroy</span><span class="params">()</span> &#123;</span><br><span class="line">        mMyHandler.removeCallbacksAndMessages(<span class="literal">null</span>);</span><br><span class="line">        <span class="built_in">super</span>.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><strong>匿名内部类与匿名函数 (Lambda 表达式)</strong> </p>
+<p><strong>匿名内部类</strong></p>
+<p><strong>定义：</strong></p>
+<ul>
+<li>匿名内部类是<strong>没有名字的类定义</strong>，通常在需要使用类的地方直接定义和实例化。</li>
+<li>必须继承一个类或实现一个接口。</li>
+</ul>
+<p><strong>语法：</strong></p>
+   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> 父类/接口() &#123;</span><br><span class="line">    <span class="comment">// 类体，可以包含成员变量、方法、构造函数等</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例：</strong></p>
+   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建一个实现 Runnable 接口的匿名内部类</span></span><br><span class="line"><span class="type">Runnable</span> <span class="variable">runnable</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;匿名内部类执行中...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Thread</span>(runnable).start();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 普通类实现</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyButtonListener</span> <span class="keyword">implements</span> <span class="title class_">ActionListener</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">actionPerformed</span><span class="params">(ActionEvent e)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;按钮被点击了！ (普通类)&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">JButton</span> <span class="variable">button</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JButton</span>(<span class="string">&quot;点击我&quot;</span>);</span><br><span class="line">        <span class="type">MyButtonListener</span> <span class="variable">listener</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyButtonListener</span>();</span><br><span class="line">        button.addActionListener(listener); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 匿名内部类实现</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">JButton</span> <span class="variable">button</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JButton</span>(<span class="string">&quot;点击我&quot;</span>);</span><br><span class="line">        button.addActionListener(<span class="keyword">new</span> <span class="title class_">ActionListener</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">actionPerformed</span><span class="params">(ActionEvent e)</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;按钮被点击了！ (匿名内部类)&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>匿名函数 (Lambda 表达式)</strong></p>
+<p><strong>定义：</strong></p>
+<ul>
+<li>Lambda 表达式是 Java 8 引入的一种<strong>简洁的函数式编程语法</strong>。</li>
+<li>可以看作是<strong>匿名函数</strong>，可以直接传递给需要函数式接口作为参数的方法。</li>
+</ul>
+<p><strong>语法：</strong></p>
+   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">(参数列表) -&gt; &#123; 函数体 &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数列表可以省略类型，如果只有一个参数，括号也可以省略。</li>
+<li>如果函数体只有一行代码，花括号也可以省略。</li>
+</ul>
+<p><strong>示例：</strong></p>
+   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用 Lambda 表达式创建 Runnable 实例</span></span><br><span class="line"><span class="type">Runnable</span> <span class="variable">runnable</span> <span class="operator">=</span> () -&gt; System.out.println(<span class="string">&quot;Lambda 表达式执行中...&quot;</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Thread</span>(runnable).start();</span><br></pre></td></tr></table></figure>
+
+
+
+</blockquote>
+<h3 id="进程内交互"><a href="#进程内交互" class="headerlink" title="进程内交互"></a>进程内交互</h3><h4 id="Handler与MessageQueue"><a href="#Handler与MessageQueue" class="headerlink" title="Handler与MessageQueue"></a>Handler与MessageQueue</h4><p><strong>Looper&amp;MessageQueue</strong></p>
 <p>主线程有且只有一个 Looper，它是在应用启动时由系统自动创建并启动的。</p>
 <p>子线程默认没有Looper，需要手动创建和启动。</p>
-<blockquote>
-<p>一般情况下子线程也不会创建Looper</p>
-</blockquote>
 <p>Looper与MessageQueue</p>
 <ul>
 <li><p><strong>一对一关系</strong>: 每个 Looper 都会关联一个唯一的 MessageQueue。Looper 对象创建时，会自动创建一个 MessageQueue 对象。</p>
@@ -2286,11 +2356,17 @@
 <li><p><strong>消息分发</strong>: 当 Looper 从 MessageQueue 中读取到消息后，会根据消息的 target 属性（即发送消息时使用的 Handler 对象），将消息分发给对应的 Handler 进行处理。</p>
 </li>
 </ul>
+<p><strong>一个线程最多一个Looper！！！</strong></p>
+<blockquote>
+<p>如何保证一个线程最多一个Looper？</p>
+<p>ThreadLocal是一个线程内部的数据存储类，当某个线程调用prepare方法的时候，会首先通过ThreadLocal检查这个线程是否已经创建了Looper,如果还没创建，则实例化Looper并将实例化后的Looper保存到ThreadLocal中，而如果ThreadLocal中已经保存了Looper，则会抛出一个RuntimeException的异常。那么意味着在一个线程中最多只能调用一次prepare方法，这样就保证了Looper的唯一性。</p>
+</blockquote>
 <p><strong>Handler</strong></p>
 <p>Handler不会被默认创建，需手动创建</p>
 <p><strong>多个 Handler 可绑定同一个 Looper</strong>，在创建 Handler 时，若未指定 Looper，则默认绑定当前线程的 Looper</p>
 <p>使用 Handler 对象的 send 或 post 方法，向 Handler 对象绑定的 Looper 对应的 MessageQueue 发送Msg</p>
 <p>通过重写 Handler 对象的 handleMessage 方法，当 Looper 从 MessageQueue 中读取到消息后，会根据消息的 target 属性（即发送消息时使用的 Handler 对象），调用 对应 Handler handleMessage 方法处理。</p>
+<p><strong>注意：进行Msg处理（调用 handleMessage 方法）的是Handler所绑定的Looper所在的线程</strong></p>
 <p>在通常情况下，主线程创建 Handler 对象并绑定mainLooper，子线程使用该 Handler 对象发送信息到主线程的MessageQueue ，当 Looper 从 MessageQueue 中读取到消息后，调用发送该 Msg 的 Handler handleMessage 方法处理。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainActivity</span> <span class="keyword">extends</span> <span class="title class_">AppCompatActivity</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Handler networkHandler;</span><br><span class="line">    <span class="keyword">private</span> Handler uiHandler;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建处理网络请求的 Handler</span></span><br><span class="line">        networkHandler = <span class="keyword">new</span> <span class="title class_">Handler</span>(Looper.getMainLooper()) &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleMessage</span><span class="params">(<span class="meta">@NonNull</span> Message msg)</span> &#123;</span><br><span class="line">                <span class="comment">// 处理网络请求结果</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> (String) msg.obj;</span><br><span class="line">                Toast.makeText(MainActivity.<span class="built_in">this</span>, <span class="string">&quot;网络请求结果: &quot;</span> + result, Toast.LENGTH_SHORT).show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建处理用户输入事件的 Handler</span></span><br><span class="line">        uiHandler = <span class="keyword">new</span> <span class="title class_">Handler</span>(Looper.getMainLooper()) &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleMessage</span><span class="params">(<span class="meta">@NonNull</span> Message msg)</span> &#123;</span><br><span class="line">                <span class="comment">// 处理用户输入事件</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">input</span> <span class="operator">=</span> (String) msg.obj;</span><br><span class="line">                Toast.makeText(MainActivity.<span class="built_in">this</span>, <span class="string">&quot;用户输入: &quot;</span> + input, Toast.LENGTH_SHORT).show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟网络请求</span></span><br><span class="line">        simulateNetworkRequest();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟用户输入事件</span></span><br><span class="line">        simulateUserInput();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">simulateNetworkRequest</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="comment">// 模拟耗时操作</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 发送网络请求结果</span></span><br><span class="line">            <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> Message.obtain();</span><br><span class="line">            message.obj = <span class="string">&quot;成功!&quot;</span>;</span><br><span class="line">            networkHandler.sendMessage(message);</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">simulateUserInput</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 发送用户输入事件</span></span><br><span class="line">        <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> Message.obtain();</span><br><span class="line">        message.obj = <span class="string">&quot;Hello!&quot;</span>;</span><br><span class="line">        uiHandler.sendMessageDelayed(message, <span class="number">3000</span>); <span class="comment">// 延迟 3 秒发送</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -2302,22 +2378,14 @@
 <p>queueIdle() 方法的返回值是一个boolean值，返回true会将IdleHandler保留，否则会将其移除。重写Idle的 queueIdle 方法实现在消息队列为空时进行的任务。</p>
 <p>在MessageQueue中维护了一个IdleHandler集合<code>mIdleHandlers</code>，并且提供了添加IdleHandler和移除IdleHandler的方法。可以通过 <code>Looper.myQueue().addIdleHandler(new Idler())</code> 添加一个IdleHandler。</p>
 <p><strong>HandlerThread</strong></p>
+<p>自带 Looper 的线程，启动后会自动创建并运行 Looper 的消息循环</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> android.graphics.Bitmap;</span><br><span class="line"><span class="keyword">import</span> android.graphics.BitmapFactory;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.os.Handler;</span><br><span class="line"><span class="keyword">import</span> android.os.HandlerThread;</span><br><span class="line"><span class="keyword">import</span> android.os.Message;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.annotation.NonNull;</span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainActivity</span> <span class="keyword">extends</span> <span class="title class_">AppCompatActivity</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">TAG</span> <span class="operator">=</span> <span class="string">&quot;MainActivity&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> HandlerThread mCompressThread;</span><br><span class="line">    <span class="keyword">private</span> Handler mCompressHandler;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建 HandlerThread</span></span><br><span class="line">        mCompressThread = <span class="keyword">new</span> <span class="title class_">HandlerThread</span>(<span class="string">&quot;CompressThread&quot;</span>);</span><br><span class="line">        mCompressThread.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建 Handler，绑定到 HandlerThread 的 Looper</span></span><br><span class="line">        mCompressHandler = <span class="keyword">new</span> <span class="title class_">Handler</span>(mCompressThread.getLooper()) &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleMessage</span><span class="params">(<span class="meta">@NonNull</span> Message msg)</span> &#123;</span><br><span class="line">                <span class="comment">// 模拟图片压缩操作</span></span><br><span class="line">                <span class="type">Bitmap</span> <span class="variable">bitmap</span> <span class="operator">=</span> (Bitmap) msg.obj;</span><br><span class="line">                compressImage(bitmap);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 任务完成，计数器减一</span></span><br><span class="line">                ((CountDownLatch) msg.getData().getParcelable(<span class="string">&quot;latch&quot;</span>)).countDown();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟添加多个图片压缩任务</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">imageCount</span> <span class="operator">=</span> <span class="number">3</span>;</span><br><span class="line">        <span class="type">CountDownLatch</span> <span class="variable">latch</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CountDownLatch</span>(imageCount);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; imageCount; i++) &#123;</span><br><span class="line">            <span class="type">Bitmap</span> <span class="variable">bitmap</span> <span class="operator">=</span> BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background);</span><br><span class="line">            addTaskToQueue(bitmap, latch);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 等待所有任务完成</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            latch.await();</span><br><span class="line">            Log.d(TAG, <span class="string">&quot;所有图片压缩任务已完成&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加压缩任务到消息队列</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">addTaskToQueue</span><span class="params">(Bitmap bitmap, CountDownLatch latch)</span> &#123;</span><br><span class="line">        <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> Message.obtain();</span><br><span class="line">        message.obj = bitmap;</span><br><span class="line">        <span class="type">Bundle</span> <span class="variable">data</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Bundle</span>();</span><br><span class="line">        data.putParcelable(<span class="string">&quot;latch&quot;</span>, latch);</span><br><span class="line">        message.setData(data);</span><br><span class="line">        mCompressHandler.sendMessage(message);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模拟图片压缩操作</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">compressImage</span><span class="params">(Bitmap bitmap)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">ByteArrayOutputStream</span> <span class="variable">baos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ByteArrayOutputStream</span>();</span><br><span class="line">            bitmap.compress(Bitmap.CompressFormat.JPEG, <span class="number">80</span>, baos);</span><br><span class="line">            Thread.sleep(<span class="number">2000</span>); <span class="comment">// 模拟耗时操作</span></span><br><span class="line">            Log.d(TAG, <span class="string">&quot;图片压缩完成，线程：&quot;</span> + Thread.currentThread().getName());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onDestroy</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onDestroy();</span><br><span class="line">        <span class="comment">// 退出 HandlerThread</span></span><br><span class="line">        mCompressThread.quitSafely();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="Android启动"><a href="#Android启动" class="headerlink" title="Android启动"></a>Android启动</h3><p>Android系统启动过程中，会先启动linux内核，然后加载init.rc文件，启动init进程。然后，init进程通过解析init.rc文件fork生成Zygote进程，该进程也是Android系统的首个Java进程。之后Zygote进程负责孵化System Server进程和APP进程。</p>
-<p><img src="/Android-learning-record/image-20240714103234291.png" alt="image-20240714103234291"></p>
-<h4 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h4><h4 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h4><ul>
-<li>由Zygote进程fork生成，SystemServer是Zygote孵化的第一个进程。</li>
-<li>负责启动、管理整个Java Framework，系统里面重要的服务都是在这个进程里面开启的，比如ActivityManagerService、PackageManagerService、WindowManagerService。</li>
-</ul>
-<h4 id="APP进程"><a href="#APP进程" class="headerlink" title="APP进程"></a>APP进程</h4><ul>
-<li>Zygote进程在App层中孵化出的第一个进程是Launcher进程，即手机的桌面APP。</li>
-<li>Zygote还会孵化出Browser、Email、Phone等APP进程，每个APP至少运行在一个进程上。</li>
-<li>所有APP进程都由Zygote进程fork生成。</li>
-</ul>
-<h2 id="Android系统中进程的交互"><a href="#Android系统中进程的交互" class="headerlink" title="Android系统中进程的交互"></a>Android系统中进程的交互</h2><p>平时我们所熟知的前端（Web\Android\iOS）通过网络与服务器通信是客户端-服务端模式的体现，而在Android Framework中，四大组件的创建、生命周期也是通过这样的模式进行通信：</p>
+
+
+<h3 id="进程间交互"><a href="#进程间交互" class="headerlink" title="进程间交互"></a>进程间交互</h3><p>平时我们所熟知的前端（Web\Android\iOS）通过网络与服务器通信是客户端-服务端模式的体现，而在Android Framework中，四大组件的创建、生命周期也是通过这样的模式进行通信：</p>
 <ul>
 <li>服务器端(server)指的就是SystemServer进程，这个进程提供了很多服务，比如AMS、PMS、WMS等等，所有的APP进程都可以与其通信。</li>
 <li>客户端(client)指的就是各个独立的APP进程。</li>
@@ -2332,7 +2400,7 @@
 
 
 
-<h3 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h3><p>进程使用Binder与System_Server通信，例如：AlarmManagerService、BluetoothService 和 BatteryService，</p>
+<h4 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h4><p>进程使用Binder与System_Server通信，例如：AlarmManagerService、BluetoothService 和 BatteryService，</p>
 <p><img src="/./Android-learning-record/image-20240721154206067.png" alt="image-20240721154206067"></p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binder_proc</span> &#123;</span></span><br><span class="line">	<span class="comment">// 存储所有binder_proc的链表</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_node</span> <span class="title">proc_node</span>;</span></span><br><span class="line">	<span class="comment">// binder_thread红黑树</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">threads</span>;</span></span><br><span class="line">	<span class="comment">// binder_proc进程内的binder实体组成的红黑树</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">nodes</span>;</span></span><br><span class="line">	......</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 驱动函数映射</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">binder_fops</span> =</span> &#123;</span><br><span class="line">	.owner = THIS_MODULE,</span><br><span class="line">	.poll = binder_poll,</span><br><span class="line">	.unlocked_ioctl = binder_ioctl,</span><br><span class="line">	.compat_ioctl = binder_ioctl,</span><br><span class="line">	.mmap = binder_mmap,</span><br><span class="line">	.open = binder_open,</span><br><span class="line">	.flush = binder_flush,</span><br><span class="line">	.release = binder_release,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册驱动参数结构体</span></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">miscdevice</span> <span class="title">binder_miscdev</span> =</span> &#123;</span><br><span class="line">	.minor = MISC_DYNAMIC_MINOR,</span><br><span class="line">    <span class="comment">// 驱动名称</span></span><br><span class="line">	.name = <span class="string">&quot;binder&quot;</span>,</span><br><span class="line">	.fops = &amp;binder_fops</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_open</span><span class="params">(<span class="keyword">struct</span> inode *nodp, <span class="keyword">struct</span> file *filp)</span>&#123;......&#125;</span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_mmap</span><span class="params">(<span class="keyword">struct</span> file *filp, <span class="keyword">struct</span> vm_area_struct *vma)</span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> __init <span class="title function_">binder_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="comment">// 创建名为binder的单线程的工作队列</span></span><br><span class="line">    binder_deferred_workqueue = create_singlethread_workqueue(<span class="string">&quot;binder&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!binder_deferred_workqueue)</span><br><span class="line">            <span class="keyword">return</span> -ENOMEM;</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">// 注册驱动，misc设备其实也就是特殊的字符设备</span></span><br><span class="line">    ret = misc_register(&amp;binder_miscdev);</span><br><span class="line">    ......</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 驱动注册函数</span></span><br><span class="line">device_initcall(binder_init);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -2345,7 +2413,47 @@
 </li>
 </ul>
 <p>作者：北野青阳<br>链接：<a href="https://juejin.cn/post/6987595923543031821">https://juejin.cn/post/6987595923543031821</a></p>
-<h3 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h3><img src="/2024/07/28/Android-Learning-Record/image-20240721155920403-1722133033018.png" class="" title="image-20240721155920403">]]></content>
+<h4 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h4><img src="/2024/07/28/Android-Learning-Record/image-20240721155920403-1722133033018.png" class="" title="image-20240721155920403">
+
+
+
+
+
+<h3 id="Android启动"><a href="#Android启动" class="headerlink" title="Android启动"></a>Android启动</h3><p>Android系统启动过程中，会先启动linux内核，然后加载init.rc文件，启动init进程。然后，init进程通过解析init.rc文件fork生成Zygote进程，该进程也是Android系统的首个Java进程。之后Zygote进程负责孵化System Server进程和APP进程。</p>
+<p><img src="/Android-learning-record/image-20240714103234291.png" alt="image-20240714103234291"></p>
+<h4 id="Init进程"><a href="#Init进程" class="headerlink" title="Init进程"></a>Init进程</h4><p>设置子进程退出信号处理函数</p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240731155705321.png" class="" title="image-20240731155705321">
+
+<blockquote>
+<p>本进程在接受到子进程退出信号后，调用sigchld_handler函数</p>
+</blockquote>
+<p>创建文件夹与挂载设备</p>
+<p>将标准输入、标准输出和标准错误重定向到 <code>/dev/null</code> 和 将<code>init</code> 进程的日志输出设置为 <code>/dev/__kmsg__</code></p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240731160912852.png" class="" title="image-20240731160912852">
+
+<blockquote>
+<p>重定向标准输入&#x2F;输出&#x2F;错误的方式是通过修改进程的文件描述符表</p>
+<p>int dup2(int oldfd, int newfd); 通过将旧文件描述符复制到新文件描述符位置（即将oldfd内容写入newfd在文件描述符表中所在的位置），使得后续访问文件描述符表对应位置的时候被重定向到修改后位置</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> fd = open(<span class="string">&quot;/dev/null&quot;</span>, O_RDWR); <span class="comment">// 读写方式打开 /dev/null</span></span><br><span class="line"><span class="keyword">if</span> (fd &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">    dup2(fd, <span class="number">0</span>); <span class="comment">// 重定向标准输入到 /dev/null</span></span><br><span class="line">    dup2(fd, <span class="number">1</span>); <span class="comment">// 重定向标准输出到 /dev/null</span></span><br><span class="line">    dup2(fd, <span class="number">2</span>); <span class="comment">// 重定向标准错误到 /dev/null</span></span><br><span class="line">    <span class="keyword">if</span> (fd &gt; <span class="number">2</span>) &#123;</span><br><span class="line">        close(fd); <span class="comment">// 关闭多余的文件描述符</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>解析<code>init.rc</code>文件</p>
+<p>获取硬件名并根据硬件名解析<code>init.&lt;硬件名&gt;.rc</code>文件</p>
+<p>从文件中获得<code>early-init</code>阶段需要执行的动作，将动作添加到一个执行队列的尾部并执行队列中的所有动作</p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240731162932328.png" class="" title="image-20240731162932328">
+
+<blockquote>
+<p>动作一般是函数指针，执行动作时通过函数指针执行函数</p>
+</blockquote>
+<h4 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h4><h4 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h4><ul>
+<li>由Zygote进程fork生成，SystemServer是Zygote孵化的第一个进程。</li>
+<li>负责启动、管理整个Java Framework，系统里面重要的服务都是在这个进程里面开启的，比如ActivityManagerService、PackageManagerService、WindowManagerService。</li>
+</ul>
+<h4 id="APP进程"><a href="#APP进程" class="headerlink" title="APP进程"></a>APP进程</h4><ul>
+<li>Zygote进程在App层中孵化出的第一个进程是Launcher进程，即手机的桌面APP。</li>
+<li>Zygote还会孵化出Browser、Email、Phone等APP进程，每个APP至少运行在一个进程上。</li>
+<li>所有APP进程都由Zygote进程fork生成。</li>
+</ul>
+]]></content>
       <categories>
         <category>Android</category>
       </categories>
