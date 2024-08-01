@@ -36,8 +36,13 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240731155705321.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240731160912852.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240731162932328.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240801102057483.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240801102304897.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240801102823567.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240801102846996.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240801103107985.png">
 <meta property="article:published_time" content="2024-07-28T02:16:25.000Z">
-<meta property="article:modified_time" content="2024-07-31T08:32:57.733Z">
+<meta property="article:modified_time" content="2024-08-01T02:33:48.596Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Android, Java">
 <meta name="twitter:card" content="summary">
@@ -230,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-07-31 16:32:57" itemprop="dateModified" datetime="2024-07-31T16:32:57+08:00">2024-07-31</time>
+                <time title="Modified: 2024-08-01 10:33:48" itemprop="dateModified" datetime="2024-08-01T10:33:48+08:00">2024-08-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1084,7 +1089,7 @@
 
 <blockquote>
 <p>重定向标准输入&#x2F;输出&#x2F;错误的方式是通过修改进程的文件描述符表</p>
-<p>int dup2(int oldfd, int newfd); 通过将旧文件描述符复制到新文件描述符位置（即将oldfd内容写入newfd在文件描述符表中所在的位置），使得后续访问文件描述符表对应位置的时候被重定向到修改后位置</p>
+<p>int dup2(int oldfd, int newfd)：通过将旧文件描述符复制到新文件描述符位置（即将oldfd内容写入newfd在文件描述符表中所在的位置），若新文件描述符已打开，则将其关闭并复制，使得后续访问文件描述符表对应位置的时候被重定向到修改后位置</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> fd = open(<span class="string">&quot;/dev/null&quot;</span>, O_RDWR); <span class="comment">// 读写方式打开 /dev/null</span></span><br><span class="line"><span class="keyword">if</span> (fd &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">    dup2(fd, <span class="number">0</span>); <span class="comment">// 重定向标准输入到 /dev/null</span></span><br><span class="line">    dup2(fd, <span class="number">1</span>); <span class="comment">// 重定向标准输出到 /dev/null</span></span><br><span class="line">    dup2(fd, <span class="number">2</span>); <span class="comment">// 重定向标准错误到 /dev/null</span></span><br><span class="line">    <span class="keyword">if</span> (fd &gt; <span class="number">2</span>) &#123;</span><br><span class="line">        close(fd); <span class="comment">// 关闭多余的文件描述符</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>解析<code>init.rc</code>文件</p>
@@ -1094,6 +1099,29 @@
 
 <blockquote>
 <p>动作一般是函数指针，执行动作时通过函数指针执行函数</p>
+</blockquote>
+<p>获得 <code>device</code>, <code>property</code>, <code>keychord</code>的文件描述符</p>
+<p>加载文件作为系统的开机画面</p>
+<p>判断系统是否在QEMU虚拟机运行，执行？操作</p>
+<p>设置系统属性</p>
+<p>执行位于<code>init</code>阶段的动作</p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240801102057483.png" class="" title="image-20240801102057483">
+
+<p>启动属性服务</p>
+<p>创建socket</p>
+<p>执行 <code>early-boot</code> 和 <code>boot</code> 阶段动作</p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240801102304897.png" class="" title="image-20240801102304897">
+
+<p>创建文件描述符数组，将<code>device</code>, <code>property</code>, <code>signal_recv</code>,<code>keychord</code>的文件描述符写入，添加期望动作。</p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240801102823567.png" class="" title="image-20240801102823567">
+
+<img src="/2024/07/28/Android-Learning-Record/image-20240801102846996.png" class="" title="image-20240801102846996">
+
+<p>循环，清空接收动作；开始监视文件描述符传入信息，并根据传入信息执行对应动作</p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240801103107985.png" class="" title="image-20240801103107985">
+
+<blockquote>
+<p>poll() 函数监视多个文件描述符，等待它们中的任何一个变为可读、可写或发生错误。在文件描述符发生变化时，revent将记录该变化。</p>
 </blockquote>
 <h4 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h4><h4 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h4><ul>
 <li>由Zygote进程fork生成，SystemServer是Zygote孵化的第一个进程。</li>

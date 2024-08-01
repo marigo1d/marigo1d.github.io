@@ -101,6 +101,8 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240425101121206.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240507185615764.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240608144715684.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240801110805754.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240801110303316.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240715103745870.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240715103802105.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240705161507324.png">
@@ -124,7 +126,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240714194601289.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/12/Op-sys-Learning-Record/image-20240421144651548.png">
 <meta property="article:published_time" content="2024-04-12T10:47:23.000Z">
-<meta property="article:modified_time" content="2024-07-31T07:54:52.146Z">
+<meta property="article:modified_time" content="2024-08-01T03:24:37.828Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="operation system">
 <meta name="twitter:card" content="summary">
@@ -317,7 +319,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-07-31 15:54:52" itemprop="dateModified" datetime="2024-07-31T15:54:52+08:00">2024-07-31</time>
+                <time title="Modified: 2024-08-01 11:24:37" itemprop="dateModified" datetime="2024-08-01T11:24:37+08:00">2024-08-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -990,12 +992,56 @@
 <p>jmp intr_exit，跳过压入的中断向量号vec_no，popad弹出所有通用寄存器值，pop gs，fs，es，ds，跳过错误码；此时栈顶为：eip值为filename（指向用户进程入口地址），cs值为SELECTOR_U_CODE，eflag为(EFLAGS_IOPL_0 | EFLAGS_MBS | EFLAGS_IF_1);</p>
 <p>前往执行对应函数，进入特权级3；</p>
 <h3 id="调度"><a href="#调度" class="headerlink" title="调度"></a>调度</h3><p>调度发生在：</p>
-<p>1.系统调用(包括时间中断)-目标中断处理函数后，若当前进程时间片为0或任务未就绪</p>
-<p>2.切换当前进程为其他态后</p>
+<p>1.系统调用(包括时间中断)-执行中断处理函数后，若当前进程时间片为0或任务未就绪，调用<code>schedule()</code></p>
+<p>2.切换当前running态进程为其他态后，调用<code>schedule()</code></p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240608144715684.png" class="" title="image-20240608144715684">
 
+<p>TASK_INTERRUPTIBLE与TASK_UNINTERRUPTIBLE</p>
+<p>TASK_INTERRUPTIBLE可接收信号，会被提前唤醒并响应信号</p>
+<p>TASK_UNINTERRUPTIBLE屏蔽信号</p>
+<p><strong>等待队列与唤醒</strong></p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240801110805754.png" class="" title="image-20240801110805754">
 
+<ol>
+<li><p><strong>进程睡眠：</strong></p>
+<ul>
+<li><p>进程调用 read() 等系统调用读取驱动设备数据，由于数据尚未准备好，驱动程序会将进程加入到自身维护的一个等待队列中。</p>
+<p>进程通过以下步骤将自己加入等待队列</p>
+<img src="/2024/04/12/Op-sys-Learning-Record/image-20240801110303316.png" class="" title="image-20240801110303316">
 
+<blockquote>
+<p>进程在执行到<code>schedule()</code>时，将自己当前状态的上下文保存至TSS，包括EIP和CS，由于EIP指向<code>while(!condition)</code>判断，即下次程序执行时会进行condition的判断，若满足则结束等待</p>
+</blockquote>
+</li>
+<li><p>进程将自身状态设置为 TASK_INTERRUPTIBLE 或 TASK_KILLABLE，表示可以被信号或中断唤醒。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>中断发生：</strong></p>
+<ul>
+<li>驱动设备完成数据输入后，会向 CPU 发出一个中断请求。</li>
+<li>CPU 收到中断请求后，会保存当前上下文，并跳转到该中断对应的中断处理函数（ISR）执行。</li>
+</ul>
+</li>
+<li><p><strong>中断处理程序：</strong></p>
+<ul>
+<li>中断处理程序（ISR）执行设备相关的处理逻辑，例如从设备读取数据到缓冲区。</li>
+<li><strong>关键步骤：</strong> ISR 会调用 wake_up_interruptible() 或类似的 API。该函数会:<ul>
+<li>将等待队列中所有等待该设备数据的进程标记为<strong>可运行状态</strong>。</li>
+<li>标记进程的<code>need_resched</code>为1。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>调度与唤醒：</strong></p>
+<ul>
+<li>中断处理完成后，CPU 会根据调度策略选择下一个要运行的进程。</li>
+<li>由于之前 wake_up_interruptible() 的调用，调度器会发现之前睡眠的进程已经变为可运行状态，因此会将其从等待队列中移出，并加入到就绪队列的末尾。</li>
+<li>被唤醒的进程最终获得 CPU 时间，继续执行，此时 read() 系统调用会成功返回读取到的数据。</li>
+</ul>
+</li>
+</ol>
+<p><strong>任务切换</strong></p>
 <p>使用远跳转实现任务切换</p>
 <p>call指令可以实现向高特权级跳转，jmp平级跳转</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">; 近跳转</span><br><span class="line">jmp short next_instruction</span><br><span class="line"></span><br><span class="line">; 远跳转，使用段地址和偏移量 (实模式)</span><br><span class="line">jmp far 1000h:1234h</span><br><span class="line"></span><br><span class="line">; 远跳转，使用选择子和偏移量 (保护模式)</span><br><span class="line">jmp far [selector:offset]</span><br><span class="line">call 0x0008:0x1234 ; 向GDT中索引为1的调用门跳转，忽略偏移0x1234</span><br></pre></td></tr></table></figure>
@@ -1151,6 +1197,9 @@
 
 <p> <code>open()</code> 函数返回的指针是进程数据结构中文件指针数组的一个索引。具体来说，当一个文件被打开时，<code>open()</code> 函数会在进程的数据结构中分配一个文件指针数组的索引（在图的最左边），并将其指向文件表（<code>file_table</code>）中的一个条目。在文件表条目中包含了文件的状态标志、引用计数、inode指针和文件位置等信息。</p>
 <p>在实际使用中，<code>open()</code> 函数返回的值是文件描述符（file descriptor），它是一个非负整数，通常从0开始递增。这个文件描述符对应于进程数据结构中文件指针数组的一个索引。</p>
+<blockquote>
+<p>注意，同一个进程多次打开同一个文件，会在系统的打开文件表中新增多个项，因为打开文件表中的项记录了打开文件的权限（eg.: 只读），多次打开时的设置可能不一样</p>
+</blockquote>
 <p><strong>文件描述符的值</strong></p>
 <p>在一个典型的UNIX系统中，文件描述符的值可能是：</p>
 <ul>
@@ -1162,12 +1211,51 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">进程</span><br><span class="line">+--------------------+</span><br><span class="line">| FD Table (进程)    |</span><br><span class="line">| +-----+------------|</span><br><span class="line">| | 0   | stdin      |</span><br><span class="line">| | 1   | stdout     |</span><br><span class="line">| | 2   | stderr     |</span><br><span class="line">| | ... | ...        |</span><br><span class="line">| | 3   | device_fd  | --&gt; 文件表项 --&gt; inode (device)</span><br><span class="line">| | 4   | property_fd| --&gt; 文件表项 --&gt; inode (property)</span><br><span class="line">| | 5   | socket_fd  | --&gt; 文件表项 --&gt; 套接字结构</span><br><span class="line">| | 6   | pipe_read_fd | --&gt; 文件表项 --&gt; 管道缓冲区</span><br><span class="line">| | 7   | pipe_write_fd| --&gt; 文件表项 --&gt; 管道缓冲区</span><br><span class="line">+-----+--------------+</span><br></pre></td></tr></table></figure>
 
 <blockquote>
+<p>关于pipe</p>
 <p>在一个进程中创建一个管道时，使用 <code>pipe</code> 系统调用会返回两个文件描述符，一个用于读端 (<code>pipe_read_fd</code>)，一个用于写端 (<code>pipe_write_fd</code>)。这两个文件描述符指向不同的文件表项，但文件表项指向相同的管道缓冲区。</p>
+<p>操作系统不会在内存中创建新的inode节点，因为管道是内存数据结构，并不与文件系统实体关联</p>
+<p>假定当前进程是一个shell，而它调用fork()产生两个子进程，从而创建一个两阶段管道，具体步骤如下：</p>
+<p>1，使用pipe() 创建管道。必须首先做到这一点，以便主进程创建的两个子进程能够继承打开的文件描述符。</p>
+<p>2，调用fork()，产生我们的“生产者进程”。该进程的标准输出流向管道。在该子进程中进行如下操作：</p>
+<p>  a, 因为生产者进程不需要管道的读取端所以使用 close(pipefd[0]) 关闭它。 </p>
+<p>  b,使用close(STDOUT_FILENO)，（即1）关闭最初的标准输出。  </p>
+<p>  c,使用dup(pipefd[1])将管道的写入端改变为文件描述符1.  </p>
+<blockquote>
+<p>dup 函数创建一个新的文件描述符，指向与 oldfd 相同的打开文件表项。新文件描述符的值将是当前进程中可用的最小未使用的文件描述符。此处即为刚才关闭的标准输出，文件描述符1。</p>
+</blockquote>
+<p>  d,我们不需要打开的文件描述符的两份拷贝，所以使用close(pipefd[1])关闭一个。 </p>
+<blockquote>
+<p> 注意关闭未使用的管道文件描述符的重要性。因为直到最后一个打开的文件描述符关闭，文件才真正关闭，即使多个进程共享文件描述符时也是如此。因为只有所有的写入端拷贝都被关闭，从管道读取数据 的进程才会知道是否到达文件末尾，所以关闭未使用的文件描述符至关重要。</p>
+</blockquote>
+<p> e,调用exec()启动运行的程序。</p>
+<p>3，调用fork()产生我们的“消费者进程“，该进程的标准输入来自于管道。该子进程中的和生产者的步骤相似，</p>
+<p> a,因为右侧的子进程不需要管道的输入端所以使用close(pipefd[1]) 关闭它。</p>
+<p> b,使用close(STDIN_FILENO)关闭最初的标准输入。STDIN_FILENO为 0</p>
+<p> c,使用dup(pipefd[0])将管道的读取端（输入）改变为文件描述符0.</p>
+<p> d,使用close(pipefd[0])关闭文件描述符的一个拷贝。</p>
+<p> e,调用exec()启动运行的程序。</p>
+<p>4，父进程关闭管道的两端close(pipefd[0]),close(pipefd[1])。</p>
+<p>5，最后，在父进程中使用wait等待两个子进程的结束。</p>
+</blockquote>
+<blockquote>
+<p>关于socket</p>
+<p>内核会执行以下操作：</p>
+<ol>
+<li><p><strong>分配资源：</strong> 在内核空间中分配一个新的 socket 数据结构，用于存储 socket 的相关信息，例如：协议族、套接字类型、本地地址、远程地址、连接状态等。</p>
+</li>
+<li><p><strong>创建文件表项：</strong> 为 socket 创建一个文件表项，并将其添加到系统打开文件表中。文件表项中包含指向 socket 数据结构的指针以及其他文件操作相关的信息。</p>
+</li>
+<li><p><strong>分配文件描述符：</strong> 在进程的文件描述符表中找到一个最小的未使用的文件描述符，并将其指向新创建的文件表项。</p>
+</li>
+</ol>
 </blockquote>
 <p><strong>文件表中的值</strong></p>
 <p>文件表（<code>file_table</code>）中的每个条目（<code>struct file</code>）可能包含以下信息：</p>
 <ul>
-<li><code>f_flags</code>：文件状态标志，如只读、只写或读写。</li>
+<li><code>f_flags</code>：文件状态标志，如只读、只写或读写。<blockquote>
+<p> 注意：poll系统调用监视的就是这个值的变化</p>
+</blockquote>
+</li>
 <li><code>f_count</code>：引用计数，表示当前有多少进程共享此文件。</li>
 <li><code>f_inode</code>：指向内存中i节点结构的指针，包含文件的元数据。</li>
 <li><code>f_pos</code>：文件位置指针，表示当前文件的读写位置。</li>
