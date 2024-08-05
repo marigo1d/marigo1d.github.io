@@ -623,8 +623,33 @@
 <ul>
 <li>每个类或接口都有自己的<strong>字符串常量池</strong>，存储在该类或接口的字节码文件中。</li>
 </ul>
-<h3 id="JVM内存"><a href="#JVM内存" class="headerlink" title="JVM内存"></a>JVM内存</h3><h4 id="Method-Area-方法区-元空间"><a href="#Method-Area-方法区-元空间" class="headerlink" title="Method Area (方法区)&#x2F;(元空间)"></a><strong>Method Area (方法区)&#x2F;(元空间)</strong></h4><p><strong>静态变量 (Static Variables)</strong></p>
-<p><strong>Class对象（多个）：</strong>每个 Class 对象内部都维护着一个指向该类运行时常量池的引用。</p>
+<h3 id="JVM内存"><a href="#JVM内存" class="headerlink" title="JVM内存"></a>JVM内存</h3><h4 id="Method-Area-方法区-元空间"><a href="#Method-Area-方法区-元空间" class="headerlink" title="Method Area (方法区)&#x2F;(元空间)"></a><strong>Method Area (方法区)&#x2F;(元空间)</strong></h4><p><strong>类信息</strong></p>
+<ul>
+<li><strong>className, superClassName, accessFlags, interfaceNames, sourceFile</strong>: 这些是类的基本信息，属于元数据，存储在方法区&#x2F;元空间。</li>
+<li><strong>fieldTable</strong>: 字段信息表，包含每个字段的描述信息，存储在方法区&#x2F;元空间。</li>
+<li><strong>methodTable</strong>: 方法信息表，包含每个方法的描述信息，存储在方法区&#x2F;元空间。</li>
+<li><strong>constantPool</strong>: 运行时常量池，存储常量、方法引用、字段引用等，位于方法区&#x2F;元空间。</li>
+<li><strong>instanceSize</strong>: 实例大小是类级别的信息，存储在方法区&#x2F;元空间。</li>
+<li><strong>innerClasses, enclosingMethod, genericSignature, runtimeVisibleTypeAnnotations, bootstrapMethods, version, minorVersion, majorVersion, constantValueAttributes, methodHandles, exceptions, nestMembers, nestHost, permittedSubclasses, recordComponents</strong>: 这些信息都属于类的元数据，存储在方法区&#x2F;元空间。</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">ClassObject</span><br><span class="line">|</span><br><span class="line">+---&gt; className<span class="punctuation">:</span> <span class="string">&quot;com/example/MyClass&quot;</span></span><br><span class="line">+---&gt; superClassName<span class="punctuation">:</span> <span class="string">&quot;java/lang/Object&quot;</span></span><br><span class="line">+---&gt; accessFlags<span class="punctuation">:</span> <span class="number">0x0021</span> (PUBLIC | SUPER)</span><br><span class="line">+---&gt; interfaceNames<span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;java/lang/Runnable&quot;</span><span class="punctuation">,</span> <span class="string">&quot;java/io/Serializable&quot;</span><span class="punctuation">]</span></span><br><span class="line">+---&gt; fieldTable<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">|      +---&gt; FieldInfo <span class="punctuation">&#123;</span></span><br><span class="line">|      |       fieldName<span class="punctuation">:</span> <span class="string">&quot;id&quot;</span><span class="punctuation">,</span></span><br><span class="line">|      |       fieldType<span class="punctuation">:</span> <span class="string">&quot;I&quot;</span><span class="punctuation">,</span></span><br><span class="line">|      |       accessFlags<span class="punctuation">:</span> <span class="number">0x0002</span> (PRIVATE)<span class="punctuation">,</span></span><br><span class="line">|      |       attributes<span class="punctuation">:</span> <span class="punctuation">[</span>ConstantValue<span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">]</span></span><br><span class="line">|      |     <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">|      +---&gt; FieldInfo <span class="punctuation">&#123;</span></span><br><span class="line">|              fieldName<span class="punctuation">:</span> <span class="string">&quot;name&quot;</span><span class="punctuation">,</span></span><br><span class="line">|              fieldType<span class="punctuation">:</span> <span class="string">&quot;Ljava/lang/String;&quot;</span><span class="punctuation">,</span></span><br><span class="line">|              accessFlags<span class="punctuation">:</span> <span class="number">0x0004</span> (PROTECTED)<span class="punctuation">,</span></span><br><span class="line">|              attributes<span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">|            <span class="punctuation">&#125;</span></span><br><span class="line">|    <span class="punctuation">]</span></span><br><span class="line">+---&gt; methodTable<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">|      +---&gt; MethodInfo <span class="punctuation">&#123;</span></span><br><span class="line">|      |       methodName<span class="punctuation">:</span> <span class="string">&quot;&lt;init&gt;&quot;</span><span class="punctuation">,</span></span><br><span class="line">|      |       methodSignature<span class="punctuation">:</span> <span class="string">&quot;()V&quot;</span><span class="punctuation">,</span></span><br><span class="line">|      |       accessFlags<span class="punctuation">:</span> <span class="number">0x0001</span> (PUBLIC)<span class="punctuation">,</span></span><br><span class="line">|      |       attributes<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">|      |         Code<span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">|      |           maxStack<span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">|      |           maxLocals<span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">|      |           code<span class="punctuation">:</span> <span class="punctuation">[</span><span class="number">0x2A</span><span class="punctuation">,</span> <span class="number">0xB7</span><span class="punctuation">,</span> <span class="number">0x00</span><span class="punctuation">,</span> <span class="number">0x01</span><span class="punctuation">,</span> <span class="number">0xB1</span><span class="punctuation">]</span><span class="punctuation">,</span>  <span class="comment">// aload_0, invokespecial, return</span></span><br><span class="line">|      |           exceptionTable<span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">|      |           lineNumberTable<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">|      |             <span class="punctuation">&#123;</span>start_pc<span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> line_number<span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">&#125;</span></span><br><span class="line">|      |           <span class="punctuation">]</span></span><br><span class="line">|      |         <span class="punctuation">&#125;</span></span><br><span class="line">|      |       <span class="punctuation">]</span></span><br><span class="line">|      |     <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">|      +---&gt; MethodInfo <span class="punctuation">&#123;</span></span><br><span class="line">|              methodName<span class="punctuation">:</span> <span class="string">&quot;run&quot;</span><span class="punctuation">,</span></span><br><span class="line">|              methodSignature<span class="punctuation">:</span> <span class="string">&quot;()V&quot;</span><span class="punctuation">,</span></span><br><span class="line">|              accessFlags<span class="punctuation">:</span> <span class="number">0x0001</span> (PUBLIC)<span class="punctuation">,</span></span><br><span class="line">|              attributes<span class="punctuation">:</span> <span class="punctuation">[</span>...<span class="punctuation">]</span></span><br><span class="line">|            <span class="punctuation">&#125;</span></span><br><span class="line">|    <span class="punctuation">]</span></span><br><span class="line">+---&gt; constantPool<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">0</span><span class="punctuation">]</span><span class="punctuation">:</span> Unused</span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">:</span> CONSTANT_Utf8_info <span class="punctuation">&#123;</span> <span class="string">&quot;com/example/MyClass&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">]</span><span class="punctuation">:</span> CONSTANT_Class_info <span class="punctuation">&#123;</span> name_index<span class="punctuation">:</span> <span class="number">1</span> <span class="punctuation">&#125;</span></span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">3</span><span class="punctuation">]</span><span class="punctuation">:</span> CONSTANT_Utf8_info <span class="punctuation">&#123;</span> <span class="string">&quot;java/lang/Object&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">4</span><span class="punctuation">]</span><span class="punctuation">:</span> CONSTANT_Class_info <span class="punctuation">&#123;</span> name_index<span class="punctuation">:</span> <span class="number">3</span> <span class="punctuation">&#125;</span></span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">5</span><span class="punctuation">]</span><span class="punctuation">:</span> CONSTANT_Utf8_info <span class="punctuation">&#123;</span> <span class="string">&quot;id&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">6</span><span class="punctuation">]</span><span class="punctuation">:</span> CONSTANT_Utf8_info <span class="punctuation">&#123;</span> <span class="string">&quot;I&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">7</span><span class="punctuation">]</span><span class="punctuation">:</span> CONSTANT_Utf8_info <span class="punctuation">&#123;</span> <span class="string">&quot;name&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">8</span><span class="punctuation">]</span><span class="punctuation">:</span> CONSTANT_Utf8_info <span class="punctuation">&#123;</span> <span class="string">&quot;Ljava/lang/String;&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">9</span><span class="punctuation">]</span><span class="punctuation">:</span> CONSTANT_Utf8_info <span class="punctuation">&#123;</span> <span class="string">&quot;&lt;init&gt;&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">|      +---&gt; ConstantPoolInfo<span class="punctuation">[</span><span class="number">10</span><span class="punctuation">]</span><span class="punctuation">:</span> CONSTANT_Utf8_info <span class="punctuation">&#123;</span> <span class="string">&quot;()V&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">|      +---&gt; ... (more constant pool entries)</span><br><span class="line">|    <span class="punctuation">]</span></span><br><span class="line">+---&gt; classLoader<span class="punctuation">:</span> SystemClassLoader</span><br><span class="line">+---&gt; protectionDomain<span class="punctuation">:</span> ProtectionDomain <span class="punctuation">&#123;</span></span><br><span class="line">|      codeSource<span class="punctuation">:</span> CodeSource <span class="punctuation">&#123;</span> location<span class="punctuation">:</span> <span class="string">&quot;file:/path/to/MyClass.class&quot;</span><span class="punctuation">,</span> certs<span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">|      permissions<span class="punctuation">:</span> Permissions <span class="punctuation">&#123;</span> ... <span class="punctuation">&#125;</span></span><br><span class="line">|    <span class="punctuation">&#125;</span></span><br><span class="line">+---&gt; instanceSize<span class="punctuation">:</span> <span class="number">24</span> bytes  <span class="comment">// Assuming 64-bit JVM, 8 bytes for Object header, 4 bytes for int, 8 bytes for String reference, padded to 8-byte boundary</span></span><br><span class="line">+---&gt; staticFieldValues<span class="punctuation">:</span> <span class="punctuation">[</span><span class="number">1</span><span class="punctuation">,</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">]</span>  <span class="comment">// Corresponds to &#x27;id&#x27; and &#x27;name&#x27; fields</span></span><br><span class="line">+---&gt; runtimeAnnotations<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">|      @java.lang.Deprecated<span class="punctuation">,</span></span><br><span class="line">|      @java.lang.SuppressWarnings(<span class="string">&quot;unchecked&quot;</span>)</span><br><span class="line">|    <span class="punctuation">]</span></span><br><span class="line">+---&gt; sourceFile<span class="punctuation">:</span> <span class="string">&quot;MyClass.java&quot;</span></span><br><span class="line">+---&gt; innerClasses<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">|      <span class="punctuation">&#123;</span></span><br><span class="line">|        innerClassName<span class="punctuation">:</span> <span class="string">&quot;InnerClass&quot;</span><span class="punctuation">,</span></span><br><span class="line">|        outerClassName<span class="punctuation">:</span> <span class="string">&quot;com/example/MyClass&quot;</span><span class="punctuation">,</span></span><br><span class="line">|        innerName<span class="punctuation">:</span> <span class="string">&quot;InnerClass&quot;</span><span class="punctuation">,</span></span><br><span class="line">|        innerClassAccessFlags<span class="punctuation">:</span> <span class="number">0x0009</span> (PUBLIC | STATIC)</span><br><span class="line">|      <span class="punctuation">&#125;</span></span><br><span class="line">|    <span class="punctuation">]</span></span><br><span class="line">+---&gt; enclosingMethod<span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span>  <span class="comment">// This class is not enclosed in a method</span></span><br><span class="line">+---&gt; genericSignature<span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span>  <span class="comment">// This class doesn&#x27;t use generics</span></span><br><span class="line">+---&gt; runtimeVisibleTypeAnnotations<span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span>  <span class="comment">// No runtime visible type annotations</span></span><br><span class="line">+---&gt; bootstrapMethods<span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span>  <span class="comment">// No bootstrap methods (used for invokedynamic)</span></span><br><span class="line">+---&gt; version<span class="punctuation">:</span> <span class="number">52.0</span>  <span class="comment">// Java 8</span></span><br><span class="line">+---&gt; minorVersion<span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">+---&gt; majorVersion<span class="punctuation">:</span> <span class="number">52</span></span><br><span class="line">+---&gt; constantValueAttributes<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">|      <span class="punctuation">&#123;</span>fieldIndex<span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span> constantValue<span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">&#125;</span>  <span class="comment">// For the &#x27;id&#x27; field</span></span><br><span class="line">|    <span class="punctuation">]</span></span><br><span class="line">+---&gt; methodHandles<span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span>  <span class="comment">// No method handles</span></span><br><span class="line">+---&gt; exceptions<span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span>  <span class="comment">// No checked exceptions declared for methods</span></span><br><span class="line">+---&gt; nestMembers<span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span>  <span class="comment">// No nest members (Java 11+ feature)</span></span><br><span class="line">+---&gt; nestHost<span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span>  <span class="comment">// This class is not a nest member</span></span><br><span class="line">+---&gt; permittedSubclasses<span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span>  <span class="comment">// No sealed classes involved (Java 15+ feature)</span></span><br><span class="line">+---&gt; recordComponents<span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span>  <span class="comment">// This is not a record class (Java 14+ feature)</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><strong>静态变量 (Static Variables)：</strong></p>
+<ul>
+<li>静态变量的值存储在堆上，但其描述信息（如字段名、类型等）存储在方法区&#x2F;元空间的 fieldTable 中。</li>
+</ul>
+<p>当 Java 代码访问静态变量时，会发生以下步骤:</p>
+<ol>
+<li>虚拟机根据变量名找到对应的 Class 对象。</li>
+<li>在 Class 对象的 fieldTable 中找到该静态变量的 FieldInfo 结构体。</li>
+<li>从 FieldInfo 结构体中获取存储值的内存地址。</li>
+<li>根据内存地址访问存储在堆上的静态变量值。</li>
+</ol>
+</blockquote>
+<blockquote>
 <blockquote>
 <p>一个类在 JVM 内存中对应一个运行时常量池！！！！！</p>
 </blockquote>
@@ -639,41 +664,7 @@
 <li><strong>字面量 (Literals):</strong> 例如数字、字符串、null 值等。</li>
 <li><strong>符号引用 (Symbolic References):</strong> 例如类和接口的全限定名、字段名、方法名、方法描述符等。</li>
 </ul>
-<p><strong>类信息 (Type Information):</strong></p>
-<ul>
-<li><strong>作用范围：</strong> 描述整个类的结构和特征。</li>
-<li><strong>内容：</strong><ul>
-<li>类的完整名称（包括包名和类名）</li>
-<li>父类的完整名称（如果该类不是 java.lang.Object）</li>
-<li>实现的接口的完整名称列表</li>
-<li>类的访问修饰符（public、abstract、final 等）</li>
-</ul>
-</li>
-</ul>
-<p><strong>字段信息 (Field Information):</strong></p>
-<ul>
-<li><p><strong>作用范围：</strong> 描述类的每个字段（成员变量）。</p>
-</li>
-<li><p><strong>内容：</strong></p>
-<ul>
-<li>字段名</li>
-<li>字段类型（例如 int、String、自定义类型等）</li>
-<li>字段访问修饰符（public、private、protected、static、final 等）</li>
-</ul>
-</li>
-</ul>
-<p><strong>方法信息 (Method Information):</strong></p>
-<ul>
-<li><strong>作用范围：</strong> 描述类的每个方法。</li>
-<li><strong>内容：</strong><ul>
-<li>方法名</li>
-<li>方法返回类型</li>
-<li>方法参数列表（包括参数类型和顺序）</li>
-<li>方法访问修饰符（public、private、protected、static、final、abstract、synchronized 等）</li>
-<li>方法体（以字节码的形式存储）</li>
-</ul>
-</li>
-</ul>
+</blockquote>
 <p>示例：</p>
 <blockquote>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">species</span> <span class="operator">=</span> <span class="string">&quot;Human&quot;</span>;  <span class="comment">// 静态变量</span></span><br><span class="line"> <span class="keyword">public</span> String name;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name)</span> &#123;</span><br><span class="line">     <span class="built_in">this</span>.name = name;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Car</span> &#123;</span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">BRAND</span> <span class="operator">=</span> <span class="string">&quot;Tesla&quot;</span>; <span class="comment">// 静态常量</span></span><br><span class="line"> <span class="keyword">public</span> String model;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">public</span> <span class="title function_">Car</span><span class="params">(String model)</span> &#123;</span><br><span class="line">     <span class="built_in">this</span>.model = model;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -715,6 +706,15 @@
 <h4 id="Heap-堆"><a href="#Heap-堆" class="headerlink" title="Heap (堆)"></a><strong>Heap (堆)</strong></h4><img src="/2024/07/28/Android-Learning-Record/image-20240728103642872.png" class="" title="image-20240728103642872">
 
 <p><strong>普通对象</strong></p>
+<p><strong>Class对象</strong>！！！</p>
+<blockquote>
+<p>Class 对象本身是 Java 对象，存储在堆上。Class 对象包含指向方法区&#x2F;元空间的指针，用于访问类的元数据信息，例如 <code>fieldTable</code>, <code>methodTable</code>, <code>constantPool</code> 等。</p>
+<ul>
+<li><strong>methodTable 指针</strong>: Class 对象中的 methodTable 指针指向方法区&#x2F;元空间中存储的方法信息数组。</li>
+<li><strong>Runtime Constant Pool 指针</strong>: Class 对象包含一个指向运行时常量池的指针，该常量池也位于方法区&#x2F;元空间。</li>
+</ul>
+</blockquote>
+<p><strong>staticFieldValues</strong>: 静态变量的值存储在堆上。注意，这里存储的是值本身，而不是静态变量的描述信息。</p>
 <p><strong>全局字符串池 (String Pool)（JDK7 以后）:</strong></p>
 <ul>
 <li><strong>全局字符串池</strong> 是 JVM 级别维护的字符串常量池，所有类共享。</li>
@@ -722,6 +722,9 @@
 <li>类加载时，类的字符串常量池中的字符串会被加载到全局字符串池中。</li>
 <li>String.intern() 方法可以将一个字符串手动添加到全局字符串池中。</li>
 </ul>
+<p><strong>classLoader</strong>: 类加载器是 Java 对象，存储在堆上。</p>
+<p><strong>protectionDomain</strong>: 保护域对象也是 Java 对象，存储在堆上。</p>
+<p><strong>runtimeAnnotations</strong>: 运行时注解是 Java 对象，存储在堆上。</p>
 <h4 id="Thread-线程"><a href="#Thread-线程" class="headerlink" title="Thread (线程)"></a><strong>Thread (线程)</strong></h4><p><strong>虚拟机栈 (JVM Stack)</strong></p>
 <ul>
 <li><strong>每个线程私有</strong>，随着线程的创建而创建，销毁而销毁。</li>
@@ -764,6 +767,48 @@
 <p><strong>循环引用问题</strong>： 对象A中存在智能指针指向对象B，对象B中存在智能指针指向对象A；</p>
 <p>由于智能指针的引用计数始终不为0，对象A和对象B将始终不能被释放。</p>
 <p><strong>解决方案</strong>：使用弱引用；对某对象使用弱引用将不增加引用计数。</p>
+<h3 id="Java层与Native层交互"><a href="#Java层与Native层交互" class="headerlink" title="Java层与Native层交互"></a>Java层与Native层交互</h3><p><strong>1. Java 层调用 native 方法：</strong></p>
+<ul>
+<li>当 Java 代码执行到 native 方法调用时，例如 System.loadLibrary(“mylib”); 或调用某个 native 方法，JVM 会暂停当前 Java 方法的执行。</li>
+</ul>
+<p><strong>2. 检查方法表：</strong></p>
+<ul>
+<li>JVM 会先检查该 native 方法是否已经链接到对应的 native 函数。</li>
+<li>每个类都有一个方法表，存储了该类的所有方法信息，包括 native 方法。</li>
+<li>如果方法表中已经有该 native 方法的入口地址，说明已经完成链接，可以直接跳转到步骤 6 执行 native 代码。</li>
+</ul>
+<p><strong>3. 加载动态链接库：</strong></p>
+<ul>
+<li>如果方法表中没有找到 native 方法的入口地址，说明该 native 方法还没有链接。</li>
+<li>JVM 会调用 System.loadLibrary() 方法加载指定的动态链接库 (例如 libmylib.so)。</li>
+<li>动态链接库加载后，会被映射到进程的地址空间。</li>
+</ul>
+<p><strong>4. 查找 JNI_OnLoad 函数：</strong></p>
+<ul>
+<li>JVM 会在加载的动态链接库中查找名为 JNI_OnLoad 的函数。</li>
+<li>这个函数是可选的，如果存在，JVM 会调用它。</li>
+<li>JNI_OnLoad 函数可以进行一些初始化工作，例如注册 native 方法。</li>
+</ul>
+<p><strong>5. 注册 native 方法：</strong></p>
+<ul>
+<li>如果动态链接库中存在 JNI_OnLoad 函数，并且该函数调用了 RegisterNatives 方法，那么 JVM 会根据 RegisterNatives 提供的参数，将 Java native 方法与动态链接库中的 native 函数进行关联。</li>
+<li>JVM 会更新方法表，将 native 方法的入口地址设置为对应的 native 函数地址。</li>
+</ul>
+<p><strong>6. 执行 native 代码：</strong></p>
+<ul>
+<li>现在，JVM 已经找到了 native 方法对应的 native 函数地址。</li>
+<li>JVM 将控制权转移到 native 函数，并将必要的参数传递给 native 函数。<ul>
+<li><strong>参数转换：</strong> Java 和 native 代码使用不同的数据类型，因此 JVM 需要将 Java 参数转换为 native 函数能够理解的数据类型。 例如，将 Java 的 String 类型转换为 C 的 char* 类型。</li>
+<li><strong>压入 JNIEnv 指针：</strong> JVM 会将 JNIEnv 指针作为第一个参数压入 native 方法栈。 JNIEnv 指针指向一个线程局部变量，包含了大量的 JNI 函数指针，native 函数可以通过这些函数与 JVM 进行交互。</li>
+<li><strong>压入 jclass 或 jobject 引用：</strong> 对于非静态 native 方法，JVM 还会将调用该方法的 Java 对象的引用 (jobject) 压入 native 方法栈。 对于静态 native 方法，则会将该方法所属类的引用 (jclass) 压入 native 方法栈。</li>
+</ul>
+</li>
+<li>native 函数执行完毕后，将结果返回给 JVM。</li>
+</ul>
+<p><strong>7. 返回 Java 层：</strong></p>
+<ul>
+<li>JVM 恢复 Java 方法的执行，并使用 native 函数返回的结果继续执行后续的指令。</li>
+</ul>
 <h3 id="常见内存泄露情况"><a href="#常见内存泄露情况" class="headerlink" title="常见内存泄露情况"></a>常见内存泄露情况</h3><p><strong>非静态的内部类默认持有外部类的引用</strong></p>
 <p>将一个长时间运行的（匿名）内部类对象传递给其他对象，而这些对象的生命周期比外部类更长，就会导致外部类无法被垃圾回收，从而造成内存泄漏。</p>
 <p><strong>静态内部类不持有外部类引用！！！</strong></p>
@@ -865,18 +910,20 @@
 
 
 <h4 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h4><p>进程使用Binder与System_Server通信，例如：AlarmManagerService、BluetoothService 和 BatteryService，</p>
-<p><img src="/./Android-learning-record/image-20240721154206067.png" alt="image-20240721154206067"></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binder_proc</span> &#123;</span></span><br><span class="line">	<span class="comment">// 存储所有binder_proc的链表</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_node</span> <span class="title">proc_node</span>;</span></span><br><span class="line">	<span class="comment">// binder_thread红黑树</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">threads</span>;</span></span><br><span class="line">	<span class="comment">// binder_proc进程内的binder实体组成的红黑树</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">nodes</span>;</span></span><br><span class="line">	......</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 驱动函数映射</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">binder_fops</span> =</span> &#123;</span><br><span class="line">	.owner = THIS_MODULE,</span><br><span class="line">	.poll = binder_poll,</span><br><span class="line">	.unlocked_ioctl = binder_ioctl,</span><br><span class="line">	.compat_ioctl = binder_ioctl,</span><br><span class="line">	.mmap = binder_mmap,</span><br><span class="line">	.open = binder_open,</span><br><span class="line">	.flush = binder_flush,</span><br><span class="line">	.release = binder_release,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册驱动参数结构体</span></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">miscdevice</span> <span class="title">binder_miscdev</span> =</span> &#123;</span><br><span class="line">	.minor = MISC_DYNAMIC_MINOR,</span><br><span class="line">    <span class="comment">// 驱动名称</span></span><br><span class="line">	.name = <span class="string">&quot;binder&quot;</span>,</span><br><span class="line">	.fops = &amp;binder_fops</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_open</span><span class="params">(<span class="keyword">struct</span> inode *nodp, <span class="keyword">struct</span> file *filp)</span>&#123;......&#125;</span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_mmap</span><span class="params">(<span class="keyword">struct</span> file *filp, <span class="keyword">struct</span> vm_area_struct *vma)</span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> __init <span class="title function_">binder_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="comment">// 创建名为binder的单线程的工作队列</span></span><br><span class="line">    binder_deferred_workqueue = create_singlethread_workqueue(<span class="string">&quot;binder&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!binder_deferred_workqueue)</span><br><span class="line">            <span class="keyword">return</span> -ENOMEM;</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">// 注册驱动，misc设备其实也就是特殊的字符设备</span></span><br><span class="line">    ret = misc_register(&amp;binder_miscdev);</span><br><span class="line">    ......</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 驱动注册函数</span></span><br><span class="line">device_initcall(binder_init);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>Binder源码</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binder_proc</span> &#123;</span></span><br><span class="line">	<span class="comment">// 用于将该 binder_proc 结构体插入到一个哈希链表中。该哈希链表存储了系统中所有的 binder_proc 结构体，方便查找。</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_node</span> <span class="title">proc_node</span>;</span></span><br><span class="line">	<span class="comment">// 红黑树的根节点。该红黑树存储了该进程中所有的 binder_thread 结构体</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">threads</span>;</span></span><br><span class="line">	<span class="comment">// 红黑树的根节点。该红黑树存储了该进程中所有的 binder_node 结构体，用于管理 Binder 实体</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">nodes</span>;</span></span><br><span class="line">	......</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 驱动函数映射。定义了 Binder 驱动的文件操作函数集。每个成员都是一个函数指针，指向处理特定文件操作的函数。</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">binder_fops</span> =</span> &#123;</span><br><span class="line">	.owner = THIS_MODULE,</span><br><span class="line">	.poll = binder_poll,</span><br><span class="line">	.unlocked_ioctl = binder_ioctl,</span><br><span class="line">	.compat_ioctl = binder_ioctl,</span><br><span class="line">	.mmap = binder_mmap,</span><br><span class="line">	.open = binder_open,</span><br><span class="line">	.flush = binder_flush,</span><br><span class="line">	.release = binder_release,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册驱动参数结构体</span></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">miscdevice</span> <span class="title">binder_miscdev</span> =</span> &#123;</span><br><span class="line">	.minor = MISC_DYNAMIC_MINOR,</span><br><span class="line">    <span class="comment">// 驱动名称</span></span><br><span class="line">	.name = <span class="string">&quot;binder&quot;</span>,</span><br><span class="line">	.fops = &amp;binder_fops</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// binder_open : 处理 open 系统调用的函数，用于打开 Binder 设备文件。</span></span><br><span class="line"><span class="comment">// binder_mmap: 处理 mmap 系统调用的函数，用于将 Binder 驱动的内存映射到用户空间。</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_open</span><span class="params">(<span class="keyword">struct</span> inode *nodp, <span class="keyword">struct</span> file *filp)</span>&#123;......&#125;</span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">binder_mmap</span><span class="params">(<span class="keyword">struct</span> file *filp, <span class="keyword">struct</span> vm_area_struct *vma)</span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> __init <span class="title function_">binder_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="comment">// 创建名为binder的单线程的工作队列</span></span><br><span class="line">    binder_deferred_workqueue = create_singlethread_workqueue(<span class="string">&quot;binder&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!binder_deferred_workqueue)</span><br><span class="line">            <span class="keyword">return</span> -ENOMEM;</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">// 注册驱动，misc设备其实也就是特殊的字符设备</span></span><br><span class="line">    ret = misc_register(&amp;binder_miscdev);</span><br><span class="line">    ......</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 驱动注册函数</span></span><br><span class="line">device_initcall(binder_init);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<ul>
-<li><p>接收端进程开启一个专门的线程，通过系统调用在binder驱动（内核）中先注册此进程（创建保存一个bidner_proc），驱动为接收端进程创建一个任务队列（biner_proc.todo）</p>
-</li>
-<li><p>接收端线程开始无限循环，通过系统调用不停访问binder驱动，如果该进程对应的任务队列有任务则返回处理，否则阻塞该线程直到有新任务入队</p>
-</li>
-<li><p>发送端也通过系统调用访问，找到目标进程，将任务丢到目标进程的队列中，然后唤醒目标进程中休眠的线程处理该任务，即完成通讯</p>
-</li>
-</ul>
-<p>作者：北野青阳<br>链接：<a href="https://juejin.cn/post/6987595923543031821">https://juejin.cn/post/6987595923543031821</a></p>
+
+
+<p><strong>Binder 通信流程:</strong></p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240805194744173.png" class="" title="image-20240805194744173">
+
+<ol>
+<li>Server在启动之后，调用对&#x2F;dev&#x2F;binder设备调用mmap</li>
+<li>内核中的binder_mmap函数进行对应的处理：申请一块物理内存，然后在Server进程的用户空间和内核空间同时进行映射</li>
+<li>Client通过BINDER_WRITE_READ命令发送请求，这个请求将先到驱动中，同时需要将数据从Client进程的用户空间拷贝到内核空间</li>
+<li>驱动通过BR_TRANSACTION通知Server有人发出请求，Server进行处理。由于这块内存也在用户空间进行了映射，因此Server进程的代码可以直接访问</li>
+</ol>
 <h4 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h4><img src="/2024/07/28/Android-Learning-Record/image-20240721155920403-1722133033018.png" class="" title="image-20240721155920403">
 
 
@@ -931,15 +978,101 @@
 <blockquote>
 <p>poll() 函数监视多个文件描述符(实际上监视的是文件描述符对应的文件表项的<code>f_flags</code>属性)，等待它们中的任何一个变为可读、可写或发生错误。在其变化时，revent将记录该变化。</p>
 </blockquote>
-<h4 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h4><h4 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h4><ul>
+<h4 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h4><p><strong>App_main.cpp</strong></p>
+<p>对传入参数进行统计与设置</p>
+<p>创建<code>AppRuntime</code>，并设置成员值</p>
+<p>判断条件，修改进程名与执行<code>runtime.start(...)</code></p>
+<p><strong>AndroidRuntime.cpp</strong></p>
+<p><code>runtime.start(...)</code></p>
+<ul>
+<li>创建虚拟机<code>AndroidRuntime:startVm(...)</code></li>
+<li>注册JNI函数<code>AndroidRuntime:startReg(...)</code></li>
+<li>使用注册JNI函数的<code>JNIEnv</code>调用Java函数，进入Java</li>
+</ul>
+<p><code>AndroidRuntime:startVm(...)</code></p>
+<ul>
+<li>设置虚拟机参数</li>
+<li>调用<code>JNI_CreateJavaVM(...)</code>创建虚拟机并得到当前线程的<code>JNIEnv</code></li>
+</ul>
+<p><code>AndroidRuntime:startReg(...)</code></p>
+<ul>
+<li>调用<code>register_jni_procs(...)</code>注册JNI函数</li>
+</ul>
+<img src="/2024/07/28/Android-Learning-Record/image-20240805152408375.png" class="" title="image-20240805152408375">
+
+<img src="/2024/07/28/Android-Learning-Record/image-20240805152418585.png" class="" title="image-20240805152418585">
+
+<blockquote>
+<p>注册JNI函数即将该函数指针写入指定java类的方法表(Method Table)中，在java类使用该方法时，可以直接查方法表得到该函数的地址并访问&#x2F;使用</p>
+</blockquote>
+<p><strong>ZygoteInit.java</strong></p>
+<p>调用<code>registerZygoteSocket()</code>注册zygote的socket</p>
+<p>调用<code>preloadClasses()</code>&amp;<code>preloadResource()</code>预加载类和资源</p>
+<p>调用<code>startSystemServer()</code>启动system_server进程</p>
+<p>调用<code>runSelectLoopMode()</code>函数</p>
+<p>调用<code>caller.run()</code>函数</p>
+<p><code>registerZygoteSocket()</code></p>
+<ul>
+<li>创建服务端Socket</li>
+</ul>
+<p><code>preloadClasses()</code>&amp;<code>preloadResource()</code></p>
+<ul>
+<li>加载资源</li>
+</ul>
+<p><code>startSystemServer()</code></p>
+<ul>
+<li>fork子进程，创建system_server进程</li>
+</ul>
+<p><code>runSelectLoopMode()</code></p>
+<ul>
+<li>处理客户连接和客户请求</li>
+</ul>
+<img src="/2024/07/28/Android-Learning-Record/image-20240805193239427.png" class="" title="image-20240805193239427">
+
+<p>-&gt; <code>runOnce()</code></p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240805193517661.png" class="" title="image-20240805193517661">
+
+<img src="/2024/07/28/Android-Learning-Record/image-20240805193529451.png" class="" title="image-20240805193529451">
+
+
+
+
+
+
+
+<h4 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h4><ul>
 <li>由Zygote进程fork生成，SystemServer是Zygote孵化的第一个进程。</li>
 <li>负责启动、管理整个Java Framework，系统里面重要的服务都是在这个进程里面开启的，比如ActivityManagerService、PackageManagerService、WindowManagerService。</li>
+</ul>
+<p><strong>ActivityManagerService.java</strong></p>
+<p>函数<code>startProcessLocked(...)</code>中调用<code>Process.start()</code>启动Process</p>
+<p><strong>Process.java</strong></p>
+<p><code>Process.start()</code></p>
+<ul>
+<li>调用<code>startViaZygote(...)</code></li>
+</ul>
+<p><code>startViaZygote(...)</code></p>
+<ul>
+<li>参数处理</li>
+<li>调用<code>zygoteSendArgsAndGetPid(参数)</code></li>
+</ul>
+<p><code>zygoteSendArgsAndGetPid(...)</code></p>
+<ul>
+<li>判断是否存在与zygote通信的Socket，并创建连接</li>
+<li>发送请求参数到Zygote并获取返回结果pid</li>
 </ul>
 <h4 id="APP进程"><a href="#APP进程" class="headerlink" title="APP进程"></a>APP进程</h4><ul>
 <li>Zygote进程在App层中孵化出的第一个进程是Launcher进程，即手机的桌面APP。</li>
 <li>Zygote还会孵化出Browser、Email、Phone等APP进程，每个APP至少运行在一个进程上。</li>
 <li>所有APP进程都由Zygote进程fork生成。</li>
 </ul>
+<img src="/2024/07/28/Android-Learning-Record/image-20240805193338222.png" class="" title="image-20240805193338222">
+
+
+
+<p>上接<code>runOnce()</code></p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240805193638556.png" class="" title="image-20240805193638556">
+
 ]]></content>
       <categories>
         <category>Android</category>
@@ -947,12 +1080,6 @@
       <tags>
         <tag>Android, Java</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
   </entry>
   <entry>
     <title>common-commands</title>
@@ -1139,6 +1266,12 @@
       </tags>
   </entry>
   <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
     <title>第一篇博客</title>
     <url>/2024/04/11/first_post/</url>
     <content><![CDATA[<p>写一个测试试一下</p>
@@ -1251,8 +1384,44 @@
 <p><strong>const与const_cast&lt;&gt;()</strong></p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">()</span> <span class="type">const</span></span>;	<span class="comment">//该const声明此函数不会修改调用该函数的对象</span></span><br><span class="line"><span class="comment">//例如</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Complex</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  	<span class="built_in">Complex</span>(<span class="type">double</span> real, <span class="type">double</span> imag) : <span class="built_in">real_</span>(real), <span class="built_in">imag_</span>(imag) &#123;&#125; <span class="comment">// 构造函数初始化列表，冒号标志着初始化列表的开始，将构造函数参数 real 的值赋给成员变量 real_</span></span><br><span class="line">    </span><br><span class="line">    Complex <span class="keyword">operator</span>+(<span class="type">const</span> Complex&amp; other) <span class="type">const</span> &#123;  <span class="comment">// 版本1: const 成员函数</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Complex</span>(real_ + other.real_, imag_ + other.imag_);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Complex <span class="keyword">operator</span>+(<span class="type">const</span> Complex&amp; other) &#123;       <span class="comment">// 版本2: 非 const 成员函数</span></span><br><span class="line">        real_ += other.real_; <span class="comment">// 修改了调用该函数的对象</span></span><br><span class="line">        imag_ += other.imag_;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">  		<span class="type">double</span> real_;</span><br><span class="line">  		<span class="type">double</span> imag_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">Complex <span class="title">c1</span><span class="params">(<span class="number">1.0</span>, <span class="number">2.0</span>)</span></span>;</span><br><span class="line">    <span class="function">Complex <span class="title">c2</span><span class="params">(<span class="number">3.0</span>, <span class="number">4.0</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    c1 = c1 + c2;  <span class="comment">// 调用版本1或版本2都可以</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">const</span> Complex <span class="title">c3</span><span class="params">(<span class="number">5.0</span>, <span class="number">6.0</span>)</span></span>;</span><br><span class="line">    c3 = c3 + c2;  <span class="comment">// 只能调用版本1 (const 成员函数)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">const</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span></span>;	<span class="comment">//该函数返回值为const</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>  </span><br><span class="line">&#123;  </span><br><span class="line"><span class="keyword">public</span>:  </span><br><span class="line">   <span class="built_in">A</span>()  </span><br><span class="line">   &#123;  </span><br><span class="line">      m_iNum = <span class="number">1</span>;  </span><br><span class="line">   &#125;  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">public</span>:  </span><br><span class="line">   <span class="type">int</span> m_iNum;  </span><br><span class="line">&#125;; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">()</span>    </span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line">   <span class="comment">//1. 指针指向类    </span></span><br><span class="line">   <span class="type">const</span> A *pca1 = <span class="keyword">new</span> A;    </span><br><span class="line">   A *pa2 = <span class="built_in">const_cast</span>&lt;A*&gt;(pca1);  <span class="comment">//常量指针转换为非常量指针    </span></span><br><span class="line">   pa2-&gt;m_iNum = <span class="number">200</span>;    <span class="comment">//fine    </span></span><br><span class="line">       </span><br><span class="line">   <span class="comment">//转换后指针指向原来的对象    </span></span><br><span class="line">   cout&lt;&lt; pca1-&gt;m_iNum &lt;&lt;pa2-&gt;m_iNum&lt;&lt;endl; <span class="comment">//200 200    </span></span><br><span class="line">        </span><br><span class="line">   <span class="comment">//2. 指针指向基本类型    </span></span><br><span class="line">   <span class="type">const</span> <span class="type">int</span> ica = <span class="number">100</span>;    </span><br><span class="line">   <span class="type">int</span> * ia = <span class="built_in">const_cast</span>&lt;<span class="type">int</span> *&gt;(&amp;ica);    </span><br><span class="line">   *ia = <span class="number">200</span>;    </span><br><span class="line">   cout&lt;&lt; *ia &lt;&lt;ica&lt;&lt;endl;   <span class="comment">//200 100  </span></span><br><span class="line">    </span><br><span class="line">   A a0;  </span><br><span class="line">   <span class="type">const</span> A &amp;a1 = a0;  </span><br><span class="line">   A a2 = <span class="built_in">const_cast</span>&lt;A&amp;&gt;(a1);　<span class="comment">//常量引用转为非常量引用</span></span><br><span class="line">  </span><br><span class="line">   a2.m_iNum = <span class="number">200</span>;    <span class="comment">//fine    </span></span><br><span class="line">  </span><br><span class="line">   cout&lt;&lt; a0.m_iNum &lt;&lt; a1.m_iNum &lt;&lt; a2.m_iNum &lt;&lt; endl; <span class="comment">//1 1 200    </span></span><br><span class="line">    </span><br><span class="line">   <span class="comment">//常量对象被转换成非常量对象时出错  </span></span><br><span class="line">   <span class="type">const</span> A ca;  </span><br><span class="line">   A a = <span class="built_in">const_cast</span>&lt;A&gt;(ca);  <span class="comment">//不允许</span></span><br><span class="line">   </span><br><span class="line">   <span class="type">const</span> <span class="type">int</span> i = <span class="number">100</span>;  </span><br><span class="line">   <span class="type">int</span> j = <span class="built_in">const_cast</span>&lt;<span class="type">int</span>&gt;(i);  <span class="comment">//不允许 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
+<blockquote>
+<ul>
+<li><strong>static_cast&lt;??&gt;(obj)</strong>:<ul>
+<li>用于<strong>相关类型</strong>之间的转换，例如：<ul>
+<li>基本类型转换 (int 到 float，double 到 int 等)</li>
+<li>void 指针和其他指针类型之间的转换</li>
+<li>向上转型 (派生类指针&#x2F;引用到基类指针&#x2F;引用)</li>
+<li>向下转型 (基类指针&#x2F;引用到派生类指针&#x2F;引用，<strong>需要程序员保证安全性</strong>)</li>
+</ul>
+</li>
+<li>编译时检查类型，不安全的操作可能导致未定义行为。</li>
+<li>将obj转换为<code>&lt;??&gt;</code>类型</li>
+</ul>
+</li>
+<li><strong>dynamic_cast</strong>:<ul>
+<li>用于<strong>多态类型</strong>之间的<strong>安全向下转型</strong> (基类指针&#x2F;引用到派生类指针&#x2F;引用)。</li>
+<li>运行时检查类型，失败时返回 nullptr (指针) 或抛出 std::bad_cast 异常 (引用)。</li>
+<li>要求基类至少有一个虚函数。</li>
+</ul>
+</li>
+<li><strong>const_cast</strong>:<ul>
+<li>用于<strong>移除或添加 const 和 volatile 限定符</strong>。</li>
+<li>不会改变对象本身的常量性，只是告诉编译器不要进行常量性检查。</li>
+<li>如果修改了实际为常量的对象，会导致未定义行为。</li>
+</ul>
+</li>
+<li><strong>reinterpret_cast</strong>:<ul>
+<li>用于<strong>底层类型转换</strong>，例如：<ul>
+<li>将指针转换为整数</li>
+<li>将整数转换为指针</li>
+<li>将一个指针转换为另一个不相关的指针类型</li>
+</ul>
+</li>
+<li>非常危险，应该尽量避免使用。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
 <p><strong>函数指针</strong></p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">greet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Hello from greet function!\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// returnType (*pointerName)(parameter1Type, parameter2Type, ...);</span></span><br><span class="line"><span class="built_in">void</span> (*ptr)() = greet; <span class="comment">// 定义函数指针并初始化</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 两种调用方式是等效的</span></span><br><span class="line"><span class="built_in">ptr</span>();         <span class="comment">// 简洁写法，ptr实际为地址</span></span><br><span class="line">(*ptr)();     <span class="comment">// 更明确的写法，强调解引用</span></span><br><span class="line">(<span class="type">void</span> *)<span class="number">1234</span>	<span class="comment">//表示一个未知类型的地址</span></span><br><span class="line">(<span class="built_in">void</span> (*)())<span class="number">1234</span>  <span class="comment">//将1234强制类型转换为函数指针（函数的地址</span></span><br><span class="line">(*((<span class="built_in">void</span> (*)())<span class="number">1234</span>))()  <span class="comment">//调用位于地址1234处的函数</span></span><br></pre></td></tr></table></figure>
 
