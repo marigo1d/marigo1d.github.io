@@ -31,6 +31,8 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240728103642872.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240723153011448-1722133358773.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240806112818621.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240806155020313.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240806155033149.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805194744173.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240721155920403-1722133033018.png">
 <meta property="og:image" content="https://marigo1d.github.io/Android-learning-record/image-20240714103234291.png">
@@ -50,7 +52,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193338222.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193638556.png">
 <meta property="article:published_time" content="2024-07-28T02:16:25.000Z">
-<meta property="article:modified_time" content="2024-08-06T03:36:47.638Z">
+<meta property="article:modified_time" content="2024-08-06T08:36:53.670Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Android, Java">
 <meta name="twitter:card" content="summary">
@@ -243,7 +245,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-08-06 11:36:47" itemprop="dateModified" datetime="2024-08-06T11:36:47+08:00">2024-08-06</time>
+                <time title="Modified: 2024-08-06 16:36:53" itemprop="dateModified" datetime="2024-08-06T16:36:53+08:00">2024-08-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1159,20 +1161,20 @@
 <p><strong>Binder结构</strong></p>
 <p><strong>device_node</strong>: Binder设备节点。</p>
 <p><strong>global_state</strong>: 全局状态信息，包括上下文管理器、进程计数、线程计数等。</p>
-<p><strong>binder_procs</strong>: 使用Binder的进程列表，每个进程包含：</p>
+<p><strong>binder_procs</strong>: 使用Binder的进程列表，每个<strong>binder_proc</strong>包含：</p>
 <ul>
-<li><strong>proc_node</strong>: 进程节点，包含该进程的Binder相关信息</li>
-<li><strong>threads</strong>: 进程中的线程列表</li>
-<li><strong>nodes</strong>: Binder对象节点列表</li>
-<li><strong>transactions</strong>: 当前进行中的事务</li>
-<li>其他进程相关的计数器和标志</li>
+<li>nodes: 红黑树，用于存储该进程创建的所有 Binder 对象。<ul>
+<li><strong>Binder 对象:</strong> 提供特定功能的接口，例如 MediaPlayerService、ActivityManagerService 等系统服务。进程每提供一种服务就有一个binder对象。</li>
 </ul>
-<p><strong>memory_management</strong>: 内存管理相关信息，包括缓冲区大小和可用异步空间。</p>
-<p><strong>work_queue</strong>: 工作队列，包括待处理的事务队列和返回队列。</p>
-<p><strong>debug_info</strong>: 调试信息，如失败的事务日志。</p>
+</li>
+<li>refs: 记录其他进程对该进程中 Binder 对象的引用。<ul>
+<li><strong>Binder 引用对象:</strong> 代表对一个 Binder 对象的引用，可以在进程间传递，例如客户端进程持有的服务端 Binder 对象的引用。</li>
+</ul>
+</li>
+<li>buffers: 管理 Binder 通信过程中使用到的内存缓冲区。</li>
+<li>binder_thread: binder_thread 结构体指针数组，存储了该进程所有 Binder 线程的信息。</li>
+</ul>
 <img src="/2024/07/28/Android-Learning-Record/image-20240806112818621.png" class="" title="image-20240806112818621">
-
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;binder_driver&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;device_node&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/dev/binder&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;global_state&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;binder_context_mgr_node&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;binder_context_mgr_uid&quot;</span><span class="punctuation">:</span> <span class="number">-1</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;proc_count&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;thread_count&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;in_flight_transactions&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;binder_procs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span>  <span class="comment">// 每一个使用binder的binder_proc</span></span><br><span class="line">        <span class="attr">&quot;pid&quot;</span><span class="punctuation">:</span> <span class="number">1234</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;proc_node&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;threads&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;pid&quot;</span><span class="punctuation">:</span> <span class="number">1234</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;task&quot;</span><span class="punctuation">:</span> <span class="string">&quot;struct task_struct *&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;transaction_stack&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;todo&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;nodes&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;ptr&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0x1000&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;cookie&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0x2000&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;has_async_transaction&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;pending_async_transaction&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;transactions&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;todo&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;delivered_death&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;max_threads&quot;</span><span class="punctuation">:</span> <span class="number">15</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;requested_threads&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;requested_threads_started&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;tmp_ref&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;memory_management&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;vm_area&quot;</span><span class="punctuation">:</span> <span class="string">&quot;struct vm_area_struct *&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;buffer_size&quot;</span><span class="punctuation">:</span> <span class="number">1048576</span><span class="punctuation">,</span>  <span class="comment">// 1MB</span></span><br><span class="line">      <span class="attr">&quot;free_async_space&quot;</span><span class="punctuation">:</span> <span class="number">1048576</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;work_queue&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;transaction_queue&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;return_queue&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;debug_info&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;failed_transaction_log&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 
 
@@ -1181,80 +1183,26 @@
 
 
 
-
-
+<p><a target="_blank" rel="noopener" href="https://sharrychoo.github.io/blog/android-source/dc-binder1">https://sharrychoo.github.io/blog/android-source/dc-binder1</a></p>
 <p><strong>Binder 通信流程:</strong></p>
+<p><strong>Main_MediaServer.cpp</strong></p>
+<p>Server获得ProcessState实例，使用该实例创建线程池 </p>
+<p>Server调用<code>defaultServiceManager()</code>获得 IServiceManager，即BpBinder，对应ServiceManager的客户端Binder</p>
+<p><strong>ProcessState.cpp</strong></p>
+<p>ProcessState的构造函数初始化</p>
+<img src="/2024/07/28/Android-Learning-Record/image-20240806155020313.png" class="" title="image-20240806155020313">
+
+<img src="/2024/07/28/Android-Learning-Record/image-20240806155033149.png" class="" title="image-20240806155033149">
+
+<p><code>open_driver()</code>函数打开了设备 <code>/dev/binder</code> ，并设置该进程在Binder中的线程池</p>
+<blockquote>
+<p>每个使用Binder的进程都在Binder驱动中有自己的线程池，该线程用于信息的处理</p>
+</blockquote>
+<p>然后，调用<code>mmap(...)</code>创建内存映射，即为下图中的Server进程中操作</p>
 <img src="/2024/07/28/Android-Learning-Record/image-20240805194744173.png" class="" title="image-20240805194744173">
 
-<p>1.初始状态</p>
-<p>Binder驱动的初始状态:</p>
-<ul>
-<li>设备节点为 <code>/dev/binder</code></li>
-<li>全局状态显示没有进程和线程</li>
-<li>只有一个进程(PID 1234)注册在驱动中</li>
-<li>内存管理区域有1MB的缓冲区</li>
-</ul>
-<p>2.进程A初始化Binder通信</p>
-<p>当进程A想要使用Binder通信时,它会执行以下步骤:</p>
-<p>a) 打开Binder设备:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fd = open(<span class="string">&quot;/dev/binder&quot;</span>, O_RDWR);</span><br></pre></td></tr></table></figure>
-
-<p>这会导致Binder驱动创建一个新的<code>proc_node</code>结构体,并增加<code>global_state.proc_count</code>。</p>
-<p>b) 映射Binder内存:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmap(<span class="literal">NULL</span>, <span class="number">1048576</span>, PROT_READ, MAP_PRIVATE, fd, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
-<p>这会使Binder驱动设置<code>memory_management.vm_area</code>以管理共享内存。</p>
-<p>c) 成为Binder线程:<br>进程A的主线程通过<code>ioctl(fd, BINDER_SET_CONTEXT_MGR, 0)</code>成为Binder线程。<br>这会导致:</p>
-<ul>
-<li><code>global_state.thread_count</code> 增加</li>
-<li>在<code>processes[0].proc_node.threads</code>中添加一个新的线程结构</li>
-</ul>
-<p>3.进程B初始化Binder通信</p>
-<p>进程B会执行类似的步骤,再次增加<code>proc_count</code>和<code>thread_count</code>。</p>
-<p>4.进程A向进程B发送事务</p>
-<p>当进程A向进程B发送一个Binder事务时:</p>
-<p>a) 进程A准备事务数据并调用<code>ioctl(fd, BINDER_WRITE_READ, &amp;bwr)</code>。</p>
-<p>b) Binder驱动执行以下操作:</p>
-<ul>
-<li>创建一个新的事务结构并加入到<code>work_queue.transaction_queue</code></li>
-<li>增加<code>global_state.in_flight_transactions</code></li>
-<li>在进程A的<code>proc_node.transactions</code>中添加事务</li>
-<li>如果是异步事务,设置相关节点的<code>has_async_transaction</code>为true</li>
-</ul>
-<p>c) 如果进程B没有足够的线程处理请求,Binder驱动可能会:</p>
-<ul>
-<li>增加<code>processes[1].proc_node.requested_threads</code></li>
-<li>当新线程启动时,增加<code>requested_threads_started</code></li>
-</ul>
-<p>5.进程B接收并处理事务</p>
-<p>a) 进程B的Binder线程通过<code>ioctl(fd, BINDER_WRITE_READ, &amp;bwr)</code>接收事务。</p>
-<p>b) Binder驱动执行以下操作:</p>
-<ul>
-<li>从<code>work_queue.transaction_queue</code>移除事务</li>
-<li>减少<code>global_state.in_flight_transactions</code></li>
-<li>将事务数据复制到进程B的用户空间</li>
-<li>更新<code>memory_management.free_async_space</code></li>
-</ul>
-<p>c) 进程B处理完事务后,准备回复并再次调用<code>ioctl</code>。</p>
-<p>d) Binder驱动then:</p>
-<ul>
-<li>创建一个新的回复事务并加入到<code>work_queue.return_queue</code></li>
-<li>在进程B的<code>proc_node.transactions</code>中移除原始事务</li>
-</ul>
-<p>6.进程A接收回复</p>
-<p>a) 进程A的Binder线程被唤醒以接收回复。</p>
-<p>b) Binder驱动:</p>
-<ul>
-<li>从<code>work_queue.return_queue</code>移除回复事务</li>
-<li>将回复数据复制到进程A的用户空间</li>
-<li>在进程A的<code>proc_node.transactions</code>中移除相关事务</li>
-</ul>
-<p>7.清理</p>
-<p>如果在通信过程中出现任何错误,Binder驱动会:</p>
-<ul>
-<li>记录失败的事务到<code>debug_info.failed_transaction_log</code></li>
-<li>适当地清理相关数据结构</li>
-</ul>
+<p><strong>IServiceManager.cpp</strong></p>
+<p>返回BpBinder(handler)，即 IServiceManager</p>
 <h4 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h4><img src="/2024/07/28/Android-Learning-Record/image-20240721155920403-1722133033018.png" class="" title="image-20240721155920403">
 
 
