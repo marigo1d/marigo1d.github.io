@@ -81,6 +81,14 @@
       </tags>
   </entry>
   <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
+  </entry>
+  <entry>
     <title>common-commands</title>
     <url>/2024/06/22/common-commands/</url>
     <content><![CDATA[<p>常用指令</p>
@@ -262,6 +270,433 @@
 ]]></content>
       <tags>
         <tag>command</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
+    <title>pytorch_learning_record</title>
+    <url>/2024/05/08/pytorch-learning-record/</url>
+    <content><![CDATA[<p>dqn与pytorch</p>
+<span id="more"></span>
+
+<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
+<p>主要属性</p>
+<ul>
+<li><p>T: dimensions reversed</p>
+</li>
+<li><p>H: 共轭转置</p>
+</li>
+<li><p>data: 值</p>
+</li>
+<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
+</li>
+<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
+</li>
+<li><p>is_leaf: 指示是否叶子节点</p>
+</li>
+<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
+</li>
+<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
+</li>
+<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
+</li>
+<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
+<p>Sub代表减法；</p>
+<p>Mul代表乘法；</p>
+<p>Mm代表矩阵乘法；</p>
+<p>Div代表除法；</p>
+<p>T代表矩阵转置；</p>
+<p>Pow代表乘方；</p>
+<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
+<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
+<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
+<p>y &#x3D; (x + w) * (w + 1)</p>
+<p>a &#x3D; x+w</p>
+<p>b &#x3D; w + 1</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
+
+
+
+<p>通常</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>自动梯度</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>torchviz</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
+
+<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
+<ul>
+<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
+<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
+<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
+<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
+<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
+<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
+<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
+</ul>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
+
+
+
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>optimizer.step()</p>
+<p>优化器执行一次梯度更新</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
+
+<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
+<p>optimizer.zero_grad()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
+
+<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
+
+
+
+<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
+<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
+<p> tensor的requires_grad的属性默认为False。</p>
+<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>.grad_fn 属性</p>
+<p>tensor在计算图中的父运算函数</p>
+<p>.detach()与.detach_()</p>
+<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
+<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
+<p>相同：</p>
+<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
+<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
+<p>不同：</p>
+<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
+<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
+<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p>torch.no_grad()</p>
+<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
+<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
+<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>.backward()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
+
+<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
+<p>.backward()方法仅适用于标量</p>
+<p>.register_hook()</p>
+<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
+<p>获取中间tensor的grad值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <tags>
+        <tag>python, pytorch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>reinforce-learning-record</title>
+    <url>/2024/06/10/reinforce-learning-record/</url>
+    <content><![CDATA[<p>reinforce learning</p>
+<span id="more"></span>
+
+<h1 id="reinforce-learning-record"><a href="#reinforce-learning-record" class="headerlink" title="reinforce learning record"></a>reinforce learning record</h1><h2 id="MRP"><a href="#MRP" class="headerlink" title="MRP"></a>MRP</h2><img src="/2024/06/10/reinforce-learning-record/image-20240610205131367.png" class="" title="image-20240610205131367">
+
+<h3 id="回报"><a href="#回报" class="headerlink" title="回报"></a>回报</h3><p>在一个马尔可夫奖励过程中，从第t时刻状态S_t开始，直到终止状态时，所有奖励的衰减之和称为<strong>回报</strong>（Return）</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203108806.png" class="" title="image-20240610203108806">
+
+<ul>
+<li>Rt表示在时刻t获得的奖励</li>
+<li><strong>到达状态Si</strong>，得到奖励r(s)；若在时刻t到达状态Si，则<strong>Rt&#x3D;r(Si)</strong></li>
+<li>对于某状态序列<img src="/2024/06/10/reinforce-learning-record/image-20240610203423677.png" class="" title="image-20240610203423677">我们有对应于该状态序列的奖励G<img src="/2024/06/10/reinforce-learning-record/image-20240610203434567.png" class="" title="image-20240610203434567"></li>
+</ul>
+<h3 id="价值函数"><a href="#价值函数" class="headerlink" title="价值函数"></a>价值函数</h3><p>在马尔可夫奖励过程中，一个状态的期望回报（即从这个状态出发的未来累积奖励的期望）被称为这个状态的<strong>价值</strong>（value）。所有状态的价值就组成了<strong>价值函数</strong>（value function），价值函数的输入为某个状态，输出为这个状态的价值。</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203509585.png" class="" title="image-20240610203509585">
+
+<ul>
+<li>对于某个状态s，从该状态出发可得到的状态序列有很多条</li>
+<li>对于某个状态s，价值函数为<strong>从该状态出发，可能存在的所有状态序列的奖励的均值</strong></li>
+</ul>
+<p>贝尔曼方程</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203841177.png" class="" title="image-20240610203841177">
+
+<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><p>与MRP相比，奖励与状态和动作相关</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610205112917.png" class="" title="image-20240610205112917">
+
+<h3 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h3><p>策略表示在状态s下采取动作a的<strong>概率</strong>，概率可能为1</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204522539.png" class="" title="image-20240610204522539">
+
+<h3 id="状态价值函数"><a href="#状态价值函数" class="headerlink" title="状态价值函数"></a>状态价值函数</h3><p>在 MDP 中基于策略Π的状态价值函数（state-value function），定义为从状态s出发遵循策略Π能获得的期望回报</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204014373.png" class="" title="image-20240610204014373">
+
+<h3 id="动作价值函数"><a href="#动作价值函数" class="headerlink" title="动作价值函数"></a>动作价值函数</h3><p>在 MDP 中，由于动作的存在，我们额外定义一个<strong>动作价值函数</strong>（action-value function）。表示在 MDP 遵循策略Π时，对当前状态s执行动作a得到的期望回报</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204152914.png" class="" title="image-20240610204152914">
+
+<ul>
+<li><strong>采取动作a到达状态s</strong>，得到奖励R</li>
+</ul>
+<h3 id="状态价值函数与动作价值函数关系"><a href="#状态价值函数与动作价值函数关系" class="headerlink" title="状态价值函数与动作价值函数关系"></a>状态价值函数与动作价值函数关系</h3><img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<ul>
+<li>从状态s出发，可能采取动作a1, a2, a3, …;对于每个可能采取的动作，均有动作价值Q，则状态s的状态价值为所有动作价值的期望</li>
+</ul>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<ul>
+<li>在状态s执行动作a后，得到奖励r(s,a)；由于可能到达多个不同的状态s’，动作价值为即时奖励r(s,a)+可能到达的所有状态的价值的期望</li>
+</ul>
+<h3 id="最优策略"><a href="#最优策略" class="headerlink" title="最优策略"></a>最优策略</h3><p>策略之间的偏序关系</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093758370.png" class="" title="image-20240612093758370">
+
+<p>最优策略为 对于任意的策略，均有最优策略优于或不差于其他策略</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093948192.png" class="" title="image-20240612093948192">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093958259.png" class="" title="image-20240612093958259">
+
+<p>最优状态价值与最优动作价值的关系</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612094048209.png" class="" title="image-20240612094048209">
+
+
+
+<h3 id="贝尔曼期望方程"><a href="#贝尔曼期望方程" class="headerlink" title="贝尔曼期望方程"></a>贝尔曼期望方程</h3><p>采取策略Π</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204627264.png" class="" title="image-20240610204627264">
+
+<ul>
+<li>对于状态s，s的状态价值为 ( 折损的 <strong>所有可达的下一状态的价值的期望</strong> + <strong>到达所有可达的下一状态的r(s’,a)的期望</strong> )</li>
+<li>对于状态s和动作a，在状态s进行动作a的价值为 ( <strong>在状态s执行动作a的r(s,a)的期望</strong>(实际上就是r(s,a)) + 折损的 <strong>在执行动作a后所有可达的下一状态的所有可执行动作的价值的期望</strong> )</li>
+</ul>
+<img src="/2024/06/10/reinforce-learning-record/shiow.PNG" class="" title="shiow">
+
+<p>图中情况为每个动作只会到达一个状态&amp;应该直接将动作视为一个节点，图为树</p>
+<h3 id="贝尔曼最优方程"><a href="#贝尔曼最优方程" class="headerlink" title="贝尔曼最优方程"></a>贝尔曼最优方程</h3><p>存在策略*，使对于任意的状态s，均有基于策略*状态价值函数大于基于策略Π的状态价值函数</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610205402396.png" class="" title="image-20240610205402396">
+
+<ul>
+<li>对于状态价值：非最优形式是求期望，最优形式是直接选取当前状态，所有动作中，未来状态序列中价值最大的</li>
+<li>对于动作价值：非最优形式是求期望，最优形式是直接选取下一状态，所有动作中，未来状态序列中动作价值最大的</li>
+</ul>
+<h2 id="策略迭代算法-基于策略函数的"><a href="#策略迭代算法-基于策略函数的" class="headerlink" title="策略迭代算法&#x2F;基于策略函数的"></a>策略迭代算法&#x2F;基于策略函数的</h2><p>策略评估：</p>
+<p>基于当前策略Π，在已知状态转移函数的情况下（即我们可以知道采取动作a后有多高的几率到达哪个状态），使用<strong>贝尔曼期望方程</strong>迭代更新状态价值函数</p>
+<p>ps: 原文中迭代更新状态价值函数是通过</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<p>以上两个公式实现的，也即</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">		qsa = <span class="number">0</span>  <span class="comment"># 当前动作的动作价值</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:  <span class="comment"># 有模型，即状态转移函数已知</span></span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))  <span class="comment"># 第一个公式，计算该动作的价值(开头的p为动作成功概率)</span></span><br><span class="line">         qsa_list.append(self.pi[s][a] * qsa)  <span class="comment"># 乘采取该动作的几率</span></span><br><span class="line">	new_v[s] = <span class="built_in">sum</span>(qsa_list)  <span class="comment"># 第二个公式，根据所有动作的价值计算状态价值</span></span><br></pre></td></tr></table></figure>
+
+<p>target: 更新<strong>状态价值函数</strong>，使之收敛</p>
+<p>策略提升：</p>
+<p>由于</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<p>故修改策略，使得动作价值最大的动作以更高的概率(若最大值唯一，该动作将成为唯一被选取动作；若不唯一，这些动作将均分概率1)被选取，可使新策略下的状态价值函数增大，也即<img src="/2024/06/10/reinforce-learning-record/image-20240611150030644.png" class="" title="image-20240611150030644"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">    	qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)</span><br><span class="line">     maxq = <span class="built_in">max</span>(qsa_list)</span><br><span class="line">     cntq = qsa_list.count(maxq)  <span class="comment"># 计算有几个动作得到了最大的Q值</span></span><br><span class="line">     <span class="comment"># 让这些动作均分概率</span></span><br><span class="line">     self.pi[s] = [<span class="number">1</span> / cntq <span class="keyword">if</span> q == maxq <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> q <span class="keyword">in</span> qsa_list]</span><br></pre></td></tr></table></figure>
+
+<p>target: 修改<strong>策略</strong>，使在新策略下，有基于新策略的状态价值函数大于原策略的状态价值函数</p>
+<h2 id="价值迭代算法-基于价值函数的"><a href="#价值迭代算法-基于价值函数的" class="headerlink" title="价值迭代算法&#x2F;基于价值函数的"></a>价值迭代算法&#x2F;基于价值函数的</h2><p>使用贝尔曼最优方程</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611191853492.png" class="" title="image-20240611191853492">
+
+<p>迭代形式</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611152610430.png" class="" title="image-20240611152610430">
+
+<p>进行价值迭代；</p>
+<p>使用</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611152643864.png" class="" title="image-20240611152643864">
+
+<p>从迭代完成的状态价值函数中获取策略，即 从当前状态出发，哪个动作的 (即时奖励+下一状态价值) 最大，策略就为哪个动作</p>
+<p>ps: 程序实际使用公式</p>
+<p>最优状态价值是选择此时使最优动作价值最大的那一个动作时的状态价值</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611153610316.png" class="" title="image-20240611153610316">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">max_diff = <span class="number">0</span></span><br><span class="line">new_v = [<span class="number">0</span>] * self.env.ncol * self.env.nrow  <span class="comment"># 迷宫环境，初始化状态价值</span></span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> <span class="built_in">range</span>(self.env.ncol * self.env.nrow):</span><br><span class="line">    qsa_list = []</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">            p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)  <span class="comment"># 记录状态s下的所有Q(s,a)价值</span></span><br><span class="line">     new_v[s] = <span class="built_in">max</span>(qsa_list)  <span class="comment"># 取最大作为新状态价值</span></span><br><span class="line">     max_diff = <span class="built_in">max</span>(max_diff, <span class="built_in">abs</span>(new_v[s] - self.v[s]))</span><br><span class="line">self.v = new_v</span><br><span class="line"><span class="keyword">if</span> max_diff &lt; self.theta: <span class="keyword">break</span>  <span class="comment"># 满足收敛条件,退出评估迭代</span></span><br><span class="line">cnt += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="有模型-无模型-在线策略-离线策略"><a href="#有模型-无模型-在线策略-离线策略" class="headerlink" title="有模型&amp;无模型+在线策略&amp;离线策略"></a>有模型&amp;无模型+在线策略&amp;离线策略</h2><p><strong>有模型强化学习：</strong></p>
+<p>智能体学习环境的状态转移函数</p>
+<p>环境的状态转移函数已知</p>
+<p>智能体可以直接根据状态转移函数得到在对环境进行动作a后环境的下一状态</p>
+<p># 状态转移函数P[state][action] &#x3D; [(p, next_state, reward, done)]包含转移成功概率，下一个状态，奖励和是否完成</p>
+<ul>
+<li>Dyna-Q</li>
+<li>Monte Carlo Tree Search (MCTS)</li>
+<li>PILCO (Probabilistic Inference for Learning Control)</li>
+</ul>
+<p><strong>无模型强化学习：</strong></p>
+<p>智能体通过与环境交互学习状态和奖励之间的映射关系</p>
+<p>环境的状态转移函数未知</p>
+<p>智能体必须通过与环境的交互才能得到环境的下一状态</p>
+<ul>
+<li>Q-learning</li>
+<li>SARSA</li>
+<li>Deep Q-Network (DQN)</li>
+<li>Policy Gradient methods (e.g., REINFORCE, A2C, PPO)</li>
+</ul>
+<p>样本：当前状态，下一状态，采取动作，奖励</p>
+<p><strong>在线策略学习：</strong></p>
+<p>不保存样本</p>
+<p><strong>离线策略学习：</strong></p>
+<p>使用经验回放池保存样本</p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="蒙特卡洛方法"><a href="#蒙特卡洛方法" class="headerlink" title="蒙特卡洛方法"></a>蒙特卡洛方法</h3><p>Value-based + online</p>
+<p>从某状态s出发，基于策略Π，获得一条状态序列，该状态序列对应一个回报G；该过程为一次采样。</p>
+<p>反复采样，得到N个状态序列+回报和M，由大数定律，可得该状态的状态价值</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161858965.png" class="" title="image-20240611161858965">
+
+<p>使用增量更新方法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161157050.png" class="" title="image-20240611161157050">
+
+<p>补：增量更新原理</p>
+<p>新均值 &#x3D; 旧均值 + 1&#x2F;总量 * (新值 - 旧均值) ？</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161942958.png" class="" title="image-20240611161942958">
+
+<h3 id="时序差分算法"><a href="#时序差分算法" class="headerlink" title="时序差分算法"></a>时序差分算法</h3><p>Value-based + online</p>
+<p>类似于蒙特卡洛，更新状态s的状态价值时，不使用完整的状态序列，在得到下一状态时立即对状态s的状态价值进行更新</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611162513650.png" class="" title="image-20240611162513650">
+
+<p>蒙特卡洛使用第三行对状态价值进行更新，时序差分使用第四行对状态价值进行更新</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611162624769.png" class="" title="image-20240611162624769">
+
+<ul>
+<li>只向前走了一步的蒙特卡洛</li>
+<li>使用下一状态的状态价值代替了很长的状态序列的回报(状态价值本身就是所有未来时刻的回报期望和)</li>
+<li>增量更新体现在 减号前部分为 (新 状态s的状态价值)，减号后部分为 (旧 状态s的状态价值)</li>
+</ul>
+<h3 id="Sarsa算法"><a href="#Sarsa算法" class="headerlink" title="Sarsa算法"></a>Sarsa算法</h3><p>Value-based + online</p>
+<p>类似于时序差分算法，对动作价值进行更新，目标是估计 <strong>ε-greedy策略的动作价值函数</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611191221769.png" class="" title="image-20240611191221769">
+
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100452913.png" class="" title="image-20240612100452913">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1, a1] - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Q-learning算法"><a href="#Q-learning算法" class="headerlink" title="Q-learning算法"></a>Q-learning算法</h3><p>Value-based + offline</p>
+<p>对动作价值进行更新，目标是估计 <strong>最优策略的动作价值函数</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611194333945.png" class="" title="image-20240611194333945">
+
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100509915.png" class="" title="image-20240612100509915">
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1].max() - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="DQN-DDQN"><a href="#DQN-DDQN" class="headerlink" title="DQN&#x2F;DDQN"></a>DQN&#x2F;DDQN</h3><p>Value-based + offline</p>
+<p>将Q-learning的Q表换成net</p>
+<h3 id="策略梯度算法-REINFORCE"><a href="#策略梯度算法-REINFORCE" class="headerlink" title="策略梯度算法(REINFORCE)"></a>策略梯度算法(REINFORCE)</h3><p>Policy-based + online</p>
+<p>定义策略学习的目标函数为，s0为初始状态</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100629893.png" class="" title="image-20240612100629893">
+
+<p>目标是修改参数θ，使J(θ)取最大；即对θ求导</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100732404.png" class="" title="image-20240612100732404">
+
+<p>where 第一行第一个求和符号后的对象为 策略的<strong>状态访问分布</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612102026769.png" class="" title="image-20240612102026769">
+
+<p>策略的状态访问分布表示该策略和在环境中会访问到的状态的分布情况(即到达每个状态的概率)</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612102256431.png" class="" title="image-20240612102256431">
+
+<p>故该求导表示 对于每个状态，我们有一定的概率在该状态，从该状态出发，策略决定了我们能获得的价值的期望</p>
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611200059062.png" class="" title="image-20240611200059062">
+
+<p>时刻t向后的回报即为(动作)价值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">reward_list = transition_dict[<span class="string">&#x27;rewards&#x27;</span>]</span><br><span class="line">state_list = transition_dict[<span class="string">&#x27;states&#x27;</span>]</span><br><span class="line">action_list = transition_dict[<span class="string">&#x27;actions&#x27;</span>]</span><br><span class="line"></span><br><span class="line">G = <span class="number">0</span></span><br><span class="line">self.optimizer.zero_grad()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(<span class="built_in">len</span>(reward_list))):  <span class="comment"># 从最后一步算起</span></span><br><span class="line">    reward = reward_list[i]  <span class="comment"># 取时间步i获得的奖励</span></span><br><span class="line">    state = torch.tensor([state_list[i]],</span><br><span class="line">                         dtype=torch.<span class="built_in">float</span>).to(self.device)  <span class="comment"># 取时间步i的状态</span></span><br><span class="line">    action = torch.tensor([action_list[i]]).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)  <span class="comment"># 取时间步i的动作</span></span><br><span class="line">    log_prob = torch.log(self.policy_net(state).gather(<span class="number">1</span>, action))</span><br><span class="line">    <span class="comment"># self.policy_net(state)： 将状态输入策略网络，得到所有可能动作的概率分布。</span></span><br><span class="line">	<span class="comment"># .gather(1, action): 从概率分布中选取实际执行动作对应的概率值。</span></span><br><span class="line">	<span class="comment"># torch.log(...): 对选取的概率值取对数，得到对数概率</span></span><br><span class="line">    G = self.gamma * G + reward  <span class="comment"># G累计了从当前时间步i到episode结束的所有奖励</span></span><br><span class="line">    loss = -log_prob * G  <span class="comment"># loss对应公式中符号α后的部分</span></span><br><span class="line">    loss.backward()  <span class="comment"># 反向传播计算梯度</span></span><br><span class="line">self.optimizer.step()  <span class="comment"># 梯度下降，实际上是对策略进行求导</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3><p>(Value + Policy)-based + offline</p>
+<p>策略函数梯度</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110026419.png" class="" title="image-20240612110026419">
+
+<p>ψ_t可为不同值，表示不同的方法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110241521.png" class="" title="image-20240612110241521">
+
+
+
+<p>价值函数的损失函数与梯度</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110951796.png" class="" title="image-20240612110951796">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612111022161.png" class="" title="image-20240612111022161">
+
+
+
+<p>Actor（策略网络）和 Critic（价值网络）</p>
+<ul>
+<li><p>Actor 要做的是与环境交互，并在 Critic 价值函数的指导下用策略梯度学习一个更好的策略。</p>
+</li>
+<li><p>Critic 要做的是通过 Actor 与环境交互收集的数据学习一个价值函数，这个价值函数会用于判断在当前状态什么动作是好的，什么动作不是好的，进而帮助 Actor 进行策略更新。</p>
+</li>
+</ul>
+<p>基于<strong>时序差分(TD)<strong>方法的</strong>Actor-Critic</strong>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110750284.png" class="" title="image-20240612110750284">
+
+<p>价值网络使用时序差分(TD)更新，策略网络使用</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络(critic)</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络(critic)预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络(actor)</span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数。(价值网络给出的当前状态价值)和(r+价值网络给出的下一状态的状态价值)的均方误差，即((a-b)^2)/2</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。策略函数梯度</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="强化学习设置小心得"><a href="#强化学习设置小心得" class="headerlink" title="强化学习设置小心得"></a>强化学习设置小心得</h2><p>控制状态空间大小，尽量选择有限状态空间</p>
+<p>eg: 将state中的一些值int化</p>
+<p>状态空间的表示值尽量接近</p>
+<p>采用标准化技术将state内的值均一化</p>
+<p>eg: [1, 200, 9999] -&gt; [0.001, 0.99, 0.9999]</p>
+<p>reward设置</p>
+<p>惩罚和奖励设置插值不要过大, 防止惩罚拟合过快</p>
+<p>+2, -200 -&gt; +2, 0</p>
+]]></content>
+      <tags>
+        <tag>python, reinforce learning</tag>
       </tags>
   </entry>
   <entry>
@@ -1429,282 +1864,6 @@
       </tags>
   </entry>
   <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>reinforce-learning-record</title>
-    <url>/2024/06/10/reinforce-learning-record/</url>
-    <content><![CDATA[<p>reinforce learning</p>
-<span id="more"></span>
-
-<h1 id="reinforce-learning-record"><a href="#reinforce-learning-record" class="headerlink" title="reinforce learning record"></a>reinforce learning record</h1><h2 id="MRP"><a href="#MRP" class="headerlink" title="MRP"></a>MRP</h2><img src="/2024/06/10/reinforce-learning-record/image-20240610205131367.png" class="" title="image-20240610205131367">
-
-<h3 id="回报"><a href="#回报" class="headerlink" title="回报"></a>回报</h3><p>在一个马尔可夫奖励过程中，从第t时刻状态S_t开始，直到终止状态时，所有奖励的衰减之和称为<strong>回报</strong>（Return）</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203108806.png" class="" title="image-20240610203108806">
-
-<ul>
-<li>Rt表示在时刻t获得的奖励</li>
-<li><strong>到达状态Si</strong>，得到奖励r(s)；若在时刻t到达状态Si，则<strong>Rt&#x3D;r(Si)</strong></li>
-<li>对于某状态序列<img src="/2024/06/10/reinforce-learning-record/image-20240610203423677.png" class="" title="image-20240610203423677">我们有对应于该状态序列的奖励G<img src="/2024/06/10/reinforce-learning-record/image-20240610203434567.png" class="" title="image-20240610203434567"></li>
-</ul>
-<h3 id="价值函数"><a href="#价值函数" class="headerlink" title="价值函数"></a>价值函数</h3><p>在马尔可夫奖励过程中，一个状态的期望回报（即从这个状态出发的未来累积奖励的期望）被称为这个状态的<strong>价值</strong>（value）。所有状态的价值就组成了<strong>价值函数</strong>（value function），价值函数的输入为某个状态，输出为这个状态的价值。</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203509585.png" class="" title="image-20240610203509585">
-
-<ul>
-<li>对于某个状态s，从该状态出发可得到的状态序列有很多条</li>
-<li>对于某个状态s，价值函数为<strong>从该状态出发，可能存在的所有状态序列的奖励的均值</strong></li>
-</ul>
-<p>贝尔曼方程</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203841177.png" class="" title="image-20240610203841177">
-
-<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><p>与MRP相比，奖励与状态和动作相关</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610205112917.png" class="" title="image-20240610205112917">
-
-<h3 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h3><p>策略表示在状态s下采取动作a的<strong>概率</strong>，概率可能为1</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204522539.png" class="" title="image-20240610204522539">
-
-<h3 id="状态价值函数"><a href="#状态价值函数" class="headerlink" title="状态价值函数"></a>状态价值函数</h3><p>在 MDP 中基于策略Π的状态价值函数（state-value function），定义为从状态s出发遵循策略Π能获得的期望回报</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204014373.png" class="" title="image-20240610204014373">
-
-<h3 id="动作价值函数"><a href="#动作价值函数" class="headerlink" title="动作价值函数"></a>动作价值函数</h3><p>在 MDP 中，由于动作的存在，我们额外定义一个<strong>动作价值函数</strong>（action-value function）。表示在 MDP 遵循策略Π时，对当前状态s执行动作a得到的期望回报</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204152914.png" class="" title="image-20240610204152914">
-
-<ul>
-<li><strong>采取动作a到达状态s</strong>，得到奖励R</li>
-</ul>
-<h3 id="状态价值函数与动作价值函数关系"><a href="#状态价值函数与动作价值函数关系" class="headerlink" title="状态价值函数与动作价值函数关系"></a>状态价值函数与动作价值函数关系</h3><img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<ul>
-<li>从状态s出发，可能采取动作a1, a2, a3, …;对于每个可能采取的动作，均有动作价值Q，则状态s的状态价值为所有动作价值的期望</li>
-</ul>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<ul>
-<li>在状态s执行动作a后，得到奖励r(s,a)；由于可能到达多个不同的状态s’，动作价值为即时奖励r(s,a)+可能到达的所有状态的价值的期望</li>
-</ul>
-<h3 id="最优策略"><a href="#最优策略" class="headerlink" title="最优策略"></a>最优策略</h3><p>策略之间的偏序关系</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612093758370.png" class="" title="image-20240612093758370">
-
-<p>最优策略为 对于任意的策略，均有最优策略优于或不差于其他策略</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612093948192.png" class="" title="image-20240612093948192">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240612093958259.png" class="" title="image-20240612093958259">
-
-<p>最优状态价值与最优动作价值的关系</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612094048209.png" class="" title="image-20240612094048209">
-
-
-
-<h3 id="贝尔曼期望方程"><a href="#贝尔曼期望方程" class="headerlink" title="贝尔曼期望方程"></a>贝尔曼期望方程</h3><p>采取策略Π</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204627264.png" class="" title="image-20240610204627264">
-
-<ul>
-<li>对于状态s，s的状态价值为 ( 折损的 <strong>所有可达的下一状态的价值的期望</strong> + <strong>到达所有可达的下一状态的r(s’,a)的期望</strong> )</li>
-<li>对于状态s和动作a，在状态s进行动作a的价值为 ( <strong>在状态s执行动作a的r(s,a)的期望</strong>(实际上就是r(s,a)) + 折损的 <strong>在执行动作a后所有可达的下一状态的所有可执行动作的价值的期望</strong> )</li>
-</ul>
-<img src="/2024/06/10/reinforce-learning-record/shiow.PNG" class="" title="shiow">
-
-<p>图中情况为每个动作只会到达一个状态&amp;应该直接将动作视为一个节点，图为树</p>
-<h3 id="贝尔曼最优方程"><a href="#贝尔曼最优方程" class="headerlink" title="贝尔曼最优方程"></a>贝尔曼最优方程</h3><p>存在策略*，使对于任意的状态s，均有基于策略*状态价值函数大于基于策略Π的状态价值函数</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610205402396.png" class="" title="image-20240610205402396">
-
-<ul>
-<li>对于状态价值：非最优形式是求期望，最优形式是直接选取当前状态，所有动作中，未来状态序列中价值最大的</li>
-<li>对于动作价值：非最优形式是求期望，最优形式是直接选取下一状态，所有动作中，未来状态序列中动作价值最大的</li>
-</ul>
-<h2 id="策略迭代算法-基于策略函数的"><a href="#策略迭代算法-基于策略函数的" class="headerlink" title="策略迭代算法&#x2F;基于策略函数的"></a>策略迭代算法&#x2F;基于策略函数的</h2><p>策略评估：</p>
-<p>基于当前策略Π，在已知状态转移函数的情况下（即我们可以知道采取动作a后有多高的几率到达哪个状态），使用<strong>贝尔曼期望方程</strong>迭代更新状态价值函数</p>
-<p>ps: 原文中迭代更新状态价值函数是通过</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<p>以上两个公式实现的，也即</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">		qsa = <span class="number">0</span>  <span class="comment"># 当前动作的动作价值</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:  <span class="comment"># 有模型，即状态转移函数已知</span></span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))  <span class="comment"># 第一个公式，计算该动作的价值(开头的p为动作成功概率)</span></span><br><span class="line">         qsa_list.append(self.pi[s][a] * qsa)  <span class="comment"># 乘采取该动作的几率</span></span><br><span class="line">	new_v[s] = <span class="built_in">sum</span>(qsa_list)  <span class="comment"># 第二个公式，根据所有动作的价值计算状态价值</span></span><br></pre></td></tr></table></figure>
-
-<p>target: 更新<strong>状态价值函数</strong>，使之收敛</p>
-<p>策略提升：</p>
-<p>由于</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<p>故修改策略，使得动作价值最大的动作以更高的概率(若最大值唯一，该动作将成为唯一被选取动作；若不唯一，这些动作将均分概率1)被选取，可使新策略下的状态价值函数增大，也即<img src="/2024/06/10/reinforce-learning-record/image-20240611150030644.png" class="" title="image-20240611150030644"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">    	qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)</span><br><span class="line">     maxq = <span class="built_in">max</span>(qsa_list)</span><br><span class="line">     cntq = qsa_list.count(maxq)  <span class="comment"># 计算有几个动作得到了最大的Q值</span></span><br><span class="line">     <span class="comment"># 让这些动作均分概率</span></span><br><span class="line">     self.pi[s] = [<span class="number">1</span> / cntq <span class="keyword">if</span> q == maxq <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> q <span class="keyword">in</span> qsa_list]</span><br></pre></td></tr></table></figure>
-
-<p>target: 修改<strong>策略</strong>，使在新策略下，有基于新策略的状态价值函数大于原策略的状态价值函数</p>
-<h2 id="价值迭代算法-基于价值函数的"><a href="#价值迭代算法-基于价值函数的" class="headerlink" title="价值迭代算法&#x2F;基于价值函数的"></a>价值迭代算法&#x2F;基于价值函数的</h2><p>使用贝尔曼最优方程</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611191853492.png" class="" title="image-20240611191853492">
-
-<p>迭代形式</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611152610430.png" class="" title="image-20240611152610430">
-
-<p>进行价值迭代；</p>
-<p>使用</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611152643864.png" class="" title="image-20240611152643864">
-
-<p>从迭代完成的状态价值函数中获取策略，即 从当前状态出发，哪个动作的 (即时奖励+下一状态价值) 最大，策略就为哪个动作</p>
-<p>ps: 程序实际使用公式</p>
-<p>最优状态价值是选择此时使最优动作价值最大的那一个动作时的状态价值</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611153610316.png" class="" title="image-20240611153610316">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">max_diff = <span class="number">0</span></span><br><span class="line">new_v = [<span class="number">0</span>] * self.env.ncol * self.env.nrow  <span class="comment"># 迷宫环境，初始化状态价值</span></span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> <span class="built_in">range</span>(self.env.ncol * self.env.nrow):</span><br><span class="line">    qsa_list = []</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">            p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)  <span class="comment"># 记录状态s下的所有Q(s,a)价值</span></span><br><span class="line">     new_v[s] = <span class="built_in">max</span>(qsa_list)  <span class="comment"># 取最大作为新状态价值</span></span><br><span class="line">     max_diff = <span class="built_in">max</span>(max_diff, <span class="built_in">abs</span>(new_v[s] - self.v[s]))</span><br><span class="line">self.v = new_v</span><br><span class="line"><span class="keyword">if</span> max_diff &lt; self.theta: <span class="keyword">break</span>  <span class="comment"># 满足收敛条件,退出评估迭代</span></span><br><span class="line">cnt += <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="有模型-无模型-在线策略-离线策略"><a href="#有模型-无模型-在线策略-离线策略" class="headerlink" title="有模型&amp;无模型+在线策略&amp;离线策略"></a>有模型&amp;无模型+在线策略&amp;离线策略</h2><p><strong>有模型强化学习：</strong></p>
-<p>智能体学习环境的状态转移函数</p>
-<p>环境的状态转移函数已知</p>
-<p>智能体可以直接根据状态转移函数得到在对环境进行动作a后环境的下一状态</p>
-<p># 状态转移函数P[state][action] &#x3D; [(p, next_state, reward, done)]包含转移成功概率，下一个状态，奖励和是否完成</p>
-<ul>
-<li>Dyna-Q</li>
-<li>Monte Carlo Tree Search (MCTS)</li>
-<li>PILCO (Probabilistic Inference for Learning Control)</li>
-</ul>
-<p><strong>无模型强化学习：</strong></p>
-<p>智能体通过与环境交互学习状态和奖励之间的映射关系</p>
-<p>环境的状态转移函数未知</p>
-<p>智能体必须通过与环境的交互才能得到环境的下一状态</p>
-<ul>
-<li>Q-learning</li>
-<li>SARSA</li>
-<li>Deep Q-Network (DQN)</li>
-<li>Policy Gradient methods (e.g., REINFORCE, A2C, PPO)</li>
-</ul>
-<p>样本：当前状态，下一状态，采取动作，奖励</p>
-<p><strong>在线策略学习：</strong></p>
-<p>不保存样本</p>
-<p><strong>离线策略学习：</strong></p>
-<p>使用经验回放池保存样本</p>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="蒙特卡洛方法"><a href="#蒙特卡洛方法" class="headerlink" title="蒙特卡洛方法"></a>蒙特卡洛方法</h3><p>Value-based + online</p>
-<p>从某状态s出发，基于策略Π，获得一条状态序列，该状态序列对应一个回报G；该过程为一次采样。</p>
-<p>反复采样，得到N个状态序列+回报和M，由大数定律，可得该状态的状态价值</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161858965.png" class="" title="image-20240611161858965">
-
-<p>使用增量更新方法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161157050.png" class="" title="image-20240611161157050">
-
-<p>补：增量更新原理</p>
-<p>新均值 &#x3D; 旧均值 + 1&#x2F;总量 * (新值 - 旧均值) ？</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161942958.png" class="" title="image-20240611161942958">
-
-<h3 id="时序差分算法"><a href="#时序差分算法" class="headerlink" title="时序差分算法"></a>时序差分算法</h3><p>Value-based + online</p>
-<p>类似于蒙特卡洛，更新状态s的状态价值时，不使用完整的状态序列，在得到下一状态时立即对状态s的状态价值进行更新</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611162513650.png" class="" title="image-20240611162513650">
-
-<p>蒙特卡洛使用第三行对状态价值进行更新，时序差分使用第四行对状态价值进行更新</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611162624769.png" class="" title="image-20240611162624769">
-
-<ul>
-<li>只向前走了一步的蒙特卡洛</li>
-<li>使用下一状态的状态价值代替了很长的状态序列的回报(状态价值本身就是所有未来时刻的回报期望和)</li>
-<li>增量更新体现在 减号前部分为 (新 状态s的状态价值)，减号后部分为 (旧 状态s的状态价值)</li>
-</ul>
-<h3 id="Sarsa算法"><a href="#Sarsa算法" class="headerlink" title="Sarsa算法"></a>Sarsa算法</h3><p>Value-based + online</p>
-<p>类似于时序差分算法，对动作价值进行更新，目标是估计 <strong>ε-greedy策略的动作价值函数</strong></p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611191221769.png" class="" title="image-20240611191221769">
-
-<p>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100452913.png" class="" title="image-20240612100452913">
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1, a1] - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="Q-learning算法"><a href="#Q-learning算法" class="headerlink" title="Q-learning算法"></a>Q-learning算法</h3><p>Value-based + offline</p>
-<p>对动作价值进行更新，目标是估计 <strong>最优策略的动作价值函数</strong></p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611194333945.png" class="" title="image-20240611194333945">
-
-<p>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100509915.png" class="" title="image-20240612100509915">
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1].max() - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="DQN-DDQN"><a href="#DQN-DDQN" class="headerlink" title="DQN&#x2F;DDQN"></a>DQN&#x2F;DDQN</h3><p>Value-based + offline</p>
-<p>将Q-learning的Q表换成net</p>
-<h3 id="策略梯度算法-REINFORCE"><a href="#策略梯度算法-REINFORCE" class="headerlink" title="策略梯度算法(REINFORCE)"></a>策略梯度算法(REINFORCE)</h3><p>Policy-based + online</p>
-<p>定义策略学习的目标函数为，s0为初始状态</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100629893.png" class="" title="image-20240612100629893">
-
-<p>目标是修改参数θ，使J(θ)取最大；即对θ求导</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100732404.png" class="" title="image-20240612100732404">
-
-<p>where 第一行第一个求和符号后的对象为 策略的<strong>状态访问分布</strong></p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612102026769.png" class="" title="image-20240612102026769">
-
-<p>策略的状态访问分布表示该策略和在环境中会访问到的状态的分布情况(即到达每个状态的概率)</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612102256431.png" class="" title="image-20240612102256431">
-
-<p>故该求导表示 对于每个状态，我们有一定的概率在该状态，从该状态出发，策略决定了我们能获得的价值的期望</p>
-<p>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611200059062.png" class="" title="image-20240611200059062">
-
-<p>时刻t向后的回报即为(动作)价值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">reward_list = transition_dict[<span class="string">&#x27;rewards&#x27;</span>]</span><br><span class="line">state_list = transition_dict[<span class="string">&#x27;states&#x27;</span>]</span><br><span class="line">action_list = transition_dict[<span class="string">&#x27;actions&#x27;</span>]</span><br><span class="line"></span><br><span class="line">G = <span class="number">0</span></span><br><span class="line">self.optimizer.zero_grad()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(<span class="built_in">len</span>(reward_list))):  <span class="comment"># 从最后一步算起</span></span><br><span class="line">    reward = reward_list[i]  <span class="comment"># 取时间步i获得的奖励</span></span><br><span class="line">    state = torch.tensor([state_list[i]],</span><br><span class="line">                         dtype=torch.<span class="built_in">float</span>).to(self.device)  <span class="comment"># 取时间步i的状态</span></span><br><span class="line">    action = torch.tensor([action_list[i]]).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)  <span class="comment"># 取时间步i的动作</span></span><br><span class="line">    log_prob = torch.log(self.policy_net(state).gather(<span class="number">1</span>, action))</span><br><span class="line">    <span class="comment"># self.policy_net(state)： 将状态输入策略网络，得到所有可能动作的概率分布。</span></span><br><span class="line">	<span class="comment"># .gather(1, action): 从概率分布中选取实际执行动作对应的概率值。</span></span><br><span class="line">	<span class="comment"># torch.log(...): 对选取的概率值取对数，得到对数概率</span></span><br><span class="line">    G = self.gamma * G + reward  <span class="comment"># G累计了从当前时间步i到episode结束的所有奖励</span></span><br><span class="line">    loss = -log_prob * G  <span class="comment"># loss对应公式中符号α后的部分</span></span><br><span class="line">    loss.backward()  <span class="comment"># 反向传播计算梯度</span></span><br><span class="line">self.optimizer.step()  <span class="comment"># 梯度下降，实际上是对策略进行求导</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3><p>(Value + Policy)-based + offline</p>
-<p>策略函数梯度</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110026419.png" class="" title="image-20240612110026419">
-
-<p>ψ_t可为不同值，表示不同的方法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110241521.png" class="" title="image-20240612110241521">
-
-
-
-<p>价值函数的损失函数与梯度</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110951796.png" class="" title="image-20240612110951796">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240612111022161.png" class="" title="image-20240612111022161">
-
-
-
-<p>Actor（策略网络）和 Critic（价值网络）</p>
-<ul>
-<li><p>Actor 要做的是与环境交互，并在 Critic 价值函数的指导下用策略梯度学习一个更好的策略。</p>
-</li>
-<li><p>Critic 要做的是通过 Actor 与环境交互收集的数据学习一个价值函数，这个价值函数会用于判断在当前状态什么动作是好的，什么动作不是好的，进而帮助 Actor 进行策略更新。</p>
-</li>
-</ul>
-<p>基于<strong>时序差分(TD)<strong>方法的</strong>Actor-Critic</strong>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110750284.png" class="" title="image-20240612110750284">
-
-<p>价值网络使用时序差分(TD)更新，策略网络使用</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络(critic)</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络(critic)预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络(actor)</span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数。(价值网络给出的当前状态价值)和(r+价值网络给出的下一状态的状态价值)的均方误差，即((a-b)^2)/2</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。策略函数梯度</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="强化学习设置小心得"><a href="#强化学习设置小心得" class="headerlink" title="强化学习设置小心得"></a>强化学习设置小心得</h2><p>控制状态空间大小，尽量选择有限状态空间</p>
-<p>eg: 将state中的一些值int化</p>
-<p>状态空间的表示值尽量接近</p>
-<p>采用标准化技术将state内的值均一化</p>
-<p>eg: [1, 200, 9999] -&gt; [0.001, 0.99, 0.9999]</p>
-<p>reward设置</p>
-<p>惩罚和奖励设置插值不要过大, 防止惩罚拟合过快</p>
-<p>+2, -200 -&gt; +2, 0</p>
-]]></content>
-      <tags>
-        <tag>python, reinforce learning</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Android-Learning-Record</title>
     <url>/2024/07/28/Android-Learning-Record/</url>
     <content><![CDATA[<p>Android学习记录</p>
@@ -1748,6 +1907,21 @@
 <li>静态类的实例化不需要依赖外部类的实例，可以直接通过 OuterClass.StaticNestedClass 的方式创建。</li>
 </ul>
 </li>
+</ul>
+<p><strong>常见的变量名前缀：</strong></p>
+<ul>
+<li><strong>m：</strong> 表示 <strong>成员变量</strong> (member variable)，即类级别的变量，区别于局部变量。例如：private int mCount;</li>
+<li><strong>s：</strong> 表示 <strong>静态变量</strong> (static variable)，即属于类本身的变量，所有实例共享。例如：public static String sTag &#x3D; “MyClass”;</li>
+<li><strong>p：</strong> 表示 <strong>参数</strong> (parameter)，即方法或构造函数的输入参数。例如：public void setName(String pName) { … }</li>
+<li><strong>g：</strong> 表示 <strong>全局变量</strong> (global variable)，一般用于 C&#x2F;C++ 代码中。</li>
+<li><strong>i：</strong> 表示 <strong>接口</strong> (interface) 或 <strong>抽象类</strong> (abstract class) 的实现类。例如，ActivityManagerProxy 实现了 IActivityManager 接口。</li>
+<li><strong>l：</strong> 表示 <strong>局部变量</strong> (local variable)，即方法或代码块内部定义的变量。</li>
+<li><strong>this：</strong> 表示当前对象的引用。</li>
+</ul>
+<p><strong>其他约定：</strong></p>
+<ul>
+<li><strong>常量 (Constant)：</strong> 通常使用全部大写字母，单词之间用下划线分隔。例如：public static final int MAX_COUNT &#x3D; 100;</li>
+<li><strong>布尔类型 (boolean)：</strong> 通常以 is 或 has 开头，例如：private boolean isRunning; 或 public boolean hasPermission();</li>
 </ul>
 <h3 id="包"><a href="#包" class="headerlink" title="包"></a>包</h3><p>对于<code>com.example.project</code></p>
 <p>其中， <code>com</code> 是顶层包, <code>example</code> 是 <code>com</code> 包的子包, <code>project</code> 是 <code>com.example</code> 包的子包。</p>
@@ -2538,18 +2712,18 @@
 
 
 </blockquote>
-<h3 id="进程内交互"><a href="#进程内交互" class="headerlink" title="进程内交互"></a>进程内交互</h3><h4 id="Handler与MessageQueue"><a href="#Handler与MessageQueue" class="headerlink" title="Handler与MessageQueue"></a>Handler与MessageQueue</h4><p><strong>Looper&amp;MessageQueue</strong></p>
+<h3 id="进程内交互"><a href="#进程内交互" class="headerlink" title="进程内交互"></a>进程内交互</h3><h4 id="Handler，Looper与MessageQueue"><a href="#Handler，Looper与MessageQueue" class="headerlink" title="Handler，Looper与MessageQueue"></a>Handler，Looper与MessageQueue</h4><p><strong>Looper&amp;MessageQueue</strong></p>
 <p>主线程有且只有一个 Looper，它是在应用启动时由系统自动创建并启动的。</p>
 <p>子线程默认没有Looper，需要手动创建和启动。</p>
 <p>Looper与MessageQueue</p>
 <ul>
-<li><p><strong>一对一关系</strong>: 每个 Looper 都会关联一个唯一的 MessageQueue。Looper 对象创建时，会自动创建一个 MessageQueue 对象。</p>
+<li><p>每个 Looper 都会关联一个唯一的 MessageQueue。Looper 对象创建时，会创建一个 MessageQueue 对象。</p>
 </li>
-<li><p><strong>消息存储</strong>: MessageQueue 就像一个消息容器，负责存储消息。当我们使用 Handler 发送消息时，消息并不会直接被处理，而是会被添加到 Looper 关联的 MessageQueue 中。</p>
+<li><p>MessageQueue 就像一个消息容器，负责存储消息。当我们使用 Handler 发送消息时，消息并不会直接被处理，而是会被添加到 Looper 关联的 MessageQueue 中。</p>
 </li>
-<li><p><strong>消息循环</strong>: Looper 通过一个无限循环不断地从 MessageQueue 中读取消息。当 Looper 发现 MessageQueue 中没有消息可处理时，就会判断是否有 IdleHandler 需要执行；若没有， Looper 就会进入休眠状态，等待新的消息到来。</p>
+<li><p>Looper 通过一个无限循环不断地从 MessageQueue 中读取消息。当 Looper 发现 MessageQueue 中没有消息可处理时，就会判断是否有 IdleHandler 需要执行；若没有， Looper 就会进入休眠状态，等待新的消息到来。</p>
 </li>
-<li><p><strong>消息分发</strong>: 当 Looper 从 MessageQueue 中读取到消息后，会根据消息的 target 属性（即发送消息时使用的 Handler 对象），将消息分发给对应的 Handler 进行处理。</p>
+<li><p>当 Looper 从 MessageQueue 中读取到消息后，会根据消息的 target 属性（即发送消息时使用的 Handler 对象），将消息分发给对应的 Handler 进行处理。</p>
 </li>
 </ul>
 <p><strong>一个线程最多一个Looper！！！</strong></p>
@@ -2560,8 +2734,15 @@
 <p><strong>Handler</strong></p>
 <p>Handler不会被默认创建，需手动创建</p>
 <p><strong>多个 Handler 可绑定同一个 Looper</strong>，在创建 Handler 时，若未指定 Looper，则默认绑定当前线程的 Looper</p>
-<p>使用 Handler 对象的 send 或 post 方法，向 Handler 对象绑定的 Looper 对应的 MessageQueue 发送Msg</p>
-<p>通过重写 Handler 对象的 handleMessage 方法，当 Looper 从 MessageQueue 中读取到消息后，会根据消息的 target 属性（即发送消息时使用的 Handler 对象），调用 对应 Handler handleMessage 方法处理。</p>
+<p>使用 Handler 对象的 send 或 post 方法，向 Handler 对象绑定的 Looper 对应的 MessageQueue 发送Msg。</p>
+<p>Looper.loop() 方法不断从 MessageQueue 中取出消息。</p>
+<p>Looper 取出消息后，会根据 Message.target 属性找到当初发送该消息的 Handler。</p>
+<p><strong>Handler 处理消息:</strong> Handler 接收到 Looper 派发的消息后，执行以下逻辑：</p>
+<ul>
+<li>检查 Message 是否携带 Callback，若有则调用 Callback.run() 处理消息。</li>
+<li>若 Message 没有 Callback，则检查自身是否设置了默认的 mCallback，若有则调用 mCallback.handleMessage() 处理消息。</li>
+<li>若以上两种 Callback 都没有，则调用自身 handleMessage() 方法处理消息。</li>
+</ul>
 <p><strong>注意：进行Msg处理（调用 handleMessage 方法）的是Handler所绑定的Looper所在的线程</strong></p>
 <p>在通常情况下，主线程创建 Handler 对象并绑定mainLooper，子线程使用该 Handler 对象发送信息到主线程的MessageQueue ，当 Looper 从 MessageQueue 中读取到消息后，调用发送该 Msg 的 Handler handleMessage 方法处理。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainActivity</span> <span class="keyword">extends</span> <span class="title class_">AppCompatActivity</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Handler networkHandler;</span><br><span class="line">    <span class="keyword">private</span> Handler uiHandler;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建处理网络请求的 Handler</span></span><br><span class="line">        networkHandler = <span class="keyword">new</span> <span class="title class_">Handler</span>(Looper.getMainLooper()) &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleMessage</span><span class="params">(<span class="meta">@NonNull</span> Message msg)</span> &#123;</span><br><span class="line">                <span class="comment">// 处理网络请求结果</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> (String) msg.obj;</span><br><span class="line">                Toast.makeText(MainActivity.<span class="built_in">this</span>, <span class="string">&quot;网络请求结果: &quot;</span> + result, Toast.LENGTH_SHORT).show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建处理用户输入事件的 Handler</span></span><br><span class="line">        uiHandler = <span class="keyword">new</span> <span class="title class_">Handler</span>(Looper.getMainLooper()) &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleMessage</span><span class="params">(<span class="meta">@NonNull</span> Message msg)</span> &#123;</span><br><span class="line">                <span class="comment">// 处理用户输入事件</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">input</span> <span class="operator">=</span> (String) msg.obj;</span><br><span class="line">                Toast.makeText(MainActivity.<span class="built_in">this</span>, <span class="string">&quot;用户输入: &quot;</span> + input, Toast.LENGTH_SHORT).show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟网络请求</span></span><br><span class="line">        simulateNetworkRequest();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟用户输入事件</span></span><br><span class="line">        simulateUserInput();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">simulateNetworkRequest</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="comment">// 模拟耗时操作</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 发送网络请求结果</span></span><br><span class="line">            <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> Message.obtain();</span><br><span class="line">            message.obj = <span class="string">&quot;成功!&quot;</span>;</span><br><span class="line">            networkHandler.sendMessage(message);</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">simulateUserInput</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 发送用户输入事件</span></span><br><span class="line">        <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> Message.obtain();</span><br><span class="line">        message.obj = <span class="string">&quot;Hello!&quot;</span>;</span><br><span class="line">        uiHandler.sendMessageDelayed(message, <span class="number">3000</span>); <span class="comment">// 延迟 3 秒发送</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -2596,7 +2777,102 @@
 
 
 
-<h4 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h4><p><a href="https://www.cnblogs.com/samchen2009/p/3316001.html">https://www.cnblogs.com/samchen2009/p/3316001.html</a></p>
+<h4 id="AIDL与Binder"><a href="#AIDL与Binder" class="headerlink" title="AIDL与Binder"></a>AIDL与Binder</h4><p>server进程与client进程交互</p>
+<p><strong>普通方式</strong></p>
+<p>server进程：</p>
+<p>继承Service，实现onBinder并返回Binder对象；</p>
+<p>需在该Binder对象中实现onTransact(…)和服务方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GradeService</span> <span class="keyword">extends</span> <span class="title class_">Service</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> REQUEST_CODE=<span class="number">1000</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">Binder</span> <span class="variable">mBinder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Binder</span>() &#123;</span><br><span class="line">        <span class="comment">// 透过匿名内部类方式继承Binder并实现服务方法，该方式存在内存泄露</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">protected</span> <span class="type">boolean</span> <span class="title function_">onTransact</span><span class="params">(<span class="type">int</span> code, <span class="meta">@NonNull</span> Parcel data, <span class="meta">@Nullable</span> Parcel reply, <span class="type">int</span> flags)</span> <span class="keyword">throws</span> RemoteException &#123;</span><br><span class="line">            <span class="keyword">if</span> (code == REQUEST_CODE) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> data.readString();</span><br><span class="line">                <span class="comment">// 根据姓名查询学生成绩并将成绩写入到返回数据</span></span><br><span class="line">                <span class="type">int</span> <span class="variable">studentGrade</span> <span class="operator">=</span> getStudentGrade(name);</span><br><span class="line">                <span class="keyword">if</span> (reply != <span class="literal">null</span>)</span><br><span class="line">                    reply.writeInt(studentGrade);</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">super</span>.onTransact(code, data, reply, flags);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 服务方法：根据姓名查询学生成绩</span></span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getStudentGrade</span><span class="params">(String name)</span> &#123;         </span><br><span class="line">            <span class="keyword">return</span> StudentMap.getStudentGrade(name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> IBinder <span class="title function_">onBind</span><span class="params">(Intent intent)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> mBinder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>client进程：</p>
+<p>通过bindService(intent, mServiceConnection, xxx)绑定服务，</p>
+<p>mServiceConnection对象中实现onServiceConnected和onServiceDisconnected方法，方法中获得server进程返回的Binder对象</p>
+<p>调用Binder对象的onTransact方法得到结果</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinderActivity</span> <span class="keyword">extends</span> <span class="title class_">AppCompatActivity</span> &#123;</span><br><span class="line">    <span class="comment">// 远程服务的Binder代理</span></span><br><span class="line">    <span class="keyword">private</span> IBinder mRemoteBinder;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">ServiceConnection</span> <span class="variable">mServiceConnection</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServiceConnection</span>() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onServiceConnected</span><span class="params">(ComponentName componentName, IBinder iBinder)</span> &#123;</span><br><span class="line">            <span class="comment">// 获取远程服务的Binder代理</span></span><br><span class="line">            mRemoteBinder = iBinder;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onServiceDisconnected</span><span class="params">(ComponentName componentName)</span> &#123;</span><br><span class="line">            mRemoteBinder = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_binder);</span><br><span class="line">        <span class="comment">// 绑定服务</span></span><br><span class="line">        findViewById(R.id.btn_bind_service).setOnClickListener(view -&gt; bindGradeService());</span><br><span class="line">        <span class="comment">// 查询学生成绩</span></span><br><span class="line">        findViewById(R.id.btn_find_grade).setOnClickListener(view -&gt; getStudentGrade(<span class="string">&quot;Anna&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 绑定远程服务</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">bindGradeService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">action</span> <span class="operator">=</span> <span class="string">&quot;android.intent.action.server.gradeservice&quot;</span>;</span><br><span class="line">        <span class="type">Intent</span> <span class="variable">intent</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Intent</span>(action);</span><br><span class="line">        intent.setPackage(getPackageName());</span><br><span class="line">        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 从远程服务查询学生成绩</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getStudentGrade</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="type">Parcel</span> <span class="variable">data</span> <span class="operator">=</span> Parcel.obtain();</span><br><span class="line">        <span class="type">Parcel</span> <span class="variable">reply</span> <span class="operator">=</span> Parcel.obtain();</span><br><span class="line">        <span class="type">int</span> <span class="variable">grade</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        data.writeString(name);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (mRemoteBinder == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;Need Bind Remote Server...&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            mRemoteBinder.transact(REQUEST_CODE, data, reply, <span class="number">0</span>);</span><br><span class="line">            grade = reply.readInt();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> grade;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用ServiceConnection对象的原因</p>
+<ul>
+<li>绑定服务是一个异步操作，服务进程的连接和启动都需要时间。</li>
+<li>如果客户端进程同步等待服务连接，可能会导致 UI 线程阻塞，造成 ANR (Application Not Responding)。</li>
+<li><code>ServiceConnection</code>  提供了一种异步回调机制，当服务连接成功或断开时，系统会自动回调 <code>ServiceConnection</code>  中的 <code>onServiceConnected()</code>  和 <code>onServiceDisconnected()</code>  方法，通知客户端进程。默认情况下，bindService() 方法是在主线程中调用的，因此 ServiceConnection 的回调方法也会在主线程中执行。</li>
+<li>这样，客户端进程就可以在 <code>onServiceConnected()</code>  方法中获取到服务的代理对象，并在 <code>onServiceDisconnected()</code>  方法中处理服务断开的情况，而无需阻塞等待。</li>
+</ul>
+<p>客户端调用Binder对象的transact方法中转</p>
+<ul>
+<li>客户端调用的是 Binder 代理对象（客户端内的binder对象）的 transact()。这个方法会将请求发送给 Binder 驱动。</li>
+<li>Binder 驱动收到请求后，会找到对应的服务端 Binder 对象，并在服务端进程调用 <strong>服务端 Binder 对象</strong> 的 onTransact() 方法。</li>
+</ul>
+<p><strong>xxxbinder.transact() 方法是一个同步方法，这意味着在默认情况下，客户端进程会在调用 transact() 方法后阻塞，直到服务端进程完成请求并返回结果。</strong></p>
+</blockquote>
+<p><strong>代理模式</strong></p>
+<p>server进程：</p>
+<p>引入服务方法端口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IGradeInterface</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">getStudentGrade</span><span class="params">(String name)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>引入xxxBinder继承一般Binder类并实现服务端口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GradeBinder</span> <span class="keyword">extends</span> <span class="title class_">Binder</span> <span class="keyword">implements</span> <span class="title class_">IGradeInterface</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getStudentGrade</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> StudentMap.getStudentGrade(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="type">boolean</span> <span class="title function_">onTransact</span><span class="params">(<span class="type">int</span> code, <span class="meta">@NonNull</span> Parcel data, <span class="meta">@Nullable</span> Parcel reply, <span class="type">int</span> flags)</span> <span class="keyword">throws</span> RemoteException &#123;</span><br><span class="line">        <span class="keyword">if</span> (code == REQUEST_CODE) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> data.readString();</span><br><span class="line">            <span class="type">int</span> <span class="variable">studentGrade</span> <span class="operator">=</span> getStudentGrade(name);</span><br><span class="line">            <span class="keyword">if</span> (reply != <span class="literal">null</span>)</span><br><span class="line">                reply.writeInt(studentGrade);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span>.onTransact(code, data, reply, flags);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>服务端继承Service，实现onBinder并返回xxxBinder对象</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GradeService</span> <span class="keyword">extends</span> <span class="title class_">Service</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> REQUEST_CODE=<span class="number">1000</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">Binder</span> <span class="variable">mBinder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GradeBinder</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> IBinder <span class="title function_">onBind</span><span class="params">(Intent intent)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> mBinder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>client进程：</p>
+<p>引入服务方法端口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IGradeInterface</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">getStudentGrade</span><span class="params">(String name)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实现服务接口得到代理Binder类型</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinderProxy</span> <span class="keyword">implements</span> <span class="title class_">IGradeInterface</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> IBinder mBinder;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">BinderProxy</span><span class="params">(IBinder binder)</span> &#123;</span><br><span class="line">        mBinder = binder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  	<span class="comment">// 通过Binder查询成绩</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getStudentGrade</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="type">Parcel</span> <span class="variable">data</span> <span class="operator">=</span> Parcel.obtain();</span><br><span class="line">        <span class="type">Parcel</span> <span class="variable">reply</span> <span class="operator">=</span> Parcel.obtain();</span><br><span class="line">        <span class="type">int</span> <span class="variable">grade</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        data.writeString(name);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (mBinder == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;Need Bind Remote Server...&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            mBinder.transact(REQUEST_CODE, data, reply, <span class="number">0</span>);</span><br><span class="line">            grade = reply.readInt();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> grade;</span><br><span class="line">    &#125;</span><br><span class="line">		</span><br><span class="line">    <span class="comment">// 实例化Binder代理类的对象</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> IGradeInterface <span class="title function_">asInterface</span><span class="params">(IBinder iBinder)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (iBinder == <span class="literal">null</span>) &#123;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 始终返回 BinderProxy 对象</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">BinderProxy</span>(iBinder); </span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>主activity中通过ServiceConnection对象的onServiceConnected方法从服务端得到返回的Binder对象，转成代理类型</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="type">ServiceConnection</span> <span class="variable">mServiceConnection</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServiceConnection</span>() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onServiceConnected</span><span class="params">(ComponentName componentName, IBinder iBinder)</span> &#123;</span><br><span class="line">      	<span class="comment">// 连接服务成功，根据是否跨进程获取BinderProxy或者GradeBinder实例</span></span><br><span class="line">        mBinderProxy = BinderProxy.asInterface(iBinder);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onServiceDisconnected</span><span class="params">(ComponentName componentName)</span> &#123;</span><br><span class="line">        mBinderProxy = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>关于 onTransact()&#x2F;transact(…) 方法：</strong> </p>
+<ul>
+<li>虽然客户端代码中没有直接调用 transact(…) 方法，但实际上，客户端的BinderProxy 的 getStudentGrade() 方法内部会调用 mBinder.transact(…)，最终还是会走到服务端的 onTransact() 方法。</li>
+<li>代理模式只是隐藏了底层的通信细节，让客户端代码看起来像是在调用本地方法一样，但实际上跨进程通信仍然是通过 transact() 和 onTransact() 方法来完成的。</li>
+</ul>
+</blockquote>
+<p><strong>AIDL</strong></p>
+<blockquote>
+<p>类似于代理模式，AIDL 会自动生成类似于所写的 <code>IGradeInterface</code>、服务端<code>GradeBinder</code>、客户端<code>BinderProxy</code>  这样的代码结构，从而简化了 Binder 通信的开发。</p>
+</blockquote>
+<p>server进程：</p>
+<p>创建AIDL文件，将暴露给客户端的<strong>接口在这个AIDL文件中声明</strong>，</p>
+<ul>
+<li>在服务端项目的 src&#x2F;main 目录下创建一个名为 aidl 的文件夹（如果还没有的话）。</li>
+<li>在 aidl 文件夹内创建一个与你的包名相同的文件夹，例如 com&#x2F;example&#x2F;gradeservice。</li>
+<li>在该包名文件夹下创建一个名为 IGradeService.aidl 的文件</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// IGradeService.aidl</span></span><br><span class="line"><span class="keyword">package</span> com.example.gradeservice;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">IGradeService</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">getStudentGrade</span><span class="params">(String name)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Service中实现这个AIDL接口并创建<strong>Service用来监听客户端的连接请求</strong>。</p>
+<ul>
+<li>Rebuild 项目。Android Studio 会自动根据 AIDL 文件生成对应的 Java 接口文件（IGradeService.java）。</li>
+<li>创建一个名为 GradeService 的 Service 类，并实现 IGradeService.Stub 抽象类。</li>
+<li>在 GradeService 中实现 getStudentGrade() 方法，提供具体的业务逻辑。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GradeService.java</span></span><br><span class="line"><span class="keyword">package</span> com.example.gradeservice;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.Service;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.IBinder;</span><br><span class="line"><span class="keyword">import</span> android.os.RemoteException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GradeService</span> <span class="keyword">extends</span> <span class="title class_">Service</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> IGradeService.<span class="type">Stub</span> <span class="variable">mBinder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IGradeService</span>.Stub() &#123; <span class="comment">// 实现接口IGradeService的binder类</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getStudentGrade</span><span class="params">(String name)</span> <span class="keyword">throws</span> RemoteException &#123;</span><br><span class="line">            <span class="keyword">return</span> StudentMap.getStudentGrade(name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> IBinder <span class="title function_">onBind</span><span class="params">(Intent intent)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> mBinder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>client进程：</p>
+<p>引入AIDL</p>
+<ul>
+<li>将服务端的 IGradeService.aidl 文件 <strong>原封不动地</strong> 复制到客户端项目的 src&#x2F;main&#x2F;aidl&#x2F;com&#x2F;example&#x2F;gradeservice&#x2F; 目录下。</li>
+</ul>
+<p><strong>绑定服务端的Service</strong>，绑定成功后，将<strong>服务端返回的Binder对象转成AIDL接口所属的类型</strong>，调用AIDL接口中的方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> com.example.gradeservice.IGradeService;</span><br><span class="line"></span><br><span class="line"><span class="comment">// MainActivity.java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainActivity</span> <span class="keyword">extends</span> <span class="title class_">BaseViewBindingActivity</span>&lt;ActivityBinderBinding&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> IGradeService mBinderProxy;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">ServiceConnection</span> <span class="variable">mServiceConnection</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServiceConnection</span>() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onServiceConnected</span><span class="params">(ComponentName componentName, IBinder iBinder)</span> &#123;</span><br><span class="line">          	<span class="comment">// 透过服务端返回的binder对象转换为代理binder对象</span></span><br><span class="line">            mBinderProxy = IGradeService.Stub.asInterface(iBinder);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onServiceDisconnected</span><span class="params">(ComponentName componentName)</span> &#123;</span><br><span class="line">            mBinderProxy = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        binding.btnBindService.setOnClickListener(view -&gt; bindGradeService());</span><br><span class="line">      	<span class="comment">// 查询学生成绩</span></span><br><span class="line">        binding.btnFindGrade.setOnClickListener(view -&gt; getStudentGrade(<span class="string">&quot;Anna&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">// 绑定服务</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">bindGradeService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">action</span> <span class="operator">=</span> <span class="string">&quot;android.intent.action.server.aidl.gradeservice&quot;</span>;</span><br><span class="line">        <span class="type">Intent</span> <span class="variable">intent</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Intent</span>(action);</span><br><span class="line">        intent.setPackage(getPackageName());</span><br><span class="line">        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">		<span class="comment">// 查询成绩</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">getStudentGrade</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">grade</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            grade = mBinderProxy.getStudentGrade(name);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        ToastUtils.showShort(<span class="string">&quot;Anna grade is &quot;</span> + grade);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="Binder实现"><a href="#Binder实现" class="headerlink" title="Binder实现"></a>Binder实现</h4><p><a href="https://www.cnblogs.com/samchen2009/p/3316001.html">https://www.cnblogs.com/samchen2009/p/3316001.html</a></p>
 <p><a href="https://sharrychoo.github.io/blog/android-source/dc-binder1">https://sharrychoo.github.io/blog/android-source/dc-binder1</a></p>
 <p>进程使用Binder与System_Server通信，例如：AlarmManagerService、BluetoothService 和 BatteryService，</p>
 <p><strong>Binder结构</strong></p>
@@ -2889,7 +3165,7 @@
 
 <h4 id="SystemServer进程"><a href="#SystemServer进程" class="headerlink" title="SystemServer进程"></a>SystemServer进程</h4><ul>
 <li>由Zygote进程fork生成，SystemServer是Zygote孵化的第一个进程。</li>
-<li>负责启动、管理整个Java Framework，系统里面重要的服务都是在这个进程里面开启的，比如ActivityManagerService、PackageManagerService、WindowManagerService。</li>
+<li>负责启动、管理整个Java Framework，系统里面重要的服务都是在这个进程里面开启的，比如ActivityManagerService、WindowManagerService。</li>
 </ul>
 <p><strong>ActivityManagerService.java</strong></p>
 <p>函数<code>startProcessLocked(...)</code>中调用<code>Process.start()</code>启动Process</p>
@@ -2922,171 +3198,16 @@
 
 
 
+
+
+
+
 <h3 id="常用框架"><a href="#常用框架" class="headerlink" title="常用框架"></a>常用框架</h3><h4 id="Glide"><a href="#Glide" class="headerlink" title="Glide"></a>Glide</h4><h4 id="Retrofit"><a href="#Retrofit" class="headerlink" title="Retrofit"></a>Retrofit</h4><h4 id="RxJava"><a href="#RxJava" class="headerlink" title="RxJava"></a>RxJava</h4>]]></content>
       <categories>
         <category>Android</category>
       </categories>
       <tags>
         <tag>Android, Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pytorch_learning_record</title>
-    <url>/2024/05/08/pytorch-learning-record/</url>
-    <content><![CDATA[<p>dqn与pytorch</p>
-<span id="more"></span>
-
-<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
-<p>主要属性</p>
-<ul>
-<li><p>T: dimensions reversed</p>
-</li>
-<li><p>H: 共轭转置</p>
-</li>
-<li><p>data: 值</p>
-</li>
-<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
-</li>
-<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
-</li>
-<li><p>is_leaf: 指示是否叶子节点</p>
-</li>
-<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
-</li>
-<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
-</li>
-<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
-</li>
-<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
-<p>Sub代表减法；</p>
-<p>Mul代表乘法；</p>
-<p>Mm代表矩阵乘法；</p>
-<p>Div代表除法；</p>
-<p>T代表矩阵转置；</p>
-<p>Pow代表乘方；</p>
-<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
-<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
-<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
-<p>y &#x3D; (x + w) * (w + 1)</p>
-<p>a &#x3D; x+w</p>
-<p>b &#x3D; w + 1</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
-
-
-
-<p>通常</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>自动梯度</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>torchviz</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
-
-<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
-<ul>
-<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
-<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
-<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
-<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
-<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
-<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
-<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
-</ul>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
-
-
-
-<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>optimizer.step()</p>
-<p>优化器执行一次梯度更新</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
-
-<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
-<p>optimizer.zero_grad()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
-
-<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
-
-
-
-<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
-<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
-<p> tensor的requires_grad的属性默认为False。</p>
-<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>.grad_fn 属性</p>
-<p>tensor在计算图中的父运算函数</p>
-<p>.detach()与.detach_()</p>
-<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
-<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
-<p>相同：</p>
-<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
-<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
-<p>不同：</p>
-<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
-<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
-<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-<p>torch.no_grad()</p>
-<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
-<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
-<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>.backward()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
-
-<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
-<p>.backward()方法仅适用于标量</p>
-<p>.register_hook()</p>
-<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
-<p>获取中间tensor的grad值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <tags>
-        <tag>python, pytorch</tag>
       </tags>
   </entry>
 </search>
