@@ -81,14 +81,6 @@
       </tags>
   </entry>
   <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
     <title>common-commands</title>
     <url>/2024/06/22/common-commands/</url>
     <content><![CDATA[<p>常用指令</p>
@@ -273,169 +265,18 @@
       </tags>
   </entry>
   <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
+  </entry>
+  <entry>
     <title>pic_test</title>
     <url>/2024/04/12/pic-test/</url>
     <content><![CDATA[<p>图片插入测试：</p>
 <img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>pytorch_learning_record</title>
-    <url>/2024/05/08/pytorch-learning-record/</url>
-    <content><![CDATA[<p>dqn与pytorch</p>
-<span id="more"></span>
-
-<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
-<p>主要属性</p>
-<ul>
-<li><p>T: dimensions reversed</p>
-</li>
-<li><p>H: 共轭转置</p>
-</li>
-<li><p>data: 值</p>
-</li>
-<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
-</li>
-<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
-</li>
-<li><p>is_leaf: 指示是否叶子节点</p>
-</li>
-<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
-</li>
-<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
-</li>
-<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
-</li>
-<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
-<p>Sub代表减法；</p>
-<p>Mul代表乘法；</p>
-<p>Mm代表矩阵乘法；</p>
-<p>Div代表除法；</p>
-<p>T代表矩阵转置；</p>
-<p>Pow代表乘方；</p>
-<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
-<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
-<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
-<p>y &#x3D; (x + w) * (w + 1)</p>
-<p>a &#x3D; x+w</p>
-<p>b &#x3D; w + 1</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
-
-
-
-<p>通常</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>自动梯度</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>torchviz</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
-
-<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
-<ul>
-<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
-<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
-<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
-<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
-<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
-<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
-<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
-</ul>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
-
-
-
-<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>optimizer.step()</p>
-<p>优化器执行一次梯度更新</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
-
-<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
-<p>optimizer.zero_grad()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
-
-<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
-
-
-
-<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
-<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
-<p> tensor的requires_grad的属性默认为False。</p>
-<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>.grad_fn 属性</p>
-<p>tensor在计算图中的父运算函数</p>
-<p>.detach()与.detach_()</p>
-<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
-<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
-<p>相同：</p>
-<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
-<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
-<p>不同：</p>
-<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
-<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
-<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-<p>torch.no_grad()</p>
-<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
-<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
-<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>.backward()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
-
-<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
-<p>.backward()方法仅适用于标量</p>
-<p>.register_hook()</p>
-<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
-<p>获取中间tensor的grad值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <tags>
-        <tag>python, pytorch</tag>
-      </tags>
   </entry>
   <entry>
     <title>reinforce-learning-record</title>
@@ -697,6 +538,165 @@
 ]]></content>
       <tags>
         <tag>python, reinforce learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pytorch_learning_record</title>
+    <url>/2024/05/08/pytorch-learning-record/</url>
+    <content><![CDATA[<p>dqn与pytorch</p>
+<span id="more"></span>
+
+<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
+<p>主要属性</p>
+<ul>
+<li><p>T: dimensions reversed</p>
+</li>
+<li><p>H: 共轭转置</p>
+</li>
+<li><p>data: 值</p>
+</li>
+<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
+</li>
+<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
+</li>
+<li><p>is_leaf: 指示是否叶子节点</p>
+</li>
+<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
+</li>
+<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
+</li>
+<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
+</li>
+<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
+<p>Sub代表减法；</p>
+<p>Mul代表乘法；</p>
+<p>Mm代表矩阵乘法；</p>
+<p>Div代表除法；</p>
+<p>T代表矩阵转置；</p>
+<p>Pow代表乘方；</p>
+<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
+<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
+<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
+<p>y &#x3D; (x + w) * (w + 1)</p>
+<p>a &#x3D; x+w</p>
+<p>b &#x3D; w + 1</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
+
+
+
+<p>通常</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>自动梯度</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>torchviz</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
+
+<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
+<ul>
+<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
+<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
+<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
+<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
+<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
+<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
+<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
+</ul>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
+
+
+
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>optimizer.step()</p>
+<p>优化器执行一次梯度更新</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
+
+<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
+<p>optimizer.zero_grad()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
+
+<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
+
+
+
+<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
+<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
+<p> tensor的requires_grad的属性默认为False。</p>
+<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>.grad_fn 属性</p>
+<p>tensor在计算图中的父运算函数</p>
+<p>.detach()与.detach_()</p>
+<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
+<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
+<p>相同：</p>
+<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
+<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
+<p>不同：</p>
+<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
+<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
+<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p>torch.no_grad()</p>
+<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
+<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
+<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>.backward()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
+
+<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
+<p>.backward()方法仅适用于标量</p>
+<p>.register_hook()</p>
+<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
+<p>获取中间tensor的grad值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <tags>
+        <tag>python, pytorch</tag>
       </tags>
   </entry>
   <entry>
