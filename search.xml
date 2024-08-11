@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Database-Learning-Record</title>
-    <url>/2024/08/10/Database-Learning-Record/</url>
-    <content><![CDATA[<p>操作系统相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database_Learning_Record"></a>Database_Learning_Record</h1>]]></content>
-      <categories>
-        <category>database</category>
-      </categories>
-      <tags>
-        <tag>database</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Algo Learning Record</title>
     <url>/2024/04/25/Algo-Learning-Record/</url>
     <content><![CDATA[<p>算法相关学习记录</p>
@@ -80,12 +64,640 @@
       </tags>
   </entry>
   <entry>
+    <title>Database-Learning-Record</title>
+    <url>/2024/08/10/Database-Learning-Record/</url>
+    <content><![CDATA[<p>MySQL和Redis数据库相关学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database_Learning_Record"></a>Database_Learning_Record</h1><p>测试测试</p>
+]]></content>
+      <categories>
+        <category>database</category>
+      </categories>
+      <tags>
+        <tag>database</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>第一篇博客</title>
     <url>/2024/04/11/first_post/</url>
     <content><![CDATA[<p>写一个测试试一下</p>
 <p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
 <p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
+    <title>reinforce-learning-record</title>
+    <url>/2024/06/10/reinforce-learning-record/</url>
+    <content><![CDATA[<p>reinforce learning</p>
+<span id="more"></span>
+
+<h1 id="reinforce-learning-record"><a href="#reinforce-learning-record" class="headerlink" title="reinforce learning record"></a>reinforce learning record</h1><h2 id="MRP"><a href="#MRP" class="headerlink" title="MRP"></a>MRP</h2><img src="/2024/06/10/reinforce-learning-record/image-20240610205131367.png" class="" title="image-20240610205131367">
+
+<h3 id="回报"><a href="#回报" class="headerlink" title="回报"></a>回报</h3><p>在一个马尔可夫奖励过程中，从第t时刻状态S_t开始，直到终止状态时，所有奖励的衰减之和称为<strong>回报</strong>（Return）</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203108806.png" class="" title="image-20240610203108806">
+
+<ul>
+<li>Rt表示在时刻t获得的奖励</li>
+<li><strong>到达状态Si</strong>，得到奖励r(s)；若在时刻t到达状态Si，则<strong>Rt&#x3D;r(Si)</strong></li>
+<li>对于某状态序列<img src="/2024/06/10/reinforce-learning-record/image-20240610203423677.png" class="" title="image-20240610203423677">我们有对应于该状态序列的奖励G<img src="/2024/06/10/reinforce-learning-record/image-20240610203434567.png" class="" title="image-20240610203434567"></li>
+</ul>
+<h3 id="价值函数"><a href="#价值函数" class="headerlink" title="价值函数"></a>价值函数</h3><p>在马尔可夫奖励过程中，一个状态的期望回报（即从这个状态出发的未来累积奖励的期望）被称为这个状态的<strong>价值</strong>（value）。所有状态的价值就组成了<strong>价值函数</strong>（value function），价值函数的输入为某个状态，输出为这个状态的价值。</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203509585.png" class="" title="image-20240610203509585">
+
+<ul>
+<li>对于某个状态s，从该状态出发可得到的状态序列有很多条</li>
+<li>对于某个状态s，价值函数为<strong>从该状态出发，可能存在的所有状态序列的奖励的均值</strong></li>
+</ul>
+<p>贝尔曼方程</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610203841177.png" class="" title="image-20240610203841177">
+
+<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><p>与MRP相比，奖励与状态和动作相关</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610205112917.png" class="" title="image-20240610205112917">
+
+<h3 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h3><p>策略表示在状态s下采取动作a的<strong>概率</strong>，概率可能为1</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204522539.png" class="" title="image-20240610204522539">
+
+<h3 id="状态价值函数"><a href="#状态价值函数" class="headerlink" title="状态价值函数"></a>状态价值函数</h3><p>在 MDP 中基于策略Π的状态价值函数（state-value function），定义为从状态s出发遵循策略Π能获得的期望回报</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204014373.png" class="" title="image-20240610204014373">
+
+<h3 id="动作价值函数"><a href="#动作价值函数" class="headerlink" title="动作价值函数"></a>动作价值函数</h3><p>在 MDP 中，由于动作的存在，我们额外定义一个<strong>动作价值函数</strong>（action-value function）。表示在 MDP 遵循策略Π时，对当前状态s执行动作a得到的期望回报</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204152914.png" class="" title="image-20240610204152914">
+
+<ul>
+<li><strong>采取动作a到达状态s</strong>，得到奖励R</li>
+</ul>
+<h3 id="状态价值函数与动作价值函数关系"><a href="#状态价值函数与动作价值函数关系" class="headerlink" title="状态价值函数与动作价值函数关系"></a>状态价值函数与动作价值函数关系</h3><img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<ul>
+<li>从状态s出发，可能采取动作a1, a2, a3, …;对于每个可能采取的动作，均有动作价值Q，则状态s的状态价值为所有动作价值的期望</li>
+</ul>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<ul>
+<li>在状态s执行动作a后，得到奖励r(s,a)；由于可能到达多个不同的状态s’，动作价值为即时奖励r(s,a)+可能到达的所有状态的价值的期望</li>
+</ul>
+<h3 id="最优策略"><a href="#最优策略" class="headerlink" title="最优策略"></a>最优策略</h3><p>策略之间的偏序关系</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093758370.png" class="" title="image-20240612093758370">
+
+<p>最优策略为 对于任意的策略，均有最优策略优于或不差于其他策略</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093948192.png" class="" title="image-20240612093948192">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612093958259.png" class="" title="image-20240612093958259">
+
+<p>最优状态价值与最优动作价值的关系</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612094048209.png" class="" title="image-20240612094048209">
+
+
+
+<h3 id="贝尔曼期望方程"><a href="#贝尔曼期望方程" class="headerlink" title="贝尔曼期望方程"></a>贝尔曼期望方程</h3><p>采取策略Π</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610204627264.png" class="" title="image-20240610204627264">
+
+<ul>
+<li>对于状态s，s的状态价值为 ( 折损的 <strong>所有可达的下一状态的价值的期望</strong> + <strong>到达所有可达的下一状态的r(s’,a)的期望</strong> )</li>
+<li>对于状态s和动作a，在状态s进行动作a的价值为 ( <strong>在状态s执行动作a的r(s,a)的期望</strong>(实际上就是r(s,a)) + 折损的 <strong>在执行动作a后所有可达的下一状态的所有可执行动作的价值的期望</strong> )</li>
+</ul>
+<img src="/2024/06/10/reinforce-learning-record/shiow.PNG" class="" title="shiow">
+
+<p>图中情况为每个动作只会到达一个状态&amp;应该直接将动作视为一个节点，图为树</p>
+<h3 id="贝尔曼最优方程"><a href="#贝尔曼最优方程" class="headerlink" title="贝尔曼最优方程"></a>贝尔曼最优方程</h3><p>存在策略*，使对于任意的状态s，均有基于策略*状态价值函数大于基于策略Π的状态价值函数</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610205402396.png" class="" title="image-20240610205402396">
+
+<ul>
+<li>对于状态价值：非最优形式是求期望，最优形式是直接选取当前状态，所有动作中，未来状态序列中价值最大的</li>
+<li>对于动作价值：非最优形式是求期望，最优形式是直接选取下一状态，所有动作中，未来状态序列中动作价值最大的</li>
+</ul>
+<h2 id="策略迭代算法-基于策略函数的"><a href="#策略迭代算法-基于策略函数的" class="headerlink" title="策略迭代算法&#x2F;基于策略函数的"></a>策略迭代算法&#x2F;基于策略函数的</h2><p>策略评估：</p>
+<p>基于当前策略Π，在已知状态转移函数的情况下（即我们可以知道采取动作a后有多高的几率到达哪个状态），使用<strong>贝尔曼期望方程</strong>迭代更新状态价值函数</p>
+<p>ps: 原文中迭代更新状态价值函数是通过</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<p>以上两个公式实现的，也即</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">		qsa = <span class="number">0</span>  <span class="comment"># 当前动作的动作价值</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:  <span class="comment"># 有模型，即状态转移函数已知</span></span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))  <span class="comment"># 第一个公式，计算该动作的价值(开头的p为动作成功概率)</span></span><br><span class="line">         qsa_list.append(self.pi[s][a] * qsa)  <span class="comment"># 乘采取该动作的几率</span></span><br><span class="line">	new_v[s] = <span class="built_in">sum</span>(qsa_list)  <span class="comment"># 第二个公式，根据所有动作的价值计算状态价值</span></span><br></pre></td></tr></table></figure>
+
+<p>target: 更新<strong>状态价值函数</strong>，使之收敛</p>
+<p>策略提升：</p>
+<p>由于</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<p>故修改策略，使得动作价值最大的动作以更高的概率(若最大值唯一，该动作将成为唯一被选取动作；若不唯一，这些动作将均分概率1)被选取，可使新策略下的状态价值函数增大，也即<img src="/2024/06/10/reinforce-learning-record/image-20240611150030644.png" class="" title="image-20240611150030644"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">    	qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)</span><br><span class="line">     maxq = <span class="built_in">max</span>(qsa_list)</span><br><span class="line">     cntq = qsa_list.count(maxq)  <span class="comment"># 计算有几个动作得到了最大的Q值</span></span><br><span class="line">     <span class="comment"># 让这些动作均分概率</span></span><br><span class="line">     self.pi[s] = [<span class="number">1</span> / cntq <span class="keyword">if</span> q == maxq <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> q <span class="keyword">in</span> qsa_list]</span><br></pre></td></tr></table></figure>
+
+<p>target: 修改<strong>策略</strong>，使在新策略下，有基于新策略的状态价值函数大于原策略的状态价值函数</p>
+<h2 id="价值迭代算法-基于价值函数的"><a href="#价值迭代算法-基于价值函数的" class="headerlink" title="价值迭代算法&#x2F;基于价值函数的"></a>价值迭代算法&#x2F;基于价值函数的</h2><p>使用贝尔曼最优方程</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611191853492.png" class="" title="image-20240611191853492">
+
+<p>迭代形式</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611152610430.png" class="" title="image-20240611152610430">
+
+<p>进行价值迭代；</p>
+<p>使用</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611152643864.png" class="" title="image-20240611152643864">
+
+<p>从迭代完成的状态价值函数中获取策略，即 从当前状态出发，哪个动作的 (即时奖励+下一状态价值) 最大，策略就为哪个动作</p>
+<p>ps: 程序实际使用公式</p>
+<p>最优状态价值是选择此时使最优动作价值最大的那一个动作时的状态价值</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611153610316.png" class="" title="image-20240611153610316">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">max_diff = <span class="number">0</span></span><br><span class="line">new_v = [<span class="number">0</span>] * self.env.ncol * self.env.nrow  <span class="comment"># 迷宫环境，初始化状态价值</span></span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> <span class="built_in">range</span>(self.env.ncol * self.env.nrow):</span><br><span class="line">    qsa_list = []</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">            p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)  <span class="comment"># 记录状态s下的所有Q(s,a)价值</span></span><br><span class="line">     new_v[s] = <span class="built_in">max</span>(qsa_list)  <span class="comment"># 取最大作为新状态价值</span></span><br><span class="line">     max_diff = <span class="built_in">max</span>(max_diff, <span class="built_in">abs</span>(new_v[s] - self.v[s]))</span><br><span class="line">self.v = new_v</span><br><span class="line"><span class="keyword">if</span> max_diff &lt; self.theta: <span class="keyword">break</span>  <span class="comment"># 满足收敛条件,退出评估迭代</span></span><br><span class="line">cnt += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="有模型-无模型-在线策略-离线策略"><a href="#有模型-无模型-在线策略-离线策略" class="headerlink" title="有模型&amp;无模型+在线策略&amp;离线策略"></a>有模型&amp;无模型+在线策略&amp;离线策略</h2><p><strong>有模型强化学习：</strong></p>
+<p>智能体学习环境的状态转移函数</p>
+<p>环境的状态转移函数已知</p>
+<p>智能体可以直接根据状态转移函数得到在对环境进行动作a后环境的下一状态</p>
+<p># 状态转移函数P[state][action] &#x3D; [(p, next_state, reward, done)]包含转移成功概率，下一个状态，奖励和是否完成</p>
+<ul>
+<li>Dyna-Q</li>
+<li>Monte Carlo Tree Search (MCTS)</li>
+<li>PILCO (Probabilistic Inference for Learning Control)</li>
+</ul>
+<p><strong>无模型强化学习：</strong></p>
+<p>智能体通过与环境交互学习状态和奖励之间的映射关系</p>
+<p>环境的状态转移函数未知</p>
+<p>智能体必须通过与环境的交互才能得到环境的下一状态</p>
+<ul>
+<li>Q-learning</li>
+<li>SARSA</li>
+<li>Deep Q-Network (DQN)</li>
+<li>Policy Gradient methods (e.g., REINFORCE, A2C, PPO)</li>
+</ul>
+<p>样本：当前状态，下一状态，采取动作，奖励</p>
+<p><strong>在线策略学习：</strong></p>
+<p>不保存样本</p>
+<p><strong>离线策略学习：</strong></p>
+<p>使用经验回放池保存样本</p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="蒙特卡洛方法"><a href="#蒙特卡洛方法" class="headerlink" title="蒙特卡洛方法"></a>蒙特卡洛方法</h3><p>Value-based + online</p>
+<p>从某状态s出发，基于策略Π，获得一条状态序列，该状态序列对应一个回报G；该过程为一次采样。</p>
+<p>反复采样，得到N个状态序列+回报和M，由大数定律，可得该状态的状态价值</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161858965.png" class="" title="image-20240611161858965">
+
+<p>使用增量更新方法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161157050.png" class="" title="image-20240611161157050">
+
+<p>补：增量更新原理</p>
+<p>新均值 &#x3D; 旧均值 + 1&#x2F;总量 * (新值 - 旧均值) ？</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611161942958.png" class="" title="image-20240611161942958">
+
+<h3 id="时序差分算法"><a href="#时序差分算法" class="headerlink" title="时序差分算法"></a>时序差分算法</h3><p>Value-based + online</p>
+<p>类似于蒙特卡洛，更新状态s的状态价值时，不使用完整的状态序列，在得到下一状态时立即对状态s的状态价值进行更新</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611162513650.png" class="" title="image-20240611162513650">
+
+<p>蒙特卡洛使用第三行对状态价值进行更新，时序差分使用第四行对状态价值进行更新</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611162624769.png" class="" title="image-20240611162624769">
+
+<ul>
+<li>只向前走了一步的蒙特卡洛</li>
+<li>使用下一状态的状态价值代替了很长的状态序列的回报(状态价值本身就是所有未来时刻的回报期望和)</li>
+<li>增量更新体现在 减号前部分为 (新 状态s的状态价值)，减号后部分为 (旧 状态s的状态价值)</li>
+</ul>
+<h3 id="Sarsa算法"><a href="#Sarsa算法" class="headerlink" title="Sarsa算法"></a>Sarsa算法</h3><p>Value-based + online</p>
+<p>类似于时序差分算法，对动作价值进行更新，目标是估计 <strong>ε-greedy策略的动作价值函数</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611191221769.png" class="" title="image-20240611191221769">
+
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100452913.png" class="" title="image-20240612100452913">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1, a1] - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Q-learning算法"><a href="#Q-learning算法" class="headerlink" title="Q-learning算法"></a>Q-learning算法</h3><p>Value-based + offline</p>
+<p>对动作价值进行更新，目标是估计 <strong>最优策略的动作价值函数</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611194333945.png" class="" title="image-20240611194333945">
+
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100509915.png" class="" title="image-20240612100509915">
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1].max() - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="DQN-DDQN"><a href="#DQN-DDQN" class="headerlink" title="DQN&#x2F;DDQN"></a>DQN&#x2F;DDQN</h3><p>Value-based + offline</p>
+<p>将Q-learning的Q表换成net</p>
+<h3 id="策略梯度算法-REINFORCE"><a href="#策略梯度算法-REINFORCE" class="headerlink" title="策略梯度算法(REINFORCE)"></a>策略梯度算法(REINFORCE)</h3><p>Policy-based + online</p>
+<p>定义策略学习的目标函数为，s0为初始状态</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100629893.png" class="" title="image-20240612100629893">
+
+<p>目标是修改参数θ，使J(θ)取最大；即对θ求导</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612100732404.png" class="" title="image-20240612100732404">
+
+<p>where 第一行第一个求和符号后的对象为 策略的<strong>状态访问分布</strong></p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612102026769.png" class="" title="image-20240612102026769">
+
+<p>策略的状态访问分布表示该策略和在环境中会访问到的状态的分布情况(即到达每个状态的概率)</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612102256431.png" class="" title="image-20240612102256431">
+
+<p>故该求导表示 对于每个状态，我们有一定的概率在该状态，从该状态出发，策略决定了我们能获得的价值的期望</p>
+<p>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240611200059062.png" class="" title="image-20240611200059062">
+
+<p>时刻t向后的回报即为(动作)价值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">reward_list = transition_dict[<span class="string">&#x27;rewards&#x27;</span>]</span><br><span class="line">state_list = transition_dict[<span class="string">&#x27;states&#x27;</span>]</span><br><span class="line">action_list = transition_dict[<span class="string">&#x27;actions&#x27;</span>]</span><br><span class="line"></span><br><span class="line">G = <span class="number">0</span></span><br><span class="line">self.optimizer.zero_grad()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(<span class="built_in">len</span>(reward_list))):  <span class="comment"># 从最后一步算起</span></span><br><span class="line">    reward = reward_list[i]  <span class="comment"># 取时间步i获得的奖励</span></span><br><span class="line">    state = torch.tensor([state_list[i]],</span><br><span class="line">                         dtype=torch.<span class="built_in">float</span>).to(self.device)  <span class="comment"># 取时间步i的状态</span></span><br><span class="line">    action = torch.tensor([action_list[i]]).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)  <span class="comment"># 取时间步i的动作</span></span><br><span class="line">    log_prob = torch.log(self.policy_net(state).gather(<span class="number">1</span>, action))</span><br><span class="line">    <span class="comment"># self.policy_net(state)： 将状态输入策略网络，得到所有可能动作的概率分布。</span></span><br><span class="line">	<span class="comment"># .gather(1, action): 从概率分布中选取实际执行动作对应的概率值。</span></span><br><span class="line">	<span class="comment"># torch.log(...): 对选取的概率值取对数，得到对数概率</span></span><br><span class="line">    G = self.gamma * G + reward  <span class="comment"># G累计了从当前时间步i到episode结束的所有奖励</span></span><br><span class="line">    loss = -log_prob * G  <span class="comment"># loss对应公式中符号α后的部分</span></span><br><span class="line">    loss.backward()  <span class="comment"># 反向传播计算梯度</span></span><br><span class="line">self.optimizer.step()  <span class="comment"># 梯度下降，实际上是对策略进行求导</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3><p>(Value + Policy)-based + offline</p>
+<p>策略函数梯度</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110026419.png" class="" title="image-20240612110026419">
+
+<p>ψ_t可为不同值，表示不同的方法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110241521.png" class="" title="image-20240612110241521">
+
+
+
+<p>价值函数的损失函数与梯度</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110951796.png" class="" title="image-20240612110951796">
+
+<img src="/2024/06/10/reinforce-learning-record/image-20240612111022161.png" class="" title="image-20240612111022161">
+
+
+
+<p>Actor（策略网络）和 Critic（价值网络）</p>
+<ul>
+<li><p>Actor 要做的是与环境交互，并在 Critic 价值函数的指导下用策略梯度学习一个更好的策略。</p>
+</li>
+<li><p>Critic 要做的是通过 Actor 与环境交互收集的数据学习一个价值函数，这个价值函数会用于判断在当前状态什么动作是好的，什么动作不是好的，进而帮助 Actor 进行策略更新。</p>
+</li>
+</ul>
+<p>基于<strong>时序差分(TD)<strong>方法的</strong>Actor-Critic</strong>算法</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20240612110750284.png" class="" title="image-20240612110750284">
+
+<p>价值网络使用时序差分(TD)更新，策略网络使用</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络(critic)</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络(critic)预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络(actor)</span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数。(价值网络给出的当前状态价值)和(r+价值网络给出的下一状态的状态价值)的均方误差，即((a-b)^2)/2</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。策略函数梯度</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="强化学习设置小心得"><a href="#强化学习设置小心得" class="headerlink" title="强化学习设置小心得"></a>强化学习设置小心得</h2><p>控制状态空间大小，尽量选择有限状态空间</p>
+<p>eg: 将state中的一些值int化</p>
+<p>状态空间的表示值尽量接近</p>
+<p>采用标准化技术将state内的值均一化</p>
+<p>eg: [1, 200, 9999] -&gt; [0.001, 0.99, 0.9999]</p>
+<p>reward设置</p>
+<p>惩罚和奖励设置插值不要过大, 防止惩罚拟合过快</p>
+<p>+2, -200 -&gt; +2, 0</p>
+]]></content>
+      <tags>
+        <tag>python, reinforce learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pytorch_learning_record</title>
+    <url>/2024/05/08/pytorch-learning-record/</url>
+    <content><![CDATA[<p>dqn与pytorch</p>
+<span id="more"></span>
+
+<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
+<p>主要属性</p>
+<ul>
+<li><p>T: dimensions reversed</p>
+</li>
+<li><p>H: 共轭转置</p>
+</li>
+<li><p>data: 值</p>
+</li>
+<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
+</li>
+<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
+</li>
+<li><p>is_leaf: 指示是否叶子节点</p>
+</li>
+<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
+</li>
+<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
+</li>
+<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
+</li>
+<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
+<p>Sub代表减法；</p>
+<p>Mul代表乘法；</p>
+<p>Mm代表矩阵乘法；</p>
+<p>Div代表除法；</p>
+<p>T代表矩阵转置；</p>
+<p>Pow代表乘方；</p>
+<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
+<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
+<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
+<p>y &#x3D; (x + w) * (w + 1)</p>
+<p>a &#x3D; x+w</p>
+<p>b &#x3D; w + 1</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
+
+
+
+<p>通常</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>自动梯度</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>torchviz</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
+
+<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
+<ul>
+<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
+<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
+<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
+<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
+<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
+<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
+<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
+</ul>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
+
+
+
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>optimizer.step()</p>
+<p>优化器执行一次梯度更新</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
+
+<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
+<p>optimizer.zero_grad()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
+
+<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
+
+
+
+<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
+<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
+<p> tensor的requires_grad的属性默认为False。</p>
+<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>.grad_fn 属性</p>
+<p>tensor在计算图中的父运算函数</p>
+<p>.detach()与.detach_()</p>
+<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
+<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
+<p>相同：</p>
+<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
+<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
+<p>不同：</p>
+<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
+<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
+<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p>torch.no_grad()</p>
+<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
+<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
+<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>.backward()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
+
+<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
+<p>.backward()方法仅适用于标量</p>
+<p>.register_hook()</p>
+<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
+<p>获取中间tensor的grad值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <tags>
+        <tag>python, pytorch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>common-commands</title>
+    <url>/2024/06/22/common-commands/</url>
+    <content><![CDATA[<p>常用指令</p>
+<span id="more"></span>
+
+
+
+<h1 id="Common-Commands"><a href="#Common-Commands" class="headerlink" title="Common Commands"></a>Common Commands</h1><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p><a href="https://zhuanlan.zhihu.com/p/69746955">https://zhuanlan.zhihu.com/p/69746955</a></p>
+<p>python变量，函数均为对象</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>() : </span><br><span class="line">    <span class="comment">#函数在创建时同时生成变量对象hello和函数对象（函数对象名为hello）</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    x=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(test())<span class="comment">#函数默认返回值为None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">say = hello</span><br><span class="line"> </span><br><span class="line"><span class="keyword">del</span> hello <span class="comment">#del删除了hello变量对象</span></span><br><span class="line">say()</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say)<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say.__name__) <span class="comment">##对象属性,查看对象名</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>python类</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    def my_method(self, arg1, arg2):</span><br><span class="line">    #类的方法第一个参数为self</span><br><span class="line">        # 方法体</span><br><span class="line"></span><br><span class="line">#Bound Method</span><br><span class="line">obj = MyClass()#类 实例化</span><br><span class="line">obj.my_method(arg1, arg2)#实例对象调用方法</span><br><span class="line"></span><br><span class="line">#Unbound Method</span><br><span class="line">MyClass.my_method(obj, arg1, arg2)</span><br><span class="line">	#原因：可以直接通过类访问方法，但是必须指定类的实例</span><br></pre></td></tr></table></figure>
+
+
+
+<p>函数内部函数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> test</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hello()())</span><br><span class="line"><span class="comment">#首先hello()返回函数对象test，然后调用 test()</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>函数装饰器</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">f</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">f</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inn</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;inner&quot;</span>)</span><br><span class="line">        f()</span><br><span class="line">    <span class="keyword">return</span> inn</span><br><span class="line"></span><br><span class="line"><span class="meta">@hello</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#等价于</span></span><br><span class="line">test=hello(test)<span class="comment">#原函数对象test仍存在，变量对象test指向新函数hello(test)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#test &lt;function test at 0x000001821AE551C0&gt;</span></span><br><span class="line"><span class="comment">#test() None</span></span><br><span class="line"><span class="comment">#test为函数对象，test()为（执行函数对象后的）返回值</span></span><br><span class="line">test()</span><br><span class="line"><span class="built_in">print</span>(test.__name__)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>with语句 上下文对象管理</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">with open(&#x27;myfile.txt&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">    contents = f.read()</span><br><span class="line">    print(contents)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**open(‘myfile.txt’, ‘r’)**：这是一个上下文管理器，它打开文件并返回一个文件对象。</li>
+<li><strong>as f</strong>：将文件对象赋值给变量 f，以便在 with 代码块中使用。</li>
+<li>在 with 代码块中，我们可以使用 f 读取文件内容。</li>
+<li>当 with 代码块执行完毕后，文件会自动关闭，即使在读取过程中发生异常。</li>
+</ul>
+<p>Python类型注解</p>
+<p><a href="https://zhuanlan.zhihu.com/p/419955374">https://zhuanlan.zhihu.com/p/419955374</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment">#规定函数传入参数为str类型，返回值为str类型</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Hello <span class="subst">&#123;name&#125;</span>!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mix</span>(<span class="params">scores: <span class="built_in">list</span>[<span class="built_in">int</span>], ages: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]</span>) -&gt; <span class="built_in">tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>]:</span><br><span class="line">    <span class="comment">#容器注解</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">seq: Seq1[<span class="built_in">str</span>]</span>):</span><br><span class="line">    <span class="comment">#传入参数为（列表+元组）的泛化：序列Seq</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> seq:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="type">Optional</span>[<span class="built_in">str</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为None或为str</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Yeah&#x27;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>() -&gt; <span class="type">Union</span>[<span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为str，int，float 三选一</span></span><br><span class="line">    <span class="comment">#Optional[int] 和 Union[int, None] 是等价的。</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#T为泛型，T必须为str或int</span></span><br><span class="line">T = TypeVar(<span class="string">&#x27;T&#x27;</span>, <span class="built_in">str</span>, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">a: T, b: T</span>) -&gt; <span class="type">List</span>[T]:</span><br><span class="line">    <span class="keyword">return</span> [a, b]</span><br><span class="line"></span><br><span class="line"><span class="comment"># K的具体类型没有限制</span></span><br><span class="line">K = TypeVar(<span class="string">&quot;K&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="python-环境"><a href="#python-环境" class="headerlink" title="python 环境"></a>python 环境</h2><p>sudo apt-get update  # 更新包管理器</p>
+<p>sudo apt-get install python3-venv  # 安装Python虚拟环境工具</p>
+<p>cd &#x2F;path&#x2F;to&#x2F;your&#x2F;project</p>
+<p>python3 -m venv venv</p>
+<p>source venv&#x2F;bin&#x2F;activate</p>
+<p>pip install -r requirements.txt</p>
+<p>deactivate</p>
+<p>conda指令</p>
+<p>conda env list</p>
+<p>conda create –name your_env_name python&#x3D;3.5 numpy scipy</p>
+<p>conda remove –<em>name</em> <em>your_env_name</em> –all</p>
+<p>conda install</p>
+<p>​	conda install numpy&#x3D;1.9.3</p>
+<p>activate your_env_name</p>
+<p>deactivate</p>
+<p>conda clean –all</p>
+<p>当前conda虚拟环境中存在pip时，使用pip指令将优先使用环境中pip而非全局pip，可通过pip list（当前环境必须已安装pip）和 conda list 查看当前环境包列表</p>
+<p>出现报错</p>
+<p>PackagesNotFoundError: The following packages are not available from current channels</p>
+<p>尝试在<a href="https://anaconda.org直接搜索该包并使用网站所提供的指令安装/">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ol>
+<li><p>**<code>docker pull</code>**：用于从 Docker 镜像仓库下载镜像到本地主机。</p>
+<ul>
+<li>语法：<code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></li>
+<li>示例：<code>docker pull ubuntu:20.04</code></li>
+</ul>
+<p>这个命令用于获取 Docker 镜像，其中 <code>NAME</code> 表示镜像的名称，<code>TAG</code> 表示镜像的标签，或者可以使用 <code>@DIGEST</code> 来指定镜像的摘要。如果不指定标签，将默认获取 <code>latest</code> 标签的镜像。</p>
+</li>
+<li><p>**<code>docker load</code>**：用于从文件加载镜像，通常是以 tar 归档文件的形式。</p>
+<ul>
+<li>语法：<code>docker load [OPTIONS]</code></li>
+<li>示例：<code>docker load -i myimage.tar</code></li>
+</ul>
+<p>这个命令用于加载以 tar 归档文件格式存储的 Docker 镜像。通常用于将镜像从一个环境传输到另一个环境。</p>
+</li>
+<li><p>**<code>docker save</code>**：用于将 Docker 镜像保存为 tar 归档文件。</p>
+<ul>
+<li>语法：<code>docker save [OPTIONS] IMAGE [IMAGE...]</code></li>
+<li>示例：<code>docker save -o myimage.tar myimage:tag</code></li>
+</ul>
+<p>这个命令允许你将一个或多个 Docker 镜像保存为 tar 归档文件，通常用于导出镜像以便在不同环境中使用。</p>
+</li>
+<li><p>**<code>docker run</code>**：用于创建和启动 Docker 容器。</p>
+<ul>
+<li>语法：<code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></li>
+<li>示例：<code>docker run -d -p 8080:80 my-web-app</code></li>
+</ul>
+<p>这个命令用于在 Docker 容器中运行一个镜像，你需要指定镜像的名称、容器选项（如端口映射、环境变量、容器名称等），以及容器内要执行的命令。</p>
+</li>
+<li><p>**<code>docker build</code>**：用于构建自定义 Docker 镜像，通常通过 Dockerfile 文件定义构建步骤。</p>
+<ul>
+<li>语法：<code>docker build [OPTIONS] PATH | URL | -</code></li>
+<li>示例：<code>docker build -t my-custom-image .</code></li>
+</ul>
+<p><code>docker build</code> 命令用于基于 Dockerfile 构建自定义镜像。你需要提供包含 Dockerfile 的路径，以及可选的选项和标签。</p>
+<p>Dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 使用官方 Python 3 镜像作为基础镜像</span><br><span class="line">FROM python:3.8</span><br><span class="line"></span><br><span class="line"># 设置工作目录</span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"># 复制本地项目到容器中</span><br><span class="line">COPY ./myproject /app</span><br><span class="line"></span><br><span class="line"># 安装项目依赖</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 指定容器启动命令</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+<li><p>**<code>docker rm</code>**：用于删除已停止的容器。</p>
+<ul>
+<li>语法：<code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></li>
+<li>示例：<code>docker rm my-container</code></li>
+</ul>
+<p>这个命令用于删除一个或多个已经停止的容器，释放资源并清理系统。</p>
+</li>
+<li><p>**<code>docker stop</code>**：用于停止运行中的容器。</p>
+<ul>
+<li>语法：<code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></li>
+<li>示例：<code>docker stop my-container</code></li>
+</ul>
+<p>这个命令用于停止一个或多个正在运行的容器，使它们从运行状态转换为停止状态。</p>
+</li>
+<li><p>**<code>docker ps</code>**：用于列出正在运行的容器。</p>
+<ul>
+<li>语法：<code>docker ps [OPTIONS]</code></li>
+<li>示例：<code>docker ps -a</code></li>
+</ul>
+<p><code>docker ps</code> 命令用于列出当前正在运行的容器，包括容器的 ID、状态、端口映射等信息。加上 <code>-a</code> 选项可以列出所有容器，包括已停止的容器。</p>
+</li>
+</ol>
+<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p><a href="https://blog.csdn.net/qq_34021712/article/details/117260462">https://blog.csdn.net/qq_34021712/article/details/117260462</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在桌面创建test目录</span><br><span class="line">mkdir /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 切换到test目录</span><br><span class="line">cd /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 创建并初始化git库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 链接到远程git仓库 </span><br><span class="line"># -t 默认使用 main 分支，origin为远程仓库别名（替换链接）</span><br><span class="line">git remote add origin -t main https://github.com/Helloworld-7558/git-demo.git</span><br><span class="line"></span><br><span class="line"># 将远程git库下载到本地</span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line">#修改</span><br><span class="line"></span><br><span class="line"># 将目录下所有文件都增加到本地库中。</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"># 提交更改到本地仓库</span><br><span class="line">git commit -m &#x27;提交注释&#x27;</span><br><span class="line"></span><br><span class="line"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span><br><span class="line"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"># 将本地修改推到github上</span><br><span class="line">git push -u origin main  # 首次</span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
+
+
+
+<ol>
+<li>什么是主分支<br>主分支是<em>默认分支</em>,当执行<code>git clone</code>时，克隆的就是默认分支。<code>git init</code>初始化时，会以<strong>master</strong>分支作为主分支，主分支可以改成其他分支。</li>
+<li>什么是origin<br><strong>origin</strong>代表远程分支，比如gitlab上保存的分支。Git作为分布式版本控制工具，本地分支与远程分支并无不同。假如远程服务器上有一个<strong>develop</strong>分支，那么在本地以<strong>origin&#x2F;develop</strong>代表远程分支</li>
+<li>如何创建新分支<br># 方法一<br>git branch branch_name<br># 此方法以当前所在分支为基础来创建<br># e.g. git branch feature&#x2F;test<br>​<br># 方法二<br>git branch branch_name base_branch_name<br># 此方法忽略当前所在的分支，以指定的base_branch_name为基础来创建分支<br># e.g. git branch feature&#x2F;test develop<br># e.g. git branch feature&#x2F;test origin&#x2F;develop<br>​<br># 方法三<br>git checkout -b branch_name<br># 此方法是一个快捷操作，创建并切换分支。checkout本是用来切换分支的，增加“-b”选项指：当分支不存在时创建，同样支持指定base_branch_name<br># e.g. git checkout -b feature&#x2F;test<br># e.g. git checkout -b feature&#x2F;test develop<br># e.g. git checkout -b feature&#x2F;test origin&#x2F;develop</li>
+<li>如何切换分支<br>git checkout branch_name</li>
+<li>查看所有分支<br># 列出本地所有分支<br>git branch</li>
+<li>如何删除分支<br>当使用gitflow工作流时，本地分支会越来越多，不用的分支可以删除<br># 删除单个分支<br>git branch -d branch_name<br>​<br># 删除多个分支<br>git branch | grep feature&#x2F; | xargs git branch -d<br># git branch命令不支持管道操作，所获得的列表不能作为git branch -d的参数，所以需要使用xargs做一个辅助</li>
+<li>如何提交修改<br># 第一步：将修改进行暂存(Stage)<br>git add .&#x2F; # 添加所有本地修改<br># 添加特定文件 git add file1 file2<br># 添加特定文件夹下的所有文件 git add .&#x2F;dir1&#x2F;dir2&#x2F;<br>​<br># 第二步：执行commit<br>git commit -m ‘commit message’<br># 使用编辑器编写提交说明 git commit ,Git将自动打开默认编辑器，通常是Vim，可以自定义<br># 在上一条提交上追加提交 git commit –amend，本次提交不会生成一条新的提交记录。应该保证每次提交都是一次完整的功能修改，当发现上次提交的内容不完整时，应该采用此种方法进行追加提交。</li>
+<li>如何取消本地修改<br># 将文件从暂存区中去除,文件的修改不会丢失<br>git reset – filename<br>​<br># 将文件(未暂存)的修改取消，文件的修改将丢失<br>git checkout – filename<br>​<br># 将所有文件(未暂存)修改取消,文件的修改将丢失<br>git checkout – .&#x2F;<br>​<br># 将所有文件(包括已暂存)的修改取消，文件的修改将丢失<br>git reset –hard HEAD</li>
+<li><code>checkout</code>命令为什么可以用来<em>取消文件修改</em><br><code>checkout</code>命令翻译为”检出”，他的实际作用是将版本库中的内容拿出来放到工作区。<br>当执行<code>git checkout branch_name</code>时相当于把<code>brach_name</code>分支的内容拿出来放到工作区，表象就是切换了分支<br>当执行<code>git checkout -- filename</code>时，相当于把该文件版本库中的内容拿出来放到工作区，表象就是覆盖了该文件在工作区中的修改</li>
+<li><code>rebase</code>命令什么时候用<br><code>rebase</code>命令翻译为<em>变基</em>。我们在创建任何分支时，都有一个基分支，比如：<br><code>git branch feature/test develop</code>创建一个<code>feature/test</code>分支，他的基分支就是<code>develop</code>。Git会记录每个分支的基分支，变基就是改变分支的基分支。变基的表象就是基分支上改动会合并到当前分支，但不会生成合并记录。所以其使用场景就是：当develop上有别人提交的新内容，并且我们需要这些新内容时，执行一次变基，这样别人提交的最新代码就会出现在当前分支上。<br># 第一种用法：完全变基<br>git rebase –onto base_branch_name branch_name<br># 此种不常用<br>​<br># 第二种用法：通过变基获取最新代码<br>git rebase base_branch_name<br># 在向服务器推送自己的代码前，执行一遍rebase能提前知道自己的代码是否和别人的有冲突，便于提前解决冲突，当有冲突时需要手动解决冲突，然后执行：git rebase –continue</li>
+<li>向服务器推送代码<br>在使用gitflow工作流时，会经常执行<code>git push origin branch_name</code>命令。比简单的<code>git push</code>命令多了两个参数。此处之所以需要多传两个参数是因为，<code>branch_name</code>是我们本地创建的分支，服务器上没有该分支，且本地Git也并不知道本地<code>branch_name</code>与远程的哪个分支对应。所以需要显式传参。<br>同时我们可以告诉Git，本地与远程如何对应，在第一次推送代码时执行：<code>git push -u origin branch_name</code> 或<code>git push --set-upstream origin branch_name</code>，会告诉Git，本地<code>branch_name</code>分支与<code>origin/branch_name</code>对应，之后就可以直接执行<code>git pussh</code>, 而无需显式传参。</li>
+</ol>
+<h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h2><p>hello.c -预处理 -E-&gt; hello.i -编译 -S-&gt; hello.s -汇编 -c-&gt; hello.o -链接 -&gt; hello</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc  main.cpp hello.cpp factorial.cpp -o hello</span><br></pre></td></tr></table></figure>
+
+<p>使用gcc 将多个文件 <strong>生成</strong> 为 hello可执行文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">	gcc test.c</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件。这里未指定输出文件，默认输出为 a.out。</span><br><span class="line"></span><br><span class="line">-o：指定生成的输出文件；</span><br><span class="line">	gcc test.c -o test</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件 test。-o 选项用来指定输出文件的文件名。</span><br><span class="line">	</span><br><span class="line">-E：仅执行编译预处理；</span><br><span class="line">	gcc -E test.c -o test.i</span><br><span class="line">	将 test.c 预处理输出 test.i 文件。</span><br><span class="line"></span><br><span class="line">-S：将C代码转换为汇编代码；</span><br><span class="line">	gcc -S test.i</span><br><span class="line">	将预处理输出文件 test.i 汇编成 test.s 文件。</span><br><span class="line"></span><br><span class="line">-wall：显示警告信息；</span><br><span class="line"></span><br><span class="line">-c：仅执行编译操作，不进行连接操作。</span><br><span class="line">	gcc -c test.s</span><br><span class="line">	将汇编输出文件 test.s 编译输出 test.o 文件。</span><br><span class="line"></span><br><span class="line">-l：用来指定程序要链接的库，-l参数紧接着就是库名</span><br><span class="line"></span><br><span class="line">-I：寻找头文件的目录</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">make main</span><br><span class="line">make -f config.txt //指定makefile文件</span><br><span class="line">make --file=config.txt</span><br></pre></td></tr></table></figure>
+
+<p>使用Make指令执行Makefile文件(make指令自动寻找当前文件夹下的Makefile文件)</p>
+<p>Makefile文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;target&gt; : &lt;prerequisites&gt;	//目标，前置条件</span><br><span class="line">[tab] &lt;commands&gt;	//命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.PHONY: clean	//声明目标clean为伪目标</span><br><span class="line">clean:</span><br><span class="line">    rm -rf *.o</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个简单的实例</span><br><span class="line">main:main.o fun0.o fun1.o fun2.0	</span><br><span class="line">	gcc -o main main.o fun0.o fun1.o fun2.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个复杂的实例</span><br><span class="line"># Define required macros here</span><br><span class="line">SHELL = /bin/sh		//宏定义</span><br><span class="line">OBJS =  main.o factorial.o hello.o</span><br><span class="line">CFLAG = -Wall -g</span><br><span class="line">CC = gcc</span><br><span class="line">INCLUDE =</span><br><span class="line">LIBS = -lm</span><br><span class="line">hello:$&#123;OBJ&#125;	//$&#123;&#125;表示变量</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -o $@ $&#123;OBJS&#125; $&#123;LIBS&#125;</span><br><span class="line">clean:</span><br><span class="line">   -rm -f *.o core *.core	//类似于bash,?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意个字符，&#123;a,b,c&#125;表示匹配a或b或c</span><br><span class="line">.cpp.o:</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -c</span><br></pre></td></tr></table></figure>
+
+<p>冒号左侧：目标文件</p>
+<p>冒号右侧：被依赖文件，前置条件</p>
+<p>前置条件决定 “目标” 是否需要重新构建。只要前置条件中列出的文件中，有任何一个文件被更新（即前置条件列出的文件的最后修改时间比目标的最后修改时间新），或者 “目标” 不存在，那 “目标” 就需要重新构建。</p>
+<p>如果前置条件中列出的文件中有任何一个文件不存在，那么 Make 就需要在 Makefile 文件中寻找并执行能够生成该文件的规则，也就是说缺失文件本身也是一个 “目标”，需要先将该 “目标” 构建出来才能利用它去构建当前 “目标”（构建 A 时发现 A 需要依赖 B，所以要先构建 B 才能继续构建 A，简称递归生成依赖）。</p>
+<p><code>$@</code>，<code>$^</code>，<code>$&lt;</code> 这种符号，这种符号称为自动变量。自动变量是局部变量，作用域范围在当前的规则内（即自动化变量只应该出现在 Makefile 目标规则中）</p>
+<p><code>$@</code> 指代当前目标， Make 命令意图构建的目标</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hello: hello.o</span><br><span class="line">    gcc hello.o -o $@	//$@为hello</span><br></pre></td></tr></table></figure>
+
+<p><code>$&lt;</code> 指代第一个前置条件。比如规则为 hello: a b，那么 <code>$&lt;</code> 就指代 a。</p>
+<p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 hello: a b，那么 <code>$^</code> 就指代 a 和 b。</p>
+]]></content>
+      <tags>
+        <tag>command</tag>
+      </tags>
   </entry>
   <entry>
     <title>Op_sys Learning Record</title>
@@ -1252,355 +1864,6 @@
       </tags>
   </entry>
   <entry>
-    <title>common-commands</title>
-    <url>/2024/06/22/common-commands/</url>
-    <content><![CDATA[<p>常用指令</p>
-<span id="more"></span>
-
-
-
-<h1 id="Common-Commands"><a href="#Common-Commands" class="headerlink" title="Common Commands"></a>Common Commands</h1><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p><a href="https://zhuanlan.zhihu.com/p/69746955">https://zhuanlan.zhihu.com/p/69746955</a></p>
-<p>python变量，函数均为对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>() : </span><br><span class="line">    <span class="comment">#函数在创建时同时生成变量对象hello和函数对象（函数对象名为hello）</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    x=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(test())<span class="comment">#函数默认返回值为None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">say = hello</span><br><span class="line"> </span><br><span class="line"><span class="keyword">del</span> hello <span class="comment">#del删除了hello变量对象</span></span><br><span class="line">say()</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say)<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say.__name__) <span class="comment">##对象属性,查看对象名</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>python类</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    def my_method(self, arg1, arg2):</span><br><span class="line">    #类的方法第一个参数为self</span><br><span class="line">        # 方法体</span><br><span class="line"></span><br><span class="line">#Bound Method</span><br><span class="line">obj = MyClass()#类 实例化</span><br><span class="line">obj.my_method(arg1, arg2)#实例对象调用方法</span><br><span class="line"></span><br><span class="line">#Unbound Method</span><br><span class="line">MyClass.my_method(obj, arg1, arg2)</span><br><span class="line">	#原因：可以直接通过类访问方法，但是必须指定类的实例</span><br></pre></td></tr></table></figure>
-
-
-
-<p>函数内部函数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> test</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hello()())</span><br><span class="line"><span class="comment">#首先hello()返回函数对象test，然后调用 test()</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>函数装饰器</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">f</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">f</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inn</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;inner&quot;</span>)</span><br><span class="line">        f()</span><br><span class="line">    <span class="keyword">return</span> inn</span><br><span class="line"></span><br><span class="line"><span class="meta">@hello</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#等价于</span></span><br><span class="line">test=hello(test)<span class="comment">#原函数对象test仍存在，变量对象test指向新函数hello(test)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#test &lt;function test at 0x000001821AE551C0&gt;</span></span><br><span class="line"><span class="comment">#test() None</span></span><br><span class="line"><span class="comment">#test为函数对象，test()为（执行函数对象后的）返回值</span></span><br><span class="line">test()</span><br><span class="line"><span class="built_in">print</span>(test.__name__)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>with语句 上下文对象管理</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">with open(&#x27;myfile.txt&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">    contents = f.read()</span><br><span class="line">    print(contents)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>**open(‘myfile.txt’, ‘r’)**：这是一个上下文管理器，它打开文件并返回一个文件对象。</li>
-<li><strong>as f</strong>：将文件对象赋值给变量 f，以便在 with 代码块中使用。</li>
-<li>在 with 代码块中，我们可以使用 f 读取文件内容。</li>
-<li>当 with 代码块执行完毕后，文件会自动关闭，即使在读取过程中发生异常。</li>
-</ul>
-<p>Python类型注解</p>
-<p><a href="https://zhuanlan.zhihu.com/p/419955374">https://zhuanlan.zhihu.com/p/419955374</a></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment">#规定函数传入参数为str类型，返回值为str类型</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Hello <span class="subst">&#123;name&#125;</span>!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mix</span>(<span class="params">scores: <span class="built_in">list</span>[<span class="built_in">int</span>], ages: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]</span>) -&gt; <span class="built_in">tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>]:</span><br><span class="line">    <span class="comment">#容器注解</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">seq: Seq1[<span class="built_in">str</span>]</span>):</span><br><span class="line">    <span class="comment">#传入参数为（列表+元组）的泛化：序列Seq</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> seq:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="type">Optional</span>[<span class="built_in">str</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为None或为str</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Yeah&#x27;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>() -&gt; <span class="type">Union</span>[<span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为str，int，float 三选一</span></span><br><span class="line">    <span class="comment">#Optional[int] 和 Union[int, None] 是等价的。</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#T为泛型，T必须为str或int</span></span><br><span class="line">T = TypeVar(<span class="string">&#x27;T&#x27;</span>, <span class="built_in">str</span>, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">a: T, b: T</span>) -&gt; <span class="type">List</span>[T]:</span><br><span class="line">    <span class="keyword">return</span> [a, b]</span><br><span class="line"></span><br><span class="line"><span class="comment"># K的具体类型没有限制</span></span><br><span class="line">K = TypeVar(<span class="string">&quot;K&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="python-环境"><a href="#python-环境" class="headerlink" title="python 环境"></a>python 环境</h2><p>sudo apt-get update  # 更新包管理器</p>
-<p>sudo apt-get install python3-venv  # 安装Python虚拟环境工具</p>
-<p>cd &#x2F;path&#x2F;to&#x2F;your&#x2F;project</p>
-<p>python3 -m venv venv</p>
-<p>source venv&#x2F;bin&#x2F;activate</p>
-<p>pip install -r requirements.txt</p>
-<p>deactivate</p>
-<p>conda指令</p>
-<p>conda env list</p>
-<p>conda create –name your_env_name python&#x3D;3.5 numpy scipy</p>
-<p>conda remove –<em>name</em> <em>your_env_name</em> –all</p>
-<p>conda install</p>
-<p>​	conda install numpy&#x3D;1.9.3</p>
-<p>activate your_env_name</p>
-<p>deactivate</p>
-<p>conda clean –all</p>
-<p>当前conda虚拟环境中存在pip时，使用pip指令将优先使用环境中pip而非全局pip，可通过pip list（当前环境必须已安装pip）和 conda list 查看当前环境包列表</p>
-<p>出现报错</p>
-<p>PackagesNotFoundError: The following packages are not available from current channels</p>
-<p>尝试在<a href="https://anaconda.org直接搜索该包并使用网站所提供的指令安装/">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
-<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ol>
-<li><p>**<code>docker pull</code>**：用于从 Docker 镜像仓库下载镜像到本地主机。</p>
-<ul>
-<li>语法：<code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></li>
-<li>示例：<code>docker pull ubuntu:20.04</code></li>
-</ul>
-<p>这个命令用于获取 Docker 镜像，其中 <code>NAME</code> 表示镜像的名称，<code>TAG</code> 表示镜像的标签，或者可以使用 <code>@DIGEST</code> 来指定镜像的摘要。如果不指定标签，将默认获取 <code>latest</code> 标签的镜像。</p>
-</li>
-<li><p>**<code>docker load</code>**：用于从文件加载镜像，通常是以 tar 归档文件的形式。</p>
-<ul>
-<li>语法：<code>docker load [OPTIONS]</code></li>
-<li>示例：<code>docker load -i myimage.tar</code></li>
-</ul>
-<p>这个命令用于加载以 tar 归档文件格式存储的 Docker 镜像。通常用于将镜像从一个环境传输到另一个环境。</p>
-</li>
-<li><p>**<code>docker save</code>**：用于将 Docker 镜像保存为 tar 归档文件。</p>
-<ul>
-<li>语法：<code>docker save [OPTIONS] IMAGE [IMAGE...]</code></li>
-<li>示例：<code>docker save -o myimage.tar myimage:tag</code></li>
-</ul>
-<p>这个命令允许你将一个或多个 Docker 镜像保存为 tar 归档文件，通常用于导出镜像以便在不同环境中使用。</p>
-</li>
-<li><p>**<code>docker run</code>**：用于创建和启动 Docker 容器。</p>
-<ul>
-<li>语法：<code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></li>
-<li>示例：<code>docker run -d -p 8080:80 my-web-app</code></li>
-</ul>
-<p>这个命令用于在 Docker 容器中运行一个镜像，你需要指定镜像的名称、容器选项（如端口映射、环境变量、容器名称等），以及容器内要执行的命令。</p>
-</li>
-<li><p>**<code>docker build</code>**：用于构建自定义 Docker 镜像，通常通过 Dockerfile 文件定义构建步骤。</p>
-<ul>
-<li>语法：<code>docker build [OPTIONS] PATH | URL | -</code></li>
-<li>示例：<code>docker build -t my-custom-image .</code></li>
-</ul>
-<p><code>docker build</code> 命令用于基于 Dockerfile 构建自定义镜像。你需要提供包含 Dockerfile 的路径，以及可选的选项和标签。</p>
-<p>Dockerfile</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 使用官方 Python 3 镜像作为基础镜像</span><br><span class="line">FROM python:3.8</span><br><span class="line"></span><br><span class="line"># 设置工作目录</span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"># 复制本地项目到容器中</span><br><span class="line">COPY ./myproject /app</span><br><span class="line"></span><br><span class="line"># 安装项目依赖</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 指定容器启动命令</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-</li>
-<li><p>**<code>docker rm</code>**：用于删除已停止的容器。</p>
-<ul>
-<li>语法：<code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></li>
-<li>示例：<code>docker rm my-container</code></li>
-</ul>
-<p>这个命令用于删除一个或多个已经停止的容器，释放资源并清理系统。</p>
-</li>
-<li><p>**<code>docker stop</code>**：用于停止运行中的容器。</p>
-<ul>
-<li>语法：<code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></li>
-<li>示例：<code>docker stop my-container</code></li>
-</ul>
-<p>这个命令用于停止一个或多个正在运行的容器，使它们从运行状态转换为停止状态。</p>
-</li>
-<li><p>**<code>docker ps</code>**：用于列出正在运行的容器。</p>
-<ul>
-<li>语法：<code>docker ps [OPTIONS]</code></li>
-<li>示例：<code>docker ps -a</code></li>
-</ul>
-<p><code>docker ps</code> 命令用于列出当前正在运行的容器，包括容器的 ID、状态、端口映射等信息。加上 <code>-a</code> 选项可以列出所有容器，包括已停止的容器。</p>
-</li>
-</ol>
-<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p><a href="https://blog.csdn.net/qq_34021712/article/details/117260462">https://blog.csdn.net/qq_34021712/article/details/117260462</a></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在桌面创建test目录</span><br><span class="line">mkdir /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 切换到test目录</span><br><span class="line">cd /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 创建并初始化git库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 链接到远程git仓库 </span><br><span class="line"># -t 默认使用 main 分支，origin为远程仓库别名（替换链接）</span><br><span class="line">git remote add origin -t main https://github.com/Helloworld-7558/git-demo.git</span><br><span class="line"></span><br><span class="line"># 将远程git库下载到本地</span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line">#修改</span><br><span class="line"></span><br><span class="line"># 将目录下所有文件都增加到本地库中。</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"># 提交更改到本地仓库</span><br><span class="line">git commit -m &#x27;提交注释&#x27;</span><br><span class="line"></span><br><span class="line"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span><br><span class="line"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"># 将本地修改推到github上</span><br><span class="line">git push -u origin main  # 首次</span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
-
-
-
-<ol>
-<li>什么是主分支<br>主分支是<em>默认分支</em>,当执行<code>git clone</code>时，克隆的就是默认分支。<code>git init</code>初始化时，会以<strong>master</strong>分支作为主分支，主分支可以改成其他分支。</li>
-<li>什么是origin<br><strong>origin</strong>代表远程分支，比如gitlab上保存的分支。Git作为分布式版本控制工具，本地分支与远程分支并无不同。假如远程服务器上有一个<strong>develop</strong>分支，那么在本地以<strong>origin&#x2F;develop</strong>代表远程分支</li>
-<li>如何创建新分支<br># 方法一<br>git branch branch_name<br># 此方法以当前所在分支为基础来创建<br># e.g. git branch feature&#x2F;test<br>​<br># 方法二<br>git branch branch_name base_branch_name<br># 此方法忽略当前所在的分支，以指定的base_branch_name为基础来创建分支<br># e.g. git branch feature&#x2F;test develop<br># e.g. git branch feature&#x2F;test origin&#x2F;develop<br>​<br># 方法三<br>git checkout -b branch_name<br># 此方法是一个快捷操作，创建并切换分支。checkout本是用来切换分支的，增加“-b”选项指：当分支不存在时创建，同样支持指定base_branch_name<br># e.g. git checkout -b feature&#x2F;test<br># e.g. git checkout -b feature&#x2F;test develop<br># e.g. git checkout -b feature&#x2F;test origin&#x2F;develop</li>
-<li>如何切换分支<br>git checkout branch_name</li>
-<li>查看所有分支<br># 列出本地所有分支<br>git branch</li>
-<li>如何删除分支<br>当使用gitflow工作流时，本地分支会越来越多，不用的分支可以删除<br># 删除单个分支<br>git branch -d branch_name<br>​<br># 删除多个分支<br>git branch | grep feature&#x2F; | xargs git branch -d<br># git branch命令不支持管道操作，所获得的列表不能作为git branch -d的参数，所以需要使用xargs做一个辅助</li>
-<li>如何提交修改<br># 第一步：将修改进行暂存(Stage)<br>git add .&#x2F; # 添加所有本地修改<br># 添加特定文件 git add file1 file2<br># 添加特定文件夹下的所有文件 git add .&#x2F;dir1&#x2F;dir2&#x2F;<br>​<br># 第二步：执行commit<br>git commit -m ‘commit message’<br># 使用编辑器编写提交说明 git commit ,Git将自动打开默认编辑器，通常是Vim，可以自定义<br># 在上一条提交上追加提交 git commit –amend，本次提交不会生成一条新的提交记录。应该保证每次提交都是一次完整的功能修改，当发现上次提交的内容不完整时，应该采用此种方法进行追加提交。</li>
-<li>如何取消本地修改<br># 将文件从暂存区中去除,文件的修改不会丢失<br>git reset – filename<br>​<br># 将文件(未暂存)的修改取消，文件的修改将丢失<br>git checkout – filename<br>​<br># 将所有文件(未暂存)修改取消,文件的修改将丢失<br>git checkout – .&#x2F;<br>​<br># 将所有文件(包括已暂存)的修改取消，文件的修改将丢失<br>git reset –hard HEAD</li>
-<li><code>checkout</code>命令为什么可以用来<em>取消文件修改</em><br><code>checkout</code>命令翻译为”检出”，他的实际作用是将版本库中的内容拿出来放到工作区。<br>当执行<code>git checkout branch_name</code>时相当于把<code>brach_name</code>分支的内容拿出来放到工作区，表象就是切换了分支<br>当执行<code>git checkout -- filename</code>时，相当于把该文件版本库中的内容拿出来放到工作区，表象就是覆盖了该文件在工作区中的修改</li>
-<li><code>rebase</code>命令什么时候用<br><code>rebase</code>命令翻译为<em>变基</em>。我们在创建任何分支时，都有一个基分支，比如：<br><code>git branch feature/test develop</code>创建一个<code>feature/test</code>分支，他的基分支就是<code>develop</code>。Git会记录每个分支的基分支，变基就是改变分支的基分支。变基的表象就是基分支上改动会合并到当前分支，但不会生成合并记录。所以其使用场景就是：当develop上有别人提交的新内容，并且我们需要这些新内容时，执行一次变基，这样别人提交的最新代码就会出现在当前分支上。<br># 第一种用法：完全变基<br>git rebase –onto base_branch_name branch_name<br># 此种不常用<br>​<br># 第二种用法：通过变基获取最新代码<br>git rebase base_branch_name<br># 在向服务器推送自己的代码前，执行一遍rebase能提前知道自己的代码是否和别人的有冲突，便于提前解决冲突，当有冲突时需要手动解决冲突，然后执行：git rebase –continue</li>
-<li>向服务器推送代码<br>在使用gitflow工作流时，会经常执行<code>git push origin branch_name</code>命令。比简单的<code>git push</code>命令多了两个参数。此处之所以需要多传两个参数是因为，<code>branch_name</code>是我们本地创建的分支，服务器上没有该分支，且本地Git也并不知道本地<code>branch_name</code>与远程的哪个分支对应。所以需要显式传参。<br>同时我们可以告诉Git，本地与远程如何对应，在第一次推送代码时执行：<code>git push -u origin branch_name</code> 或<code>git push --set-upstream origin branch_name</code>，会告诉Git，本地<code>branch_name</code>分支与<code>origin/branch_name</code>对应，之后就可以直接执行<code>git pussh</code>, 而无需显式传参。</li>
-</ol>
-<h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h2><p>hello.c -预处理 -E-&gt; hello.i -编译 -S-&gt; hello.s -汇编 -c-&gt; hello.o -链接 -&gt; hello</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc  main.cpp hello.cpp factorial.cpp -o hello</span><br></pre></td></tr></table></figure>
-
-<p>使用gcc 将多个文件 <strong>生成</strong> 为 hello可执行文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">	gcc test.c</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件。这里未指定输出文件，默认输出为 a.out。</span><br><span class="line"></span><br><span class="line">-o：指定生成的输出文件；</span><br><span class="line">	gcc test.c -o test</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件 test。-o 选项用来指定输出文件的文件名。</span><br><span class="line">	</span><br><span class="line">-E：仅执行编译预处理；</span><br><span class="line">	gcc -E test.c -o test.i</span><br><span class="line">	将 test.c 预处理输出 test.i 文件。</span><br><span class="line"></span><br><span class="line">-S：将C代码转换为汇编代码；</span><br><span class="line">	gcc -S test.i</span><br><span class="line">	将预处理输出文件 test.i 汇编成 test.s 文件。</span><br><span class="line"></span><br><span class="line">-wall：显示警告信息；</span><br><span class="line"></span><br><span class="line">-c：仅执行编译操作，不进行连接操作。</span><br><span class="line">	gcc -c test.s</span><br><span class="line">	将汇编输出文件 test.s 编译输出 test.o 文件。</span><br><span class="line"></span><br><span class="line">-l：用来指定程序要链接的库，-l参数紧接着就是库名</span><br><span class="line"></span><br><span class="line">-I：寻找头文件的目录</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">make main</span><br><span class="line">make -f config.txt //指定makefile文件</span><br><span class="line">make --file=config.txt</span><br></pre></td></tr></table></figure>
-
-<p>使用Make指令执行Makefile文件(make指令自动寻找当前文件夹下的Makefile文件)</p>
-<p>Makefile文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;target&gt; : &lt;prerequisites&gt;	//目标，前置条件</span><br><span class="line">[tab] &lt;commands&gt;	//命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.PHONY: clean	//声明目标clean为伪目标</span><br><span class="line">clean:</span><br><span class="line">    rm -rf *.o</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个简单的实例</span><br><span class="line">main:main.o fun0.o fun1.o fun2.0	</span><br><span class="line">	gcc -o main main.o fun0.o fun1.o fun2.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个复杂的实例</span><br><span class="line"># Define required macros here</span><br><span class="line">SHELL = /bin/sh		//宏定义</span><br><span class="line">OBJS =  main.o factorial.o hello.o</span><br><span class="line">CFLAG = -Wall -g</span><br><span class="line">CC = gcc</span><br><span class="line">INCLUDE =</span><br><span class="line">LIBS = -lm</span><br><span class="line">hello:$&#123;OBJ&#125;	//$&#123;&#125;表示变量</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -o $@ $&#123;OBJS&#125; $&#123;LIBS&#125;</span><br><span class="line">clean:</span><br><span class="line">   -rm -f *.o core *.core	//类似于bash,?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意个字符，&#123;a,b,c&#125;表示匹配a或b或c</span><br><span class="line">.cpp.o:</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -c</span><br></pre></td></tr></table></figure>
-
-<p>冒号左侧：目标文件</p>
-<p>冒号右侧：被依赖文件，前置条件</p>
-<p>前置条件决定 “目标” 是否需要重新构建。只要前置条件中列出的文件中，有任何一个文件被更新（即前置条件列出的文件的最后修改时间比目标的最后修改时间新），或者 “目标” 不存在，那 “目标” 就需要重新构建。</p>
-<p>如果前置条件中列出的文件中有任何一个文件不存在，那么 Make 就需要在 Makefile 文件中寻找并执行能够生成该文件的规则，也就是说缺失文件本身也是一个 “目标”，需要先将该 “目标” 构建出来才能利用它去构建当前 “目标”（构建 A 时发现 A 需要依赖 B，所以要先构建 B 才能继续构建 A，简称递归生成依赖）。</p>
-<p><code>$@</code>，<code>$^</code>，<code>$&lt;</code> 这种符号，这种符号称为自动变量。自动变量是局部变量，作用域范围在当前的规则内（即自动化变量只应该出现在 Makefile 目标规则中）</p>
-<p><code>$@</code> 指代当前目标， Make 命令意图构建的目标</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hello: hello.o</span><br><span class="line">    gcc hello.o -o $@	//$@为hello</span><br></pre></td></tr></table></figure>
-
-<p><code>$&lt;</code> 指代第一个前置条件。比如规则为 hello: a b，那么 <code>$&lt;</code> 就指代 a。</p>
-<p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 hello: a b，那么 <code>$^</code> 就指代 a 和 b。</p>
-]]></content>
-      <tags>
-        <tag>command</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pytorch_learning_record</title>
-    <url>/2024/05/08/pytorch-learning-record/</url>
-    <content><![CDATA[<p>dqn与pytorch</p>
-<span id="more"></span>
-
-<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
-<p>主要属性</p>
-<ul>
-<li><p>T: dimensions reversed</p>
-</li>
-<li><p>H: 共轭转置</p>
-</li>
-<li><p>data: 值</p>
-</li>
-<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
-</li>
-<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
-</li>
-<li><p>is_leaf: 指示是否叶子节点</p>
-</li>
-<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
-</li>
-<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
-</li>
-<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
-</li>
-<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
-<p>Sub代表减法；</p>
-<p>Mul代表乘法；</p>
-<p>Mm代表矩阵乘法；</p>
-<p>Div代表除法；</p>
-<p>T代表矩阵转置；</p>
-<p>Pow代表乘方；</p>
-<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
-<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
-<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
-<p>y &#x3D; (x + w) * (w + 1)</p>
-<p>a &#x3D; x+w</p>
-<p>b &#x3D; w + 1</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
-
-
-
-<p>通常</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>自动梯度</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>torchviz</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
-
-<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
-<ul>
-<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
-<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
-<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
-<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
-<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
-<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
-<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
-</ul>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
-
-
-
-<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>optimizer.step()</p>
-<p>优化器执行一次梯度更新</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
-
-<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
-<p>optimizer.zero_grad()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
-
-<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
-
-
-
-<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
-<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
-<p> tensor的requires_grad的属性默认为False。</p>
-<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>.grad_fn 属性</p>
-<p>tensor在计算图中的父运算函数</p>
-<p>.detach()与.detach_()</p>
-<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
-<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
-<p>相同：</p>
-<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
-<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
-<p>不同：</p>
-<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
-<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
-<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-<p>torch.no_grad()</p>
-<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
-<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
-<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>.backward()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
-
-<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
-<p>.backward()方法仅适用于标量</p>
-<p>.register_hook()</p>
-<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
-<p>获取中间tensor的grad值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <tags>
-        <tag>python, pytorch</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
     <title>Android-Learning-Record</title>
     <url>/2024/07/28/Android-Learning-Record/</url>
     <content><![CDATA[<p>Android学习记录</p>
@@ -1665,8 +1928,7 @@
 <p>在文件系统中，存在以下的层次结构：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">com/</span><br><span class="line">    example/</span><br><span class="line">        project/</span><br><span class="line">            MyClass.java </span><br></pre></td></tr></table></figure>
 
-
-
+<p>如果项目根目录是 MyProject，那么 com.example.project.MyClass 类文件应该位于 MyProject&#x2F;src&#x2F;main&#x2F;java&#x2F;com&#x2F;example&#x2F;project&#x2F;MyClass.java</p>
 <h3 id="泛型与通配符"><a href="#泛型与通配符" class="headerlink" title="泛型与通配符"></a>泛型与通配符</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IResponse</span>&lt;T&gt; &#123; <span class="comment">//使用泛型</span></span><br><span class="line">	</span><br><span class="line">	T <span class="title function_">getData</span><span class="params">()</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T t)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringResponse</span> <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(String t)</span> &#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Response</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;T&gt;&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> T <span class="title function_">getData</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> data;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T data)</span> &#123;</span><br><span class="line">		<span class="built_in">this</span>.data = data;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Response</span>&lt;T <span class="keyword">extends</span> <span class="title class_">BaseData</span>&gt; <span class="keyword">implements</span> <span class="title class_">IResponse</span>&lt;T&gt;&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getToken</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">if</span>(data!=<span class="literal">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> data.getToken();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>();</span><br><span class="line"><span class="type">Teacher</span> <span class="variable">teacher</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Teacher</span>();</span><br><span class="line"></span><br><span class="line">Person person;	</span><br><span class="line">person = student; <span class="comment">// 多态</span></span><br><span class="line">person = teacher; <span class="comment">// 多态</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printList</span><span class="params">(List&lt;?&gt; list)</span> &#123; <span class="comment">//通配符</span></span><br><span class="line">    <span class="keyword">for</span> (Object o : list) &#123;</span><br><span class="line">        System.out.println(o);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="comment">// 该方法可以接收任何类型的List,例如 List&lt;String&gt;、List&lt;Integer&gt; 等</span></span><br><span class="line"></span><br><span class="line">List&lt;? <span class="keyword">extends</span> <span class="title class_">Person</span>&gt; personList; <span class="comment">//只接收Person或Person子类</span></span><br><span class="line">List&lt;? <span class="built_in">super</span> Student&gt; personList <span class="comment">//只接收Student或Student父类</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
@@ -2945,268 +3207,6 @@
       </categories>
       <tags>
         <tag>Android, Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>reinforce-learning-record</title>
-    <url>/2024/06/10/reinforce-learning-record/</url>
-    <content><![CDATA[<p>reinforce learning</p>
-<span id="more"></span>
-
-<h1 id="reinforce-learning-record"><a href="#reinforce-learning-record" class="headerlink" title="reinforce learning record"></a>reinforce learning record</h1><h2 id="MRP"><a href="#MRP" class="headerlink" title="MRP"></a>MRP</h2><img src="/2024/06/10/reinforce-learning-record/image-20240610205131367.png" class="" title="image-20240610205131367">
-
-<h3 id="回报"><a href="#回报" class="headerlink" title="回报"></a>回报</h3><p>在一个马尔可夫奖励过程中，从第t时刻状态S_t开始，直到终止状态时，所有奖励的衰减之和称为<strong>回报</strong>（Return）</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203108806.png" class="" title="image-20240610203108806">
-
-<ul>
-<li>Rt表示在时刻t获得的奖励</li>
-<li><strong>到达状态Si</strong>，得到奖励r(s)；若在时刻t到达状态Si，则<strong>Rt&#x3D;r(Si)</strong></li>
-<li>对于某状态序列<img src="/2024/06/10/reinforce-learning-record/image-20240610203423677.png" class="" title="image-20240610203423677">我们有对应于该状态序列的奖励G<img src="/2024/06/10/reinforce-learning-record/image-20240610203434567.png" class="" title="image-20240610203434567"></li>
-</ul>
-<h3 id="价值函数"><a href="#价值函数" class="headerlink" title="价值函数"></a>价值函数</h3><p>在马尔可夫奖励过程中，一个状态的期望回报（即从这个状态出发的未来累积奖励的期望）被称为这个状态的<strong>价值</strong>（value）。所有状态的价值就组成了<strong>价值函数</strong>（value function），价值函数的输入为某个状态，输出为这个状态的价值。</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203509585.png" class="" title="image-20240610203509585">
-
-<ul>
-<li>对于某个状态s，从该状态出发可得到的状态序列有很多条</li>
-<li>对于某个状态s，价值函数为<strong>从该状态出发，可能存在的所有状态序列的奖励的均值</strong></li>
-</ul>
-<p>贝尔曼方程</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610203841177.png" class="" title="image-20240610203841177">
-
-<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><p>与MRP相比，奖励与状态和动作相关</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610205112917.png" class="" title="image-20240610205112917">
-
-<h3 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h3><p>策略表示在状态s下采取动作a的<strong>概率</strong>，概率可能为1</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204522539.png" class="" title="image-20240610204522539">
-
-<h3 id="状态价值函数"><a href="#状态价值函数" class="headerlink" title="状态价值函数"></a>状态价值函数</h3><p>在 MDP 中基于策略Π的状态价值函数（state-value function），定义为从状态s出发遵循策略Π能获得的期望回报</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204014373.png" class="" title="image-20240610204014373">
-
-<h3 id="动作价值函数"><a href="#动作价值函数" class="headerlink" title="动作价值函数"></a>动作价值函数</h3><p>在 MDP 中，由于动作的存在，我们额外定义一个<strong>动作价值函数</strong>（action-value function）。表示在 MDP 遵循策略Π时，对当前状态s执行动作a得到的期望回报</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204152914.png" class="" title="image-20240610204152914">
-
-<ul>
-<li><strong>采取动作a到达状态s</strong>，得到奖励R</li>
-</ul>
-<h3 id="状态价值函数与动作价值函数关系"><a href="#状态价值函数与动作价值函数关系" class="headerlink" title="状态价值函数与动作价值函数关系"></a>状态价值函数与动作价值函数关系</h3><img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<ul>
-<li>从状态s出发，可能采取动作a1, a2, a3, …;对于每个可能采取的动作，均有动作价值Q，则状态s的状态价值为所有动作价值的期望</li>
-</ul>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<ul>
-<li>在状态s执行动作a后，得到奖励r(s,a)；由于可能到达多个不同的状态s’，动作价值为即时奖励r(s,a)+可能到达的所有状态的价值的期望</li>
-</ul>
-<h3 id="最优策略"><a href="#最优策略" class="headerlink" title="最优策略"></a>最优策略</h3><p>策略之间的偏序关系</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612093758370.png" class="" title="image-20240612093758370">
-
-<p>最优策略为 对于任意的策略，均有最优策略优于或不差于其他策略</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612093948192.png" class="" title="image-20240612093948192">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240612093958259.png" class="" title="image-20240612093958259">
-
-<p>最优状态价值与最优动作价值的关系</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612094048209.png" class="" title="image-20240612094048209">
-
-
-
-<h3 id="贝尔曼期望方程"><a href="#贝尔曼期望方程" class="headerlink" title="贝尔曼期望方程"></a>贝尔曼期望方程</h3><p>采取策略Π</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610204627264.png" class="" title="image-20240610204627264">
-
-<ul>
-<li>对于状态s，s的状态价值为 ( 折损的 <strong>所有可达的下一状态的价值的期望</strong> + <strong>到达所有可达的下一状态的r(s’,a)的期望</strong> )</li>
-<li>对于状态s和动作a，在状态s进行动作a的价值为 ( <strong>在状态s执行动作a的r(s,a)的期望</strong>(实际上就是r(s,a)) + 折损的 <strong>在执行动作a后所有可达的下一状态的所有可执行动作的价值的期望</strong> )</li>
-</ul>
-<img src="/2024/06/10/reinforce-learning-record/shiow.PNG" class="" title="shiow">
-
-<p>图中情况为每个动作只会到达一个状态&amp;应该直接将动作视为一个节点，图为树</p>
-<h3 id="贝尔曼最优方程"><a href="#贝尔曼最优方程" class="headerlink" title="贝尔曼最优方程"></a>贝尔曼最优方程</h3><p>存在策略*，使对于任意的状态s，均有基于策略*状态价值函数大于基于策略Π的状态价值函数</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610205402396.png" class="" title="image-20240610205402396">
-
-<ul>
-<li>对于状态价值：非最优形式是求期望，最优形式是直接选取当前状态，所有动作中，未来状态序列中价值最大的</li>
-<li>对于动作价值：非最优形式是求期望，最优形式是直接选取下一状态，所有动作中，未来状态序列中动作价值最大的</li>
-</ul>
-<h2 id="策略迭代算法-基于策略函数的"><a href="#策略迭代算法-基于策略函数的" class="headerlink" title="策略迭代算法&#x2F;基于策略函数的"></a>策略迭代算法&#x2F;基于策略函数的</h2><p>策略评估：</p>
-<p>基于当前策略Π，在已知状态转移函数的情况下（即我们可以知道采取动作a后有多高的几率到达哪个状态），使用<strong>贝尔曼期望方程</strong>迭代更新状态价值函数</p>
-<p>ps: 原文中迭代更新状态价值函数是通过</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<p>以上两个公式实现的，也即</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">		qsa = <span class="number">0</span>  <span class="comment"># 当前动作的动作价值</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:  <span class="comment"># 有模型，即状态转移函数已知</span></span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))  <span class="comment"># 第一个公式，计算该动作的价值(开头的p为动作成功概率)</span></span><br><span class="line">         qsa_list.append(self.pi[s][a] * qsa)  <span class="comment"># 乘采取该动作的几率</span></span><br><span class="line">	new_v[s] = <span class="built_in">sum</span>(qsa_list)  <span class="comment"># 第二个公式，根据所有动作的价值计算状态价值</span></span><br></pre></td></tr></table></figure>
-
-<p>target: 更新<strong>状态价值函数</strong>，使之收敛</p>
-<p>策略提升：</p>
-<p>由于</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<p>故修改策略，使得动作价值最大的动作以更高的概率(若最大值唯一，该动作将成为唯一被选取动作；若不唯一，这些动作将均分概率1)被选取，可使新策略下的状态价值函数增大，也即<img src="/2024/06/10/reinforce-learning-record/image-20240611150030644.png" class="" title="image-20240611150030644"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">qsa_list = []</span><br><span class="line">	<span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):  <span class="comment"># 迷宫环境，四相运动</span></span><br><span class="line">    	qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">        	p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)</span><br><span class="line">     maxq = <span class="built_in">max</span>(qsa_list)</span><br><span class="line">     cntq = qsa_list.count(maxq)  <span class="comment"># 计算有几个动作得到了最大的Q值</span></span><br><span class="line">     <span class="comment"># 让这些动作均分概率</span></span><br><span class="line">     self.pi[s] = [<span class="number">1</span> / cntq <span class="keyword">if</span> q == maxq <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> q <span class="keyword">in</span> qsa_list]</span><br></pre></td></tr></table></figure>
-
-<p>target: 修改<strong>策略</strong>，使在新策略下，有基于新策略的状态价值函数大于原策略的状态价值函数</p>
-<h2 id="价值迭代算法-基于价值函数的"><a href="#价值迭代算法-基于价值函数的" class="headerlink" title="价值迭代算法&#x2F;基于价值函数的"></a>价值迭代算法&#x2F;基于价值函数的</h2><p>使用贝尔曼最优方程</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611191853492.png" class="" title="image-20240611191853492">
-
-<p>迭代形式</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611152610430.png" class="" title="image-20240611152610430">
-
-<p>进行价值迭代；</p>
-<p>使用</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611152643864.png" class="" title="image-20240611152643864">
-
-<p>从迭代完成的状态价值函数中获取策略，即 从当前状态出发，哪个动作的 (即时奖励+下一状态价值) 最大，策略就为哪个动作</p>
-<p>ps: 程序实际使用公式</p>
-<p>最优状态价值是选择此时使最优动作价值最大的那一个动作时的状态价值</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611153610316.png" class="" title="image-20240611153610316">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213050168.png" class="" title="image-20240610213050168">
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">max_diff = <span class="number">0</span></span><br><span class="line">new_v = [<span class="number">0</span>] * self.env.ncol * self.env.nrow  <span class="comment"># 迷宫环境，初始化状态价值</span></span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> <span class="built_in">range</span>(self.env.ncol * self.env.nrow):</span><br><span class="line">    qsa_list = []</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        qsa = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> res <span class="keyword">in</span> self.env.P[s][a]:</span><br><span class="line">            p, next_state, r, done = res</span><br><span class="line">            qsa += p * (r + self.gamma * self.v[next_state] * (<span class="number">1</span> - done))</span><br><span class="line">        qsa_list.append(qsa)  <span class="comment"># 记录状态s下的所有Q(s,a)价值</span></span><br><span class="line">     new_v[s] = <span class="built_in">max</span>(qsa_list)  <span class="comment"># 取最大作为新状态价值</span></span><br><span class="line">     max_diff = <span class="built_in">max</span>(max_diff, <span class="built_in">abs</span>(new_v[s] - self.v[s]))</span><br><span class="line">self.v = new_v</span><br><span class="line"><span class="keyword">if</span> max_diff &lt; self.theta: <span class="keyword">break</span>  <span class="comment"># 满足收敛条件,退出评估迭代</span></span><br><span class="line">cnt += <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="有模型-无模型-在线策略-离线策略"><a href="#有模型-无模型-在线策略-离线策略" class="headerlink" title="有模型&amp;无模型+在线策略&amp;离线策略"></a>有模型&amp;无模型+在线策略&amp;离线策略</h2><p><strong>有模型强化学习：</strong></p>
-<p>智能体学习环境的状态转移函数</p>
-<p>环境的状态转移函数已知</p>
-<p>智能体可以直接根据状态转移函数得到在对环境进行动作a后环境的下一状态</p>
-<p># 状态转移函数P[state][action] &#x3D; [(p, next_state, reward, done)]包含转移成功概率，下一个状态，奖励和是否完成</p>
-<ul>
-<li>Dyna-Q</li>
-<li>Monte Carlo Tree Search (MCTS)</li>
-<li>PILCO (Probabilistic Inference for Learning Control)</li>
-</ul>
-<p><strong>无模型强化学习：</strong></p>
-<p>智能体通过与环境交互学习状态和奖励之间的映射关系</p>
-<p>环境的状态转移函数未知</p>
-<p>智能体必须通过与环境的交互才能得到环境的下一状态</p>
-<ul>
-<li>Q-learning</li>
-<li>SARSA</li>
-<li>Deep Q-Network (DQN)</li>
-<li>Policy Gradient methods (e.g., REINFORCE, A2C, PPO)</li>
-</ul>
-<p>样本：当前状态，下一状态，采取动作，奖励</p>
-<p><strong>在线策略学习：</strong></p>
-<p>不保存样本</p>
-<p><strong>离线策略学习：</strong></p>
-<p>使用经验回放池保存样本</p>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="蒙特卡洛方法"><a href="#蒙特卡洛方法" class="headerlink" title="蒙特卡洛方法"></a>蒙特卡洛方法</h3><p>Value-based + online</p>
-<p>从某状态s出发，基于策略Π，获得一条状态序列，该状态序列对应一个回报G；该过程为一次采样。</p>
-<p>反复采样，得到N个状态序列+回报和M，由大数定律，可得该状态的状态价值</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161858965.png" class="" title="image-20240611161858965">
-
-<p>使用增量更新方法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161157050.png" class="" title="image-20240611161157050">
-
-<p>补：增量更新原理</p>
-<p>新均值 &#x3D; 旧均值 + 1&#x2F;总量 * (新值 - 旧均值) ？</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611161942958.png" class="" title="image-20240611161942958">
-
-<h3 id="时序差分算法"><a href="#时序差分算法" class="headerlink" title="时序差分算法"></a>时序差分算法</h3><p>Value-based + online</p>
-<p>类似于蒙特卡洛，更新状态s的状态价值时，不使用完整的状态序列，在得到下一状态时立即对状态s的状态价值进行更新</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611162513650.png" class="" title="image-20240611162513650">
-
-<p>蒙特卡洛使用第三行对状态价值进行更新，时序差分使用第四行对状态价值进行更新</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611162624769.png" class="" title="image-20240611162624769">
-
-<ul>
-<li>只向前走了一步的蒙特卡洛</li>
-<li>使用下一状态的状态价值代替了很长的状态序列的回报(状态价值本身就是所有未来时刻的回报期望和)</li>
-<li>增量更新体现在 减号前部分为 (新 状态s的状态价值)，减号后部分为 (旧 状态s的状态价值)</li>
-</ul>
-<h3 id="Sarsa算法"><a href="#Sarsa算法" class="headerlink" title="Sarsa算法"></a>Sarsa算法</h3><p>Value-based + online</p>
-<p>类似于时序差分算法，对动作价值进行更新，目标是估计 <strong>ε-greedy策略的动作价值函数</strong></p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611191221769.png" class="" title="image-20240611191221769">
-
-<p>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100452913.png" class="" title="image-20240612100452913">
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1, a1] - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="Q-learning算法"><a href="#Q-learning算法" class="headerlink" title="Q-learning算法"></a>Q-learning算法</h3><p>Value-based + offline</p>
-<p>对动作价值进行更新，目标是估计 <strong>最优策略的动作价值函数</strong></p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611194333945.png" class="" title="image-20240611194333945">
-
-<p>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100509915.png" class="" title="image-20240612100509915">
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1].max() - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="DQN-DDQN"><a href="#DQN-DDQN" class="headerlink" title="DQN&#x2F;DDQN"></a>DQN&#x2F;DDQN</h3><p>Value-based + offline</p>
-<p>将Q-learning的Q表换成net</p>
-<h3 id="策略梯度算法-REINFORCE"><a href="#策略梯度算法-REINFORCE" class="headerlink" title="策略梯度算法(REINFORCE)"></a>策略梯度算法(REINFORCE)</h3><p>Policy-based + online</p>
-<p>定义策略学习的目标函数为，s0为初始状态</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100629893.png" class="" title="image-20240612100629893">
-
-<p>目标是修改参数θ，使J(θ)取最大；即对θ求导</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240612100732404.png" class="" title="image-20240612100732404">
-
-<p>where 第一行第一个求和符号后的对象为 策略的<strong>状态访问分布</strong></p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612102026769.png" class="" title="image-20240612102026769">
-
-<p>策略的状态访问分布表示该策略和在环境中会访问到的状态的分布情况(即到达每个状态的概率)</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612102256431.png" class="" title="image-20240612102256431">
-
-<p>故该求导表示 对于每个状态，我们有一定的概率在该状态，从该状态出发，策略决定了我们能获得的价值的期望</p>
-<p>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240611200059062.png" class="" title="image-20240611200059062">
-
-<p>时刻t向后的回报即为(动作)价值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">reward_list = transition_dict[<span class="string">&#x27;rewards&#x27;</span>]</span><br><span class="line">state_list = transition_dict[<span class="string">&#x27;states&#x27;</span>]</span><br><span class="line">action_list = transition_dict[<span class="string">&#x27;actions&#x27;</span>]</span><br><span class="line"></span><br><span class="line">G = <span class="number">0</span></span><br><span class="line">self.optimizer.zero_grad()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(<span class="built_in">len</span>(reward_list))):  <span class="comment"># 从最后一步算起</span></span><br><span class="line">    reward = reward_list[i]  <span class="comment"># 取时间步i获得的奖励</span></span><br><span class="line">    state = torch.tensor([state_list[i]],</span><br><span class="line">                         dtype=torch.<span class="built_in">float</span>).to(self.device)  <span class="comment"># 取时间步i的状态</span></span><br><span class="line">    action = torch.tensor([action_list[i]]).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)  <span class="comment"># 取时间步i的动作</span></span><br><span class="line">    log_prob = torch.log(self.policy_net(state).gather(<span class="number">1</span>, action))</span><br><span class="line">    <span class="comment"># self.policy_net(state)： 将状态输入策略网络，得到所有可能动作的概率分布。</span></span><br><span class="line">	<span class="comment"># .gather(1, action): 从概率分布中选取实际执行动作对应的概率值。</span></span><br><span class="line">	<span class="comment"># torch.log(...): 对选取的概率值取对数，得到对数概率</span></span><br><span class="line">    G = self.gamma * G + reward  <span class="comment"># G累计了从当前时间步i到episode结束的所有奖励</span></span><br><span class="line">    loss = -log_prob * G  <span class="comment"># loss对应公式中符号α后的部分</span></span><br><span class="line">    loss.backward()  <span class="comment"># 反向传播计算梯度</span></span><br><span class="line">self.optimizer.step()  <span class="comment"># 梯度下降，实际上是对策略进行求导</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3><p>(Value + Policy)-based + offline</p>
-<p>策略函数梯度</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110026419.png" class="" title="image-20240612110026419">
-
-<p>ψ_t可为不同值，表示不同的方法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110241521.png" class="" title="image-20240612110241521">
-
-
-
-<p>价值函数的损失函数与梯度</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110951796.png" class="" title="image-20240612110951796">
-
-<img src="/2024/06/10/reinforce-learning-record/image-20240612111022161.png" class="" title="image-20240612111022161">
-
-
-
-<p>Actor（策略网络）和 Critic（价值网络）</p>
-<ul>
-<li><p>Actor 要做的是与环境交互，并在 Critic 价值函数的指导下用策略梯度学习一个更好的策略。</p>
-</li>
-<li><p>Critic 要做的是通过 Actor 与环境交互收集的数据学习一个价值函数，这个价值函数会用于判断在当前状态什么动作是好的，什么动作不是好的，进而帮助 Actor 进行策略更新。</p>
-</li>
-</ul>
-<p>基于<strong>时序差分(TD)<strong>方法的</strong>Actor-Critic</strong>算法</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612110750284.png" class="" title="image-20240612110750284">
-
-<p>价值网络使用时序差分(TD)更新，策略网络使用</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络(critic)</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络(critic)预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络(actor)</span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数。(价值网络给出的当前状态价值)和(r+价值网络给出的下一状态的状态价值)的均方误差，即((a-b)^2)/2</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。策略函数梯度</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="强化学习设置小心得"><a href="#强化学习设置小心得" class="headerlink" title="强化学习设置小心得"></a>强化学习设置小心得</h2><p>控制状态空间大小，尽量选择有限状态空间</p>
-<p>eg: 将state中的一些值int化</p>
-<p>状态空间的表示值尽量接近</p>
-<p>采用标准化技术将state内的值均一化</p>
-<p>eg: [1, 200, 9999] -&gt; [0.001, 0.99, 0.9999]</p>
-<p>reward设置</p>
-<p>惩罚和奖励设置插值不要过大, 防止惩罚拟合过快</p>
-<p>+2, -200 -&gt; +2, 0</p>
-]]></content>
-      <tags>
-        <tag>python, reinforce learning</tag>
       </tags>
   </entry>
 </search>
