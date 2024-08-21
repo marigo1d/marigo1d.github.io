@@ -63,7 +63,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193338222.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193638556.png">
 <meta property="article:published_time" content="2024-07-28T02:16:25.000Z">
-<meta property="article:modified_time" content="2024-08-19T12:46:23.184Z">
+<meta property="article:modified_time" content="2024-08-21T06:51:59.103Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Android, Java">
 <meta name="twitter:card" content="summary">
@@ -256,7 +256,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-08-19 20:46:23" itemprop="dateModified" datetime="2024-08-19T20:46:23+08:00">2024-08-19</time>
+                <time title="Modified: 2024-08-21 14:51:59" itemprop="dateModified" datetime="2024-08-21T14:51:59+08:00">2024-08-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1191,7 +1191,85 @@
 
 
 
-<h2 id="Android程序"><a href="#Android程序" class="headerlink" title="Android程序"></a>Android程序</h2><h3 id="View"><a href="#View" class="headerlink" title="View"></a>View</h3><h3 id="context"><a href="#context" class="headerlink" title="context"></a>context</h3><ul>
+<h2 id="Android程序"><a href="#Android程序" class="headerlink" title="Android程序"></a>Android程序</h2><h3 id="View"><a href="#View" class="headerlink" title="View"></a>View</h3><p><strong>dp 和 sp</strong></p>
+<p><strong>dp (Density-independent Pixel - 密度无关像素)</strong></p>
+<ul>
+<li><strong>定义:</strong> dp 是一个基于屏幕密度的抽象单位。它代表了在 160 dpi (dots per inch) 屏幕上一个物理像素的长度。</li>
+<li><strong>用途:</strong> 主要用于定义 View 的尺寸和间距，例如按钮的宽度、边距、内边距等。</li>
+<li><strong>优势:</strong> 使用 dp 可以保证应用在不同屏幕密度的设备上保持一致的显示效果。系统会根据设备的屏幕密度自动将 dp 值转换为对应的像素值。</li>
+<li><strong>示例:</strong><ul>
+<li>android:layout_width&#x3D;”100dp” 表示该 View 的宽度为 100dp，在不同密度的屏幕上，系统会将其转换为对应的像素值，以保持相同的物理尺寸。</li>
+</ul>
+</li>
+</ul>
+<p><strong>sp (Scale-independent Pixel - 缩放无关像素)</strong></p>
+<ul>
+<li><strong>定义:</strong> sp 与 dp 类似，也是一个基于屏幕密度的抽象单位。不同之处在于，sp 还受到用户字体大小设置的影响。</li>
+<li><strong>用途:</strong> 主要用于定义文字大小。</li>
+<li><strong>优势:</strong> 使用 sp 可以根据用户的字体大小偏好自动调整文字大小，提高应用的可访问性。</li>
+<li><strong>示例:</strong><ul>
+<li>android:textSize&#x3D;”18sp” 表示该 TextView 的文字大小为 18sp，如果用户在系统设置中调整了字体大小，该 TextView 的文字大小也会随之改变。</li>
+</ul>
+</li>
+</ul>
+<p><strong>layout_gravity 和 gravity</strong></p>
+<p><strong>layout_gravity</strong></p>
+<ul>
+<li><strong>作用目标:</strong> layout_gravity 属性用于控制 <strong>当前 View 在其父布局中的对齐方式</strong>。</li>
+<li><strong>适用范围:</strong> 该属性只能应用于 <strong>ViewGroup 的子 View</strong>，因为它需要依赖于父布局的特性才能生效。</li>
+<li><strong>常见取值:</strong><ul>
+<li>top、bottom、left、right：分别表示顶部对齐、底部对齐、左侧对齐、右侧对齐。</li>
+<li>center：表示水平和垂直居中对齐。</li>
+<li>center_horizontal、center_vertical：分别表示水平居中对齐、垂直居中对齐。</li>
+<li>start、end：分别表示在当前语言环境下，内容开始的方向对齐、内容结束的方向对齐。</li>
+<li>可以使用 | 符号组合多个值，例如 android:layout_gravity&#x3D;”bottom|right” 表示右下角对齐。</li>
+</ul>
+</li>
+</ul>
+<p><strong>gravity</strong></p>
+<ul>
+<li><p><strong>作用目标:</strong> gravity 属性用于控制 <strong>当前 View 中的内容对齐方式</strong>。</p>
+</li>
+<li><p><strong>适用范围:</strong> 该属性可以应用于 <strong>任何 View</strong>，因为它控制的是 View 自身内容的显示方式。</p>
+</li>
+<li><p><strong>常见取值:</strong></p>
+<ul>
+<li>与 layout_gravity 的取值基本相同，例如 top、bottom、left、right、center 等等。</li>
+</ul>
+</li>
+</ul>
+<p><strong>padding 与 margin</strong></p>
+<ul>
+<li><p><strong>padding(内边距)：</strong></p>
+<ul>
+<li>使视图的内容与其边界保持一定的距离。</li>
+<li>使 TextView 中的文字距离 TextView 的边界 10dp，设置 android:padding&#x3D;”10dp”。</li>
+<li>padding 就像是在视图内部加了一圈空白边框，使得内容不会紧贴着视图边界。</li>
+</ul>
+</li>
+<li><p><strong>margin(外边距)：</strong></p>
+<ul>
+<li>控制视图在布局中的位置，或者让视图之间保持一定的距离。</li>
+<li>使两个 Button 之间保持 20dp 的距离，就可以为其中一个 Button 设置 android:layout_marginRight&#x3D;”20dp”，或者为另一个 Button 设置 android:layout_marginLeft&#x3D;”20dp”。</li>
+<li><strong>margin 就像是在视图外部加了一圈透明边框，使得视图与其他视图之间保持一定的距离。</strong></li>
+</ul>
+</li>
+</ul>
+<p>margin和padding作用对象都是自身，非其他视图</p>
+<p><strong>ConstrainLayout</strong></p>
+<ul>
+<li><p><strong>android:layout_width&#x3D;”0dp”:</strong> 在 ConstraintLayout 中，将视图的宽度设置为 0dp 是一个特殊的用法。它表示该视图的宽度应该 <strong>匹配约束条件</strong>。在这个例子中，Button 的左右两边分别被约束到了 login_container 的左右两边 (app:layout_constraintEnd_toEndOf&#x3D;”@id&#x2F;login_container” 和 app:layout_constraintStart_toStartOf&#x3D;”@id&#x2F;login_container”)，因此 Button 的宽度会扩展到与 login_container 的宽度相同。</p>
+</li>
+<li><p><strong>app:layout_margin…</strong>: 这是一组专门用于 ConstraintLayout 的 margin 属性，用于设置视图与其约束目标之间的距离。例如：</p>
+<ul>
+<li>app:layout_marginStart：设置视图与其约束目标的起始边距（取决于布局方向，可能是左边距或右边距）。</li>
+<li>app:layout_marginEnd：设置视图与其约束目标的结束边距。</li>
+<li>app:layout_marginTop：设置视图与其约束目标的顶部边距。</li>
+<li>app:layout_marginBottom：设置视图与其约束目标的底部边距。</li>
+</ul>
+</li>
+</ul>
+<h3 id="context"><a href="#context" class="headerlink" title="context"></a>context</h3><ul>
 <li><strong>资源访问:</strong> 获取字符串、颜色、尺寸、图片等资源。</li>
 <li><strong>组件启动:</strong> 启动 Activity、Service、BroadcastReceiver 等组件。</li>
 <li><strong>系统服务获取:</strong> 获取布局服务 (LayoutInflater)、包管理器 (PackageManager)、通知服务 (NotificationManager) 等系统服务。</li>
@@ -1587,24 +1665,7 @@
 
 
 
-<h3 id="View与事件分发机制"><a href="#View与事件分发机制" class="headerlink" title="View与事件分发机制"></a>View与事件分发机制</h3><p><strong>padding 与 margin</strong></p>
-<ul>
-<li><p><strong>padding：</strong></p>
-<ul>
-<li>当你想让视图的内容与其边界保持一定的距离时使用。</li>
-<li>例如，你想让 TextView 中的文字距离 TextView 的边界 10dp，就可以设置 android:padding&#x3D;”10dp”。</li>
-<li>padding 就像是在视图内部加了一圈空白边框，使得内容不会紧贴着视图边界。</li>
-</ul>
-</li>
-<li><p><strong>margin：</strong></p>
-<ul>
-<li>当你想控制视图在布局中的位置，或者让视图之间保持一定的距离时使用。</li>
-<li>例如，你想让两个 Button 之间保持 20dp 的距离，就可以为其中一个 Button 设置 android:layout_marginRight&#x3D;”20dp”，或者为另一个 Button 设置 android:layout_marginLeft&#x3D;”20dp”。</li>
-<li><strong>margin 就像是在视图外部加了一圈透明边框，使得视图与其他视图之间保持一定的距离。</strong></li>
-</ul>
-</li>
-</ul>
-<p><strong>坐标系</strong></p>
+<h3 id="View与事件分发机制"><a href="#View与事件分发机制" class="headerlink" title="View与事件分发机制"></a>View与事件分发机制</h3><p><strong>坐标系</strong></p>
 <p><strong>屏幕坐标系</strong>： Raw 以屏幕左上角作为坐标原点，水平向右方向为 X 轴正轴方向，竖直向下方向为 Y 轴正轴方向。</p>
 <p><strong>View 坐标系</strong>： 默认 以 View 所在的 ViewGroup 的左上角作为坐标原点，水平向右方向为 X 轴正轴方向，竖直向下方向为 Y 轴正轴方向。View 类包含了以下几个方法用于获取其相对父容器 ViewGroup 的距离：</p>
 <ul>
