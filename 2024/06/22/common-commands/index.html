@@ -27,11 +27,14 @@
 <meta property="og:site_name" content="Marigold">
 <meta property="og:description" content="常用指令">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/22/common-commands/image-20240823160319940.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/22/common-commands/image-20240823160406360.png">
 <meta property="article:published_time" content="2024-06-22T08:07:03.000Z">
-<meta property="article:modified_time" content="2024-07-26T08:48:25.801Z">
+<meta property="article:modified_time" content="2024-08-23T08:05:06.355Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="command">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://marigo1d.github.io/2024/06/22/common-commands/image-20240823160319940.png">
 
 <link rel="canonical" href="https://marigo1d.github.io/2024/06/22/common-commands/">
 
@@ -220,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-07-26 16:48:25" itemprop="dateModified" datetime="2024-07-26T16:48:25+08:00">2024-07-26</time>
+                <time title="Modified: 2024-08-23 16:05:06" itemprop="dateModified" datetime="2024-08-23T16:05:06+08:00">2024-08-23</time>
               </span>
 
           
@@ -363,24 +366,48 @@
 <p><code>docker ps</code> 命令用于列出当前正在运行的容器，包括容器的 ID、状态、端口映射等信息。加上 <code>-a</code> 选项可以列出所有容器，包括已停止的容器。</p>
 </li>
 </ol>
-<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34021712/article/details/117260462">https://blog.csdn.net/qq_34021712/article/details/117260462</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># 在桌面创建test目录</span><br><span class="line">mkdir /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 切换到test目录</span><br><span class="line">cd /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"># 创建并初始化git库</span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"># 链接到远程git仓库 </span><br><span class="line"># -t 默认使用 main 分支，origin为远程仓库别名（替换链接）</span><br><span class="line">git remote add origin -t main https://github.com/Helloworld-7558/git-demo.git</span><br><span class="line"></span><br><span class="line"># 将远程git库下载到本地</span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line">#修改</span><br><span class="line"></span><br><span class="line"># 将目录下所有文件都增加到本地库中。</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"># 提交更改到本地仓库</span><br><span class="line">git commit -m &#x27;提交注释&#x27;</span><br><span class="line"></span><br><span class="line"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span><br><span class="line"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"># 将本地修改推到github上</span><br><span class="line">git push -u origin main  # 首次</span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
+<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p><a target="_blank" rel="noopener" href="https://learngitbranching.js.org/">https://learngitbranching.js.org/</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在桌面创建test目录</span></span><br><span class="line"><span class="built_in">mkdir</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到test目录</span></span><br><span class="line"><span class="built_in">cd</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并初始化git库</span></span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接到远程git仓库 </span></span><br><span class="line"><span class="comment"># -t 默认使用远程仓库的 main 分支，origin为远程仓库别名（替换链接）</span></span><br><span class="line">git remote add origin -t main https://github.com/xx/xxx.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将远程git库下载到本地</span></span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将目录下所有文件都增加到本地库中。</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更改到本地仓库</span></span><br><span class="line">git commit -m <span class="string">&#x27;提交注释&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span></span><br><span class="line"><span class="comment"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span></span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地修改推到github上</span></span><br><span class="line">git push -u origin main  <span class="comment"># 首次</span></span><br><span class="line">git push origin main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件夹</span></span><br><span class="line">git <span class="built_in">rm</span> -r --cached <span class="built_in">dir</span>/</span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件</span></span><br><span class="line">git <span class="built_in">rm</span> --cached file</span><br></pre></td></tr></table></figure>
 
-
-
+<p>commit</p>
+<p>创建检查点</p>
+<p>checkout</p>
+<p>git checkout main  # 切换head指向main分支指针</p>
+<p>git checkout C1  # 切换head指向检查点，<strong>此时head指针与main指针分离！！！</strong></p>
+<blockquote>
+<p>当 HEAD 指针移动到 main 分支上的非最新提交 c1 (最新提交是 c2) 后，执行commit指令</p>
 <ol>
-<li>什么是主分支<br>主分支是<em>默认分支</em>,当执行<code>git clone</code>时，克隆的就是默认分支。<code>git init</code>初始化时，会以<strong>master</strong>分支作为主分支，主分支可以改成其他分支。</li>
-<li>什么是origin<br><strong>origin</strong>代表远程分支，比如gitlab上保存的分支。Git作为分布式版本控制工具，本地分支与远程分支并无不同。假如远程服务器上有一个<strong>develop</strong>分支，那么在本地以<strong>origin&#x2F;develop</strong>代表远程分支</li>
-<li>如何创建新分支<br># 方法一<br>git branch branch_name<br># 此方法以当前所在分支为基础来创建<br># e.g. git branch feature&#x2F;test<br>​<br># 方法二<br>git branch branch_name base_branch_name<br># 此方法忽略当前所在的分支，以指定的base_branch_name为基础来创建分支<br># e.g. git branch feature&#x2F;test develop<br># e.g. git branch feature&#x2F;test origin&#x2F;develop<br>​<br># 方法三<br>git checkout -b branch_name<br># 此方法是一个快捷操作，创建并切换分支。checkout本是用来切换分支的，增加“-b”选项指：当分支不存在时创建，同样支持指定base_branch_name<br># e.g. git checkout -b feature&#x2F;test<br># e.g. git checkout -b feature&#x2F;test develop<br># e.g. git checkout -b feature&#x2F;test origin&#x2F;develop</li>
-<li>如何切换分支<br>git checkout branch_name</li>
-<li>查看所有分支<br># 列出本地所有分支<br>git branch</li>
-<li>如何删除分支<br>当使用gitflow工作流时，本地分支会越来越多，不用的分支可以删除<br># 删除单个分支<br>git branch -d branch_name<br>​<br># 删除多个分支<br>git branch | grep feature&#x2F; | xargs git branch -d<br># git branch命令不支持管道操作，所获得的列表不能作为git branch -d的参数，所以需要使用xargs做一个辅助</li>
-<li>如何提交修改<br># 第一步：将修改进行暂存(Stage)<br>git add .&#x2F; # 添加所有本地修改<br># 添加特定文件 git add file1 file2<br># 添加特定文件夹下的所有文件 git add .&#x2F;dir1&#x2F;dir2&#x2F;<br>​<br># 第二步：执行commit<br>git commit -m ‘commit message’<br># 使用编辑器编写提交说明 git commit ,Git将自动打开默认编辑器，通常是Vim，可以自定义<br># 在上一条提交上追加提交 git commit –amend，本次提交不会生成一条新的提交记录。应该保证每次提交都是一次完整的功能修改，当发现上次提交的内容不完整时，应该采用此种方法进行追加提交。</li>
-<li>如何取消本地修改<br># 将文件从暂存区中去除,文件的修改不会丢失<br>git reset – filename<br>​<br># 将文件(未暂存)的修改取消，文件的修改将丢失<br>git checkout – filename<br>​<br># 将所有文件(未暂存)修改取消,文件的修改将丢失<br>git checkout – .&#x2F;<br>​<br># 将所有文件(包括已暂存)的修改取消，文件的修改将丢失<br>git reset –hard HEAD</li>
-<li><code>checkout</code>命令为什么可以用来<em>取消文件修改</em><br><code>checkout</code>命令翻译为”检出”，他的实际作用是将版本库中的内容拿出来放到工作区。<br>当执行<code>git checkout branch_name</code>时相当于把<code>brach_name</code>分支的内容拿出来放到工作区，表象就是切换了分支<br>当执行<code>git checkout -- filename</code>时，相当于把该文件版本库中的内容拿出来放到工作区，表象就是覆盖了该文件在工作区中的修改</li>
-<li><code>rebase</code>命令什么时候用<br><code>rebase</code>命令翻译为<em>变基</em>。我们在创建任何分支时，都有一个基分支，比如：<br><code>git branch feature/test develop</code>创建一个<code>feature/test</code>分支，他的基分支就是<code>develop</code>。Git会记录每个分支的基分支，变基就是改变分支的基分支。变基的表象就是基分支上改动会合并到当前分支，但不会生成合并记录。所以其使用场景就是：当develop上有别人提交的新内容，并且我们需要这些新内容时，执行一次变基，这样别人提交的最新代码就会出现在当前分支上。<br># 第一种用法：完全变基<br>git rebase –onto base_branch_name branch_name<br># 此种不常用<br>​<br># 第二种用法：通过变基获取最新代码<br>git rebase base_branch_name<br># 在向服务器推送自己的代码前，执行一遍rebase能提前知道自己的代码是否和别人的有冲突，便于提前解决冲突，当有冲突时需要手动解决冲突，然后执行：git rebase –continue</li>
-<li>向服务器推送代码<br>在使用gitflow工作流时，会经常执行<code>git push origin branch_name</code>命令。比简单的<code>git push</code>命令多了两个参数。此处之所以需要多传两个参数是因为，<code>branch_name</code>是我们本地创建的分支，服务器上没有该分支，且本地Git也并不知道本地<code>branch_name</code>与远程的哪个分支对应。所以需要显式传参。<br>同时我们可以告诉Git，本地与远程如何对应，在第一次推送代码时执行：<code>git push -u origin branch_name</code> 或<code>git push --set-upstream origin branch_name</code>，会告诉Git，本地<code>branch_name</code>分支与<code>origin/branch_name</code>对应，之后就可以直接执行<code>git pussh</code>, 而无需显式传参。</li>
+<li><strong>HEAD 指针移动:</strong> git checkout c1 命令会将 HEAD 指针移动到 c1 提交，此时处于 “分离 HEAD 状态”。</li>
+<li><strong>新提交产生:</strong> 当进行新的提交时，Git 会创建一个新的提交对象 c3，并将 c1 作为 c3 的父提交。</li>
+<li><strong>HEAD 指针移动:</strong> c3 提交创建后，HEAD 指针会指向新的提交 c3。</li>
 </ol>
+</blockquote>
+<p>reset</p>
+<p>git reset head~1  # 切换head指向上一检查点</p>
+<p>rebase </p>
+<ul>
+<li>改变当前分支的基底分支，将当前分支的提交记录“复制”到目标分支的最新提交之后，并移动head指针和分支指针。</li>
+</ul>
+<p>(当前分支 bugFix)</p>
+<p>git rebase main  # 原bugFix的内容<strong>仍然存在</strong>，只是 HEAD 指针和分支指针发生了移动，指向bugFix最新提交记录的复制。</p>
+<p>merge</p>
+<p>(当前分支 main)</p>
+<p>git merge bugFix  # 将bugFix 分支合并到当前分支，创建新的检查点，该检查点存在两个父节点（bugFix分支的最新检查点和main分支的最新检查点），并移动head指针和分支指针。</p>
+<p>fetch</p>
+<ul>
+<li>fetch将下载远程仓库的内容，并移动 远程指针 &lt;远程仓库名&gt;&#x2F;&lt;分支&gt; 指向与远程仓库同步的位置</li>
+<li>不更新本地指针！！！这意味着，如果本地main分支指针现在指向C2，远程指针指向C1，远程仓库已更新至C3，执行fetch后会存在以下情况</li>
+</ul>
+<img src="/2024/06/22/common-commands/image-20240823160319940.png" class="" title="image-20240823160319940">
+
+<img src="/2024/06/22/common-commands/image-20240823160406360.png" class="" title="image-20240823160406360">
+
+
+
+<p>pull</p>
+<ul>
+<li>pull指令为fetch和merge指令的和</li>
+</ul>
 <h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
 

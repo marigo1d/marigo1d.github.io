@@ -63,7 +63,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193338222.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193638556.png">
 <meta property="article:published_time" content="2024-07-28T02:16:25.000Z">
-<meta property="article:modified_time" content="2024-08-22T07:07:54.172Z">
+<meta property="article:modified_time" content="2024-08-22T13:53:52.464Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Android, Java">
 <meta name="twitter:card" content="summary">
@@ -256,7 +256,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-08-22 15:07:54" itemprop="dateModified" datetime="2024-08-22T15:07:54+08:00">2024-08-22</time>
+                <time title="Modified: 2024-08-22 21:53:52" itemprop="dateModified" datetime="2024-08-22T21:53:52+08:00">2024-08-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -316,8 +316,7 @@
 </li>
 <li><p><strong>静态类</strong>：</p>
 <ul>
-<li><strong>声明位置:</strong> 静态类只能在另一个类的内部进行声明，使用 static 关键字修饰。</li>
-</ul>
+<li><p><strong>声明位置:</strong> 静态类只能在另一个类的内部进行声明，使用 static 关键字修饰。</p>
 </li>
 <li><p><strong>与外部类的关系:</strong></p>
 <ul>
@@ -325,7 +324,15 @@
 <li><strong>静态类的实例化不需要依赖外部类的实例，可以直接通过 OuterClass.StaticNestedClass 的方式创建。</strong></li>
 </ul>
 </li>
+<li><p><strong>静态内部类可以有非静态的变量和方法</strong>：静态内部类本质上是一个独立的类，它可以拥有实例变量和实例方法。要访问这些实例变量和方法，必须创建静态内部类的对象。</p>
+<p><strong>静态内部类可以有静态的变量和方法</strong>：由于静态内部类是静态的，它可以直接包含静态变量和静态方法。这些静态成员属于静态内部类本身，而不属于其外部类的实例。</p>
+</li>
 </ul>
+</li>
+</ul>
+<p><strong>内部类</strong></p>
+<p><strong>内部类中不能使用静态的变量和静态的方法！</strong>！！</p>
+<p>内部类的实例化是由外部类实例化之后才加载的，如果外部类还没有实例化，这时候调用内部类的静态成员，此时内部类还没有被加载，却要开始创建静态成员,显示是不合理的,</p>
 <p><strong>常见的变量名前缀：</strong></p>
 <ul>
 <li><strong>m：</strong> 表示 <strong>成员变量</strong> (member variable)，即类级别的变量，区别于局部变量。例如：private int mCount;</li>
@@ -1269,7 +1276,42 @@
 </ul>
 </li>
 </ul>
-<h3 id="context"><a href="#context" class="headerlink" title="context"></a>context</h3><ul>
+<p><strong>ViewBinding</strong></p>
+<p>在启用ViewBinding后，ViewBinding 会为每个 XML 布局文件生成一个绑定类</p>
+<p>针对每个xml文件，将使用(xml的驼峰文件名+Bindng)作为java文件名的方式，生成对应的java类</p>
+<p>生成类：</p>
+<p><strong>根视图属性 (<code>root</code>)</strong>:</p>
+<ul>
+<li>每个生成的 ViewBinding 类都有一个 <code>root</code> 属性，表示布局的根视图（通常是最外层的 <code>ViewGroup</code>），通过 <code>getRoot()</code> 获取。</li>
+</ul>
+<p><strong>每个视图的属性</strong>:</p>
+<ul>
+<li>对于布局中的每个视图，ViewBinding 类会生成一个相应的属性。这些属性的名称是基于视图的 <code>id</code> 自动生成的，格式为 <code>viewId</code>，其中 <code>viewId</code> 是 XML 布局中视图的 <code>android:id</code> 属性。</li>
+</ul>
+<p><strong><code>inflate</code> 方法</strong>:</p>
+<ul>
+<li>ViewBinding 类提供静态 <code>inflate</code> 方法，用于将布局文件转换为相应的视图层次结构，并返回 ViewBinding 类的实例。</li>
+</ul>
+<p><strong><code>bind</code> 方法</strong>:</p>
+<ul>
+<li>ViewBinding 类还提供一个静态 <code>bind</code> 方法，用于将现有的视图（比如已经通过 <code>setContentView()</code> 加载的视图）绑定到 ViewBinding 类上。</li>
+</ul>
+<p><strong>RecyclerView</strong></p>
+<p>onCreateViewHolder</p>
+<ul>
+<li><p><code>onCreateViewHolder</code> 方法在 <code>RecyclerView</code> 需要一个新的 <code>ViewHolder</code> 来显示列表中的数据项时触发。通常是在 <code>RecyclerView</code> 滚动到新的一项时，或者初次加载视图时，<code>RecyclerView</code> 没有足够的 <code>ViewHolder</code> 可供复用时调用。</p>
+</li>
+<li><p><code>onCreateViewHolder</code> 的目的是创建一个新的 <code>ViewHolder</code>。这个 <code>ViewHolder</code> 包含了视图的布局，并用于缓存视图引用，以便稍后可以在 <code>onBindViewHolder</code> 方法中复用这些视图组件，减少不必要的 <code>findViewById</code> 调用，提升性能。</p>
+</li>
+</ul>
+<p>onBindViewHolder</p>
+<ul>
+<li><p><code>onBindViewHolder</code> 方法在 <code>RecyclerView</code> 需要显示某个数据项时触发。这通常是在滚动列表时，<code>RecyclerView</code> 将需要更新内容的 <code>ViewHolder</code> 传递给 <code>onBindViewHolder</code>，以便将数据项绑定到视图上。</p>
+</li>
+<li><p><code>onBindViewHolder</code> 的目的是将数据绑定到已经创建的 <code>ViewHolder</code> 上。这里的数据通常来自 <code>Adapter</code> 中的数据集合，通过 <code>position</code> 参数来获取具体的数据项，然后更新 <code>ViewHolder</code> 中的视图，以显示正确的数据。</p>
+</li>
+</ul>
+<h3 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h3><ul>
 <li><strong>资源访问:</strong> 获取字符串、颜色、尺寸、图片等资源。</li>
 <li><strong>组件启动:</strong> 启动 Activity、Service、BroadcastReceiver 等组件。</li>
 <li><strong>系统服务获取:</strong> 获取布局服务 (LayoutInflater)、包管理器 (PackageManager)、通知服务 (NotificationManager) 等系统服务。</li>
@@ -2149,7 +2191,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Learning-Record"><span class="nav-text">Android Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java"><span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85"><span class="nav-text">包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">泛型与通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-text">反射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E4%B8%8EAPT"><span class="nav-text">注解与APT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="nav-text">线程与同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Lock"><span class="nav-text">Lock</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-text">分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#volatile"><span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CAS"><span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#synchronized"><span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ReentrantLock"><span class="nav-text">ReentrantLock</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%86%85%E5%AD%98"><span class="nav-text">JVM内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-Area-%E6%96%B9%E6%B3%95%E5%8C%BA-%E5%85%83%E7%A9%BA%E9%97%B4"><span class="nav-text">Method Area (方法区)&#x2F;(元空间)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heap-%E5%A0%86"><span class="nav-text">Heap (堆)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-text">Thread (线程)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC"><span class="nav-text">GC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">垃圾回收算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%A8%8B%E5%BA%8F"><span class="nav-text">Android程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#context"><span class="nav-text">context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%B1%82%E4%B8%8ENative%E5%B1%82"><span class="nav-text">Java层与Native层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E6%83%85%E5%86%B5"><span class="nav-text">常见内存泄露情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Handler%EF%BC%8CLooper%E4%B8%8EMessageQueue"><span class="nav-text">Handler，Looper与MessageQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E4%BA%A4%E4%BA%92"><span class="nav-text">进程间交互</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AIDL%E4%B8%8EBinder"><span class="nav-text">AIDL与Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder%E5%AE%9E%E7%8E%B0"><span class="nav-text">Binder实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Message%E8%B7%A8%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-text">Message跨进程通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6"><span class="nav-text">View与事件分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-text">事件分发流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle"><span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E5%90%AF%E5%8A%A8"><span class="nav-text">Android启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Init%E8%BF%9B%E7%A8%8B"><span class="nav-text">Init进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zygote%E8%BF%9B%E7%A8%8B"><span class="nav-text">Zygote进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SystemServer%E8%BF%9B%E7%A8%8B"><span class="nav-text">SystemServer进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP%E8%BF%9B%E7%A8%8B"><span class="nav-text">APP进程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A1%86%E6%9E%B6"><span class="nav-text">常用框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Glide"><span class="nav-text">Glide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrofit"><span class="nav-text">Retrofit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RxJava"><span class="nav-text">RxJava</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Learning-Record"><span class="nav-text">Android Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java"><span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85"><span class="nav-text">包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">泛型与通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-text">反射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E4%B8%8EAPT"><span class="nav-text">注解与APT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="nav-text">线程与同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Lock"><span class="nav-text">Lock</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-text">分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#volatile"><span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CAS"><span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#synchronized"><span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ReentrantLock"><span class="nav-text">ReentrantLock</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%86%85%E5%AD%98"><span class="nav-text">JVM内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-Area-%E6%96%B9%E6%B3%95%E5%8C%BA-%E5%85%83%E7%A9%BA%E9%97%B4"><span class="nav-text">Method Area (方法区)&#x2F;(元空间)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heap-%E5%A0%86"><span class="nav-text">Heap (堆)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-text">Thread (线程)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC"><span class="nav-text">GC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">垃圾回收算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%A8%8B%E5%BA%8F"><span class="nav-text">Android程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Context"><span class="nav-text">Context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%B1%82%E4%B8%8ENative%E5%B1%82"><span class="nav-text">Java层与Native层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E6%83%85%E5%86%B5"><span class="nav-text">常见内存泄露情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Handler%EF%BC%8CLooper%E4%B8%8EMessageQueue"><span class="nav-text">Handler，Looper与MessageQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E4%BA%A4%E4%BA%92"><span class="nav-text">进程间交互</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AIDL%E4%B8%8EBinder"><span class="nav-text">AIDL与Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder%E5%AE%9E%E7%8E%B0"><span class="nav-text">Binder实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Message%E8%B7%A8%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-text">Message跨进程通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6"><span class="nav-text">View与事件分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-text">事件分发流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle"><span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E5%90%AF%E5%8A%A8"><span class="nav-text">Android启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Init%E8%BF%9B%E7%A8%8B"><span class="nav-text">Init进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zygote%E8%BF%9B%E7%A8%8B"><span class="nav-text">Zygote进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SystemServer%E8%BF%9B%E7%A8%8B"><span class="nav-text">SystemServer进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP%E8%BF%9B%E7%A8%8B"><span class="nav-text">APP进程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A1%86%E6%9E%B6"><span class="nav-text">常用框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Glide"><span class="nav-text">Glide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrofit"><span class="nav-text">Retrofit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RxJava"><span class="nav-text">RxJava</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
