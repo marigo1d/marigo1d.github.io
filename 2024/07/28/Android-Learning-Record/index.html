@@ -63,7 +63,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193338222.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193638556.png">
 <meta property="article:published_time" content="2024-07-28T02:16:25.000Z">
-<meta property="article:modified_time" content="2024-08-22T13:53:52.464Z">
+<meta property="article:modified_time" content="2024-08-27T10:45:26.525Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Android, Java">
 <meta name="twitter:card" content="summary">
@@ -256,7 +256,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-08-22 21:53:52" itemprop="dateModified" datetime="2024-08-22T21:53:52+08:00">2024-08-22</time>
+                <time title="Modified: 2024-08-27 18:45:26" itemprop="dateModified" datetime="2024-08-27T18:45:26+08:00">2024-08-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1276,41 +1276,50 @@
 </ul>
 </li>
 </ul>
-<p><strong>ViewBinding</strong></p>
+<p><strong>RecyclerView</strong></p>
+<p>onCreateViewHolder触发时机</p>
+<ul>
+<li><strong>首次加载 RecyclerView 时：</strong> 当 RecyclerView 第一次被加载到屏幕上时，onCreateViewHolder 方法会被调用，用于创建 ViewHolder 实例。此时，RecyclerView 需要根据你的布局文件实例化 ViewHolder，并将它们缓存起来以备后用。</li>
+<li><strong>缓存中没有可用的 ViewHolder 时：</strong> 当用户滚动 RecyclerView，需要显示新的 item，而缓存中没有可用的 ViewHolder 时，onCreateViewHolder 会被调用以创建新的 ViewHolder。</li>
+</ul>
+<p>onBindViewHolder触发时机</p>
+<ul>
+<li><strong>首次加载 RecyclerView 时：</strong> 在 onCreateViewHolder 创建了 ViewHolder 后，onBindViewHolder 方法会被立即调用，用于将数据绑定到 ViewHolder 上。</li>
+<li><strong>用户滚动 RecyclerView，新的 item 需要显示时：</strong> 当用户滚动 RecyclerView，新的 item 进入屏幕时，onBindViewHolder 会被调用，将对应位置的数据绑定到复用的 ViewHolder 上。</li>
+<li><strong>调用 notifyDataSetChanged() 等方法刷新 RecyclerView 时：</strong> 当你更新了数据源并调用 notifyDataSetChanged()、notifyItemInserted() 等方法刷新 RecyclerView 时，onBindViewHolder 会被调用，以更新 ViewHolder 的数据。</li>
+</ul>
+<p><strong>LayoutInflater</strong></p>
+<p> LayoutInflater 是与 Context 绑定的，而 Activity 本身就是一个 Context。每个 Activity 都会持有自己唯一的 LayoutInflater 对象，用于加载布局文件。</p>
+<p>该 Activity 中所有的 Fragment 和 RecyclerView 所使用的 LayoutInflater 对象为 Activity 对应的 Context LayoutInflater 对象</p>
+<p>**ViewBinding 与 ViewHolder **</p>
 <p>在启用ViewBinding后，ViewBinding 会为每个 XML 布局文件生成一个绑定类</p>
 <p>针对每个xml文件，将使用(xml的驼峰文件名+Bindng)作为java文件名的方式，生成对应的java类</p>
-<p>生成类：</p>
+<p>xml对应生成的 ViewBinding 类：</p>
 <p><strong>根视图属性 (<code>root</code>)</strong>:</p>
 <ul>
-<li>每个生成的 ViewBinding 类都有一个 <code>root</code> 属性，表示布局的根视图（通常是最外层的 <code>ViewGroup</code>），通过 <code>getRoot()</code> 获取。</li>
+<li>每个生成的 ViewBinding 类都有一个 <code>root</code> 属性，表示布局的根视图（通常是最外层的 <code>ViewGroup</code>），通过 <code>getRoot()</code> 获取，为 View 类型。</li>
 </ul>
-<p><strong>每个视图的属性</strong>:</p>
+<p><strong>每个视图的属性 (<code>views</code>)</strong> :</p>
 <ul>
 <li>对于布局中的每个视图，ViewBinding 类会生成一个相应的属性。这些属性的名称是基于视图的 <code>id</code> 自动生成的，格式为 <code>viewId</code>，其中 <code>viewId</code> 是 XML 布局中视图的 <code>android:id</code> 属性。</li>
 </ul>
 <p><strong><code>inflate</code> 方法</strong>:</p>
 <ul>
-<li>ViewBinding 类提供静态 <code>inflate</code> 方法，用于将布局文件转换为相应的视图层次结构，并返回 ViewBinding 类的实例。</li>
+<li>ViewBinding 类提供静态 <code>inflate</code> 方法，用于将布局文件转换为相应的视图层次结构，并返回 ViewBinding 类的实例。<ul>
+<li><code>inflate</code> 方法调用 LayoutInflater 将布局文件转换为对应的 View 层级结构。</li>
+<li><code>inflate</code> 方法将 View 实例绑定到 Binding 对象的属性中。</li>
+</ul>
+</li>
 </ul>
 <p><strong><code>bind</code> 方法</strong>:</p>
 <ul>
 <li>ViewBinding 类还提供一个静态 <code>bind</code> 方法，用于将现有的视图（比如已经通过 <code>setContentView()</code> 加载的视图）绑定到 ViewBinding 类上。</li>
 </ul>
-<p><strong>RecyclerView</strong></p>
-<p>onCreateViewHolder</p>
-<ul>
-<li><p><code>onCreateViewHolder</code> 方法在 <code>RecyclerView</code> 需要一个新的 <code>ViewHolder</code> 来显示列表中的数据项时触发。通常是在 <code>RecyclerView</code> 滚动到新的一项时，或者初次加载视图时，<code>RecyclerView</code> 没有足够的 <code>ViewHolder</code> 可供复用时调用。</p>
-</li>
-<li><p><code>onCreateViewHolder</code> 的目的是创建一个新的 <code>ViewHolder</code>。这个 <code>ViewHolder</code> 包含了视图的布局，并用于缓存视图引用，以便稍后可以在 <code>onBindViewHolder</code> 方法中复用这些视图组件，减少不必要的 <code>findViewById</code> 调用，提升性能。</p>
-</li>
-</ul>
-<p>onBindViewHolder</p>
-<ul>
-<li><p><code>onBindViewHolder</code> 方法在 <code>RecyclerView</code> 需要显示某个数据项时触发。这通常是在滚动列表时，<code>RecyclerView</code> 将需要更新内容的 <code>ViewHolder</code> 传递给 <code>onBindViewHolder</code>，以便将数据项绑定到视图上。</p>
-</li>
-<li><p><code>onBindViewHolder</code> 的目的是将数据绑定到已经创建的 <code>ViewHolder</code> 上。这里的数据通常来自 <code>Adapter</code> 中的数据集合，通过 <code>position</code> 参数来获取具体的数据项，然后更新 <code>ViewHolder</code> 中的视图，以显示正确的数据。</p>
-</li>
-</ul>
+<p>ViewHolder在创建时，通过 new Viewholder(binding) 创建，实际上是将 binding.root 赋值给了 ViewHolder.itemView</p>
+<blockquote>
+<p>ViewHolder 像是视图的“控制器”: ViewHolder 对根视图 (itemView) 进行了一次封装，但它更像是 MVC 模式中的 Controller，负责管理视图的生命周期、数据绑定、事件处理等逻辑。</p>
+<p>ViewHolder 像是视图的“访问器”: ViewBinding 是对 View 树进行了一次包装，但它更像是提供了 类型安全、便捷 的方式来访问视图。</p>
+</blockquote>
 <h3 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h3><ul>
 <li><strong>资源访问:</strong> 获取字符串、颜色、尺寸、图片等资源。</li>
 <li><strong>组件启动:</strong> 启动 Activity、Service、BroadcastReceiver 等组件。</li>
@@ -1743,15 +1752,17 @@
 </ul>
 <p><strong>PhoneWindow与DecorView</strong></p>
 <ul>
-<li><p>每个 Activity 都对应一个 PhoneWindow，即每个 Activity 实例均包含了一个 PhoneWindow 对象</p>
-</li>
-<li><p>每个 PhoneWindow 都对应一个 DecorView，DecorView 依靠 PhoneWindow 作为构造参数之一来实例化</p>
-</li>
-<li><p>DecorView 是 FrameLayout 的子类，是 Activity 视图树的根视图，我们平时调用 setContentView 所添加的 View 就对应 DecorView 的 ContentParent 区域</p>
-</li>
-<li><p>在这三者中 DecorView 会最先接收到触摸事件，DecorView 作为视图树的根视图，就负责向其内部 View 下发触摸事件</p>
-</li>
+<li>每个 Activity 都对应一个 PhoneWindow，即每个 Activity 实例均包含了一个 PhoneWindow 对象</li>
+<li>每个 PhoneWindow 都对应一个 DecorView，DecorView 依靠 PhoneWindow 作为构造参数之一来实例化</li>
+<li>DecorView 是 FrameLayout 的子类，是 Activity 视图树的根视图，我们平时调用 setContentView 所添加的 View 就对应 DecorView 的 ContentParent 区域</li>
+<li>在这三者中 DecorView 会最先接收到触摸事件，DecorView 作为视图树的根视图，就负责向其内部 View 下发触摸事件</li>
 </ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Activity</span><br><span class="line">│</span><br><span class="line">└── PhoneWindow</span><br><span class="line">    │</span><br><span class="line">    └── DecorView (FrameLayout)</span><br><span class="line">        │</span><br><span class="line">        ├── TitleBar/ActionBar</span><br><span class="line">        │</span><br><span class="line">        └── ContentView (Activity 布局文件定义的根视图)</span><br><span class="line">            │</span><br><span class="line">            └── ... 其他 View</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>StatusBar (状态栏) 不属于 当前Activity，位于屏幕最上方</p>
+<p>TitleBar&#x2F;ActionBar 属于 DecorView，位于 StatusBar (状态栏) 下方</p>
+</blockquote>
 <img src="/2024/07/28/Android-Learning-Record/image-20240812184518922.png" class="" title="image-20240812184518922">
 <p>参考链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6931914294980411406">https://juejin.cn/post/6931914294980411406</a></p>
 <blockquote>
