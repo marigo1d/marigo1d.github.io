@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Database-Learning-Record</title>
-    <url>/2024/08/10/Database-Learning-Record/</url>
-    <content><![CDATA[<p>MySQL和Redis数据库相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database Learning Record"></a>Database Learning Record</h1><p>待完成</p>
-]]></content>
-      <categories>
-        <category>database</category>
-      </categories>
-      <tags>
-        <tag>database</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Algo Learning Record</title>
     <url>/2024/04/25/Algo-Learning-Record/</url>
     <content><![CDATA[<p>算法相关学习记录</p>
@@ -101,6 +84,23 @@
       </tags>
   </entry>
   <entry>
+    <title>Database-Learning-Record</title>
+    <url>/2024/08/10/Database-Learning-Record/</url>
+    <content><![CDATA[<p>MySQL和Redis数据库相关学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database Learning Record"></a>Database Learning Record</h1><p>待完成</p>
+]]></content>
+      <categories>
+        <category>database</category>
+      </categories>
+      <tags>
+        <tag>database</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Android-Learning-Record</title>
     <url>/2024/07/28/Android-Learning-Record/</url>
     <content><![CDATA[<p>Android学习记录</p>
@@ -160,6 +160,19 @@
 <p>内部类的实例化是由外部类实例化之后才加载的，如果外部类还没有实例化，这时候调用内部类的静态成员，此时内部类还没有被加载，却要开始创建静态成员,显示是不合理的,</p>
 <p><strong>接口可继承接口</strong></p>
 </blockquote>
+<p><strong>Try-Catch-Finally</strong></p>
+<p>执行逻辑</p>
+<p>Try块顺序执行，直到遇到Exception</p>
+<p>即 1.若没有抛出Exception，则Try块将顺序执行完成</p>
+<p>​	 2.若抛出Exception，Try块执行将到抛出Exception的位置截至</p>
+<p>Catch块仅在Try块抛出Exception时执行</p>
+<p>Finally块 <strong>不论 Try块&#x2F;Catch块 的执行情况，一定会得到执行</strong></p>
+<p>即 即使在Try块&#x2F;Catch块中存在return，Finally块一定会得到执行，且在Finally块执行完成后进行return；</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="type">int</span> <span class="title function_">test</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Try block - start&quot;</span>);</span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> <span class="number">10</span> / <span class="number">0</span>; <span class="comment">// 抛出 ArithmeticException</span></span><br><span class="line">        System.out.println(<span class="string">&quot;Try block - end&quot;</span>); <span class="comment">// 不会执行</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (ArithmeticException e) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Catch block: &quot;</span> + e.getMessage());</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>; <span class="comment">// 在Finally块执行结束后返回</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Finally block - always executed&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">&quot;After try-catch-finally&quot;</span>); <span class="comment">// 不会执行</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// 不会执行</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>没有在Catch块中抛出Exception，程序会中断当前执行流程</p>
+</blockquote>
 <p><strong>常见的变量名前缀：</strong></p>
 <ul>
 <li><strong>m：</strong> 表示 <strong>成员变量</strong> (member variable)，即类级别的变量，区别于局部变量。例如：private int mCount;</li>
@@ -188,6 +201,12 @@
 <p>Entry&lt;K,V&gt; extends HashMap.Node&lt;K,V&gt;存在属性before和after，会向table中装入Entry&lt;K,V&gt;类型节点，装入时修改before after以记录写入顺序</p>
 </blockquote>
 <p>TreeMap: Entry&lt;K, V&gt;节点的红黑树</p>
+<blockquote>
+<p>所有的map均含有</p>
+<p><strong>entrySet:</strong> 该集合包含了 Map 对象中所有的键值对 (key-value pairs)，每个键值对都被封装成一个 Map.Entry 对象</p>
+<p><strong>keySet():</strong> 返回一个包含了 Map 中所有 key 的 Set 集合。</p>
+<p><strong>values():</strong> 返回一个包含了 Map 中所有 value 的 Collection 集合。</p>
+</blockquote>
 <p>ArrayList: 自扩容数组</p>
 <p>LinkedList: 双向链表</p>
 <blockquote>
@@ -198,6 +217,30 @@
 <blockquote>
 <p>que -&gt; 队列</p>
 </blockquote>
+<p>HashSet: 通过HashMap实现</p>
+<p>LinkedHashSet: </p>
+<p>TreeSet: 红黑树，无法重复元素插入</p>
+<p><strong>排序</strong></p>
+<p>在不指定Comparator的情况下，使用 <strong>自然排序</strong> (natural ordering)，即键的升序排列</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">Comparator</span>&lt;String&gt;() &#123;</span><br><span class="line">    <span class="comment">// 匿名内部类</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(String s1, String s2)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Integer.compare(s1.length(), s2.length());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// lambda表达式</span></span><br><span class="line">(s1, s2) -&gt; Integer.compare(s1.length(), s2.length())</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>对比</strong></p>
+<p>peek&amp;&amp;get</p>
+<p>peek -&gt; element || NULL</p>
+<p>get -&gt; element || throw an exception</p>
+<p>poll&amp;&amp;remove</p>
+<p>poll -&gt; element || NULL</p>
+<p>remove -&gt; element || throw an exception</p>
+<p>offer&amp;&amp;add</p>
+<blockquote>
+<p>default: at the tail of this deque</p>
+</blockquote>
+<p>offer -&gt; true || false</p>
+<p>add -&gt; true || IllegalStateException</p>
+<p>Arrays.asList() 返回的是一个存储 Integer 对象的 List</p>
+<p>new int[]{} 返回的是一个存储 int 类型的 数组</p>
 <h3 id="包"><a href="#包" class="headerlink" title="包"></a>包</h3><p>对于<code>com.example.project</code></p>
 <p>其中， <code>com</code> 是顶层包, <code>example</code> 是 <code>com</code> 包的子包, <code>project</code> 是 <code>com.example</code> 包的子包。</p>
 <p>在文件系统中，存在以下的层次结构：</p>
@@ -741,27 +784,17 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConditionExample</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">notFull</span> <span class="operator">=</span> lock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">notEmpty</span> <span class="operator">=</span> lock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">BUFFER_SIZE</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">producer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">                lock.lock();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">while</span> (count == BUFFER_SIZE) &#123; <span class="comment">// 缓冲区满，等待</span></span><br><span class="line">                        notFull.await();</span><br><span class="line">                    &#125;</span><br><span class="line">                    count++;</span><br><span class="line">                    System.out.println(<span class="string">&quot;生产者生产了数据，当前数量：&quot;</span> + count);</span><br><span class="line">                    notEmpty.signal(); <span class="comment">// 唤醒消费者</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    lock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">consumer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">                lock.lock();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">while</span> (count == <span class="number">0</span>) &#123; <span class="comment">// 缓冲区空，等待</span></span><br><span class="line">                        notEmpty.await();</span><br><span class="line">                    &#125;</span><br><span class="line">                    count--;</span><br><span class="line">                    System.out.println(<span class="string">&quot;消费者消费了数据，当前数量：&quot;</span> + count);</span><br><span class="line">                    notFull.signal(); <span class="comment">// 唤醒生产者</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    lock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        producer.start();</span><br><span class="line">        consumer.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
-<p><strong>其他方法</strong></p>
-<ul>
-<li>**getHoldCount(): ** 返回当前线程持有该锁的次数。可重入锁允许同一个线程多次获取锁。</li>
-<li>**isHeldByCurrentThread(): ** 判断当前线程是否持有该锁。</li>
-<li>**isLocked(): ** 判断该锁是否被任何线程持有。</li>
-<li>**hasQueuedThreads(): ** 判断是否有线程在等待获取该锁。</li>
-<li>**getQueueLength(): ** 返回等待获取该锁的线程数。</li>
-</ul>
-<p>实例</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReentrantLockExample</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">condition</span> <span class="operator">=</span> lock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            lock.lock();  <span class="comment">// 获取锁，如果锁已被其他线程持有，则当前线程会阻塞，直到获取到锁。</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">while</span> (count &lt; <span class="number">5</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;线程 1 增加计数：&quot;</span> + ++count);</span><br><span class="line">                    condition.signal(); <span class="comment">// 唤醒其他线程</span></span><br><span class="line">                    condition.await(); <span class="comment">// 等待</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();  <span class="comment">// 释放锁</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">while</span> (count &lt; <span class="number">5</span>) &#123;</span><br><span class="line">                    condition.await(); <span class="comment">// 等待</span></span><br><span class="line">                    System.out.println(<span class="string">&quot;线程 2 增加计数：&quot;</span> + ++count);</span><br><span class="line">                    condition.signal(); <span class="comment">// 唤醒其他线程</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
+<p><strong>流程</strong>:</p>
+<ol>
+<li>生产者线程获取锁，执行 count++ 。</li>
+<li>生产者线程发现队列已满，调用 notFull.await() 进入等待，<strong>并在finally中释放锁</strong>。</li>
+<li>消费者线程获取锁，执行 count– 。</li>
+<li>消费者线程发现队列为空，调用 notEmpty.await() 进入等待，<strong>并finally中释放锁</strong>。</li>
+<li>生产者线程被其他线程唤醒，重新获取锁，生产数据，并调用 notEmpty.signal() 唤醒消费者线程，<strong>但生产者线程此时并没有释放锁</strong>。</li>
+<li>生产者线程执行 finally 块中的 lock.unlock()，<strong>释放锁</strong>。</li>
+<li>消费者线程被唤醒，尝试获取锁，并成功获取。</li>
+<li>消费者线程消费数据，并最终在 finally 块中释放锁。</li>
+</ol>
 <h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><p><a href="https://tangxman.github.io/2015/07/27/the-difference-of-java-string-pool/">https://tangxman.github.io/2015/07/27/the-difference-of-java-string-pool/</a></p>
 -1722133033018.JPG)
 
@@ -2284,6 +2317,12 @@
       </tags>
   </entry>
   <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
     <title>第一篇博客</title>
     <url>/2024/04/11/first_post/</url>
     <content><![CDATA[<p>写一个测试试一下</p>
@@ -2449,12 +2488,6 @@
       <tags>
         <tag>python, pytorch</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
   </entry>
   <entry>
     <title>reinforce-learning-record</title>
