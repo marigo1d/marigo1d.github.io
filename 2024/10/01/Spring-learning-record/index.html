@@ -28,7 +28,7 @@
 <meta property="og:description" content="Spring相关学习记录">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-10-01T10:30:43.000Z">
-<meta property="article:modified_time" content="2024-10-01T10:32:42.825Z">
+<meta property="article:modified_time" content="2024-10-01T10:43:00.586Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="java, Spring">
 <meta name="twitter:card" content="summary">
@@ -214,7 +214,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2024-10-01 18:30:43 / Modified: 18:32:42" itemprop="dateCreated datePublished" datetime="2024-10-01T18:30:43+08:00">2024-10-01</time>
+              <time title="Created: 2024-10-01 18:30:43 / Modified: 18:43:00" itemprop="dateCreated datePublished" datetime="2024-10-01T18:30:43+08:00">2024-10-01</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -242,36 +242,87 @@
 
 
 
-<h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h3 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h3><p><strong>构造性注解</strong></p>
+<h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h2 id="REST-架构风格"><a href="#REST-架构风格" class="headerlink" title="REST 架构风格"></a>REST 架构风格</h2><p>REST（Representational State Transfer）是一种设计 Web 服务的架构风格，它强调客户端和服务器之间的交互应该围绕 <strong>资源</strong> 展开，并使用标准的 HTTP 方法来操作这些资源。</p>
+<table>
+<thead>
+<tr>
+<th>HTTP 方法</th>
+<th>REST 操作</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>获取资源</td>
+<td>获取资源的表述</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>创建资源</td>
+<td>创建新的资源</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>更新资源</td>
+<td>替换整个资源</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td>部分更新资源</td>
+<td>更新资源的一部分</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>删除资源</td>
+<td>删除资源</td>
+</tr>
+</tbody></table>
+<p><strong>RESTful 请求</strong>是指符合 REST 架构风格的 HTTP 请求。它通常包含以下部分：</p>
 <ul>
-<li>@Component:<ul>
+<li><strong>URL：</strong> 指向要操作的资源的唯一地址。</li>
+<li><strong>HTTP 方法：</strong> 指示要执行的操作（GET、POST、PUT、DELETE 等）。</li>
+<li><strong>请求头：</strong> 包含一些元数据，例如内容类型、授权信息等。</li>
+<li><strong>请求体：</strong> 对于 POST 和 PUT 请求，可能包含要创建或更新的资源的数据。</li>
+</ul>
+<p><strong>例如：</strong></p>
+<p>一个获取用户信息的 RESTful 请求可能是这样的：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /users/123</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p><strong>构造性注解</strong></p>
+<ul>
+<li><p>@Component:</p>
+<ul>
 <li>这是最通用的构造型注解，可以用于标记任何需要被 Spring 管理的类。</li>
 <li>当你不确定使用哪个更具体的注解时，可以使用 @Component。</li>
 </ul>
 </li>
-<li>@Service:<ul>
+<li><p>@Service:</p>
+<ul>
 <li>用于标记服务层组件，通常包含业务逻辑。</li>
-<li>它是 @Component 的特化，语义更加明确。</li>
 </ul>
 </li>
-<li>@Repository:<ul>
+<li><p>@Repository:</p>
+<ul>
 <li>用于标记数据访问层组件，例如 DAO (Data Access Object) 类。</li>
-<li>它是 @Component 的特化，语义更加明确，并且可以启用 Spring Data JPA 的一些功能，例如异常转换。</li>
 </ul>
 </li>
-<li>@Controller:<ul>
+<li><p>@Controller:</p>
+<ul>
 <li>用于标记 Web 层控制器组件，例如 Spring MVC 中的控制器类。</li>
-<li>它是 @Component 的特化，语义更加明确，并且可以启用 Spring MVC 的一些功能，例如请求映射。</li>
+<li>使用 @Controller，需要在每个处理 RESTful 请求的方法上添加 @ResponseBody 注解，以便将返回值作为响应体发送。</li>
 </ul>
 </li>
-<li>@Configuration:<ul>
+<li><p>@Configuration:</p>
+<ul>
 <li>用于标记配置类，通常包含 @Bean 注解标记的方法，用于创建 Bean。</li>
-<li>它是 @Component 的特化，语义更加明确，并且可以启用 Spring 的 Java 配置功能。</li>
 </ul>
 </li>
-<li>@RestController:<ul>
+<li><p>@RestController:</p>
+<ul>
 <li>用于标记 RESTful Web 服务的控制器组件，相当于 @Controller 和 @ResponseBody 的组合。</li>
-<li>它是 @Controller 的特化，语义更加明确，并且可以简化 RESTful Web 服务的开发。</li>
+<li>使用 @RestController，所有方法的返回值都将自动作为响应体发送，无需额外添加 @ResponseBody 注解。</li>
 </ul>
 </li>
 </ul>
@@ -283,7 +334,6 @@
 <p><strong>依赖注入注解：</strong></p>
 <ul>
 <li>@Autowired：用于自动注入依赖，可以作用于构造函数、字段、Setter 方法等。</li>
-<li>@Inject：与 @Autowired 功能类似，是 JSR-330 规范定义的注解。</li>
 <li>@Resource：用于注入依赖，默认按名称注入，如果找不到同名 Bean，则按类型注入。</li>
 <li>@Value：用于注入属性值，可以注入配置文件中的值、系统属性、环境变量等。</li>
 </ul>
@@ -307,12 +357,27 @@
 </ul>
 <p><strong>Web 相关注解：</strong></p>
 <ul>
-<li>@RequestMapping：用于映射 HTTP 请求到控制器方法。</li>
-<li>@GetMapping、@PostMapping 等：@RequestMapping 的特化，用于简化请求映射的配置。</li>
-<li>@PathVariable：用于获取 URL 中的路径变量。</li>
-<li>@RequestParam：用于获取请求参数。</li>
-<li>@ResponseBody：用于将方法返回值转换为 HTTP 响应体。</li>
-<li>@RequestBody：用于将 HTTP 请求体转换为方法参数。</li>
+<li><p>@RequestMapping：</p>
+<p>将 HTTP 请求映射到控制器方法;</p>
+<p>定义 URL 映射规则，例如 &#x2F;users、&#x2F;users&#x2F;{id} 等;</p>
+<p>指定 HTTP 请求方法，例如 GET、POST、PUT、DELETE 等;</p>
+<p>定义请求参数，例如 @RequestParam、@PathVariable 等.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/users&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line"><span class="meta">@RequestMapping(value = &quot;/&#123;id&#125;&quot;, method = RequestMethod.GET)</span></span><br><span class="line"><span class="keyword">public</span> User <span class="title function_">getUser</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RequestMapping(method = RequestMethod.POST)</span></span><br><span class="line"><span class="keyword">public</span> User <span class="title function_">createUser</span><span class="params">(<span class="meta">@RequestBody</span> User user)</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>@GetMapping、@PostMapping 等：@RequestMapping 的特化，用于简化请求映射的配置。</p>
+</li>
+<li><p>@PathVariable：用于获取 URL 中的路径变量。</p>
+</li>
+<li><p>@RequestParam：用于获取请求参数。</p>
+</li>
+<li><p>@RequestBody：用于将 HTTP 请求体转换为方法参数。</p>
+</li>
+<li><p>@ResponseBody: </p>
+<ul>
+<li>方法的返回值转换为指定的格式，例如 JSON 或 XML，并将其作为响应体发送给客户端。</li>
+<li>应用于方法上, 只对该方法生效; 应用于类上, 对该类中的所有方法生效。</li>
+</ul>
+</li>
 </ul>
 <p><strong>测试相关注解：</strong></p>
 <ul>
@@ -326,7 +391,7 @@
 <li>@Profile：用于根据不同的环境激活不同的 Bean。</li>
 <li>@Conditional：用于根据条件创建 Bean。</li>
 </ul>
-<h3 id="Spring-Bean-的生命周期"><a href="#Spring-Bean-的生命周期" class="headerlink" title="Spring Bean 的生命周期"></a>Spring Bean 的生命周期</h3><ol>
+<h2 id="Spring-Bean-的生命周期"><a href="#Spring-Bean-的生命周期" class="headerlink" title="Spring Bean 的生命周期"></a>Spring Bean 的生命周期</h2><ol>
 <li><p><strong>实例化 Bean：</strong></p>
 <ul>
 <li><p>Spring 容器根据配置信息找到 Bean 的定义。</p>
@@ -499,7 +564,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring"><span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">Spring Bean 的生命周期</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring"><span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#REST-%E6%9E%B6%E6%9E%84%E9%A3%8E%E6%A0%BC"><span class="nav-text">REST 架构风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">Spring Bean 的生命周期</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
