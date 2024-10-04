@@ -28,7 +28,7 @@
 <meta property="og:description" content="Spring相关学习记录">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-10-01T10:30:43.000Z">
-<meta property="article:modified_time" content="2024-10-01T10:43:00.586Z">
+<meta property="article:modified_time" content="2024-10-04T08:42:55.674Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="java, Spring">
 <meta name="twitter:card" content="summary">
@@ -212,10 +212,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2024-10-01 18:30:43 / Modified: 18:43:00" itemprop="dateCreated datePublished" datetime="2024-10-01T18:30:43+08:00">2024-10-01</time>
+              <time title="Created: 2024-10-01 18:30:43" itemprop="dateCreated datePublished" datetime="2024-10-01T18:30:43+08:00">2024-10-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-04 16:42:55" itemprop="dateModified" datetime="2024-10-04T16:42:55+08:00">2024-10-04</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -242,7 +248,8 @@
 
 
 
-<h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h2 id="REST-架构风格"><a href="#REST-架构风格" class="headerlink" title="REST 架构风格"></a>REST 架构风格</h2><p>REST（Representational State Transfer）是一种设计 Web 服务的架构风格，它强调客户端和服务器之间的交互应该围绕 <strong>资源</strong> 展开，并使用标准的 HTTP 方法来操作这些资源。</p>
+<h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><p><a target="_blank" rel="noopener" href="https://liaoxuefeng.com/books/java/spring/index.html">https://liaoxuefeng.com/books/java/spring/index.html</a></p>
+<h2 id="REST-架构风格"><a href="#REST-架构风格" class="headerlink" title="REST 架构风格"></a>REST 架构风格</h2><p>REST（Representational State Transfer）是一种设计 Web 服务的架构风格，它强调客户端和服务器之间的交互应该围绕 <strong>资源</strong> 展开，并使用标准的 HTTP 方法来操作这些资源。</p>
 <table>
 <thead>
 <tr>
@@ -290,12 +297,27 @@
 
 
 
+<h2 id="IoC容器与IoC对象"><a href="#IoC容器与IoC对象" class="headerlink" title="IoC容器与IoC对象"></a>IoC容器与IoC对象</h2><p><strong>Bean 对象</strong>通常被称为<strong>IoC 对象</strong>，它们是由 Spring 的 <strong>IoC 容器</strong>负责管理的对象。</p>
+<p>Spring IoC 容器的创建过程：</p>
+<ul>
+<li><p><strong>基于 XML 配置</strong>：当加载 XML 配置文件时，容器会初始化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main.java</span></span><br><span class="line"><span class="keyword">package</span> com.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 没有spring注解哦，此时spring容器尚未启动</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 加载 Spring 的 XML 配置文件</span></span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;application.xml&quot;</span>);  <span class="comment">// 启动spring容器并基于application.xml扫描并创建bean</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取 UserService Bean</span></span><br><span class="line">        <span class="type">UserService</span> <span class="variable">userService</span> <span class="operator">=</span> context.getBean(UserService.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 调用 login 方法</span></span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userService.login(<span class="string">&quot;bob@example.com&quot;</span>, <span class="string">&quot;password&quot;</span>);</span><br><span class="line">        System.out.println(user.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;!-- application.xml --&gt;</span><br><span class="line">&lt;beans xmlns=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span><br><span class="line">       xmlns:xsi=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="line">       xsi:schemaLocation=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span><br><span class="line"><span class="string">       http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;bean id=<span class="string">&quot;emailService&quot;</span> class=<span class="string">&quot;com.example.EmailService&quot;</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;bean id=<span class="string">&quot;userService&quot;</span> class=<span class="string">&quot;com.example.UserService&quot;</span>&gt;</span><br><span class="line">        &lt;constructor-arg ref=<span class="string">&quot;emailService&quot;</span>/&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>基于 Java 配置类</strong>：当有 <code>@Configuration</code> 类时，Spring 会通过 Java 配置类创建 IoC 容器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main.java</span></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.AnnotationConfigApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AnnotationConfigApplicationContext</span>(AppConfig.class);  <span class="comment">// 基于AppConfig.java 扫描</span></span><br><span class="line">        <span class="type">UserService</span> <span class="variable">userService</span> <span class="operator">=</span> context.getBean(UserService.class);</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userService.login(<span class="string">&quot;bob@example.com&quot;</span>, <span class="string">&quot;password&quot;</span>);</span><br><span class="line">        System.out.println(user.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// AppConfig.java</span></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> UserService <span class="title function_">userService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">UserService</span>(emailService());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> EmailService <span class="title function_">emailService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">EmailService</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>基于 Spring Boot 应用程序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果使用 Spring Boot，Spring 容器的创建是通过 <code>@SpringBootApplication</code> 注解触发的，它实际上是一个组合注解，包含了 <code>@Configuration</code>、<code>@EnableAutoConfiguration</code> 和 <code>@ComponentScan</code>。</p>
+<p>**<code>SpringApplication.run()</code>**：这是 Spring Boot 应用程序的入口。这个方法启动了 Spring Boot 应用，并创建了 IoC 容器。<code>@SpringBootApplication</code> 会自动扫描指定的包路径下的所有类，并将它们注册到 IoC 容器中。</p>
+</blockquote>
 <h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p><strong>构造性注解</strong></p>
 <ul>
 <li><p>@Component:</p>
 <ul>
 <li>这是最通用的构造型注解，可以用于标记任何需要被 Spring 管理的类。</li>
-<li>当你不确定使用哪个更具体的注解时，可以使用 @Component。</li>
 </ul>
 </li>
 <li><p>@Service:</p>
@@ -318,6 +340,9 @@
 <ul>
 <li>用于标记配置类，通常包含 @Bean 注解标记的方法，用于创建 Bean。</li>
 </ul>
+<blockquote>
+<p>Configuration也是构造性注解，被视为 @Component</p>
+</blockquote>
 </li>
 <li><p>@RestController:</p>
 <ul>
@@ -333,9 +358,15 @@
 </blockquote>
 <p><strong>依赖注入注解：</strong></p>
 <ul>
-<li>@Autowired：用于自动注入依赖，可以作用于构造函数、字段、Setter 方法等。</li>
-<li>@Resource：用于注入依赖，默认按名称注入，如果找不到同名 Bean，则按类型注入。</li>
-<li>@Value：用于注入属性值，可以注入配置文件中的值、系统属性、环境变量等。</li>
+<li><p>@Autowired：用于自动注入依赖，可以作用于构造函数、字段、Setter 方法等。</p>
+</li>
+<li><p>@Resource：用于注入依赖，默认按名称注入，如果找不到同名 Bean，则按类型注入。</p>
+</li>
+<li><p>@Value：用于注入属性值，可以注入配置文件中的值、系统属性、环境变量等。</p>
+<blockquote>
+<p>可以配合@PropertySource使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;app.properties&quot;)</span>  <span class="comment">// 表示读取classpath的app.properties 文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig</span> &#123;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;app.zone:Z&#125;&quot;)</span>  <span class="comment">// &quot;$&#123;app.zone:Z&#125;&quot;表示读取key为app.zone的value，但如果key不存在，就使用默认值Z</span></span><br><span class="line">    String zoneId;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    ZoneId <span class="title function_">createZoneId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ZoneId.of(zoneId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></blockquote>
+</li>
 </ul>
 <blockquote>
 <p>依赖注入只发生在被Spring管理的Bean上，这意味着，使用构造函数注入和使用 Setter 方法注入通常只会发生在被构造型注解标记的类上</p>
@@ -348,8 +379,15 @@
 </ul>
 <p><strong>AOP 相关注解：</strong></p>
 <ul>
-<li>@Aspect：用于标记切面类。</li>
-<li>@Before、@After、@Around 等：用于定义切点和增强。</li>
+<li><p>@Aspect：用于标记切面类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoggingAspect</span> &#123;</span><br><span class="line">    <span class="comment">// 在执行UserService的每个方法前执行:</span></span><br><span class="line">    <span class="meta">@Before(&quot;execution(public * com.itranswarp.learnjava.service.UserService.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doAccessCheck</span><span class="params">()</span> &#123;</span><br><span class="line">        System.err.println(<span class="string">&quot;[Before] do access check...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在执行MailService的每个方法前后执行:</span></span><br><span class="line">    <span class="meta">@Around(&quot;execution(public * com.itranswarp.learnjava.service.MailService.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">doLogging</span><span class="params">(ProceedingJoinPoint pjp)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.err.println(<span class="string">&quot;[Around] start &quot;</span> + pjp.getSignature());</span><br><span class="line">        <span class="type">Object</span> <span class="variable">retVal</span> <span class="operator">=</span> pjp.proceed();</span><br><span class="line">        System.err.println(<span class="string">&quot;[Around] done &quot;</span> + pjp.getSignature());</span><br><span class="line">        <span class="keyword">return</span> retVal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span></span><br><span class="line"><span class="meta">@EnableAspectJAutoProxy</span>  <span class="comment">// 配合@Aspect使用</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Spring的IoC容器发现配置类存在该注解后，就会自动查找带有<code>@Aspect</code>的Bean，然后根据每个方法的<code>@Before</code>、<code>@Around</code>等注解把AOP注入到特定的Bean中。</p>
+</li>
+<li><p>@Before、@After、@Around 等：用于定义切点和增强。</p>
+</li>
 </ul>
 <p><strong>事务管理注解：</strong></p>
 <ul>
@@ -379,6 +417,7 @@
 </ul>
 </li>
 </ul>
+<p><strong>Database相关注解：</strong></p>
 <p><strong>测试相关注解：</strong></p>
 <ul>
 <li>@SpringBootTest：用于标记 Spring Boot 测试类。</li>
@@ -386,29 +425,66 @@
 </ul>
 <p><strong>其他注解：</strong></p>
 <ul>
-<li>@Scope：用于指定 Bean 的作用域。</li>
-<li>@Lazy：用于延迟初始化 Bean。</li>
-<li>@Profile：用于根据不同的环境激活不同的 Bean。</li>
-<li>@Conditional：用于根据条件创建 Bean。</li>
+<li><p>@Scope：用于指定 Bean 的作用域。</p>
+</li>
+<li><p>@ComponentScan</p>
+<ul>
+<li>如果某类被注解<code>@ComponentScan</code>标注，则会扫描标注该注解的类所在包及其子包中的所有组件（包括 <code>@Component</code>、<code>@Service</code>、<code>@Repository</code> 等）</li>
+<li>如果被 <code>@ComponentScan</code> 标注的 <code>MyApplication</code> 类位于 <code>com.example</code> 包下，Spring 会默认扫描 <code>com.example</code> 包及其所有子包，例如 <code>com.example.domain</code>。</li>
 </ul>
+</li>
+<li><p>@Lazy：用于延迟初始化 Bean。</p>
+</li>
+<li><p>@Profile：用于根据不同的环境激活不同的 Bean。</p>
+</li>
+<li><p>@Conditional：用于根据条件创建 Bean。</p>
+</li>
+</ul>
+<h3 id="使用构造函数注入-使用-Setter-方法注入"><a href="#使用构造函数注入-使用-Setter-方法注入" class="headerlink" title="使用构造函数注入 &amp;&amp; 使用 Setter 方法注入"></a>使用构造函数注入 &amp;&amp; 使用 Setter 方法注入</h3><p><strong>构造函数注入</strong></p>
+<p>假设我们有两个类：<code>UserService</code> 和 <code>EmailService</code>，<code>UserService</code> 依赖于 <code>EmailService</code>。</p>
+<p><strong>EmailService 类：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EmailService</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendEmail</span><span class="params">(String to, String subject, String body)</span> &#123;</span><br><span class="line">    	System.out.println(<span class="string">&quot;Sending email to &quot;</span> + to + <span class="string">&quot;:\nSubject: &quot;</span> + subject + <span class="string">&quot;\nBody: &quot;</span> + body);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>UserService 类：</strong></p>
+<p>使用构造函数注入 <code>EmailService</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> EmailService emailService;  <span class="comment">// 目标字段可以是 final，但不强制必须是 final，强烈建议在构造函数注入时将依赖字段声明为 final，因为这可以确保依赖在对象创建时被完全初始化，而且不会在对象生命周期中被修改，从而提供更高的安全性和不可变性。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造函数注入</span></span><br><span class="line">    <span class="comment">// 这里没有使用@Autowired，但是属性emailService被自动注入bean</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserService</span><span class="params">(EmailService emailService)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.emailService = emailService;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">registerUser</span><span class="params">(String username, String email)</span> &#123;</span><br><span class="line">        <span class="comment">// ... 用户注册逻辑 ...</span></span><br><span class="line">        emailService.sendEmail(email, <span class="string">&quot;Welcome!&quot;</span>, <span class="string">&quot;Thank you for registering.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Setter 方法注入</strong></p>
+<p>假设我们仍然使用 <code>UserService</code> 和 <code>EmailService</code>，但这次使用 Setter 方法注入 <code>EmailService</code>。</p>
+<p><strong>EmailService 类：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EmailService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendEmail</span><span class="params">(String to, String subject, String body)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Sending email to &quot;</span> + to + <span class="string">&quot;:\nSubject: &quot;</span> + subject + <span class="string">&quot;\nBody: &quot;</span> + body);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>UserService 类：</strong></p>
+<p>使用 Setter 方法注入 <code>EmailService</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EmailService emailService;  </span><br><span class="line">    <span class="comment">// 依赖不能是 final 的！！！，final 字段必须在对象构造时被赋值（即通过构造函数进行初始化）</span></span><br><span class="line">    <span class="comment">// 即使字段的访问级别是 private，Spring 仍然可以使用反射来绕过 Java 的访问控制机制，直接为私有字段设置值。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Setter 方法注入</span></span><br><span class="line">    <span class="meta">@Autowired</span>  <span class="comment">// 将Setter方法标记为@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setEmailService</span><span class="params">(EmailService emailService)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.emailService = emailService;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">registerUser</span><span class="params">(String username, String email)</span> &#123;</span><br><span class="line">        <span class="comment">// ... 用户注册逻辑 ...</span></span><br><span class="line">        emailService.sendEmail(email, <span class="string">&quot;Welcome!&quot;</span>, <span class="string">&quot;Thank you for registering.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<h3 id="为什么不直接将-Autowired-标记在属性上？"><a href="#为什么不直接将-Autowired-标记在属性上？" class="headerlink" title="为什么不直接将 @Autowired 标记在属性上？"></a><strong>为什么不直接将 <code>@Autowired</code> 标记在属性上？</strong></h3><p>实际上，<strong>Spring 支持将 <code>@Autowired</code> 直接标记在属性上</strong>，这种方式叫做<strong>字段注入</strong>（Field Injection）。这种注入方式不需要提供 <code>set</code> 方法，Spring 会直接通过反射为属性注入依赖。然而，字段注入通常被认为是<strong>不推荐的做法</strong>，原因如下：</p>
+<h4 id="字段注入的缺点："><a href="#字段注入的缺点：" class="headerlink" title="字段注入的缺点："></a>字段注入的缺点：</h4><ol>
+<li><strong>不利于测试</strong>：直接将 <code>@Autowired</code> 注解标记在字段上，依赖会通过反射注入。这样会让单元测试变得困难，因为无法直接通过构造函数或 Setter 方法传递 mock 对象，而是必须使用像 <code>ReflectionTestUtils</code> 这样的工具来手动设置私有字段的依赖。</li>
+<li><strong>违背封装原则</strong>：字段注入直接修改类的私有属性，违背了对象的封装性原则。在面向对象编程中，通常希望属性通过构造函数或 Setter 方法来进行操作，而不是直接被外部干预。</li>
+<li><strong>无法支持 <code>final</code> 关键字</strong>：如果使用字段注入，属性不能声明为 <code>final</code>，因为 <code>final</code> 属性必须在构造函数中初始化，而不是通过反射。这限制了对不可变性的支持。</li>
+</ol>
+</blockquote>
 <h2 id="Spring-Bean-的生命周期"><a href="#Spring-Bean-的生命周期" class="headerlink" title="Spring Bean 的生命周期"></a>Spring Bean 的生命周期</h2><ol>
 <li><p><strong>实例化 Bean：</strong></p>
 <ul>
-<li><p>Spring 容器根据配置信息找到 Bean 的定义。</p>
+<li><p>根据配置的包路径，通过<strong>组件扫描（Component Scanning）</strong>找到带有构造型注解的类（例如 <code>@Component</code>、<code>@Service</code>、<code>@Repository</code> 等），标注了构造型注解的类注册为 Spring 容器中的 Bean。</p>
 </li>
-<li><p><strong>推断构造方法：</strong> Spring 选择合适的构造方法进行实例化。如果有多个构造方法，会根据依赖注入的需要选择合适的构造方法。</p>
+<li><p><strong>推断构造方法：</strong> Spring 选择合适的构造方法进行实例化。</p>
 <blockquote>
-<p><strong>没有在 config 中设置该类的构建方法：</strong></p>
-<ul>
-<li>如果类上有构造型注解（例如 @Component、@Service 等），Spring 会通过组件扫描发现该类，并尝试使用其默认的无参构造函数创建 Bean 对象。</li>
-<li>如果类没有默认的无参构造函数，但只有一个有参构造函数，Spring 也会尝试使用该有参构造函数创建 Bean 对象，并尝试自动注入构造函数所需的依赖。</li>
-<li>如果类有多个构造函数，Spring 会根据依赖注入的需要选择合适的构造函数。如果没有找到合适的构造函数，或者无法自动注入构造函数所需的依赖，则会抛出异常。</li>
-</ul>
-<p><strong>在 config 中设置了该类的构造方法：</strong></p>
+<p><strong>在 config 中设置了类的构造方法：</strong></p>
 <ul>
 <li>如果在 @Configuration 类中使用 @Bean 注解定义了该类的构建方法，Spring 会使用该方法创建 Bean 对象。</li>
 <li>在 @Bean 方法中，你可以手动创建 Bean 对象，并使用构造函数注入或 Setter 方法注入设置 Bean 的属性。</li>
 <li>即使类上有构造型注解，Spring 也会优先使用 @Bean 方法创建 Bean 对象，而不是使用组件扫描和自动注册的方式。</li>
+</ul>
+<p><strong>没有在 config 中设置类的构建方法：</strong></p>
+<ul>
+<li>如果类上有构造型注解（例如 @Component、@Service 等），Spring 会通过组件扫描发现该类，并尝试使用其默认的无参构造函数创建 Bean 对象。</li>
+<li>如果类没有默认的无参构造函数，但只有一个有参构造函数，Spring 也会尝试使用该有参构造函数创建 Bean 对象，并尝试自动注入构造函数所需的依赖。</li>
+<li>如果类有多个构造函数，Spring 会优先选择标注了 <code>@Autowired</code> 的构造函数。如果没有标注 <code>@Autowired</code>，Spring 会尝试通过依赖匹配来选择合适的构造函数。如果不能成功解析依赖，将抛出异常。</li>
 </ul>
 </blockquote>
 </li>
@@ -484,6 +560,7 @@
 </ul>
 </li>
 </ol>
+<h1 id="Spring-Boot"><a href="#Spring-Boot" class="headerlink" title="Spring Boot"></a>Spring Boot</h1><p><a target="_blank" rel="noopener" href="https://liaoxuefeng.com/books/java/springboot/index.html">https://liaoxuefeng.com/books/java/springboot/index.html</a></p>
 
     </div>
 
@@ -564,7 +641,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring"><span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#REST-%E6%9E%B6%E6%9E%84%E9%A3%8E%E6%A0%BC"><span class="nav-text">REST 架构风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">Spring Bean 的生命周期</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring"><span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#REST-%E6%9E%B6%E6%9E%84%E9%A3%8E%E6%A0%BC"><span class="nav-text">REST 架构风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IoC%E5%AE%B9%E5%99%A8%E4%B8%8EIoC%E5%AF%B9%E8%B1%A1"><span class="nav-text">IoC容器与IoC对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%B3%A8%E5%85%A5-%E4%BD%BF%E7%94%A8-Setter-%E6%96%B9%E6%B3%95%E6%B3%A8%E5%85%A5"><span class="nav-text">使用构造函数注入 &amp;&amp; 使用 Setter 方法注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%9B%B4%E6%8E%A5%E5%B0%86-Autowired-%E6%A0%87%E8%AE%B0%E5%9C%A8%E5%B1%9E%E6%80%A7%E4%B8%8A%EF%BC%9F"><span class="nav-text">为什么不直接将 @Autowired 标记在属性上？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E6%AE%B5%E6%B3%A8%E5%85%A5%E7%9A%84%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="nav-text">字段注入的缺点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">Spring Bean 的生命周期</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot"><span class="nav-text">Spring Boot</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
