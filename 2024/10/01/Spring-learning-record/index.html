@@ -28,7 +28,7 @@
 <meta property="og:description" content="Spring相关学习记录">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-10-01T10:30:43.000Z">
-<meta property="article:modified_time" content="2024-10-09T11:23:45.900Z">
+<meta property="article:modified_time" content="2024-11-18T11:56:58.836Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="java, Spring">
 <meta name="twitter:card" content="summary">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-10-09 19:23:45" itemprop="dateModified" datetime="2024-10-09T19:23:45+08:00">2024-10-09</time>
+                <time title="Modified: 2024-11-18 19:56:58" itemprop="dateModified" datetime="2024-11-18T19:56:58+08:00">2024-11-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -391,54 +391,6 @@
 <p>即使一个项目中有多个 Servlet，它们都共享同一个 ServletContext。ServletContext 代表整个 Web 应用程序，它提供了一种在不同 Servlet 之间共享信息和资源的机制。</p>
 </blockquote>
 <h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><p><a target="_blank" rel="noopener" href="https://liaoxuefeng.com/books/java/spring/index.html">https://liaoxuefeng.com/books/java/spring/index.html</a></p>
-<h2 id="REST-架构风格"><a href="#REST-架构风格" class="headerlink" title="REST 架构风格"></a>REST 架构风格</h2><p>REST（Representational State Transfer）是一种设计 Web 服务的架构风格，它强调客户端和服务器之间的交互应该围绕 <strong>资源</strong> 展开，并使用标准的 HTTP 方法来操作这些资源。</p>
-<table>
-<thead>
-<tr>
-<th>HTTP 方法</th>
-<th>REST 操作</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>GET</td>
-<td>获取资源</td>
-<td>获取资源的表述</td>
-</tr>
-<tr>
-<td>POST</td>
-<td>创建资源</td>
-<td>创建新的资源</td>
-</tr>
-<tr>
-<td>PUT</td>
-<td>更新资源</td>
-<td>替换整个资源</td>
-</tr>
-<tr>
-<td>PATCH</td>
-<td>部分更新资源</td>
-<td>更新资源的一部分</td>
-</tr>
-<tr>
-<td>DELETE</td>
-<td>删除资源</td>
-<td>删除资源</td>
-</tr>
-</tbody></table>
-<p><strong>RESTful 请求</strong>是指符合 REST 架构风格的 HTTP 请求。它通常包含以下部分：</p>
-<ul>
-<li><strong>URL：</strong> 指向要操作的资源的唯一地址。</li>
-<li><strong>HTTP 方法：</strong> 指示要执行的操作（GET、POST、PUT、DELETE 等）。</li>
-<li><strong>请求头：</strong> 包含一些元数据，例如内容类型、授权信息等。</li>
-<li><strong>请求体：</strong> 对于 POST 和 PUT 请求，可能包含要创建或更新的资源的数据。</li>
-</ul>
-<p><strong>例如：</strong></p>
-<p>一个获取用户信息的 RESTful 请求可能是这样的：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /users/123</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="IoC容器与IoC对象"><a href="#IoC容器与IoC对象" class="headerlink" title="IoC容器与IoC对象"></a>IoC容器与IoC对象</h2><p><strong>Bean 对象</strong>通常被称为<strong>IoC 对象</strong>，它们是由 Spring 的 <strong>IoC 容器</strong>负责管理的对象。</p>
 <p>Spring IoC 容器的创建过程：</p>
 <ul>
@@ -448,14 +400,7 @@
 <li><p><strong>基于 Java 配置类</strong>：当有 <code>@Configuration</code> 类时，Spring 会通过 Java 配置类创建 IoC 容器。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main.java</span></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.AnnotationConfigApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AnnotationConfigApplicationContext</span>(AppConfig.class);  <span class="comment">// 基于AppConfig.java 扫描</span></span><br><span class="line">        <span class="type">UserService</span> <span class="variable">userService</span> <span class="operator">=</span> context.getBean(UserService.class);</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userService.login(<span class="string">&quot;bob@example.com&quot;</span>, <span class="string">&quot;password&quot;</span>);</span><br><span class="line">        System.out.println(user.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// AppConfig.java</span></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> UserService <span class="title function_">userService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">UserService</span>(emailService());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> EmailService <span class="title function_">emailService</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">EmailService</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
-<blockquote>
-<p>基于 Spring Boot 应用程序</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果使用 Spring Boot，Spring 容器的创建是通过 <code>@SpringBootApplication</code> 注解触发的，它实际上是一个组合注解，包含了 <code>@Configuration</code>、<code>@EnableAutoConfiguration</code> 和 <code>@ComponentScan</code>。</p>
-<p>**<code>SpringApplication.run()</code>**：这是 Spring Boot 应用程序的入口。这个方法启动了 Spring Boot 应用，并创建了 IoC 容器。<code>@SpringBootApplication</code> 会自动扫描指定的包路径下的所有类，并将它们注册到 IoC 容器中。</p>
-</blockquote>
-<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p><strong>构造性注解</strong></p>
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p><strong>构造性注解</strong>: 被构造性注解标记的类，Spring会自动使用无参构造函数创建该类的Bean</p>
 <ul>
 <li><p>@Component:</p>
 <ul>
@@ -483,32 +428,37 @@
 <li>用于标记配置类，通常包含 @Bean 注解标记的方法，用于创建 Bean。</li>
 </ul>
 <blockquote>
-<p>Configuration也是构造性注解，被视为 @Component</p>
+<p>Configuration也是构造性注解</p>
 </blockquote>
 </li>
 <li><p>@RestController:</p>
 <ul>
 <li>用于标记 RESTful Web 服务的控制器组件，相当于 @Controller 和 @ResponseBody 的组合。</li>
 <li>使用 @RestController，所有方法的返回值都将自动作为响应体发送，无需额外添加 @ResponseBody 注解。</li>
+<li>编写REST接口需要定义<code>@RestController</code>，然后，每个方法都是一个API接口，输入和输出只要能被Jackson序列化或反序列化为JSON就没有问题。</li>
 </ul>
 </li>
 </ul>
 <blockquote>
-<p>被构造性注解标记的类将会被注册为Bean</p>
+<p>被构造性注解标记的类将会被注册创建为Bean</p>
 <p>一般的，被构造性注解标记的类的属性<strong>不会被自动注入</strong></p>
-<p>希望类的属性被自动注入的，应使用<strong>使用构造函数注入</strong>和<strong>使用 Setter 方法注入</strong>方法</p>
 </blockquote>
 <p><strong>依赖注入注解：</strong></p>
 <ul>
-<li><p>@Autowired：用于自动注入依赖，可以作用于构造函数、字段、Setter 方法等。</p>
+<li><p>@Autowired：用于自动注入依赖</p>
+<ul>
+<li>默认按照类型（byType）装配依赖对象。如果有多个相同类型的 Bean，会尝试按照名称（byName）进行匹配。如果没有匹配的 Bean，会抛出异常。</li>
+<li>可以作用于构造函数、字段、Setter 方法等。</li>
+</ul>
 </li>
-<li><p>@Resource：用于注入依赖，默认按名称注入，如果找不到同名 Bean，则按类型注入。</p>
+<li><p>@Resource：用于注入依赖</p>
+<ul>
+<li>默认按照名称（byName）装配依赖对象。名称可以通过 name 属性指定，如果没有指定，则默认使用字段名或 setter 方法的参数名作为名称。如果找不到名称匹配的 Bean，会回退到按照类型（byType）进行匹配。如果仍然找不到匹配的 Bean，会抛出异常。</li>
+<li>可以用于字段和 setter 方法上，不能用于构造函数和配置方法上。</li>
+</ul>
 </li>
 <li><p>@Value：用于注入属性值，可以注入配置文件中的值、系统属性、环境变量等。</p>
-<blockquote>
-<p>可以配合@PropertySource使用</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;app.properties&quot;)</span>  <span class="comment">// 表示读取classpath的app.properties 文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig</span> &#123;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;app.zone:Z&#125;&quot;)</span>  <span class="comment">// &quot;$&#123;app.zone:Z&#125;&quot;表示读取key为app.zone的value，但如果key不存在，就使用默认值Z</span></span><br><span class="line">    String zoneId;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    ZoneId <span class="title function_">createZoneId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ZoneId.of(zoneId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></blockquote>
-</li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ValueExample</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// $&#123;&#125;访问外部属性（配置文件、系统属性、环境变量）,简单变量替换</span></span><br><span class="line">    <span class="comment">// #&#123;&#125;运行时计算表达式，动态计算值、条件判断、集合操作等</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 注入 application.properties 或 application.yml 中的属性值</span></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;app.name&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String appName;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注入系统属性</span></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;user.home&#125;&quot;)</span>  <span class="comment">// 等同于 System.getProperty(&quot;user.home&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String userHome;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注入环境变量 (需要先设置环境变量)</span></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;MY_ENV_VAR&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String myEnvVar;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 SpEL 表达式设置默认值</span></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;app.description:Default Description&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String appDescription;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注入字面量</span></span><br><span class="line">    <span class="meta">@Value(&quot;A hardcoded value&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String hardcodedValue;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注入数组 (application.properties: app.features=feature1,feature2,feature3)</span></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;app.features&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String[] appFeatures;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注入 List (需要 Spring Boot 2.4 以上版本， application.properties: app.colors=red,green,blue)</span></span><br><span class="line">    <span class="meta">@Value(&quot;#&#123;&#x27;$&#123;app.colors&#125;&#x27;.split(&#x27;,&#x27;)&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> java.util.List&lt;String&gt; appColors;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Value(&quot;#&#123;1 + 2&#125;&quot;)</span> <span class="comment">// 计算 1 + 2 的结果，结果为 3</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> sum;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;#&#123;T(java.lang.Math).random() * 100.0&#125;&quot;)</span> <span class="comment">// 调用 Math.random() 方法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">double</span> randomNumber;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;#&#123;beanName.methodName()&#125;&quot;)</span> <span class="comment">// 调用 Spring Bean 的方法</span></span><br><span class="line">    <span class="keyword">private</span> String result;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printValues</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;App Name: &quot;</span> + appName);</span><br><span class="line">        System.out.println(<span class="string">&quot;User Home: &quot;</span> + userHome);</span><br><span class="line">        System.out.println(<span class="string">&quot;My Env Var: &quot;</span> + myEnvVar);</span><br><span class="line">        System.out.println(<span class="string">&quot;App Description: &quot;</span> + appDescription);</span><br><span class="line">        System.out.println(<span class="string">&quot;Hardcoded Value: &quot;</span> + hardcodedValue);</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;App Features: &quot;</span>);</span><br><span class="line">        <span class="keyword">for</span>(String feature : appFeatures) &#123;</span><br><span class="line">            System.out.print(feature + <span class="string">&quot; &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;App Colors: &quot;</span>);</span><br><span class="line">        <span class="keyword">for</span>(String color : appColors) &#123;</span><br><span class="line">            System.out.print(color + <span class="string">&quot; &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// application.properties 示例</span></span><br><span class="line"><span class="comment">// app.name=My Application</span></span><br><span class="line"><span class="comment">// app.description=A great application</span></span><br><span class="line"><span class="comment">// app.features=feature1,feature2,feature3</span></span><br><span class="line"><span class="comment">// app.colors=red,green,blue</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 <blockquote>
 <p>依赖注入只发生在被Spring管理的Bean上，这意味着，使用构造函数注入和使用 Setter 方法注入通常只会发生在被构造型注解标记的类上</p>
@@ -581,19 +531,26 @@
 </ul>
 <p><strong>其他注解：</strong></p>
 <ul>
-<li><p>@Scope：用于指定 Bean 的作用域。</p>
-</li>
-<li><p>@ComponentScan</p>
-<ul>
+<li>@Scope：用于指定 Bean 的作用域。</li>
+<li>@ComponentScan<ul>
 <li>如果某类被注解<code>@ComponentScan</code>标注，则会扫描标注该注解的类所在包及其子包中的所有组件（包括 <code>@Component</code>、<code>@Service</code>、<code>@Repository</code> 等）</li>
 <li>如果被 <code>@ComponentScan</code> 标注的 <code>MyApplication</code> 类位于 <code>com.example</code> 包下，Spring 会默认扫描 <code>com.example</code> 包及其所有子包，例如 <code>com.example.domain</code>。</li>
 </ul>
 </li>
-<li><p>@Lazy：用于延迟初始化 Bean。</p>
+<li>@Lazy：用于延迟初始化 Bean。</li>
+<li>@Profile：用于根据不同的环境激活不同的 Bean。</li>
+<li>@Conditional：用于根据条件创建 Bean。</li>
+<li><strong>@PropertySource:</strong><ul>
+<li><strong>作用:</strong> 将外部属性文件加载到 Spring 的 Environment 中。这些属性文件可以是 properties 文件、yaml 文件或其他格式的文件。</li>
+<li><strong>使用场景:</strong> 主要用于导入配置文件，例如 application.properties、application.yml 等，或者自定义的配置文件。</li>
+<li><strong>绑定方式:</strong> @PropertySource <strong>不会</strong>直接将属性绑定到 Java Bean 上。它只是将属性加载到 Environment 中，使用 @Value 注解或 Environment 对象来访问这些属性。</li>
+</ul>
 </li>
-<li><p>@Profile：用于根据不同的环境激活不同的 Bean。</p>
-</li>
-<li><p>@Conditional：用于根据条件创建 Bean。</p>
+<li><strong>@ConfigurationProperties:</strong><ul>
+<li><strong>作用:</strong> 将配置文件中的属性绑定到一个 Java Bean 上。</li>
+<li><strong>使用场景:</strong> 主要用于将一组相关的配置属性组织成一个 Java Bean，方便管理和使用。</li>
+<li><strong>绑定方式:</strong> @ConfigurationProperties 会自动将配置文件中与 Bean 属性名称匹配的属性值注入到 Bean 中。支持松散绑定（relaxed binding），例如 my-property 可以绑定到 myProperty 属性。</li>
+</ul>
 </li>
 </ul>
 <h2 id="Bean的创建"><a href="#Bean的创建" class="headerlink" title="Bean的创建"></a>Bean的创建</h2><h3 id="使用构造函数注入-使用-Setter-方法注入"><a href="#使用构造函数注入-使用-Setter-方法注入" class="headerlink" title="使用构造函数注入 &amp;&amp; 使用 Setter 方法注入"></a>使用构造函数注入 &amp;&amp; 使用 Setter 方法注入</h3><p><strong>构造函数注入</strong></p>
@@ -850,7 +807,22 @@
 
 
 
-<h3 id="结合MyBatis"><a href="#结合MyBatis" class="headerlink" title="结合MyBatis"></a>结合MyBatis</h3><h3 id="JDBC与Hibernate-JPA-MyBatis"><a href="#JDBC与Hibernate-JPA-MyBatis" class="headerlink" title="JDBC与Hibernate, JPA, MyBatis"></a>JDBC与Hibernate, JPA, MyBatis</h3><p>ORM，也是建立在JDBC的基础上，通过ResultSet到JavaBean的映射，实现各种查询。有自动跟踪Entity修改的全自动化ORM如Hibernate和JPA，需要为每个Entity创建代理，也有完全自己映射，连INSERT和UPDATE语句都需要手动编写的MyBatis，但没有任何透明的Proxy。</p>
+<h3 id="结合MyBatis"><a href="#结合MyBatis" class="headerlink" title="结合MyBatis"></a>结合MyBatis</h3><p>@Mapper 注解</p>
+<ul>
+<li><strong>自动生成 Mapper 接口的实现类:</strong> @Mapper 注解会告诉 MyBatis 为标注的接口生成一个实现类，并将该实现类注册到 Spring 容器中。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RuleTreeNodeDao</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询规则树节点</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> treeId    规则树ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>          规则树节点集合</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    List&lt;RuleTreeNodePO&gt; <span class="title function_">queryRuleTreeNodeList</span><span class="params">(Long treeId)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询规则树节点数量</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> treeId    规则树ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>          节点数量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="type">int</span> <span class="title function_">queryTreeNodeCount</span><span class="params">(Long treeId)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询规则树节点</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> treeId    规则树ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>          节点集合</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    List&lt;RuleTreeNodePO&gt; <span class="title function_">queryTreeRulePoint</span><span class="params">(Long treeId)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>映射 SQL 语句:</strong> MyBatis 使用 XML 文件或注解的方式将 SQL 语句与 Java 方法关联起来。例如，queryRuleTreeNodeList 方法会对应一个 SQL 查询语句，该语句用于查询规则树节点。</p>
+<p><strong>参数绑定:</strong> MyBatis 会将 Java 方法的参数绑定到 SQL 语句中的参数占位符。例如，queryRuleTreeNodeList 方法的 treeId 参数会被绑定到 SQL 语句中的 #{treeId} 占位符。</p>
+<p><strong>结果映射:</strong> MyBatis 会将 SQL 查询结果映射到 Java 对象。例如，queryRuleTreeNodeList 方法的返回值类型是 <code>List&lt;RuleTreeNodePO&gt;</code>，MyBatis 会将查询结果的每一行映射到一个 <code>RuleTreeNodePO</code> 对象，并将这些对象添加到一个 List 中返回。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">mapper</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span> <span class="string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;cn.bugstack.xfg.frame.infrastructure.dao.RuleTreeNodeDao&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;ruleTreeNodeMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;cn.bugstack.xfg.frame.infrastructure.po.RuleTreeNodePO&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span> <span class="attr">column</span>=<span class="string">&quot;id&quot;</span> <span class="attr">property</span>=<span class="string">&quot;id&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;tree_id&quot;</span> <span class="attr">property</span>=<span class="string">&quot;treeId&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;node_type&quot;</span> <span class="attr">property</span>=<span class="string">&quot;nodeType&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;node_value&quot;</span> <span class="attr">property</span>=<span class="string">&quot;nodeValue&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;rule_key&quot;</span> <span class="attr">property</span>=<span class="string">&quot;ruleKey&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;rule_desc&quot;</span> <span class="attr">property</span>=<span class="string">&quot;ruleDesc&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryRuleTreeNodeList&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;ruleTreeNodeMap&quot;</span>&gt;</span></span><br><span class="line">        SELECT id, tree_id, node_type, node_value, rule_key, rule_desc</span><br><span class="line">        FROM rule_tree_node</span><br><span class="line">        where tree_id = #&#123;treeId&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryTreeNodeCount&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;java.lang.Integer&quot;</span>&gt;</span></span><br><span class="line">        select count(id) from rule_tree_node where tree_id = #&#123;treeId&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryTreeRulePoint&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;ruleTreeNodeMap&quot;</span>&gt;</span></span><br><span class="line">        SELECT distinct (rule_key), rule_desc</span><br><span class="line">        FROM rule_tree_node</span><br><span class="line">        where tree_id = #&#123;treeId&#125; and rule_key is not null</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="JDBC与Hibernate-JPA-MyBatis"><a href="#JDBC与Hibernate-JPA-MyBatis" class="headerlink" title="JDBC与Hibernate, JPA, MyBatis"></a>JDBC与Hibernate, JPA, MyBatis</h3><p>ORM，也是建立在JDBC的基础上，通过ResultSet到JavaBean的映射，实现各种查询。有自动跟踪Entity修改的全自动化ORM如Hibernate和JPA，需要为每个Entity创建代理，也有完全自己映射，连INSERT和UPDATE语句都需要手动编写的MyBatis，但没有任何透明的Proxy。</p>
 <h2 id="Spring-网络相关"><a href="#Spring-网络相关" class="headerlink" title="Spring 网络相关"></a>Spring 网络相关</h2><p>标准的Maven Web工程目录结构</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">spring-web-mvc</span><br><span class="line">├── pom.xml</span><br><span class="line">└── src</span><br><span class="line">    └── main</span><br><span class="line">        ├── java</span><br><span class="line">        │   └── com</span><br><span class="line">        │       └── itranswarp</span><br><span class="line">        │           └── learnjava</span><br><span class="line">        │               ├── AppConfig.java  // Spring配置类</span><br><span class="line">        │               ├── DatabaseInitializer.java</span><br><span class="line">        │               ├── entity</span><br><span class="line">        │               │   └── User.java</span><br><span class="line">        │               ├── service</span><br><span class="line">        │               │   └── UserService.java</span><br><span class="line">        │               └── web</span><br><span class="line">        │                   └── UserController.java</span><br><span class="line">        ├── resources</span><br><span class="line">        │   ├── jdbc.properties  // 数据库连接配置文件，包含数据库URL、用户名、密码等信息。</span><br><span class="line">        │   └── logback.xml  // 日志配置文件，配置日志输出格式、级别等。</span><br><span class="line">        └── webapp</span><br><span class="line">            ├── WEB-INF</span><br><span class="line">            │   ├── templates</span><br><span class="line">            │   │   ├── _base.html</span><br><span class="line">            │   │   ├── index.html</span><br><span class="line">            │   │   ├── profile.html</span><br><span class="line">            │   │   ├── register.html</span><br><span class="line">            │   │   └── signin.html</span><br><span class="line">            │   └── web.xml  // 指导 Web 容器（例如 Tomcat）如何部署和运行应用, 一般包含Servlet信息,servlet-mapping信息, Filter信息, welcome页面信息.</span><br><span class="line">            └── static</span><br><span class="line">                ├── css</span><br><span class="line">                │   └── bootstrap.css</span><br><span class="line">                └── js</span><br><span class="line">                    └── jquery.js</span><br></pre></td></tr></table></figure>
 
@@ -889,8 +861,79 @@
 <li><strong>嵌入式Tomcat提供Servlet容器的功能:</strong> 嵌入式Tomcat负责接收HTTP请求、管理Servlet生命周期、处理Servlet请求等。</li>
 <li><strong>DispatcherServlet是运行在嵌入式Tomcat中的一个Servlet:</strong> DispatcherServlet依赖于嵌入式Tomcat提供的Servlet容器功能，它被注册到嵌入式Tomcat中，由嵌入式Tomcat负责调用它的service()方法来处理请求。</li>
 </ul>
-<p>DispatcherServlet的实例是由嵌入式Tomcat创建的，但它的初始化和配置是由Spring Boot完成的。 Spring Boot会将DispatcherServlet注册到嵌入式Tomcat中，并将其与Spring的WebApplicationContext关联起来。 这样，DispatcherServlet就可以访问Spring容器中的Bean，并使用Spring MVC的功能来处理请求。</p>
+<p>DispatcherServlet的实例是由嵌入式Tomcat创建的，但它的初始化和配置是由Spring Boot完成的。 Spring Boot会将DispatcherSeHrvlet注册到嵌入式Tomcat中，并将其与Spring的WebApplicationContext关联起来。 这样，DispatcherServlet就可以访问Spring容器中的Bean，并使用Spring MVC的功能来处理请求。</p>
 </blockquote>
+<h3 id="HandlerMapping"><a href="#HandlerMapping" class="headerlink" title="HandlerMapping"></a>HandlerMapping</h3><p><code>HandlerMapping</code>在Spring应用程序启动时进行初始化。它会扫描整个项目，缓存所有带有相关注解（如<code>@RequestMapping</code>、<code>@GetMapping</code>等）的Controller方法的<code>request</code>-<code>handler</code>映射到<code>HandlerMapping</code>的bean中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐ ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─</span><br><span class="line">  ┌─────────────────────┐        ┌───────────┐   │</span><br><span class="line">│ │DelegatingFilterProxy│─│─│─ ─▶│AuthFilter │</span><br><span class="line">  └─────────────────────┘        └───────────┘   │</span><br><span class="line">│ ┌─────────────────────┐ │ │    ┌───────────┐</span><br><span class="line">  │  DispatcherServlet  │─ ─ ─ ─▶│Controllers│   │</span><br><span class="line">│ └─────────────────────┘ │ │    └───────────┘</span><br><span class="line">                                                 │</span><br><span class="line">│    Servlet Container    │ │  Spring Container</span><br><span class="line"> ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─   ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="REST-架构风格"><a href="#REST-架构风格" class="headerlink" title="REST 架构风格"></a>REST 架构风格</h3><p>REST（Representational State Transfer）是一种设计 Web 服务的架构风格，它强调客户端和服务器之间的交互应该围绕 <strong>资源</strong> 展开，并使用标准的 HTTP 方法来操作这些资源。</p>
+<ul>
+<li><strong>资源（Resources）：</strong> REST 架构的核心是资源。任何可以被命名的信息都可以被认为是一个资源，例如一个文档、一张图片、一个用户、一个订单等。每个资源都有一个唯一的标识符（URI）。</li>
+<li><strong>表述（Representations）：</strong> 资源的表述是资源在某个特定时刻的状态的展现形式。它可以是各种格式，例如 JSON、XML、HTML 等。客户端通过获取资源的表述来了解资源的状态。</li>
+<li><strong>状态转移（State Transfer）：</strong> 客户端通过 HTTP 方法（例如 GET、POST、PUT、DELETE）与服务器交互，从而改变资源的状态。这些 HTTP 方法对应着不同的操作：<ul>
+<li><strong>GET:</strong> 获取资源的表述。</li>
+<li><strong>POST:</strong> 创建新的资源。</li>
+<li><strong>PUT:</strong> 更新现有资源。</li>
+<li><strong>DELETE:</strong> 删除资源。</li>
+</ul>
+</li>
+<li><strong>无状态（Stateless）：</strong> RESTful API 是无状态的，这意味着每个请求都包含了处理该请求所需的全部信息。服务器不存储客户端的任何状态信息，每个请求都是独立的。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>HTTP 方法</th>
+<th>REST 操作</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>获取资源</td>
+<td>获取资源的表述</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>创建资源</td>
+<td>创建新的资源</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>更新资源</td>
+<td>替换整个资源</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td>部分更新资源</td>
+<td>更新资源的一部分</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>删除资源</td>
+<td>删除资源</td>
+</tr>
+</tbody></table>
+<p><strong>RESTful 请求</strong>是指符合 REST 架构风格的 HTTP 请求。它通常包含以下部分：</p>
+<ul>
+<li><strong>URL：</strong> 指向要操作的资源的唯一地址。</li>
+<li><strong>HTTP 方法：</strong> 指示要执行的操作（GET、POST、PUT、DELETE 等）。</li>
+<li><strong>请求头：</strong> 包含一些元数据，例如内容类型、授权信息等。</li>
+<li><strong>请求体：</strong> 对于 POST 和 PUT 请求，可能包含要创建或更新的资源的数据。</li>
+</ul>
+<p><strong>例如：</strong></p>
+<p>一个获取用户信息的 RESTful 请求可能是这样的：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /users/123</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
 <h1 id="Spring-Boot"><a href="#Spring-Boot" class="headerlink" title="Spring Boot"></a>Spring Boot</h1><p><a target="_blank" rel="noopener" href="https://liaoxuefeng.com/books/java/springboot/index.html">https://liaoxuefeng.com/books/java/springboot/index.html</a></p>
 <p>这些自动创建的Bean就是Spring Boot的特色：AutoConfiguration。</p>
 <p>当我们引入<code>spring-boot-starter-jdbc</code>时，启动时会自动扫描所有的<code>XxxAutoConfiguration</code>：</p>
@@ -911,6 +954,193 @@
 <p>引入第三方<code>pebble-spring-boot-starter</code>时，自动创建了：</p>
 <ul>
 <li><code>PebbleAutoConfiguration</code>：自动创建了一个<code>PebbleViewResolver</code>。</li>
+</ul>
+<h2 id="注解-1"><a href="#注解-1" class="headerlink" title="注解"></a>注解</h2><p>基于 Spring Boot 应用程序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">     SpringApplication.run(Application.class, args);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Spring 容器的创建是通过 <code>@SpringBootApplication</code> 注解触发的，它实际上是一个组合注解，包含了 <code>@Configuration</code>、<code>@EnableAutoConfiguration</code> 和 <code>@ComponentScan</code>。</p>
+<p>**<code>SpringApplication.run()</code>**：这是 Spring Boot 应用程序的入口。这个方法启动了 Spring Boot 应用，并创建了 IoC 容器。<code>@SpringBootApplication</code> 会自动扫描指定的包路径下的所有类，并将它们注册到 IoC 容器中。</p>
+<p>@Configurable</p>
+<p>@Configurable 允许将 Spring 管理的 Bean 注入到通过 new 关键字创建的对象中。这在一些情况下非常有用，例如在使用遗留代码或无法直接使用 Spring 管理的库时。</p>
+<p>被添加 @Configurable 注解的类，在被new创建时，AspectJ 的代码会拦截对象的创建过程，并使用 Spring 的 BeanFactory 将依赖注入到对象中（即不会new出新对象，将从Spring中获得已经创建的该类型的Bean作为new的结果）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configurable</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MyRepository repository;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doSomething</span><span class="params">()</span> &#123;</span><br><span class="line">        repository.save(<span class="string">&quot;some data&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 在其他地方使用 new 创建对象</span></span><br><span class="line"><span class="type">MyService</span> <span class="variable">service</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyService</span>();</span><br><span class="line">service.doSomething(); <span class="comment">// repository 已经被注入，可以正常使用</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>@ConfigurationProperties</p>
+<p>读取指定配置文件，将配置文件中相应的值注入到Bean中</p>
+<blockquote>
+<p>配置文件搜索位置</p>
+<p>打包在应用程序中的特定于配置文件的应用程序属性（application-{profile}.properties 和 YAML 变体）</p>
+<p>打包在应用程序中的应用程序属性（application.properties 和 YAML 变体）</p>
+</blockquote>
+<p>假设有以下配置文件：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 文件：application.properties  yml格式</span></span><br><span class="line"><span class="attr">rate-limiter:</span></span><br><span class="line">  <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">limit:</span> <span class="number">100</span></span><br><span class="line">  <span class="attr">unknown-property:</span> <span class="string">some-value</span></span><br></pre></td></tr></table></figure>
+
+<p>以及以下 Java Bean：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 文件：RateLimiterAopConfigProperties.java</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(prefix = &quot;rate-limiter&quot;, ignoreInvalidFields = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RateLimiterProperties</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> enabled;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">limit</span> <span class="operator">=</span> <span class="number">200</span>;  <span class="comment">// 默认值200，会被配置文件覆盖</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// getters and setters for enabled and limit</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于 ignoreInvalidFields &#x3D; true，unknown-property 将会被忽略，而 enabled 和 limit 将分别被设置为 true 和 100。</p>
+<p>@EnableConfigurationProperties(…)</p>
+<p>将一个类作为配置属性类，并启用属性绑定；<strong>被指定作为配置属性类可以没有任何 Spring 注解</strong></p>
+<p>@Component + @ConfigurationProperties 的配置属性类 等于 @EnableConfigurationProperties</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties(AliPayConfigProperties.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AliPayConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean(&quot;alipayClient&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> AlipayClient <span class="title function_">alipayClient</span><span class="params">(AliPayConfigProperties properties)</span> &#123;  <span class="comment">// bean对象被注入作为传入参数</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DefaultAlipayClient</span>(properties.getGatewayUrl(),</span><br><span class="line">                properties.getApp_id(),</span><br><span class="line">                properties.getMerchant_private_key(),</span><br><span class="line">                properties.getFormat(),</span><br><span class="line">                properties.getCharset(),</span><br><span class="line">                properties.getAlipay_public_key(),</span><br><span class="line">                properties.getSign_type());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="常用库"><a href="#常用库" class="headerlink" title="常用库"></a>常用库</h1><h2 id="retrofit"><a href="#retrofit" class="headerlink" title="retrofit"></a>retrofit</h2><p>Retrofit 是一个用于 Android 和 Java 的类型安全的 HTTP 客户端，它通过将 HTTP API 转换为 Java 接口，简化了网络请求的编写和管理。它利用注解来描述 HTTP 请求，并使用 OkHttp 库执行实际的网络操作。</p>
+<p>一个Retrofit的Call对象通常只对应<strong>一次HTTP请求和一次HTTP响应</strong></p>
+<p>Call&lt;T&gt; 的泛型T是用来指定该 HTTP 请求成功后，预期从服务器接收到的数据类型</p>
+<p>案例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义 API 接口，使用接口定义网络请求</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">ApiService</span> &#123;</span><br><span class="line">    <span class="comment">// 使用 @GET 注解指定 GET 请求，@Path 注解用于替换 URL 路径中的占位符 &#123;id&#125;</span></span><br><span class="line">    <span class="meta">@GET(&quot;/users/&#123;id&#125;&quot;)</span></span><br><span class="line">    Call&lt;User&gt; <span class="title function_">getUser</span><span class="params">(<span class="meta">@Path(&quot;id&quot;)</span> <span class="type">int</span> id)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 @Query 注解添加查询参数</span></span><br><span class="line">    <span class="meta">@GET(&quot;/users&quot;)</span></span><br><span class="line">    Call&lt;List&lt;User&gt;&gt; <span class="title function_">getUsers</span><span class="params">(<span class="meta">@Query(&quot;page&quot;)</span> <span class="type">int</span> page, <span class="meta">@Query(&quot;per_page&quot;)</span> <span class="type">int</span> perPage)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 @QueryMap 注解添加多个查询参数，以 Map 的形式传递</span></span><br><span class="line">    <span class="meta">@GET(&quot;/users&quot;)</span></span><br><span class="line">    Call&lt;List&lt;User&gt;&gt; <span class="title function_">getUsers</span><span class="params">(<span class="meta">@QueryMap</span> Map&lt;String, String&gt; options)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 @POST 注解指定 POST 请求，@Headers 注解添加静态请求头, @Body 注解用于发送请求体，即被标记传入参数会直接作为post报文体</span></span><br><span class="line">    <span class="meta">@POST(&quot;/users&quot;)</span></span><br><span class="line">    <span class="meta">@Headers(&#123;</span></span><br><span class="line"><span class="meta">            &quot;Content-Type: application/json&quot;,</span></span><br><span class="line"><span class="meta">            &quot;Accept: application/json&quot;</span></span><br><span class="line"><span class="meta">    &#125;)</span></span><br><span class="line">    Call&lt;User&gt; <span class="title function_">createUser</span><span class="params">(<span class="meta">@Body</span> User user)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 @FormUrlEncoded 注解指定 POST 请求的编码类型为 application/x-www-form-urlencoded，@Field 注解添加表单数据，即被标记的传入参数会拼接，作为post报文体</span></span><br><span class="line">    <span class="meta">@FormUrlEncoded</span></span><br><span class="line">    <span class="meta">@POST(&quot;/users&quot;)</span></span><br><span class="line">    Call&lt;User&gt; <span class="title function_">createUser</span><span class="params">(<span class="meta">@Field(&quot;name&quot;)</span> String name, <span class="meta">@Field(&quot;email&quot;)</span> String email)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 @FieldMap 注解添加多个表单数据，以 Map 的形式传递</span></span><br><span class="line">    <span class="meta">@FormUrlEncoded</span></span><br><span class="line">    <span class="meta">@POST(&quot;/users&quot;)</span></span><br><span class="line">    Call&lt;User&gt; <span class="title function_">createUser</span><span class="params">(<span class="meta">@FieldMap</span> Map&lt;String, String&gt; fields)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 @Multipart 注解指定 POST 请求为多部分请求，@Part 注解用于多部分请求中的每个部分；请求体会被分割成多个部分，每个部分都包含自己的内容类型、头部信息和数据；按照@Part进行切割，即file为块1，description为块2</span></span><br><span class="line">    <span class="meta">@Multipart</span></span><br><span class="line">    <span class="meta">@POST(&quot;/upload&quot;)</span></span><br><span class="line">    Call&lt;ResponseBody&gt; <span class="title function_">uploadFile</span><span class="params">(<span class="meta">@Part(&quot;file&quot;)</span> RequestBody file, <span class="meta">@Part(&quot;description&quot;)</span> RequestBody description)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 @PartMap 注解添加多个 Part，以 Map 的形式传递；按照一个键值对一块进行切割</span></span><br><span class="line">    <span class="meta">@Multipart</span></span><br><span class="line">    <span class="meta">@POST(&quot;/upload&quot;)</span></span><br><span class="line">    Call&lt;ResponseBody&gt; <span class="title function_">uploadMultipleFiles</span><span class="params">(<span class="meta">@PartMap</span> Map&lt;String, RequestBody&gt; files)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 @PUT 注解指定 PUT 请求</span></span><br><span class="line">    <span class="meta">@PUT(&quot;/users/&#123;id&#125;&quot;)</span></span><br><span class="line">    Call&lt;User&gt; <span class="title function_">updateUser</span><span class="params">(<span class="meta">@Path(&quot;id&quot;)</span> <span class="type">int</span> id, <span class="meta">@Body</span> User user)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 @DELETE 注解指定 DELETE 请求，@Header 注解添加动态请求头</span></span><br><span class="line">    <span class="meta">@DELETE(&quot;/users/&#123;id&#125;&quot;)</span></span><br><span class="line">    Call&lt;Void&gt; <span class="title function_">deleteUser</span><span class="params">(<span class="meta">@Path(&quot;id&quot;)</span> <span class="type">int</span> id, <span class="meta">@Header(&quot;Authorization&quot;)</span> String authToken)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RetrofitExample</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">		<span class="comment">// 拦截器 拦截的是 OkHttp 发出的网络请求</span></span><br><span class="line">        <span class="comment">// 创建 HttpLoggingInterceptor，用于打印请求和响应的日志</span></span><br><span class="line">        <span class="type">HttpLoggingInterceptor</span> <span class="variable">loggingInterceptor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HttpLoggingInterceptor</span>();</span><br><span class="line">        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY); <span class="comment">// 设置日志级别为 BODY，打印请求和响应体</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建自定义拦截器，例如添加认证信息</span></span><br><span class="line">        <span class="type">Interceptor</span> <span class="variable">authInterceptor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Interceptor</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Response <span class="title function_">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">                <span class="type">Request</span> <span class="variable">original</span> <span class="operator">=</span> chain.request(); <span class="comment">// 获取原始请求</span></span><br><span class="line">                <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> original.newBuilder() <span class="comment">// 创建新的请求构建器</span></span><br><span class="line">                        .header(<span class="string">&quot;Authorization&quot;</span>, <span class="string">&quot;Bearer your_token_here&quot;</span>) <span class="comment">// 添加 Authorization 请求头</span></span><br><span class="line">                        .build(); <span class="comment">// 构建新的请求</span></span><br><span class="line">                <span class="keyword">return</span> chain.proceed(request); <span class="comment">// 执行请求</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建 OkHttpClient，并添加拦截器</span></span><br><span class="line">        <span class="type">OkHttpClient</span> <span class="variable">okHttpClient</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>.Builder()</span><br><span class="line">                .addInterceptor(loggingInterceptor) <span class="comment">// 添加日志拦截器</span></span><br><span class="line">                .addInterceptor(authInterceptor) <span class="comment">// 添加认证拦截器</span></span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建 Retrofit 实例</span></span><br><span class="line">        <span class="comment">// 注意：可以不显式的指定 OkHttpClient 实例，默认会创建</span></span><br><span class="line">        <span class="type">Retrofit</span> <span class="variable">retrofit</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">                .baseUrl(<span class="string">&quot;https://api.example.com/&quot;</span>) <span class="comment">// 设置 API 基地址</span></span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create()) <span class="comment">// 添加 Gson 转换器</span></span><br><span class="line">                .client(okHttpClient) <span class="comment">// 设置 OkHttpClient</span></span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建 API 服务</span></span><br><span class="line">        <span class="type">ApiService</span> <span class="variable">apiService</span> <span class="operator">=</span> retrofit.create(ApiService.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行 GET 请求</span></span><br><span class="line">        Call&lt;User&gt; call = apiService.getUser(<span class="number">123</span>);</span><br><span class="line">        call.enqueue(<span class="keyword">new</span> <span class="title class_">Callback</span>&lt;User&gt;() &#123; <span class="comment">// 使用 enqueue() 方法异步执行请求</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onResponse</span><span class="params">(Call&lt;User&gt; call, Response&lt;User&gt; response)</span> &#123; <span class="comment">// 请求成功的回调</span></span><br><span class="line">                <span class="keyword">if</span> (response.isSuccessful()) &#123; <span class="comment">// 检查响应是否成功</span></span><br><span class="line">                    <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> response.body(); <span class="comment">// 获取响应体</span></span><br><span class="line">                    System.out.println(user);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;Error: &quot;</span> + response.code()); <span class="comment">// 打印错误码</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onFailure</span><span class="params">(Call&lt;User&gt; call, Throwable t)</span> &#123; <span class="comment">// 请求失败的回调</span></span><br><span class="line">                System.out.println(<span class="string">&quot;Failure: &quot;</span> + t.getMessage()); <span class="comment">// 打印错误信息</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用 QueryMap 的示例</span></span><br><span class="line">        Map&lt;String, String&gt; options = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        options.put(<span class="string">&quot;page&quot;</span>, <span class="string">&quot;2&quot;</span>);</span><br><span class="line">        options.put(<span class="string">&quot;per_page&quot;</span>, <span class="string">&quot;10&quot;</span>);</span><br><span class="line">        Call&lt;List&lt;User&gt;&gt; callWithQueryMap = apiService.getUsers(options);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用 FieldMap 的示例</span></span><br><span class="line">        Map&lt;String, String&gt; fields = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        fields.put(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;John Doe&quot;</span>);</span><br><span class="line">        fields.put(<span class="string">&quot;email&quot;</span>, <span class="string">&quot;john.doe@example.com&quot;</span>);</span><br><span class="line">        Call&lt;User&gt; callWithFieldMap = apiService.createUser(fields);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// ... 其他请求示例</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 示例 User 类</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> id;</span><br><span class="line">        <span class="keyword">public</span> String name;</span><br><span class="line">        <span class="keyword">public</span> String email;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//重写 toString 方法，方便打印 User 对象的信息</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;User&#123;&quot;</span> +</span><br><span class="line">                    <span class="string">&quot;id=&quot;</span> + id +</span><br><span class="line">                    <span class="string">&quot;, name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                    <span class="string">&quot;, email=&#x27;&quot;</span> + email + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                    <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用于 Multipart 请求的 RequestBody 接口 (需要添加 okhttp3 依赖)</span></span><br><span class="line">    <span class="keyword">interface</span> <span class="title class_">RequestBody</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用于接收响应体的 ResponseBody 接口 (需要添加 okhttp3 依赖)</span></span><br><span class="line">    <span class="keyword">interface</span> <span class="title class_">ResponseBody</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="Guava"><a href="#Guava" class="headerlink" title="Guava"></a>Guava</h2><p>Guava 是 Google 开发的一个 Java 核心库，它提供了一组常用的实用工具类、扩展类和数据结构，旨在提高 Java 代码的效率、可读性和可维护性。Guava 的设计理念是补充 JDK 的不足，提供一些 JDK 缺少的功能，并对一些 JDK 中已有的功能进行改进和优化。</p>
+<p><strong>缓存 (Caching):</strong> 提供了强大的缓存功能，支持多种缓存策略，例如：</p>
+<ul>
+<li>CacheBuilder: 用于构建缓存实例。</li>
+<li>LoadingCache: 在缓存未命中时自动加载数据的缓存。</li>
+</ul>
+<p><strong>事件总线 (EventBus):</strong> 实现了发布-订阅模式，</p>
+<p>…</p>
+<h2 id="Spring-Security-jwt"><a href="#Spring-Security-jwt" class="headerlink" title="Spring Security &amp; jwt"></a>Spring Security &amp; jwt</h2><p><strong>客户端接收JWT：</strong> 服务器将生成的JWT返回给客户端，通常放在HTTP Authorization header中，使用Bearer scheme。例如：Authorization: Bearer &lt;token&gt;。</p>
+<p><strong>客户端携带JWT：</strong> 客户端在后续的请求中，将JWT添加到Authorization header中，发送给服务器。 JWT可以存储在客户端的localStorage、cookie或session storage中。</p>
+<h3 id="jwt生成流程"><a href="#jwt生成流程" class="headerlink" title="jwt生成流程"></a>jwt生成流程</h3><ol>
+<li>服务器<strong>分别</strong>对头部和载荷进行 <strong>Base64Url 编码</strong> 。</li>
+<li>将编码后的头部和载荷用 . 拼接在一起，例如 encodedHeader.encodedPayload。</li>
+<li>将拼接后的字符串作为输入，<strong>使用密钥和指定的签名算法 (例如 HS256, RS256) 进行签名</strong>，得到一个签名值。 这个过程不是“加密”，更准确地说是“生成签名”。 对于HS256，是进行HMAC-SHA256哈希运算；对于RS256，是使用RSA私钥对数据进行签名。</li>
+<li>将签名值进行 <strong>Base64Url 编码</strong>。</li>
+<li>最终的JWT是由 <strong>编码后的头部、编码后的载荷和编码后的签名</strong> 三部分用 . 连接而成，例如 encodedHeader.encodedPayload.encodedSignature。</li>
+</ol>
+<p>先身份验证，再权限判断</p>
+<h3 id="身份认证流程"><a href="#身份认证流程" class="headerlink" title="身份认证流程"></a>身份认证流程</h3><p><strong>带 JWT 请求的流程</strong></p>
+<ol>
+<li><strong>请求到达 <code>JwtRequestFilter</code></strong><ul>
+<li>当用户发送一个带 JWT 的请求时，Spring Security 会首先通过 <code>JwtRequestFilter</code> 过滤器。</li>
+<li><code>JwtRequestFilter</code> 会检查请求中的 Authorization 头部，提取 JWT 并验证其合法性。</li>
+</ul>
+</li>
+<li><strong>JWT 验证</strong><ul>
+<li><code>JwtRequestFilter</code> 会验证 JWT 是否有效（例如是否过期、是否篡改），并从中解析出用户的身份信息（如用户名）。</li>
+<li>如果验证成功，<code>JwtRequestFilter</code> 会创建一个 <code>UsernamePasswordAuthenticationToken</code> 对象，该对象包含从 JWT 中解析出来的用户信息（如用户名）。</li>
+<li><code>UsernamePasswordAuthenticationToken</code> 对象将被存储到 <code>SecurityContextHolder</code> 中，这样 Spring Security 就知道当前请求的用户身份。</li>
+</ul>
+</li>
+<li><strong><code>SecurityContextHolder</code> 中的身份信息</strong><ul>
+<li>由于用户身份已经通过 JWT 被验证，<code>SecurityContextHolder</code> 中的 <code>Authentication</code> 对象已包含了有效的身份信息。接下来的授权处理（如访问控制）会基于这个 <code>Authentication</code> 对象，而不需要重新通过 <code>AuthenticationManager</code> 进行身份验证。</li>
+</ul>
+</li>
+<li><strong>授权过程（权限验证）</strong><ul>
+<li>一旦身份信息存储在 <code>SecurityContextHolder</code> 中，Spring Security 会进行授权处理（根据用户的角色、权限等判断是否允许访问资源）。如果 JWT 解析成功且验证通过，Spring Security 会基于 <code>GrantedAuthority</code>（用户的角色和权限）进行权限验证。</li>
+</ul>
+</li>
+<li><strong>无 <code>UsernamePasswordAuthenticationFilter</code> 参与</strong><ul>
+<li>由于 JWT 已经通过 <code>JwtRequestFilter</code> 进行验证，<code>UsernamePasswordAuthenticationFilter</code> 不会再被触发。因此，整个认证过程不涉及传统的用户名&#x2F;密码验证。</li>
+</ul>
+</li>
+</ol>
+<p><strong>不带 JWT 请求的流程</strong></p>
+<ol>
+<li><strong>请求到达 <code>UsernamePasswordAuthenticationFilter</code></strong><ul>
+<li>当用户发送一个不带 JWT 的请求时（通常是通过用户名和密码登录），Spring Security 会通过 <code>UsernamePasswordAuthenticationFilter</code> 来处理该请求。</li>
+<li><code>UsernamePasswordAuthenticationFilter</code> 会从请求中获取用户名和密码（通常来自表单提交），并将其封装成一个 <code>UsernamePasswordAuthenticationToken</code> 对象。</li>
+</ul>
+</li>
+<li><strong>身份验证</strong><ul>
+<li><code>UsernamePasswordAuthenticationFilter</code> 会将 <code>UsernamePasswordAuthenticationToken</code> 交给 <code>AuthenticationManager</code> 进行身份验证。此时，Spring Security 会调用你在 <code>SecurityConfig</code> 中配置的 <code>userDetailsService</code> 来加载用户信息。</li>
+<li>在 <code>userDetailsService.loadUserByUsername()</code> 中，Spring Security 会从数据库中加载用户的用户名、密码和权限信息，并将其封装成 <code>UserDetails</code> 对象返回。</li>
+<li><code>AuthenticationManager</code> 会对比请求中提供的密码与数据库中存储的密码（经过加密的），如果密码匹配，身份验证通过。</li>
+</ul>
+</li>
+<li><strong>创建认证对象并存储到 <code>SecurityContextHolder</code></strong><ul>
+<li>如果用户名和密码匹配成功，<code>AuthenticationManager</code> 会创建一个 <code>UsernamePasswordAuthenticationToken</code> 对象（包含用户的身份信息和权限）。</li>
+<li>然后，<code>UsernamePasswordAuthenticationToken</code> 会被存储到 <code>SecurityContextHolder</code> 中，表示用户已经通过身份验证。</li>
+</ul>
+</li>
+<li><strong>授权过程（权限验证）</strong><ul>
+<li>在 <code>SecurityContextHolder</code> 中存储了有效的认证对象后，Spring Security 会根据用户的角色和权限进行授权判断，确保用户有权访问请求的资源。</li>
+</ul>
+</li>
+<li><strong>会话管理与状态管理</strong><ul>
+<li>如果你配置了会话管理（例如，<code>sessionCreationPolicy(SessionCreationPolicy.STATELESS)</code>），Spring Security 会根据配置创建相应的会话或确保无状态认证。</li>
+</ul>
+</li>
+</ol>
+<h2 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h2><p>在 MyBatis 中，注解 <code>@Select</code> 用来定义 SQL 查询。对于以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Select(&quot;SELECT * FROM user WHERE user_name = #&#123;username&#125;&quot;)</span></span><br><span class="line">User <span class="title function_">getUserByName</span><span class="params">(String username)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>执行过程</p>
+<ol>
+<li><strong>查询执行</strong>：当你调用 <code>getUserByName</code> 方法时，MyBatis 将接收传入的 <code>username</code> 参数，并将其注入到 SQL 语句中替换 <code>#&#123;username&#125;</code> 占位符。</li>
+<li><strong>SQL 查询</strong>：MyBatis 会在数据库中执行替换后的 SQL 查询。</li>
+<li><strong>结果映射</strong>：查询结果将映射到 <code>User</code> 对象。MyBatis 使用 <strong>结果映射</strong> 机制，将查询得到的数据库记录中的字段与 <code>User</code> 类的属性进行匹配。映射的依据通常是字段名称和属性名称相同。</li>
+</ol>
+<p>结果处理</p>
+<ul>
+<li><strong>自动映射</strong>：MyBatis 会根据 <code>User</code> 类的属性名称与 <code>SELECT</code> 语句返回的列名称进行映射。例如，如果数据库中的 <code>user</code> 表有 <code>id</code>, <code>user_name</code>, <code>password</code> 等字段，MyBatis 会自动将这些列的值填充到 <code>User</code> 类的 <code>id</code>, <code>userName</code>, <code>password</code> 等相应的属性中。</li>
+<li><strong>映射规则</strong>：默认情况下，MyBatis 使用 <strong>驼峰命名规则</strong>，即如果数据库中列的名称是 <code>user_name</code>，它会映射到 Java 类中的 <code>userName</code> 属性。如果属性和列名不匹配，你可能需要使用 <code>@Results</code> 或 XML 配置来手动指定映射关系。</li>
+</ul>
+<p>结果返回</p>
+<ul>
+<li><strong>返回对象</strong>：<code>getUserByName</code> 方法会返回一个 <code>User</code> 对象，如果查询到的结果为空，方法将返回 <code>null</code>。</li>
+<li><strong>错误处理</strong>：如果查询返回了多行，而该方法定义为返回单个 <code>User</code> 对象，MyBatis 将抛出异常。</li>
+</ul>
+<h1 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h1><p>DDD结构</p>
+<ul>
+<li>Domain (领域层)：<ul>
+<li>model:<ul>
+<li>aggregate (聚合): 核心业务对象，例如订单、用户等。</li>
+<li>entity (实体): 具有唯一标识的对象。</li>
+<li>valobj (值对象): 描述对象的某个特征，没有唯一标识，例如地址、颜色等。</li>
+</ul>
+</li>
+<li>repository (仓储接口): 定义数据访问接口，具体实现放在基础设施层。</li>
+<li>service (领域服务): 处理不属于任何实体或值对象的业务逻辑。</li>
+</ul>
+</li>
+<li>Application (应用层)：协调领域对象完成用户用例，不包含业务逻辑。<ul>
+<li>config</li>
+<li>Application.java</li>
+</ul>
+</li>
+<li>Infrastructure (基础设施层)：提供技术实现，例如数据库访问、消息队列等。<ul>
+<li>dao</li>
+<li>redis</li>
+<li>gateway<ul>
+<li>dto</li>
+</ul>
+</li>
+<li>adapter<ul>
+<li>port</li>
+<li>repositroy</li>
+</ul>
+</li>
+<li>security</li>
+</ul>
+</li>
+<li>trigger<ul>
+<li>http<ul>
+<li>httpController.java</li>
+</ul>
+</li>
+<li>job</li>
+<li>listener</li>
+</ul>
+</li>
+<li>types<ul>
+<li>common</li>
+<li>enums</li>
+<li>exception</li>
+<li>utils</li>
+</ul>
+</li>
 </ul>
 
     </div>
@@ -992,7 +1222,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3"><span class="nav-text">网络相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#servlet"><span class="nav-text">servlet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redirect-%E4%B8%8E-Forward"><span class="nav-text">Redirect 与 Forward</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session-%E4%B8%8E-Cookie"><span class="nav-text">Session 与 Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP"><span class="nav-text">JSP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filter"><span class="nav-text">Filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Listener"><span class="nav-text">Listener</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring"><span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#REST-%E6%9E%B6%E6%9E%84%E9%A3%8E%E6%A0%BC"><span class="nav-text">REST 架构风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IoC%E5%AE%B9%E5%99%A8%E4%B8%8EIoC%E5%AF%B9%E8%B1%A1"><span class="nav-text">IoC容器与IoC对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-text">Bean的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%B3%A8%E5%85%A5-%E4%BD%BF%E7%94%A8-Setter-%E6%96%B9%E6%B3%95%E6%B3%A8%E5%85%A5"><span class="nav-text">使用构造函数注入 &amp;&amp; 使用 Setter 方法注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Component%E6%88%96-Bean%E5%A3%B0%E6%98%8E"><span class="nav-text">使用@Component或@Bean声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%AC%AC%E4%B8%89%E6%96%B9Bean"><span class="nav-text">创建第三方Bean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FactoryBean"><span class="nav-text">FactoryBean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E9%94%80%E6%AF%81"><span class="nav-text">初始化与销毁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">Spring Bean 的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3"><span class="nav-text">数据库相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC"><span class="nav-text">JDBC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD"><span class="nav-text">JDBC事务传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E5%90%88Hibernate"><span class="nav-text">结合Hibernate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E5%90%88MyBatis"><span class="nav-text">结合MyBatis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%B8%8EHibernate-JPA-MyBatis"><span class="nav-text">JDBC与Hibernate, JPA, MyBatis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3"><span class="nav-text">Spring 网络相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8"><span class="nav-text">启动</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot"><span class="nav-text">Spring Boot</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3"><span class="nav-text">网络相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#servlet"><span class="nav-text">servlet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redirect-%E4%B8%8E-Forward"><span class="nav-text">Redirect 与 Forward</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session-%E4%B8%8E-Cookie"><span class="nav-text">Session 与 Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP"><span class="nav-text">JSP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filter"><span class="nav-text">Filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Listener"><span class="nav-text">Listener</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring"><span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IoC%E5%AE%B9%E5%99%A8%E4%B8%8EIoC%E5%AF%B9%E8%B1%A1"><span class="nav-text">IoC容器与IoC对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-text">Bean的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%B3%A8%E5%85%A5-%E4%BD%BF%E7%94%A8-Setter-%E6%96%B9%E6%B3%95%E6%B3%A8%E5%85%A5"><span class="nav-text">使用构造函数注入 &amp;&amp; 使用 Setter 方法注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Component%E6%88%96-Bean%E5%A3%B0%E6%98%8E"><span class="nav-text">使用@Component或@Bean声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%AC%AC%E4%B8%89%E6%96%B9Bean"><span class="nav-text">创建第三方Bean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FactoryBean"><span class="nav-text">FactoryBean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E9%94%80%E6%AF%81"><span class="nav-text">初始化与销毁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">Spring Bean 的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3"><span class="nav-text">数据库相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC"><span class="nav-text">JDBC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD"><span class="nav-text">JDBC事务传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E5%90%88Hibernate"><span class="nav-text">结合Hibernate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E5%90%88MyBatis"><span class="nav-text">结合MyBatis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%B8%8EHibernate-JPA-MyBatis"><span class="nav-text">JDBC与Hibernate, JPA, MyBatis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3"><span class="nav-text">Spring 网络相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8"><span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HandlerMapping"><span class="nav-text">HandlerMapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#REST-%E6%9E%B6%E6%9E%84%E9%A3%8E%E6%A0%BC"><span class="nav-text">REST 架构风格</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot"><span class="nav-text">Spring Boot</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3-1"><span class="nav-text">注解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%BA%93"><span class="nav-text">常用库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#retrofit"><span class="nav-text">retrofit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guava"><span class="nav-text">Guava</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Security-jwt"><span class="nav-text">Spring Security &amp; jwt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jwt%E7%94%9F%E6%88%90%E6%B5%81%E7%A8%8B"><span class="nav-text">jwt生成流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B"><span class="nav-text">身份认证流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis"><span class="nav-text">Mybatis</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="nav-text">项目结构</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
