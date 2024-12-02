@@ -70,7 +70,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193338222.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193638556.png">
 <meta property="article:published_time" content="2024-07-28T02:16:25.000Z">
-<meta property="article:modified_time" content="2024-12-02T03:21:43.721Z">
+<meta property="article:modified_time" content="2024-12-02T06:44:22.949Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Android, Java">
 <meta name="twitter:card" content="summary">
@@ -263,7 +263,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-12-02 11:21:43" itemprop="dateModified" datetime="2024-12-02T11:21:43+08:00">2024-12-02</time>
+                <time title="Modified: 2024-12-02 14:44:22" itemprop="dateModified" datetime="2024-12-02T14:44:22+08:00">2024-12-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -493,7 +493,7 @@
 <li><p>**加载 (Loading)**：</p>
 <ul>
 <li>通过类的全限定名（例如 java.lang.String）查找并读取类的二进制数据（.class 文件）。</li>
-<li>将类的静态结构信息（例如类名、方法名、字段名、访问权限等）<strong>存储在方法区中，并创建一个代表该类的 Class 对象，该对象唯一。</strong></li>
+<li>将类的静态结构信息（例如类名、方法名、字段名、访问权限等）<strong>存储在方法区中，并创建一个代表该类的 Class 对象，该Class对象内保存了指向方法区中这些结构信息的引用，该对象唯一。</strong></li>
 <li>加载阶段通常由类加载器完成，Java 提供三种内置的类加载器：<ul>
 <li><strong>Bootstrap ClassLoader</strong>：负责加载 Java 核心类库（rt.jar 等）。</li>
 <li><strong>Extension ClassLoader</strong>：负责加载 Java 扩展类库（jre&#x2F;lib&#x2F;ext 目录下的类）。</li>
@@ -507,9 +507,7 @@
 <li><p>**验证 (Verification)**：确保加载的类文件符合 Java 虚拟机规范，防止恶意代码破坏 JVM。</p>
 </li>
 <li><p>**准备 (Preparation)**：为类的静态变量分配内存空间，并设置默认初始值（例如，int 类型为 0）。</p>
-<blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span> <span class="number">123</span>;  <span class="comment">//为value分配内存, 且设置值为0</span></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">v2</span> <span class="operator">=</span> <span class="number">123</span>  <span class="comment">//为v2分配内存, 且设置值为123</span></span><br><span class="line">	<span class="keyword">public</span> <span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="string">&quot;123&quot;</span>;  <span class="comment">//不会为str分配内存，该变量为实例变量，创建Test对象时分配内存；&quot;123&quot;为字面量，将放入全局字符串常量池保存</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span> <span class="number">123</span>;  <span class="comment">//为value分配内存, 且设置值为0</span></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">v2</span> <span class="operator">=</span> <span class="number">123</span>  <span class="comment">//为v2分配内存, 且设置值为123</span></span><br><span class="line">	<span class="keyword">public</span> <span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="string">&quot;123&quot;</span>;  <span class="comment">//不会为str分配内存，该变量为实例变量，创建Test对象时分配内存；&quot;123&quot;为字面量，将放入全局字符串常量池保存</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>**解析 (Resolution)**：将符号引用（例如类名、方法名）转换为直接引用（例如内存地址）。</p>
 </li>
