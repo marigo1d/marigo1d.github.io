@@ -1,186 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Docker/K8s</title>
-    <url>/2024/08/16/Docker-K8s/</url>
-    <content><![CDATA[<p>容器相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="Container-related-Learning-Records"><a href="#Container-related-Learning-Records" class="headerlink" title="Container-related Learning Records"></a>Container-related Learning Records</h1><p>待完成</p>
-]]></content>
-      <tags>
-        <tag>docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Algo Learning Record</title>
-    <url>/2024/04/25/Algo-Learning-Record/</url>
-    <content><![CDATA[<p>算法相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="算法题目与设计模式"><a href="#算法题目与设计模式" class="headerlink" title="算法题目与设计模式"></a>算法题目与设计模式</h1><h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><p>平衡二叉树树</p>
-<ul>
-<li>根节点为黑</li>
-<li>不存在红节点相邻</li>
-<li>黑高一致</li>
-<li>叶节点为黑（NIL节点或空节点）</li>
-</ul>
-<p><strong>默认插入节点为红色</strong></p>
-<p>通过染色+旋转修复</p>
-<h2 id="B树与B-树"><a href="#B树与B-树" class="headerlink" title="B树与B+树"></a>B树与B+树</h2><p>二叉搜索树</p>
-<ul>
-<li><p>所有非叶子结点至多拥有两个儿子（Left和Right）；</p>
-</li>
-<li><p>所有结点存储一个关键字；</p>
-</li>
-<li><p>非叶子结点的左指针指向小于其关键字的子树，右指针指向大于其关键字的子树。</p>
-</li>
-</ul>
-<p>(m阶)B树</p>
-<ul>
-<li>根节点最多 M - 1个关键字，最多 M 个子节点；<strong>最少 1 个关键字，最少 2 个子节点</strong></li>
-<li>非根节点（包括叶节点）最多M - 1个关键字，最多 M 个子节点；最少 M&#x2F;2-1 个关键字，最少 M&#x2F;2 个子节点</li>
-<li>节点内关键字有序排列</li>
-<li>所有叶子结点位于同一层</li>
-</ul>
-<p>(m阶)B+树</p>
-<p>继承B树</p>
-<ul>
-<li><p>非叶子结点为索引节点，叶子节点提供信息</p>
-</li>
-<li><p><strong>叶子节点最大元素数为 m，最小为 m&#x2F;2</strong></p>
-<blockquote>
-<p>由于非叶节点不保存信息，故叶子节点可保存元素变多，重复保存非叶中的索引节点值；查找过程相当于索引左右两边是左开右闭区间</p>
-</blockquote>
-</li>
-<li><p>叶子节点新增链指针</p>
-</li>
-<li><p>所有关键字均在叶子节点出现</p>
-</li>
-</ul>
-<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><h3 id="创建者模式"><a href="#创建者模式" class="headerlink" title="创建者模式"></a>创建者模式</h3><h4 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h4><p>传入所需类型至工厂，工厂内实现类的创建</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 传入所需类型给工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StoreFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ICommodity <span class="title function_">getCommodityService</span><span class="params">(Integer commodityType)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> == commodityType) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">1</span> == commodityType) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CouponCommodityService</span>();</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">2</span> == commodityType) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">GoodsCommodityService</span>();</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">3</span> == commodityType) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CardCommodityService</span>();</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;不存在的商品服务类型&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="type">StoreFactory</span> <span class="variable">storeFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StoreFactory</span>();</span><br><span class="line"><span class="type">ICommodity</span> <span class="variable">commodityService_1</span> <span class="operator">=</span> storeFactory.getCommodityService(<span class="number">1</span>);</span><br><span class="line">commodityService_1.sendCommodity(<span class="string">&quot;10001&quot;</span>, <span class="string">&quot;EGM1023938910232121323432&quot;</span>, <span class="string">&quot;791098764902132&quot;</span>, <span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h4><p>多层工厂</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="type">CacheService</span> <span class="variable">proxy_EGM</span> <span class="operator">=</span> JDKProxy.getProxy(CacheServiceImpl.class, <span class="keyword">new</span> <span class="title class_">EGMCacheAdapter</span>());</span><br><span class="line"><span class="comment">// JDKProxy.getProxy为第一层工厂，负责创建CacheService类</span></span><br><span class="line"><span class="comment">// EGMCacheAdapter为第二层工厂，负责包装差异化方法名</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h4><p>传入所需组合的类型至建造者，建造者组合基本元素实现类的创建</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用</span></span><br><span class="line">builder.levelOne(<span class="number">132.52D</span>).getDetail()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 建造者</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">builder</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> IMenu <span class="title function_">levelOne</span><span class="params">(Double area)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DecorationPackageMenu</span>(area, <span class="string">&quot;豪华欧式&quot;</span>)</span><br><span class="line">        .appendCeiling(<span class="keyword">new</span> <span class="title class_">LevelTwoCeiling</span>())    <span class="comment">// 组合1</span></span><br><span class="line">        .appendCoat(<span class="keyword">new</span> <span class="title class_">DuluxCoat</span>())             <span class="comment">// 组合2</span></span><br><span class="line">        .appendFloor(<span class="keyword">new</span> <span class="title class_">ShengXiangFloor</span>());     <span class="comment">// 组合3</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DecorationPackageMenu</span> <span class="keyword">implements</span> <span class="title class_">IMenu</span> &#123;</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DecorationPackageMenu</span><span class="params">(Double area, String grade)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.area = <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(area);</span><br><span class="line">        <span class="built_in">this</span>.grade = grade;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模式优点：需要增加组合件时可以直接在这里添加&amp;组合</span></span><br><span class="line">    <span class="keyword">public</span> IMenu <span class="title function_">appendCeiling</span><span class="params">(Matter matter)</span> &#123;</span><br><span class="line">        list.add(matter);</span><br><span class="line">        price = price.add(area.multiply(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.2&quot;</span>)).multiply(matter.price()));</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h4><p>通过克隆创建重复对象</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="type">QuestionBankController</span> <span class="variable">questionBankController</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">QuestionBankController</span>();</span><br><span class="line">        System.out.println(questionBankController.createPaper(<span class="string">&quot;花花&quot;</span>, <span class="string">&quot;1000001921032&quot;</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuestionBankController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">QuestionBank</span> <span class="variable">questionBank</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">QuestionBank</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuestionBankController</span><span class="params">()</span> &#123;...&#125;  <span class="comment">// 向QuestionBank添加题目</span></span><br><span class="line">    </span><br><span class="line">        <span class="keyword">public</span> String <span class="title function_">createPaper</span><span class="params">(String candidate, String number)</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;</span><br><span class="line">        <span class="type">QuestionBank</span> <span class="variable">questionBankClone</span> <span class="operator">=</span> (QuestionBank) questionBank.clone();  <span class="comment">// 通过克隆得到新QuestionBank对象</span></span><br><span class="line">        questionBankClone.setCandidate(candidate);</span><br><span class="line">        questionBankClone.setNumber(number);</span><br><span class="line">        <span class="keyword">return</span> questionBankClone.toString();  <span class="comment">// 打印题目</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuestionBank</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// clone方法实现题目乱序</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;</span><br><span class="line">        <span class="type">QuestionBank</span> <span class="variable">questionBank</span> <span class="operator">=</span> (QuestionBank) <span class="built_in">super</span>.clone();</span><br><span class="line">        questionBank.choiceQuestionList = (ArrayList&lt;ChoiceQuestion&gt;) choiceQuestionList.clone();</span><br><span class="line">        questionBank.answerQuestionList = (ArrayList&lt;AnswerQuestion&gt;) answerQuestionList.clone();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 题目乱序</span></span><br><span class="line">        Collections.shuffle(questionBank.choiceQuestionList);</span><br><span class="line">        Collections.shuffle(questionBank.answerQuestionList);</span><br><span class="line">        <span class="comment">// 答案乱序</span></span><br><span class="line">        ArrayList&lt;ChoiceQuestion&gt; choiceQuestionList = questionBank.choiceQuestionList;</span><br><span class="line">        <span class="keyword">for</span> (ChoiceQuestion question : choiceQuestionList) &#123;</span><br><span class="line">            <span class="type">Topic</span> <span class="variable">random</span> <span class="operator">=</span> TopicRandomUtil.random(question.getOption(), question.getKey());</span><br><span class="line">            question.setOption(random.getOption());</span><br><span class="line">            question.setKey(random.getKey());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> questionBank;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h4><p>唯一对象</p>
-<h2 id="常见架构"><a href="#常见架构" class="headerlink" title="常见架构"></a>常见架构</h2><h3 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h3><p> MVC 架构调用流程</p>
-<img src="/2024/04/25/Algo-Learning-Record/road-map-230623-02.png" class="" title="MVC">
-
-<img src="/2024/04/25/Algo-Learning-Record/road-map-230623-03.png" class="" title="MVC_workflow">
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">项目结构</span><br><span class="line">├── docs</span><br><span class="line">│   └── mvc.drawio - 架构文档</span><br><span class="line">├── pom.xml</span><br><span class="line">├── src</span><br><span class="line">│   ├── main</span><br><span class="line">│   │   ├── java</span><br><span class="line">│   │   │   └── cn</span><br><span class="line">│   │   │       └── bugstack</span><br><span class="line">│   │   │           └── xfg</span><br><span class="line">│   │   │               └── frame</span><br><span class="line">│   │   │                   ├── Application.java</span><br><span class="line">│   │   │                   ├── common</span><br><span class="line">│   │   │                   │   ├── Constants.java</span><br><span class="line">│   │   │                   │   └── Result.java</span><br><span class="line">│   │   │                   ├── controller</span><br><span class="line">│   │   │                   │   └── UserController.java</span><br><span class="line">│   │   │                   ├── dao</span><br><span class="line">│   │   │                   │   └── IUserDao.java</span><br><span class="line">│   │   │                   ├── domain</span><br><span class="line">│   │   │                   │   ├── po</span><br><span class="line">│   │   │                   │   │   └── User.java</span><br><span class="line">│   │   │                   │   ├── req</span><br><span class="line">│   │   │                   │   │   └── UserReq.java</span><br><span class="line">│   │   │                   │   ├── res</span><br><span class="line">│   │   │                   │   │   └── UserRes.java</span><br><span class="line">│   │   │                   │   └── vo</span><br><span class="line">│   │   │                   │       └── UserInfo.java</span><br><span class="line">│   │   │                   └── service</span><br><span class="line">│   │   │                       ├── IUserService.java</span><br><span class="line">│   │   │                       └── impl</span><br><span class="line">│   │   │                           └── UserServiceImpl.java</span><br><span class="line">│   │   └── resources</span><br><span class="line">│   │       ├── application.yml</span><br><span class="line">│   │       └── mybatis</span><br><span class="line">│   │           ├── config</span><br><span class="line">│   │           │   └── mybatis-config.xml</span><br><span class="line">│   │           └── mapper</span><br><span class="line">│   │               └── User_Mapper.xml</span><br><span class="line">│   └── test</span><br><span class="line">│       └── java</span><br><span class="line">│           └── cn</span><br><span class="line">│               └── bugstack</span><br><span class="line">│                   └── xfg</span><br><span class="line">│                       └── frame</span><br><span class="line">│                           └── test</span><br><span class="line">│                               └── ApiTest.java</span><br><span class="line">└── road-map.sql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="DDD"><a href="#DDD" class="headerlink" title="DDD"></a>DDD</h3><img src="/2024/04/25/Algo-Learning-Record/roadmap-ddd-stc-11.png" class="" title="ddd">
-
-
-
-<h3 id="Diff"><a href="#Diff" class="headerlink" title="Diff"></a>Diff</h3><p>mvc</p>
-<img src="/2024/04/25/Algo-Learning-Record/ddd-easy-guide-03-02.png" class="" title="diff">
-
-<p>ddd</p>
-<img src="/2024/04/25/Algo-Learning-Record/ddd-easy-guide-03-04.png" class="" title="diff2">
-
-
-
-<img src="/2024/04/25/Algo-Learning-Record/ddd-easy-guide-03-05.png" class="" title="diff3">
-
-
-
-
-
-
-
-<h2 id="题"><a href="#题" class="headerlink" title="题"></a>题</h2><h3 id="双指针"><a href="#双指针" class="headerlink" title="双指针"></a>双指针</h3><p>「双指针」，当我们需要枚举数组中的两个元素时，如果我们发现随着第一个元素的递增，第二个元素是递减的，那么就可以使用双指针的方法，将枚举的时间复杂度从 O(N^2) 减少至 O(N)。</p>
-<p>即在一次循环中，同时存在两个移动的指针，<strong>该方法旨在减少一层循环</strong></p>
-<h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3><p>我们使用两个指针表示字符串中的某个子串（或窗口）的左右边界；</p>
-<p>在每一步的操作中，我们会将左指针向右移动一格，表示 我们开始枚举下一个字符作为起始位置，然后我们可以不断地向右移动右指针，但需要保证这两个指针对应的子串中没有重复的字符。在移动结束后，这个子串就对应着 以左指针开始的，不包含重复字符的最长子串。我们记录下这个子串的长度；</p>
-<p>在枚举结束后，我们找到的最长的子串的长度即为答案。</p>
-<p><strong>该方法旨在利用已有的信息（即已经遍历过的不加重复遍历，类似于动态规划的思想）</strong></p>
-<h3 id="线段树"><a href="#线段树" class="headerlink" title="线段树"></a>线段树</h3><p>统计数组中任意 [a, b] 的和&#x2F;最大值&#x2F;…</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">maxSubArrayIterState</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> lSum, rSum, mSum, iSum;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">maxSubArrayIterState</span><span class="params">(<span class="type">int</span> lSum, <span class="type">int</span> rSum, <span class="type">int</span> mSum, <span class="type">int</span> iSum)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.lSum = lSum;</span><br><span class="line">        <span class="built_in">this</span>.rSum = rSum;</span><br><span class="line">        <span class="built_in">this</span>.iSum = iSum;</span><br><span class="line">        <span class="built_in">this</span>.mSum = mSum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> maxSubArrayIterState <span class="title function_">maxSubArrayIter</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> l, <span class="type">int</span> r)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (l == r) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">maxSubArrayIterState</span>(a[l], a[l], a[l], a[l]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">maxSubArrayIterState</span> <span class="variable">lInterval</span> <span class="operator">=</span> maxSubArrayIter(a,l, (l + r) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    <span class="type">maxSubArrayIterState</span> <span class="variable">rInterval</span> <span class="operator">=</span> maxSubArrayIter(a, (((l + r) &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>), r);</span><br><span class="line">    <span class="type">int</span> <span class="variable">lS</span> <span class="operator">=</span> Math.max(lInterval.lSum, lInterval.iSum + rInterval.lSum);</span><br><span class="line">    <span class="type">int</span> <span class="variable">rS</span> <span class="operator">=</span> Math.max(rInterval.rSum, rInterval.iSum + lInterval.rSum);</span><br><span class="line">    <span class="type">int</span> <span class="variable">mS</span> <span class="operator">=</span> Math.max(Math.max(lInterval.mSum, rInterval.mSum), lInterval.rSum + rInterval.lSum);</span><br><span class="line">    <span class="type">int</span> <span class="variable">iS</span> <span class="operator">=</span> lInterval.iSum + rInterval.iSum;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">maxSubArrayIterState</span>(lS, rS, mS, iS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h3><h4 id="DP问题分析"><a href="#DP问题分析" class="headerlink" title="DP问题分析"></a>DP问题分析</h4><p>递归&amp;动态规划</p>
-<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
-
-<p>递归会重复进入状态，DP不会</p>
-<p>递归一个起点，多个终点；</p>
-<p>DP多个起点，一个终点；</p>
-<p>DP核心：</p>
-<p>1.确定状态和动作</p>
-<p>2.确定起点和终点</p>
-<h4 id="无权图两点间路径数"><a href="#无权图两点间路径数" class="headerlink" title="无权图两点间路径数"></a>无权图两点间<strong>路径数</strong></h4><p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果相加。</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
-<p>3.到达起点，当前递归结束，返回；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>邻接点</strong>的走法已知；</p>
-<p>2.到达<strong>次邻接点</strong>的走法为从<strong>邻接点</strong>到<strong>次邻接点</strong>的走法之和；</p>
-<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的走法之和；</p>
-<p>实例：</p>
-<img src="/2024/04/25/Algo-Learning-Record/image-20240426101614103.png" class="" title="image-20240426101614103">
-
-<p>递归</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCount</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">1</span> || n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> pathsCount(m - <span class="number">1</span>, n) + pathsCount(m , n -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>DP</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCounts</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h4 id="有权图两点间最大路径"><a href="#有权图两点间最大路径" class="headerlink" title="有权图两点间最大路径"></a>有权图两点间<strong>最大路径</strong></h4><p>递归思路：</p>
-<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果取最大。</p>
-<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
-<p>3.到达起点，当前递归结束，返回当前节点值；</p>
-<p>DP思路：</p>
-<p>1.从起点出发，到达所有<strong>邻接点</strong>的距离可知；</p>
-<p>2.到达<strong>次邻接点</strong>的最大距离为从<strong>邻接点</strong>到<strong>次邻接点</strong>的最大距离；</p>
-<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的最大距离；</p>
-<p>实例：</p>
-<img src="/2024/04/25/Algo-Learning-Record/image-20240426102031155.png" class="" title="image-20240426102031155">
-
-<p>递归</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> getMin(grid, m-<span class="number">1</span>, n-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getMin</span><span class="params">(<span class="type">int</span>[][] grid, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">minRow</span> <span class="operator">=</span> getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    <span class="type">int</span> <span class="variable">minColumn</span> <span class="operator">=</span> getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grid[i][j] + Math.min(minRow, minColumn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>DP</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m ;i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n;i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = grid[i][j] + Math.min(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>algorithm</category>
-      </categories>
-      <tags>
-        <tag>algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Database-Learning-Record</title>
     <url>/2024/08/10/Database-Learning-Record/</url>
     <content><![CDATA[<p>MySQL和Redis数据库相关学习记录</p>
@@ -312,6 +132,198 @@
       </categories>
       <tags>
         <tag>database</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Algo Learning Record</title>
+    <url>/2024/04/25/Algo-Learning-Record/</url>
+    <content><![CDATA[<p>算法相关学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="算法题目与设计模式"><a href="#算法题目与设计模式" class="headerlink" title="算法题目与设计模式"></a>算法题目与设计模式</h1><h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><p>平衡二叉树树</p>
+<ul>
+<li>根节点为黑</li>
+<li>不存在红节点相邻</li>
+<li>黑高一致</li>
+<li>叶节点为黑（NIL节点或空节点）</li>
+</ul>
+<p><strong>默认插入节点为红色</strong></p>
+<p>通过染色+旋转修复</p>
+<h2 id="B树与B-树"><a href="#B树与B-树" class="headerlink" title="B树与B+树"></a>B树与B+树</h2><p>二叉搜索树</p>
+<ul>
+<li><p>所有非叶子结点至多拥有两个儿子（Left和Right）；</p>
+</li>
+<li><p>所有结点存储一个关键字；</p>
+</li>
+<li><p>非叶子结点的左指针指向小于其关键字的子树，右指针指向大于其关键字的子树。</p>
+</li>
+</ul>
+<p>(m阶)B树</p>
+<ul>
+<li>根节点最多 M - 1个关键字，最多 M 个子节点；<strong>最少 1 个关键字，最少 2 个子节点</strong></li>
+<li>非根节点（包括叶节点）最多M - 1个关键字，最多 M 个子节点；最少 M&#x2F;2-1 个关键字，最少 M&#x2F;2 个子节点</li>
+<li>节点内关键字有序排列</li>
+<li>所有叶子结点位于同一层</li>
+</ul>
+<p>(m阶)B+树</p>
+<p>继承B树</p>
+<ul>
+<li><p>非叶子结点为索引节点，叶子节点提供信息</p>
+</li>
+<li><p><strong>叶子节点最大元素数为 m，最小为 m&#x2F;2</strong></p>
+<blockquote>
+<p>由于非叶节点不保存信息，故叶子节点可保存元素变多，重复保存非叶中的索引节点值；查找过程相当于索引左右两边是左开右闭区间</p>
+</blockquote>
+</li>
+<li><p>叶子节点新增链指针</p>
+</li>
+<li><p>所有关键字均在叶子节点出现</p>
+</li>
+</ul>
+<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><h3 id="创建者模式"><a href="#创建者模式" class="headerlink" title="创建者模式"></a>创建者模式</h3><h4 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h4><p>传入所需类型至工厂，工厂内实现类的创建</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 传入所需类型给工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StoreFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ICommodity <span class="title function_">getCommodityService</span><span class="params">(Integer commodityType)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> == commodityType) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">1</span> == commodityType) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CouponCommodityService</span>();</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">2</span> == commodityType) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">GoodsCommodityService</span>();</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">3</span> == commodityType) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CardCommodityService</span>();</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;不存在的商品服务类型&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="type">StoreFactory</span> <span class="variable">storeFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StoreFactory</span>();</span><br><span class="line"><span class="type">ICommodity</span> <span class="variable">commodityService_1</span> <span class="operator">=</span> storeFactory.getCommodityService(<span class="number">1</span>);</span><br><span class="line">commodityService_1.sendCommodity(<span class="string">&quot;10001&quot;</span>, <span class="string">&quot;EGM1023938910232121323432&quot;</span>, <span class="string">&quot;791098764902132&quot;</span>, <span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h4><p>多层工厂</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="type">CacheService</span> <span class="variable">proxy_EGM</span> <span class="operator">=</span> JDKProxy.getProxy(CacheServiceImpl.class, <span class="keyword">new</span> <span class="title class_">EGMCacheAdapter</span>());</span><br><span class="line"><span class="comment">// JDKProxy.getProxy为第一层工厂，负责创建CacheService类</span></span><br><span class="line"><span class="comment">// EGMCacheAdapter为第二层工厂，负责包装差异化方法名</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h4><p>传入所需组合的类型至建造者，建造者组合基本元素实现类的创建</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用</span></span><br><span class="line">builder.levelOne(<span class="number">132.52D</span>).getDetail()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 建造者</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">builder</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> IMenu <span class="title function_">levelOne</span><span class="params">(Double area)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DecorationPackageMenu</span>(area, <span class="string">&quot;豪华欧式&quot;</span>)</span><br><span class="line">        .appendCeiling(<span class="keyword">new</span> <span class="title class_">LevelTwoCeiling</span>())    <span class="comment">// 组合1</span></span><br><span class="line">        .appendCoat(<span class="keyword">new</span> <span class="title class_">DuluxCoat</span>())             <span class="comment">// 组合2</span></span><br><span class="line">        .appendFloor(<span class="keyword">new</span> <span class="title class_">ShengXiangFloor</span>());     <span class="comment">// 组合3</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DecorationPackageMenu</span> <span class="keyword">implements</span> <span class="title class_">IMenu</span> &#123;</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DecorationPackageMenu</span><span class="params">(Double area, String grade)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.area = <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(area);</span><br><span class="line">        <span class="built_in">this</span>.grade = grade;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模式优点：需要增加组合件时可以直接在这里添加&amp;组合</span></span><br><span class="line">    <span class="keyword">public</span> IMenu <span class="title function_">appendCeiling</span><span class="params">(Matter matter)</span> &#123;</span><br><span class="line">        list.add(matter);</span><br><span class="line">        price = price.add(area.multiply(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.2&quot;</span>)).multiply(matter.price()));</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h4><p>通过克隆创建重复对象</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="type">QuestionBankController</span> <span class="variable">questionBankController</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">QuestionBankController</span>();</span><br><span class="line">        System.out.println(questionBankController.createPaper(<span class="string">&quot;花花&quot;</span>, <span class="string">&quot;1000001921032&quot;</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuestionBankController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">QuestionBank</span> <span class="variable">questionBank</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">QuestionBank</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuestionBankController</span><span class="params">()</span> &#123;...&#125;  <span class="comment">// 向QuestionBank添加题目</span></span><br><span class="line">    </span><br><span class="line">        <span class="keyword">public</span> String <span class="title function_">createPaper</span><span class="params">(String candidate, String number)</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;</span><br><span class="line">        <span class="type">QuestionBank</span> <span class="variable">questionBankClone</span> <span class="operator">=</span> (QuestionBank) questionBank.clone();  <span class="comment">// 通过克隆得到新QuestionBank对象</span></span><br><span class="line">        questionBankClone.setCandidate(candidate);</span><br><span class="line">        questionBankClone.setNumber(number);</span><br><span class="line">        <span class="keyword">return</span> questionBankClone.toString();  <span class="comment">// 打印题目</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuestionBank</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// clone方法实现题目乱序</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;</span><br><span class="line">        <span class="type">QuestionBank</span> <span class="variable">questionBank</span> <span class="operator">=</span> (QuestionBank) <span class="built_in">super</span>.clone();</span><br><span class="line">        questionBank.choiceQuestionList = (ArrayList&lt;ChoiceQuestion&gt;) choiceQuestionList.clone();</span><br><span class="line">        questionBank.answerQuestionList = (ArrayList&lt;AnswerQuestion&gt;) answerQuestionList.clone();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 题目乱序</span></span><br><span class="line">        Collections.shuffle(questionBank.choiceQuestionList);</span><br><span class="line">        Collections.shuffle(questionBank.answerQuestionList);</span><br><span class="line">        <span class="comment">// 答案乱序</span></span><br><span class="line">        ArrayList&lt;ChoiceQuestion&gt; choiceQuestionList = questionBank.choiceQuestionList;</span><br><span class="line">        <span class="keyword">for</span> (ChoiceQuestion question : choiceQuestionList) &#123;</span><br><span class="line">            <span class="type">Topic</span> <span class="variable">random</span> <span class="operator">=</span> TopicRandomUtil.random(question.getOption(), question.getKey());</span><br><span class="line">            question.setOption(random.getOption());</span><br><span class="line">            question.setKey(random.getKey());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> questionBank;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h4><p>唯一对象</p>
+<h2 id="常见架构"><a href="#常见架构" class="headerlink" title="常见架构"></a>常见架构</h2><h3 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h3><p> MVC 架构调用流程</p>
+<img src="/2024/04/25/Algo-Learning-Record/road-map-230623-02.png" class="" title="MVC">
+
+<img src="/2024/04/25/Algo-Learning-Record/road-map-230623-03.png" class="" title="MVC_workflow">
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">项目结构</span><br><span class="line">├── docs</span><br><span class="line">│   └── mvc.drawio - 架构文档</span><br><span class="line">├── pom.xml</span><br><span class="line">├── src</span><br><span class="line">│   ├── main</span><br><span class="line">│   │   ├── java</span><br><span class="line">│   │   │   └── cn</span><br><span class="line">│   │   │       └── bugstack</span><br><span class="line">│   │   │           └── xfg</span><br><span class="line">│   │   │               └── frame</span><br><span class="line">│   │   │                   ├── Application.java</span><br><span class="line">│   │   │                   ├── common</span><br><span class="line">│   │   │                   │   ├── Constants.java</span><br><span class="line">│   │   │                   │   └── Result.java</span><br><span class="line">│   │   │                   ├── controller</span><br><span class="line">│   │   │                   │   └── UserController.java</span><br><span class="line">│   │   │                   ├── dao</span><br><span class="line">│   │   │                   │   └── IUserDao.java</span><br><span class="line">│   │   │                   ├── domain</span><br><span class="line">│   │   │                   │   ├── po</span><br><span class="line">│   │   │                   │   │   └── User.java</span><br><span class="line">│   │   │                   │   ├── req</span><br><span class="line">│   │   │                   │   │   └── UserReq.java</span><br><span class="line">│   │   │                   │   ├── res</span><br><span class="line">│   │   │                   │   │   └── UserRes.java</span><br><span class="line">│   │   │                   │   └── vo</span><br><span class="line">│   │   │                   │       └── UserInfo.java</span><br><span class="line">│   │   │                   └── service</span><br><span class="line">│   │   │                       ├── IUserService.java</span><br><span class="line">│   │   │                       └── impl</span><br><span class="line">│   │   │                           └── UserServiceImpl.java</span><br><span class="line">│   │   └── resources</span><br><span class="line">│   │       ├── application.yml</span><br><span class="line">│   │       └── mybatis</span><br><span class="line">│   │           ├── config</span><br><span class="line">│   │           │   └── mybatis-config.xml</span><br><span class="line">│   │           └── mapper</span><br><span class="line">│   │               └── User_Mapper.xml</span><br><span class="line">│   └── test</span><br><span class="line">│       └── java</span><br><span class="line">│           └── cn</span><br><span class="line">│               └── bugstack</span><br><span class="line">│                   └── xfg</span><br><span class="line">│                       └── frame</span><br><span class="line">│                           └── test</span><br><span class="line">│                               └── ApiTest.java</span><br><span class="line">└── road-map.sql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="DDD"><a href="#DDD" class="headerlink" title="DDD"></a>DDD</h3><img src="/2024/04/25/Algo-Learning-Record/roadmap-ddd-stc-11.png" class="" title="ddd">
+
+
+
+<h3 id="Diff"><a href="#Diff" class="headerlink" title="Diff"></a>Diff</h3><p>mvc</p>
+<img src="/2024/04/25/Algo-Learning-Record/ddd-easy-guide-03-02.png" class="" title="diff">
+
+<p>ddd</p>
+<img src="/2024/04/25/Algo-Learning-Record/ddd-easy-guide-03-04.png" class="" title="diff2">
+
+
+
+<img src="/2024/04/25/Algo-Learning-Record/ddd-easy-guide-03-05.png" class="" title="diff3">
+
+
+
+
+
+
+
+<h2 id="题"><a href="#题" class="headerlink" title="题"></a>题</h2><h3 id="双指针"><a href="#双指针" class="headerlink" title="双指针"></a>双指针</h3><p>「双指针」，当我们需要枚举数组中的两个元素时，如果我们发现随着第一个元素的递增，第二个元素是递减的，那么就可以使用双指针的方法，将枚举的时间复杂度从 O(N^2) 减少至 O(N)。</p>
+<p>即在一次循环中，同时存在两个移动的指针，<strong>该方法旨在减少一层循环</strong></p>
+<h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3><p>我们使用两个指针表示字符串中的某个子串（或窗口）的左右边界；</p>
+<p>在每一步的操作中，我们会将左指针向右移动一格，表示 我们开始枚举下一个字符作为起始位置，然后我们可以不断地向右移动右指针，但需要保证这两个指针对应的子串中没有重复的字符。在移动结束后，这个子串就对应着 以左指针开始的，不包含重复字符的最长子串。我们记录下这个子串的长度；</p>
+<p>在枚举结束后，我们找到的最长的子串的长度即为答案。</p>
+<p><strong>该方法旨在利用已有的信息（即已经遍历过的不加重复遍历，类似于动态规划的思想）</strong></p>
+<h3 id="线段树"><a href="#线段树" class="headerlink" title="线段树"></a>线段树</h3><p>统计数组中任意 [a, b] 的和&#x2F;最大值&#x2F;…</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">maxSubArrayIterState</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> lSum, rSum, mSum, iSum;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">maxSubArrayIterState</span><span class="params">(<span class="type">int</span> lSum, <span class="type">int</span> rSum, <span class="type">int</span> mSum, <span class="type">int</span> iSum)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.lSum = lSum;</span><br><span class="line">        <span class="built_in">this</span>.rSum = rSum;</span><br><span class="line">        <span class="built_in">this</span>.iSum = iSum;</span><br><span class="line">        <span class="built_in">this</span>.mSum = mSum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> maxSubArrayIterState <span class="title function_">maxSubArrayIter</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> l, <span class="type">int</span> r)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (l == r) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">maxSubArrayIterState</span>(a[l], a[l], a[l], a[l]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">maxSubArrayIterState</span> <span class="variable">lInterval</span> <span class="operator">=</span> maxSubArrayIter(a,l, (l + r) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    <span class="type">maxSubArrayIterState</span> <span class="variable">rInterval</span> <span class="operator">=</span> maxSubArrayIter(a, (((l + r) &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>), r);</span><br><span class="line">    <span class="type">int</span> <span class="variable">lS</span> <span class="operator">=</span> Math.max(lInterval.lSum, lInterval.iSum + rInterval.lSum);</span><br><span class="line">    <span class="type">int</span> <span class="variable">rS</span> <span class="operator">=</span> Math.max(rInterval.rSum, rInterval.iSum + lInterval.rSum);</span><br><span class="line">    <span class="type">int</span> <span class="variable">mS</span> <span class="operator">=</span> Math.max(Math.max(lInterval.mSum, rInterval.mSum), lInterval.rSum + rInterval.lSum);</span><br><span class="line">    <span class="type">int</span> <span class="variable">iS</span> <span class="operator">=</span> lInterval.iSum + rInterval.iSum;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">maxSubArrayIterState</span>(lS, rS, mS, iS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h3><p><del>动态规划</del></p>
+<p>贪心剪枝的全状态值记录</p>
+<h4 id="DP问题分析"><a href="#DP问题分析" class="headerlink" title="DP问题分析"></a>DP问题分析</h4><p>递归&amp;动态规划</p>
+<img src="/2024/04/25/Algo-Learning-Record/IMG_0091.PNG" class="" title="IMG_0091(20240425-192828)">
+
+
+
+<p><strong>DP核心：</strong></p>
+<p>1.状态</p>
+<blockquote>
+<p>一般来说，某一天为状态维度1，某一天的某一种状态为状态维度2</p>
+</blockquote>
+<p>2.起点和终点</p>
+<blockquote>
+<p>一般终点都是确定的，偶尔起点也会是确定的</p>
+</blockquote>
+<p>3.如何转移+剪枝</p>
+<blockquote>
+<p>越复杂的问题转移越复杂，例如：从<code>状态[x][y][z]</code>转移到<code>状态[x+1][y][z]</code></p>
+<p>一般采用贪心剪枝，移除不需要的状态链</p>
+</blockquote>
+<h4 id="无权图两点间路径数"><a href="#无权图两点间路径数" class="headerlink" title="无权图两点间路径数"></a>无权图两点间<strong>路径数</strong></h4><p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果相加。</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
+<p>3.到达起点，当前递归结束，返回；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>邻接点</strong>的走法已知；</p>
+<p>2.到达<strong>次邻接点</strong>的走法为从<strong>邻接点</strong>到<strong>次邻接点</strong>的走法之和；</p>
+<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的走法之和；</p>
+<p>实例：</p>
+<img src="/2024/04/25/Algo-Learning-Record/image-20240426101614103.png" class="" title="image-20240426101614103">
+
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCount</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">1</span> || n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> pathsCount(m - <span class="number">1</span>, n) + pathsCount(m , n -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>DP</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">pathsCounts</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == <span class="number">0</span> || j == <span class="number">0</span>) &#123;</span><br><span class="line">                dp[i][j] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="有权图两点间最大路径"><a href="#有权图两点间最大路径" class="headerlink" title="有权图两点间最大路径"></a>有权图两点间<strong>最大路径</strong></h4><p>递归思路：</p>
+<p>1.从终点出发，存在多个选择，每个选择为分支，<strong>传入递归函数</strong>并进入；取得递归结果取最大。</p>
+<p>2.对于每一个中间态，存在多个选择，<strong>传入递归函数</strong>并进入；</p>
+<p>3.到达起点，当前递归结束，返回当前节点值；</p>
+<p>DP思路：</p>
+<p>1.从起点出发，到达所有<strong>邻接点</strong>的距离可知；</p>
+<p>2.到达<strong>次邻接点</strong>的最大距离为从<strong>邻接点</strong>到<strong>次邻接点</strong>的最大距离；</p>
+<p>3.到达终点的走法为从<strong>终点邻接点</strong>到终点的最大距离；</p>
+<p>实例：</p>
+<img src="/2024/04/25/Algo-Learning-Record/image-20240426102031155.png" class="" title="image-20240426102031155">
+
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//从终点前进</span></span><br><span class="line">    <span class="keyword">return</span> getMin(grid, m-<span class="number">1</span>, n-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getMin</span><span class="params">(<span class="type">int</span>[][] grid, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">    <span class="comment">//到达起点</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> grid[i][j] + getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">minRow</span> <span class="operator">=</span> getMin(grid, i-<span class="number">1</span>, j);</span><br><span class="line">    <span class="type">int</span> <span class="variable">minColumn</span> <span class="operator">=</span> getMin(grid, i, j-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grid[i][j] + Math.min(minRow, minColumn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>DP</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minPathSum</span><span class="params">(<span class="type">int</span>[][] grid)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> grid.length;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="type">int</span>[][] dp = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化起点</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m ;i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n;i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从起点前进</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = grid[i][j] + Math.min(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//到达终点</span></span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker/K8s</title>
+    <url>/2024/08/16/Docker-K8s/</url>
+    <content><![CDATA[<p>容器相关学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="Container-related-Learning-Records"><a href="#Container-related-Learning-Records" class="headerlink" title="Container-related Learning Records"></a>Container-related Learning Records</h1><p>待完成</p>
+]]></content>
+      <tags>
+        <tag>docker</tag>
       </tags>
   </entry>
   <entry>
