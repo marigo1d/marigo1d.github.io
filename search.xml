@@ -1,140 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Database-Learning-Record</title>
-    <url>/2024/08/10/Database-Learning-Record/</url>
-    <content><![CDATA[<p>MySQL和Redis数据库相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database Learning Record"></a>Database Learning Record</h1><h2 id="property"><a href="#property" class="headerlink" title="property"></a>property</h2><h3 id="数据库事务的-ACID-特性"><a href="#数据库事务的-ACID-特性" class="headerlink" title="数据库事务的 ACID 特性"></a>数据库事务的 ACID 特性</h3><p>ACID 是数据库事务的四个重要特性，它们保证了事务的可靠性和一致性。</p>
-<p><strong>1. 原子性 (Atomicity)</strong></p>
-<ul>
-<li><strong>定义:</strong> 一个事务的所有操作要么全部成功执行，要么全部不执行，不会出现部分成功部分失败的情况。</li>
-<li><strong>作用:</strong> 保证数据库状态的一致性，即使事务执行过程中发生错误，数据库也能回滚到事务开始前的状态，就像什么都没发生过一样。</li>
-<li><strong>举例:</strong> 转账操作需要从账户 A 扣款并向账户 B 加款，这两个操作必须作为一个整体执行，要么都成功，要么都失败。如果只扣款成功而加款失败，就会导致数据不一致。</li>
-</ul>
-<p><strong>2. 一致性 (Consistency)</strong></p>
-<ul>
-<li><strong>定义:</strong> 事务执行前后，数据库必须保持一致的状态，满足所有预定义的约束和规则。</li>
-<li><strong>作用:</strong> 保证数据库数据的完整性和正确性，防止数据出现逻辑上的错误。</li>
-<li><strong>举例:</strong> 银行账户的余额不能小于零。如果一个事务导致账户余额变为负数，则该事务违反了一致性约束，数据库会回滚事务，保持数据一致性。</li>
-</ul>
-<p><strong>3. 隔离性 (Isolation)</strong></p>
-<ul>
-<li><strong>定义:</strong> 多个事务并发执行时，彼此之间相互隔离，互不干扰，就像每个事务都是独立执行的一样。</li>
-<li><strong>作用:</strong> 防止并发事务之间的数据冲突，保证每个事务都能看到一致的数据。</li>
-<li><strong>举例:</strong> 用户 A 和用户 B 同时读取账户 C 的余额，然后分别进行转账操作。隔离性保证了用户 A 和用户 B 的操作不会相互影响，每个用户都能看到正确的账户余额。</li>
-</ul>
-<p><strong>4. 持久性 (Durability)</strong></p>
-<ul>
-<li><strong>定义:</strong> 一旦事务提交成功，其对数据库的修改将永久保存，即使数据库发生故障也不会丢失。</li>
-<li><strong>作用:</strong> 保证数据的可靠性和安全性，即使系统崩溃，数据也能恢复到最新状态。</li>
-<li><strong>举例:</strong> 用户 A 成功转账后，即使数据库突然断电，转账操作的结果也不会丢失，数据库重启后，账户 A 和账户 B 的余额仍然会反映转账后的状态。</li>
-</ul>
-<h3 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h3><p><strong>1. Read Uncommitted (读未提交)</strong></p>
-<ul>
-<li><strong>特点:</strong> 事务可以读取到其他未提交事务的数据。</li>
-<li><strong>问题:</strong><ul>
-<li><strong>脏读 (Dirty Read):</strong> 事务 A 读取了事务 B 未提交的数据，如果事务 B 回滚，事务 A 读取的数据就是无效的。</li>
-</ul>
-</li>
-<li><strong>应用场景:</strong> 几乎没有实际应用场景，因为脏读会导致数据严重不一致。</li>
-</ul>
-<p><strong>2. Read Committed (读已提交)</strong></p>
-<ul>
-<li><strong>特点:</strong> 事务只能读取到其他已提交事务的数据。</li>
-<li><strong>问题:</strong><ul>
-<li><strong>不可重复读 (Non-repeatable Read):</strong> 同一个事务内多次读取同一数据，读取到的结果可能不同，因为其他事务可能已经修改并提交了该数据。</li>
-</ul>
-</li>
-<li><strong>应用场景:</strong> 大多数数据库默认的隔离级别，可以避免脏读，但存在不可重复读的问题。</li>
-</ul>
-<p><strong>3. Repeatable Read (可重复读)</strong></p>
-<ul>
-<li><strong>特点:</strong> 同一个事务内多次读取同一数据，读取到的结果相同，即使其他事务已经修改并提交了该数据。</li>
-<li><strong>问题:</strong><ul>
-<li><strong>幻读 (Phantom Read):</strong> 事务 A 读取某个范围的数据，事务 B 在该范围内插入或删除了数据，导致事务 A 再次读取时，发现结果集发生了变化。</li>
-</ul>
-</li>
-<li><strong>应用场景:</strong> MySQL InnoDB 引擎默认的隔离级别，可以避免脏读和不可重复读，但存在幻读的问题。</li>
-</ul>
-<p><strong>4. Serializable (串行化)</strong></p>
-<ul>
-<li><strong>特点:</strong> 所有事务串行执行，相当于只有一个事务在执行，避免了所有并发问题。</li>
-<li><strong>问题:</strong> 并发性能极低，因为所有事务都需要排队执行。</li>
-<li><strong>应用场景:</strong> 对数据一致性要求极高的场景，例如金融交易。</li>
-</ul>
-<h2 id="MySQL-Struc"><a href="#MySQL-Struc" class="headerlink" title="MySQL Struc"></a>MySQL Struc</h2><img src="/2024/08/10/Database-Learning-Record/image-20240919111718667.png" class="" title="image-20240919111718667">
-
-
-
-<p><strong>基本信息</strong></p>
-<p>页 作为 B树的节点</p>
-<p>B树的节点，每个节点均包含数条数据</p>
-<p>页中 行的主键作为B树节点的key</p>
-<img src="/2024/08/10/Database-Learning-Record/image-20240919155834155.png" class="" title="image-20240919155834155">
-
-<p>B+树</p>
-<p>将原B树的 <strong>非叶子节点的数据行</strong> 存放在 <strong>叶子节点</strong>，原 <strong>非叶子节点的数据行</strong> 数据区域变更为保存目标页地址 -&gt; 稳定查询次数</p>
-<p><strong>非叶子节点</strong>由于不再保存真实数据，可保存条目增加 -&gt; 树高度降低</p>
-<p>叶子节点通过指针连接 -&gt; 范围查询</p>
-<img src="/2024/08/10/Database-Learning-Record/image-20240919160103358.png" class="" title="image-20240919160103358">
-
-
-
-<p><strong>Buffer Pool</strong></p>
-<p>存储页</p>
-<p><strong>自适应哈希索引 (Adaptive Hash Index, AHI)</strong> </p>
-<ol>
-<li><strong>监控热点页:</strong> InnoDB 引擎会监控索引页的访问频率。当某个索引页被频繁访问，达到预设阈值后，会被认为是热点页。</li>
-<li><strong>创建哈希索引:</strong> InnoDB 引擎会自动为热点页创建哈希索引，并将哈希索引存储在内存的哈希表中。</li>
-<li><strong>加速查询:</strong> 当执行查询时，InnoDB 引擎会先查找哈希索引。如果找到匹配项，可以直接定位到对应的索引页，避免了 B-tree 索引的多次查找，从而提升查询效率。</li>
-</ol>
-<p><strong>Undo Buffer &amp;&amp; Undo Tablespace</strong></p>
-<p>Undo Log 记录了事务中每一个数据修改操作的反向操作，例如：</p>
-<ul>
-<li>插入操作的 Undo Log 记录了删除相应记录的操作。</li>
-<li>更新操作的 Undo Log 记录了将数据恢复到旧值的操作。</li>
-<li>删除操作的 Undo Log 记录了插入被删除记录的操作。</li>
-</ul>
-<p><strong>Undo Log</strong> 主要用于事务回滚和实现 MVCC</p>
-<blockquote>
-<p><strong>读取一致性 (MVCC)：</strong> 即使事务 A 已经提交，其他未提交的事务或使用了快照读的事务仍然可能需要访问事务 A 修改之前的数据版本。Undo Log 中保留的事务 A 的记录可以用来构建这些旧版本的数据，保证读取一致性。</p>
-</blockquote>
-<p>Undo Log 存储在 Undo Tablespace 中，可以配置为独立的表空间或 InnoDB 系统表空间的一部分</p>
-<p><strong>Redo Log Buffer &amp;&amp;  Redo Log Files</strong></p>
-<p>Redo Log 记录了数据库的物理修改，例如：</p>
-<ul>
-<li>在哪个数据页修改了哪个字节，修改后的值是什么。</li>
-</ul>
-<p>当事务修改数据时，先将修改记录写入 Redo Log Buffer, 在事务提交时，将 Redo Log Buffer 中的内容刷新到 Redo Log Files, 数据库崩溃恢复&#x2F;内存掉电数据清空时，会读取 Redo Log Files，重新执行其中的修改操作，将数据库恢复到崩溃前的最新状态。</p>
-<p><strong>Redo Log 的作用是保证已提交事务的持久性，而不是未提交事务的恢复。</strong></p>
-<p>Redo Log 存储在 Redo Log Files 中，通常是两个或多个循环使用的文件。</p>
-<h2 id="java-JDBC"><a href="#java-JDBC" class="headerlink" title="java JDBC"></a>java JDBC</h2><p>常见用法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConnectionExample</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SQLException &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// JDBC连接的URL, 不同数据库有不同的格式:</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_URL</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>;</span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_USER</span> <span class="operator">=</span> <span class="string">&quot;root&quot;</span>;</span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_PASSWORD</span> <span class="operator">=</span> <span class="string">&quot;password&quot;</span>;</span><br><span class="line">		<span class="comment">// 获取连接:</span></span><br><span class="line">		<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 1. createStatement(): 创建一个Statement对象，用于向数据库发送SQL语句。</span></span><br><span class="line">            <span class="type">Statement</span> <span class="variable">stmt</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line">            <span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> stmt.executeQuery(<span class="string">&quot;SELECT * FROM my_table&quot;</span>);</span><br><span class="line">            <span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">                <span class="comment">// Process results</span></span><br><span class="line">            &#125;</span><br><span class="line">            rs.close();</span><br><span class="line">            stmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 2. prepareStatement(): 创建一个PreparedStatement对象，用于发送参数化的SQL语句。这有助于防止SQL注入漏洞。</span></span><br><span class="line">            <span class="type">PreparedStatement</span> <span class="variable">pstmt</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;INSERT INTO my_table (column1, column2) VALUES (?, ?)&quot;</span>);</span><br><span class="line">            pstmt.setString(<span class="number">1</span>, <span class="string">&quot;value1&quot;</span>);</span><br><span class="line">            pstmt.setInt(<span class="number">2</span>, <span class="number">123</span>);</span><br><span class="line">            <span class="type">int</span> <span class="variable">rowsAffected</span> <span class="operator">=</span> pstmt.executeUpdate();</span><br><span class="line">            pstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 3. prepareCall(): 创建一个CallableStatement对象，用于调用存储过程。</span></span><br><span class="line">            <span class="type">CallableStatement</span> <span class="variable">cstmt</span> <span class="operator">=</span> conn.prepareCall(<span class="string">&quot;&#123;call my_procedure(?, ?)&#125;&quot;</span>);</span><br><span class="line">            cstmt.setInt(<span class="number">1</span>, <span class="number">456</span>);</span><br><span class="line">            cstmt.registerOutParameter(<span class="number">2</span>, Types.VARCHAR); <span class="comment">// Register output parameter</span></span><br><span class="line">            cstmt.execute();</span><br><span class="line">            <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> cstmt.getString(<span class="number">2</span>); <span class="comment">// Retrieve output parameter value</span></span><br><span class="line">            cstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 4. setAutoCommit(boolean): 控制连接是否处于自动提交模式。</span></span><br><span class="line">            conn.setAutoCommit(<span class="literal">false</span>); <span class="comment">// 禁用自动提交以启动事务</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 5. commit(): 提交当前事务。</span></span><br><span class="line">            conn.commit();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 6. rollback(): 回滚当前事务。</span></span><br><span class="line">            <span class="comment">//  conn.rollback();  // In case of an error</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 7. close(): Closes the connection.  VERY IMPORTANT!</span></span><br><span class="line">            conn.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 8. isClosed(): Checks if the connection is closed.</span></span><br><span class="line">            <span class="type">boolean</span> <span class="variable">isClosed</span> <span class="operator">=</span> conn.isClosed();</span><br><span class="line">            System.out.println(<span class="string">&quot;Connection closed: &quot;</span> + isClosed);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 9. getMetaData(): 返回一个DatabaseMetaData对象，其中包含有关数据库的信息。</span></span><br><span class="line">            <span class="type">DatabaseMetaData</span> <span class="variable">metaData</span> <span class="operator">=</span> conn.getMetaData();</span><br><span class="line">            <span class="type">String</span> <span class="variable">databaseProductName</span> <span class="operator">=</span> metaData.getDatabaseProductName();</span><br><span class="line">            System.out.println(<span class="string">&quot;Database Product: &quot;</span> + databaseProductName);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 10. setTransactionIsolation(int level) : 设置事务隔离级别</span></span><br><span class="line">            <span class="comment">// Example: conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">            System.err.println(<span class="string">&quot;SQL Exception: &quot;</span> + e.getMessage());</span><br><span class="line">            <span class="keyword">if</span> (conn != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    conn.rollback(); <span class="comment">// Rollback on error if auto-commit is off</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (SQLException ex) &#123;</span><br><span class="line">                    System.err.println(<span class="string">&quot;Rollback failed: &quot;</span> + ex.getMessage());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="JDBC事务"><a href="#JDBC事务" class="headerlink" title="JDBC事务"></a>JDBC事务</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> openConnection();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 关闭自动提交:</span></span><br><span class="line">    conn.setAutoCommit(<span class="literal">false</span>);</span><br><span class="line">    <span class="comment">// 执行多条SQL语句:</span></span><br><span class="line">    insert(); update(); delete();</span><br><span class="line">    <span class="comment">// 提交事务:</span></span><br><span class="line">    conn.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">    <span class="comment">// 回滚事务:</span></span><br><span class="line">    conn.rollback();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    conn.setAutoCommit(<span class="literal">true</span>);</span><br><span class="line">    conn.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中，开启事务的关键代码是<code>conn.setAutoCommit(false)</code>，表示关闭自动提交。提交事务的代码在执行完指定的若干条SQL语句后，调用<code>conn.commit()</code>。要注意事务不是总能成功，如果事务提交失败，会抛出SQL异常（也可能在执行SQL语句的时候就抛出了），此时我们必须捕获并调用<code>conn.rollback()</code>回滚事务。最后，在<code>finally</code>中通过<code>conn.setAutoCommit(true)</code>把<code>Connection</code>对象的状态恢复到初始值。</p>
-<p>实际上，默认情况下，我们获取到<code>Connection</code>连接后，总是处于“自动提交”模式，也就是每执行一条SQL都是作为事务自动执行的，这也是为什么前面几节我们的更新操作总能成功的原因：因为默认有这种“隐式事务”。只要关闭了<code>Connection</code>的<code>autoCommit</code>，那么就可以在一个事务中执行多条语句，事务以<code>commit()</code>方法结束。</p>
-<h3 id="JDBC批处理"><a href="#JDBC批处理" class="headerlink" title="JDBC批处理"></a>JDBC批处理</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> (<span class="type">PreparedStatement</span> <span class="variable">ps</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;INSERT INTO students (name, gender, grade, score) VALUES (?, ?, ?, ?)&quot;</span>)) &#123;</span><br><span class="line">    <span class="comment">// 对同一个PreparedStatement反复设置参数并调用addBatch():</span></span><br><span class="line">    <span class="keyword">for</span> (Student s : students) &#123;</span><br><span class="line">        ps.setString(<span class="number">1</span>, s.name);</span><br><span class="line">        ps.setBoolean(<span class="number">2</span>, s.gender);</span><br><span class="line">        ps.setInt(<span class="number">3</span>, s.grade);</span><br><span class="line">        ps.setInt(<span class="number">4</span>, s.score);</span><br><span class="line">        ps.addBatch(); <span class="comment">// 添加到batch</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 执行batch:</span></span><br><span class="line">    <span class="type">int</span>[] ns = ps.executeBatch();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n : ns) &#123;</span><br><span class="line">        System.out.println(n + <span class="string">&quot; inserted.&quot;</span>); <span class="comment">// batch中每个SQL执行的结果数量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="JDBC连接池"><a href="#JDBC连接池" class="headerlink" title="JDBC连接池"></a>JDBC连接池</h3><p>创建 <code>DataSource</code> 连接池：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">HikariConfig</span> <span class="variable">config</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HikariConfig</span>();</span><br><span class="line">config.setJdbcUrl(<span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>);</span><br><span class="line">config.setUsername(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">config.setPassword(<span class="string">&quot;password&quot;</span>);</span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;connectionTimeout&quot;</span>, <span class="string">&quot;1000&quot;</span>); <span class="comment">// 连接超时：1秒</span></span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;idleTimeout&quot;</span>, <span class="string">&quot;60000&quot;</span>); <span class="comment">// 空闲超时：60秒</span></span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;maximumPoolSize&quot;</span>, <span class="string">&quot;10&quot;</span>); <span class="comment">// 最大连接数：10</span></span><br><span class="line"><span class="type">DataSource</span> <span class="variable">ds</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HikariDataSource</span>(config);</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> ds.getConnection()) &#123; <span class="comment">// 在此获取连接</span></span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="comment">// 在此“关闭”连接</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>database</category>
-      </categories>
-      <tags>
-        <tag>database</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Algo Learning Record</title>
     <url>/2024/04/25/Algo-Learning-Record/</url>
     <content><![CDATA[<p>算法相关学习记录</p>
@@ -142,6 +8,119 @@
 
 
 
+<h1 id="Java容器"><a href="#Java容器" class="headerlink" title="Java容器"></a>Java容器</h1><h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayDeque;</span><br><span class="line"></span><br><span class="line">ArrayDeque&lt;Integer&gt; s = <span class="keyword">new</span> <span class="title class_">ArrayDeque</span>&lt;&gt;();</span><br><span class="line">s.push(<span class="number">1</span>);  <span class="comment">// 压栈</span></span><br><span class="line">q.pop();  <span class="comment">// 出栈操作</span></span><br><span class="line">q.peek();  <span class="comment">// 获取栈顶元素</span></span><br><span class="line">queue.isEmpty();</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="最小堆"><a href="#最小堆" class="headerlink" title="最小堆"></a>最小堆</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.PriorityQueue</span><br><span class="line"></span><br><span class="line">PriorityQueue&lt;Integer&gt; minHeap = <span class="keyword">new</span> <span class="title class_">PriorityQueue</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">minHeap.add(<span class="number">5</span>);</span><br><span class="line">minHeap.add(<span class="number">1</span>);</span><br><span class="line">minHeap.add(<span class="number">3</span>);</span><br><span class="line">minHeap.add(<span class="number">7</span>);</span><br><span class="line">minHeap.add(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;最小堆元素 (使用迭代器遍历，顺序不保证): &quot;</span> + minHeap);</span><br><span class="line"></span><br><span class="line">System.out.print(<span class="string">&quot;按顺序取出最小元素: &quot;</span>);</span><br><span class="line"><span class="keyword">while</span> (!minHeap.isEmpty()) &#123;</span><br><span class="line">	System.out.print(minHeap.poll() + <span class="string">&quot; &quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h2><p>Queue</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"><span class="keyword">import</span> java.util.Queue;</span><br><span class="line"></span><br><span class="line">Queue&lt;Integer&gt; q = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">q.add(<span class="number">1</span>);  <span class="comment">// 无返回值，队列满抛出异常</span></span><br><span class="line">q.offer(<span class="number">1</span>);  <span class="comment">// 如果插入成功，返回 true；如果队列已满，返回 false，而不会抛出异常。</span></span><br><span class="line"><span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> dq.peek();  <span class="comment">// 查看队头元素</span></span><br><span class="line">first = q.poll();  <span class="comment">// 出队操作</span></span><br><span class="line">queue.isEmpty();</span><br></pre></td></tr></table></figure>
+
+
+
+<p>Deque</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.LinkedList</span><br><span class="line"><span class="keyword">import</span> java.util.Deque    </span><br><span class="line"></span><br><span class="line">Deque&lt;Integer&gt; dq = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 队尾操作</span></span><br><span class="line">dq.add(<span class="number">1</span>);</span><br><span class="line">dq.offer(<span class="number">1</span>);</span><br><span class="line"><span class="type">int</span> <span class="variable">last</span> <span class="operator">=</span> deque.peekLast();</span><br><span class="line">last = dq.removeLast();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 队首操作</span></span><br><span class="line">dq.push(<span class="number">1</span>);</span><br><span class="line">dq.offerFirst(<span class="number">2</span>);</span><br><span class="line"><span class="type">int</span> <span class="variable">first</span> <span class="operator">=</span> dq.peek();</span><br><span class="line">first = dq.poll();</span><br><span class="line">first = dq.removeFirst();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Set</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet</span><br><span class="line"><span class="keyword">import</span> java.util.LinkedHashSet</span><br><span class="line"><span class="keyword">import</span> java.util.TreeSet</span><br><span class="line"></span><br><span class="line">Set&lt;String&gt; hashSet = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">hashSet.add(<span class="string">&quot;apple&quot;</span>);</span><br><span class="line">hashSet.add(<span class="string">&quot;banana&quot;</span>);</span><br><span class="line">hashSet.add(<span class="string">&quot;apple&quot;</span>); <span class="comment">// 重复元素会被忽略</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">containsApple</span> <span class="operator">=</span> hashSet.contains(<span class="string">&quot;apple&quot;</span>); <span class="comment">// 快速查找</span></span><br><span class="line"></span><br><span class="line">Set&lt;String&gt; linkedHashSet = <span class="keyword">new</span> <span class="title class_">LinkedHashSet</span>&lt;&gt;();</span><br><span class="line">linkedHashSet.add(<span class="string">&quot;apple&quot;</span>);</span><br><span class="line">linkedHashSet.add(<span class="string">&quot;banana&quot;</span>);</span><br><span class="line">linkedHashSet.forEach(System.out::println);</span><br><span class="line"><span class="comment">// System.out::println为方法引用，引用System.out对象的println方法，编译器将其转换为相应的函数式接口实例，得到一个Consumer&lt;String&gt; 的实例</span></span><br><span class="line"></span><br><span class="line">Set&lt;String&gt; treeSet = <span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;&gt;();</span><br><span class="line">treeSet.add(<span class="string">&quot;banana&quot;</span>);</span><br><span class="line">treeSet.add(<span class="string">&quot;apple&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (String fruit : treeSet)</span><br><span class="line">&#123;</span><br><span class="line">    System.out.println(fruit);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p>Map</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line">Map&lt;String, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">map.put(<span class="string">&quot;Alice&quot;</span>, <span class="number">90</span>);  <span class="comment">// 添加键值对</span></span><br><span class="line">map.get(<span class="string">&quot;Alice&quot;</span>);  <span class="comment">// 根据键获取值</span></span><br><span class="line"><span class="comment">// 遍历键值对</span></span><br><span class="line"><span class="keyword">for</span> (Map.Entry&lt;String, Integer&gt; entry : map.entrySet()) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;姓名: &quot;</span> + entry.getKey() + <span class="string">&quot;, 分数: &quot;</span> + entry.getValue());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 检查是否包含某键或某值</span></span><br><span class="line">System.out.println(<span class="string">&quot;是否包含Bob: &quot;</span> + map.containsKey(<span class="string">&quot;Bob&quot;</span>));</span><br><span class="line">System.out.println(<span class="string">&quot;是否包含分数85: &quot;</span> + map.containsValue(<span class="number">85</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除键值对</span></span><br><span class="line">map.remove(<span class="string">&quot;Charlie&quot;</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;删除后HashMap内容: &quot;</span> + map);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 超实用！！！如果key不存在，设置默认值为0；key存在，则value+1</span></span><br><span class="line">map.compute(key, (k, v) -&gt; (v == <span class="literal">null</span>) ? <span class="number">1</span> : v + <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>TreeMap</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.TreeMap</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用自然排序（对于 String 键来说是字母顺序）</span></span><br><span class="line">TreeMap&lt;String, Integer&gt; treeMap1 = <span class="keyword">new</span> <span class="title class_">TreeMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">treeMap1.put(<span class="string">&quot;Apple&quot;</span>, <span class="number">1</span>);</span><br><span class="line">treeMap1.put(<span class="string">&quot;Banana&quot;</span>, <span class="number">2</span>);</span><br><span class="line">treeMap1.put(<span class="string">&quot;Orange&quot;</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span> treeMap1.get(<span class="string">&quot;Banana&quot;</span>); <span class="comment">// 获取键为 &quot;Banana&quot; 的值</span></span><br><span class="line">System.out.println(value); <span class="comment">// 输出 2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// getOrDefault() 方法可以在键不存在时返回默认值</span></span><br><span class="line"><span class="type">int</span> <span class="variable">defaultValue</span> <span class="operator">=</span> treeMap1.getOrDefault(<span class="string">&quot;Grape&quot;</span>, <span class="number">0</span>); <span class="comment">// &quot;Grape&quot; 不存在，返回 0</span></span><br><span class="line">System.out.println(defaultValue); <span class="comment">// 输出 0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 forEach 遍历</span></span><br><span class="line">treeMap1.forEach((key, value) -&gt; System.out.println(<span class="string">&quot;Key: &quot;</span> + key + <span class="string">&quot;, Value: &quot;</span> + value));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 entrySet() 遍历</span></span><br><span class="line"><span class="keyword">for</span> (Map.Entry&lt;String, Integer&gt; entry : treeMap1.entrySet()) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Key: &quot;</span> + entry.getKey() + <span class="string">&quot;, Value: &quot;</span> + entry.getValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 keySet() 遍历键，然后获取值</span></span><br><span class="line"><span class="keyword">for</span> (String key : treeMap1.keySet()) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Key: &quot;</span> + key + <span class="string">&quot;, Value: &quot;</span> + treeMap1.get(key));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">TreeMap&lt;String, Integer&gt; treeMap2 = <span class="keyword">new</span> <span class="title class_">TreeMap</span>&lt;&gt;((s1, s2) -&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">value1</span> <span class="operator">=</span> treeMap1.getOrDefault(s1, <span class="number">0</span>); <span class="comment">// 处理键不存在的情况</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">value2</span> <span class="operator">=</span> treeMap1.getOrDefault(s2, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> value2 - value1;</span><br><span class="line">    <span class="comment">// 返回值含义</span></span><br><span class="line">    <span class="comment">// 负数: 表示 s1 小于 s2 (按值逆序排列，值大的排在前面)。</span></span><br><span class="line">	<span class="comment">// 零: 表示 s1 等于 s2。</span></span><br><span class="line">	<span class="comment">// 正数: 表示 s1 大于 s2 (按值逆序排列，值小的排在后面)。</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">treeMap2.putAll(treeMap1); <span class="comment">// 将 treeMap1 的元素复制到 treeMap2</span></span><br><span class="line"></span><br><span class="line">treeMap2.forEach((key, value) -&gt; System.out.println(<span class="string">&quot;Key: &quot;</span> + key + <span class="string">&quot;, Value: &quot;</span> + value));</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="常用排序"><a href="#常用排序" class="headerlink" title="常用排序"></a>常用排序</h1><h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序*"></a>冒泡排序*</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BubbleSort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">bubbleSort</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> arr.length;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n - i - <span class="number">1</span>; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (arr[j] &gt; arr[j + <span class="number">1</span>]) &#123;  <span class="comment">// 大的向上冒泡</span></span><br><span class="line">                    <span class="comment">// 比较相邻的两个元素并交换它们的位置</span></span><br><span class="line">                    <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> arr[j];</span><br><span class="line">                    arr[j] = arr[j + <span class="number">1</span>];</span><br><span class="line">                    arr[j + <span class="number">1</span>] = temp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SelectionSort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">selectionSort</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> arr.length;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">minIndex</span> <span class="operator">=</span> i;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i + <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (arr[j] &lt; arr[minIndex]) &#123;</span><br><span class="line">                    minIndex = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 每次从未排序部分中找到最小值，并将其放到已排序部分的末尾。</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> arr[minIndex];</span><br><span class="line">            arr[minIndex] = arr[i];</span><br><span class="line">            arr[i] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序*"></a>插入排序*</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InsertionSort</span> &#123;</span><br><span class="line">    <span class="comment">// 每次从未排序部分取一个元素，插入到已排序部分的合适位置。</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">insertionSort</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> arr.length;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">key</span> <span class="operator">=</span> arr[i];  <span class="comment">// 相当于取出了在位置i的元素</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i - <span class="number">1</span>;  <span class="comment">// 已排序部分的末尾</span></span><br><span class="line">            <span class="keyword">while</span> (j &gt;= <span class="number">0</span> &amp;&amp; arr[j] &gt; key) &#123;</span><br><span class="line">                arr[j + <span class="number">1</span>] = arr[j]; <span class="comment">// 向右移动已排序部分</span></span><br><span class="line">                j--;</span><br><span class="line">            &#125;</span><br><span class="line">            arr[j + <span class="number">1</span>] = key; <span class="comment">// 写入目标位置</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序*"></a>快速排序*</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickSort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">quickSort</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> low, <span class="type">int</span> high)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (low &lt; high) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">pi</span> <span class="operator">=</span> partition(arr, low, high);</span><br><span class="line">            quickSort(arr, low, pi - <span class="number">1</span>);</span><br><span class="line">            quickSort(arr, pi + <span class="number">1</span>, high);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">// 选择一个基准值（pivot）。</span></span><br><span class="line">	<span class="comment">// 将小于基准值的元素放到左侧，大于基准值的元素放到右侧。</span></span><br><span class="line">	<span class="comment">// 对左右部分递归排序，直到数组被完全排序。</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">partition</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> low, <span class="type">int</span> high)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pivot</span> <span class="operator">=</span> arr[high];</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> low - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> low; j &lt; high; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (arr[j] &lt; pivot) &#123;</span><br><span class="line">                i++;</span><br><span class="line">                <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> arr[i];</span><br><span class="line">                arr[i] = arr[j];</span><br><span class="line">                arr[j] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> arr[i + <span class="number">1</span>];</span><br><span class="line">        arr[i + <span class="number">1</span>] = arr[high];</span><br><span class="line">        arr[high] = temp;</span><br><span class="line">        <span class="keyword">return</span> i + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MergeSort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">mergeSort</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> left, <span class="type">int</span> right)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (left &lt; right) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            mergeSort(arr, left, mid);</span><br><span class="line">            mergeSort(arr, mid + <span class="number">1</span>, right);</span><br><span class="line">            merge(arr, left, mid, right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 将数组不断分成两部分，直到无法再分。</span></span><br><span class="line">	<span class="comment">// 然后通过合并两个有序数组的方式，将小规模数组逐步合并为一个完整有序数组。</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">merge</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> left, <span class="type">int</span> mid, <span class="type">int</span> right)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n1</span> <span class="operator">=</span> mid - left + <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n2</span> <span class="operator">=</span> right - mid;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span>[] L = <span class="keyword">new</span> <span class="title class_">int</span>[n1];</span><br><span class="line">        <span class="type">int</span>[] R = <span class="keyword">new</span> <span class="title class_">int</span>[n2];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n1; i++) L[i] = arr[left + i];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; n2; j++) R[j] = arr[mid + <span class="number">1</span> + j];</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>, j = <span class="number">0</span>, k = left;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; n1 &amp;&amp; j &lt; n2) &#123;</span><br><span class="line">            <span class="keyword">if</span> (L[i] &lt;= R[j]) &#123;</span><br><span class="line">                arr[k] = L[i];</span><br><span class="line">                i++;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                arr[k] = R[j];</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">            k++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (i &lt; n1) arr[k++] = L[i++];</span><br><span class="line">        <span class="keyword">while</span> (j &lt; n2) arr[k++] = R[j++];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HeapSort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">heapSort</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> arr.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> n / <span class="number">2</span> - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) </span><br><span class="line">            heapify(arr, n, i);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> n - <span class="number">1</span>; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> arr[<span class="number">0</span>];</span><br><span class="line">            arr[<span class="number">0</span>] = arr[i];</span><br><span class="line">            arr[i] = temp;</span><br><span class="line"></span><br><span class="line">            heapify(arr, i, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 将数组构造成一个大顶堆（父节点大于或等于子节点）。</span></span><br><span class="line">	<span class="comment">// 取出堆顶元素（最大值），并将其与堆的末尾元素交换。</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">heapify</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> n, <span class="type">int</span> i)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">largest</span> <span class="operator">=</span> i;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">2</span> * i + <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> <span class="number">2</span> * i + <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (left &lt; n &amp;&amp; arr[left] &gt; arr[largest]) </span><br><span class="line">            largest = left;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (right &lt; n &amp;&amp; arr[right] &gt; arr[largest]) </span><br><span class="line">            largest = right;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (largest != i) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">swap</span> <span class="operator">=</span> arr[i];</span><br><span class="line">            arr[i] = arr[largest];</span><br><span class="line">            arr[largest] = swap;</span><br><span class="line"></span><br><span class="line">            heapify(arr, n, largest);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] arr = &#123;<span class="number">64</span>, <span class="number">34</span>, <span class="number">25</span>, <span class="number">12</span>, <span class="number">22</span>, <span class="number">11</span>, <span class="number">90</span>&#125;;</span><br><span class="line">        QuickSort.quickSort(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>);</span><br><span class="line">        System.out.println(Arrays.toString(arr));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<table>
+<thead>
+<tr>
+<th>排序算法</th>
+<th>时间复杂度 (最好&#x2F;最坏&#x2F;平均)</th>
+<th>空间复杂度</th>
+<th>稳定性</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>冒泡排序</td>
+<td>O(n) &#x2F; O(n²) &#x2F; O(n²)</td>
+<td>O(1)</td>
+<td>稳定</td>
+<td>简单小规模数据</td>
+</tr>
+<tr>
+<td>选择排序</td>
+<td>O(n²) &#x2F; O(n²) &#x2F; O(n²)</td>
+<td>O(1)</td>
+<td>不稳定</td>
+<td>简单数据，无需稳定性</td>
+</tr>
+<tr>
+<td>插入排序</td>
+<td>O(n) &#x2F; O(n²) &#x2F; O(n²)</td>
+<td>O(1)</td>
+<td>稳定</td>
+<td>小规模、部分有序数据</td>
+</tr>
+<tr>
+<td>快速排序</td>
+<td>O(n log n) &#x2F; O(n²) &#x2F; O(n log n)</td>
+<td>O(log n)</td>
+<td>不稳定</td>
+<td>大规模数据，追求高效率</td>
+</tr>
+<tr>
+<td>归并排序</td>
+<td>O(n log n) &#x2F; O(n log n) &#x2F; O(n log n)</td>
+<td>O(n)</td>
+<td>稳定</td>
+<td>大规模数据，需要稳定性</td>
+</tr>
+<tr>
+<td>堆排序</td>
+<td>O(n log n) &#x2F; O(n log n) &#x2F; O(n log n)</td>
+<td>O(1)</td>
+<td>不稳定</td>
+<td>大规模数据，需要原地排序</td>
+</tr>
+</tbody></table>
 <h1 id="算法题目与设计模式"><a href="#算法题目与设计模式" class="headerlink" title="算法题目与设计模式"></a>算法题目与设计模式</h1><h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><p>平衡二叉树树</p>
 <ul>
 <li>根节点为黑</li>
@@ -325,6 +304,148 @@
       <tags>
         <tag>docker</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Database-Learning-Record</title>
+    <url>/2024/08/10/Database-Learning-Record/</url>
+    <content><![CDATA[<p>MySQL和Redis数据库相关学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database Learning Record"></a>Database Learning Record</h1><h2 id="property"><a href="#property" class="headerlink" title="property"></a>property</h2><h3 id="数据库事务的-ACID-特性"><a href="#数据库事务的-ACID-特性" class="headerlink" title="数据库事务的 ACID 特性"></a>数据库事务的 ACID 特性</h3><p>ACID 是数据库事务的四个重要特性，它们保证了事务的可靠性和一致性。</p>
+<p><strong>1. 原子性 (Atomicity)</strong></p>
+<ul>
+<li><strong>定义:</strong> 一个事务的所有操作要么全部成功执行，要么全部不执行，不会出现部分成功部分失败的情况。</li>
+<li><strong>作用:</strong> 保证数据库状态的一致性，即使事务执行过程中发生错误，数据库也能回滚到事务开始前的状态，就像什么都没发生过一样。</li>
+<li><strong>举例:</strong> 转账操作需要从账户 A 扣款并向账户 B 加款，这两个操作必须作为一个整体执行，要么都成功，要么都失败。如果只扣款成功而加款失败，就会导致数据不一致。</li>
+</ul>
+<p><strong>2. 一致性 (Consistency)</strong></p>
+<ul>
+<li><strong>定义:</strong> 事务执行前后，数据库必须保持一致的状态，满足所有预定义的约束和规则。</li>
+<li><strong>作用:</strong> 保证数据库数据的完整性和正确性，防止数据出现逻辑上的错误。</li>
+<li><strong>举例:</strong> 银行账户的余额不能小于零。如果一个事务导致账户余额变为负数，则该事务违反了一致性约束，数据库会回滚事务，保持数据一致性。</li>
+</ul>
+<p><strong>3. 隔离性 (Isolation)</strong></p>
+<ul>
+<li><strong>定义:</strong> 多个事务并发执行时，彼此之间相互隔离，互不干扰，就像每个事务都是独立执行的一样。</li>
+<li><strong>作用:</strong> 防止并发事务之间的数据冲突，保证每个事务都能看到一致的数据。</li>
+<li><strong>举例:</strong> 用户 A 和用户 B 同时读取账户 C 的余额，然后分别进行转账操作。隔离性保证了用户 A 和用户 B 的操作不会相互影响，每个用户都能看到正确的账户余额。</li>
+</ul>
+<p><strong>4. 持久性 (Durability)</strong></p>
+<ul>
+<li><strong>定义:</strong> 一旦事务提交成功，其对数据库的修改将永久保存，即使数据库发生故障也不会丢失。</li>
+<li><strong>作用:</strong> 保证数据的可靠性和安全性，即使系统崩溃，数据也能恢复到最新状态。</li>
+<li><strong>举例:</strong> 用户 A 成功转账后，即使数据库突然断电，转账操作的结果也不会丢失，数据库重启后，账户 A 和账户 B 的余额仍然会反映转账后的状态。</li>
+</ul>
+<h3 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h3><p><strong>1. Read Uncommitted (读未提交)</strong></p>
+<ul>
+<li><strong>特点:</strong> 事务可以读取到其他未提交事务的数据。</li>
+<li><strong>问题:</strong><ul>
+<li><strong>脏读 (Dirty Read):</strong> 事务 A 读取了事务 B 未提交的数据，如果事务 B 回滚，事务 A 读取的数据就是无效的。</li>
+</ul>
+</li>
+<li><strong>应用场景:</strong> 几乎没有实际应用场景，因为脏读会导致数据严重不一致。</li>
+</ul>
+<p><strong>2. Read Committed (读已提交)</strong></p>
+<ul>
+<li><strong>特点:</strong> 事务只能读取到其他已提交事务的数据。</li>
+<li><strong>问题:</strong><ul>
+<li><strong>不可重复读 (Non-repeatable Read):</strong> 同一个事务内多次读取同一数据，读取到的结果可能不同，因为其他事务可能已经修改并提交了该数据。</li>
+</ul>
+</li>
+<li><strong>应用场景:</strong> 大多数数据库默认的隔离级别，可以避免脏读，但存在不可重复读的问题。</li>
+</ul>
+<p><strong>3. Repeatable Read (可重复读)</strong></p>
+<ul>
+<li><strong>特点:</strong> 同一个事务内多次读取同一数据，读取到的结果相同，即使其他事务已经修改并提交了该数据。</li>
+<li><strong>问题:</strong><ul>
+<li><strong>幻读 (Phantom Read):</strong> 事务 A 读取某个范围的数据，事务 B 在该范围内插入或删除了数据，导致事务 A 再次读取时，发现结果集发生了变化。</li>
+</ul>
+</li>
+<li><strong>应用场景:</strong> MySQL InnoDB 引擎默认的隔离级别，可以避免脏读和不可重复读，但存在幻读的问题。</li>
+</ul>
+<p><strong>4. Serializable (串行化)</strong></p>
+<ul>
+<li><strong>特点:</strong> 所有事务串行执行，相当于只有一个事务在执行，避免了所有并发问题。</li>
+<li><strong>问题:</strong> 并发性能极低，因为所有事务都需要排队执行。</li>
+<li><strong>应用场景:</strong> 对数据一致性要求极高的场景，例如金融交易。</li>
+</ul>
+<h2 id="MySQL-Struc"><a href="#MySQL-Struc" class="headerlink" title="MySQL Struc"></a>MySQL Struc</h2><img src="/2024/08/10/Database-Learning-Record/image-20240919111718667.png" class="" title="image-20240919111718667">
+
+
+
+<p><strong>基本信息</strong></p>
+<p>页 作为 B树的节点</p>
+<p>B树的节点，每个节点均包含数条数据</p>
+<p>页中 行的主键作为B树节点的key</p>
+<img src="/2024/08/10/Database-Learning-Record/image-20240919155834155.png" class="" title="image-20240919155834155">
+
+<p>B+树</p>
+<p>将原B树的 <strong>非叶子节点的数据行</strong> 存放在 <strong>叶子节点</strong>，原 <strong>非叶子节点的数据行</strong> 数据区域变更为保存目标页地址 -&gt; 稳定查询次数</p>
+<p><strong>非叶子节点</strong>由于不再保存真实数据，可保存条目增加 -&gt; 树高度降低</p>
+<p>叶子节点通过指针连接 -&gt; 范围查询</p>
+<img src="/2024/08/10/Database-Learning-Record/image-20240919160103358.png" class="" title="image-20240919160103358">
+
+
+
+<p><strong>Buffer Pool</strong></p>
+<p>存储页</p>
+<p><strong>自适应哈希索引 (Adaptive Hash Index, AHI)</strong> </p>
+<ol>
+<li><strong>监控热点页:</strong> InnoDB 引擎会监控索引页的访问频率。当某个索引页被频繁访问，达到预设阈值后，会被认为是热点页。</li>
+<li><strong>创建哈希索引:</strong> InnoDB 引擎会自动为热点页创建哈希索引，并将哈希索引存储在内存的哈希表中。</li>
+<li><strong>加速查询:</strong> 当执行查询时，InnoDB 引擎会先查找哈希索引。如果找到匹配项，可以直接定位到对应的索引页，避免了 B-tree 索引的多次查找，从而提升查询效率。</li>
+</ol>
+<p><strong>Undo Buffer &amp;&amp; Undo Tablespace</strong></p>
+<p>Undo Log 记录了事务中每一个数据修改操作的反向操作，例如：</p>
+<ul>
+<li>插入操作的 Undo Log 记录了删除相应记录的操作。</li>
+<li>更新操作的 Undo Log 记录了将数据恢复到旧值的操作。</li>
+<li>删除操作的 Undo Log 记录了插入被删除记录的操作。</li>
+</ul>
+<p><strong>Undo Log</strong> 主要用于事务回滚和实现 MVCC</p>
+<blockquote>
+<p><strong>读取一致性 (MVCC)：</strong> 即使事务 A 已经提交，其他未提交的事务或使用了快照读的事务仍然可能需要访问事务 A 修改之前的数据版本。Undo Log 中保留的事务 A 的记录可以用来构建这些旧版本的数据，保证读取一致性。</p>
+</blockquote>
+<p>Undo Log 存储在 Undo Tablespace 中，可以配置为独立的表空间或 InnoDB 系统表空间的一部分</p>
+<p><strong>Redo Log Buffer &amp;&amp;  Redo Log Files</strong></p>
+<p>Redo Log 记录了数据库的物理修改，例如：</p>
+<ul>
+<li>在哪个数据页修改了哪个字节，修改后的值是什么。</li>
+</ul>
+<p>当事务修改数据时，先将修改记录写入 Redo Log Buffer, 在事务提交时，将 Redo Log Buffer 中的内容刷新到 Redo Log Files, 数据库崩溃恢复&#x2F;内存掉电数据清空时，会读取 Redo Log Files，重新执行其中的修改操作，将数据库恢复到崩溃前的最新状态。</p>
+<p><strong>Redo Log 的作用是保证已提交事务的持久性，而不是未提交事务的恢复。</strong></p>
+<p>Redo Log 存储在 Redo Log Files 中，通常是两个或多个循环使用的文件。</p>
+<h2 id="java-JDBC"><a href="#java-JDBC" class="headerlink" title="java JDBC"></a>java JDBC</h2><p>常见用法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConnectionExample</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SQLException &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// JDBC连接的URL, 不同数据库有不同的格式:</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_URL</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>;</span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_USER</span> <span class="operator">=</span> <span class="string">&quot;root&quot;</span>;</span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_PASSWORD</span> <span class="operator">=</span> <span class="string">&quot;password&quot;</span>;</span><br><span class="line">		<span class="comment">// 获取连接:</span></span><br><span class="line">		<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 1. createStatement(): 创建一个Statement对象，用于向数据库发送SQL语句。</span></span><br><span class="line">            <span class="type">Statement</span> <span class="variable">stmt</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line">            <span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> stmt.executeQuery(<span class="string">&quot;SELECT * FROM my_table&quot;</span>);</span><br><span class="line">            <span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">                <span class="comment">// Process results</span></span><br><span class="line">            &#125;</span><br><span class="line">            rs.close();</span><br><span class="line">            stmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 2. prepareStatement(): 创建一个PreparedStatement对象，用于发送参数化的SQL语句。这有助于防止SQL注入漏洞。</span></span><br><span class="line">            <span class="type">PreparedStatement</span> <span class="variable">pstmt</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;INSERT INTO my_table (column1, column2) VALUES (?, ?)&quot;</span>);</span><br><span class="line">            pstmt.setString(<span class="number">1</span>, <span class="string">&quot;value1&quot;</span>);</span><br><span class="line">            pstmt.setInt(<span class="number">2</span>, <span class="number">123</span>);</span><br><span class="line">            <span class="type">int</span> <span class="variable">rowsAffected</span> <span class="operator">=</span> pstmt.executeUpdate();</span><br><span class="line">            pstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 3. prepareCall(): 创建一个CallableStatement对象，用于调用存储过程。</span></span><br><span class="line">            <span class="type">CallableStatement</span> <span class="variable">cstmt</span> <span class="operator">=</span> conn.prepareCall(<span class="string">&quot;&#123;call my_procedure(?, ?)&#125;&quot;</span>);</span><br><span class="line">            cstmt.setInt(<span class="number">1</span>, <span class="number">456</span>);</span><br><span class="line">            cstmt.registerOutParameter(<span class="number">2</span>, Types.VARCHAR); <span class="comment">// Register output parameter</span></span><br><span class="line">            cstmt.execute();</span><br><span class="line">            <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> cstmt.getString(<span class="number">2</span>); <span class="comment">// Retrieve output parameter value</span></span><br><span class="line">            cstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 4. setAutoCommit(boolean): 控制连接是否处于自动提交模式。</span></span><br><span class="line">            conn.setAutoCommit(<span class="literal">false</span>); <span class="comment">// 禁用自动提交以启动事务</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 5. commit(): 提交当前事务。</span></span><br><span class="line">            conn.commit();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 6. rollback(): 回滚当前事务。</span></span><br><span class="line">            <span class="comment">//  conn.rollback();  // In case of an error</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 7. close(): Closes the connection.  VERY IMPORTANT!</span></span><br><span class="line">            conn.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 8. isClosed(): Checks if the connection is closed.</span></span><br><span class="line">            <span class="type">boolean</span> <span class="variable">isClosed</span> <span class="operator">=</span> conn.isClosed();</span><br><span class="line">            System.out.println(<span class="string">&quot;Connection closed: &quot;</span> + isClosed);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 9. getMetaData(): 返回一个DatabaseMetaData对象，其中包含有关数据库的信息。</span></span><br><span class="line">            <span class="type">DatabaseMetaData</span> <span class="variable">metaData</span> <span class="operator">=</span> conn.getMetaData();</span><br><span class="line">            <span class="type">String</span> <span class="variable">databaseProductName</span> <span class="operator">=</span> metaData.getDatabaseProductName();</span><br><span class="line">            System.out.println(<span class="string">&quot;Database Product: &quot;</span> + databaseProductName);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 10. setTransactionIsolation(int level) : 设置事务隔离级别</span></span><br><span class="line">            <span class="comment">// Example: conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">            System.err.println(<span class="string">&quot;SQL Exception: &quot;</span> + e.getMessage());</span><br><span class="line">            <span class="keyword">if</span> (conn != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    conn.rollback(); <span class="comment">// Rollback on error if auto-commit is off</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (SQLException ex) &#123;</span><br><span class="line">                    System.err.println(<span class="string">&quot;Rollback failed: &quot;</span> + ex.getMessage());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="JDBC事务"><a href="#JDBC事务" class="headerlink" title="JDBC事务"></a>JDBC事务</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> openConnection();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 关闭自动提交:</span></span><br><span class="line">    conn.setAutoCommit(<span class="literal">false</span>);</span><br><span class="line">    <span class="comment">// 执行多条SQL语句:</span></span><br><span class="line">    insert(); update(); delete();</span><br><span class="line">    <span class="comment">// 提交事务:</span></span><br><span class="line">    conn.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">    <span class="comment">// 回滚事务:</span></span><br><span class="line">    conn.rollback();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    conn.setAutoCommit(<span class="literal">true</span>);</span><br><span class="line">    conn.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，开启事务的关键代码是<code>conn.setAutoCommit(false)</code>，表示关闭自动提交。提交事务的代码在执行完指定的若干条SQL语句后，调用<code>conn.commit()</code>。要注意事务不是总能成功，如果事务提交失败，会抛出SQL异常（也可能在执行SQL语句的时候就抛出了），此时我们必须捕获并调用<code>conn.rollback()</code>回滚事务。最后，在<code>finally</code>中通过<code>conn.setAutoCommit(true)</code>把<code>Connection</code>对象的状态恢复到初始值。</p>
+<p>实际上，默认情况下，我们获取到<code>Connection</code>连接后，总是处于“自动提交”模式，也就是每执行一条SQL都是作为事务自动执行的，这也是为什么前面几节我们的更新操作总能成功的原因：因为默认有这种“隐式事务”。只要关闭了<code>Connection</code>的<code>autoCommit</code>，那么就可以在一个事务中执行多条语句，事务以<code>commit()</code>方法结束。</p>
+<h3 id="JDBC批处理"><a href="#JDBC批处理" class="headerlink" title="JDBC批处理"></a>JDBC批处理</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> (<span class="type">PreparedStatement</span> <span class="variable">ps</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;INSERT INTO students (name, gender, grade, score) VALUES (?, ?, ?, ?)&quot;</span>)) &#123;</span><br><span class="line">    <span class="comment">// 对同一个PreparedStatement反复设置参数并调用addBatch():</span></span><br><span class="line">    <span class="keyword">for</span> (Student s : students) &#123;</span><br><span class="line">        ps.setString(<span class="number">1</span>, s.name);</span><br><span class="line">        ps.setBoolean(<span class="number">2</span>, s.gender);</span><br><span class="line">        ps.setInt(<span class="number">3</span>, s.grade);</span><br><span class="line">        ps.setInt(<span class="number">4</span>, s.score);</span><br><span class="line">        ps.addBatch(); <span class="comment">// 添加到batch</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 执行batch:</span></span><br><span class="line">    <span class="type">int</span>[] ns = ps.executeBatch();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n : ns) &#123;</span><br><span class="line">        System.out.println(n + <span class="string">&quot; inserted.&quot;</span>); <span class="comment">// batch中每个SQL执行的结果数量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="JDBC连接池"><a href="#JDBC连接池" class="headerlink" title="JDBC连接池"></a>JDBC连接池</h3><p>创建 <code>DataSource</code> 连接池：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">HikariConfig</span> <span class="variable">config</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HikariConfig</span>();</span><br><span class="line">config.setJdbcUrl(<span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>);</span><br><span class="line">config.setUsername(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">config.setPassword(<span class="string">&quot;password&quot;</span>);</span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;connectionTimeout&quot;</span>, <span class="string">&quot;1000&quot;</span>); <span class="comment">// 连接超时：1秒</span></span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;idleTimeout&quot;</span>, <span class="string">&quot;60000&quot;</span>); <span class="comment">// 空闲超时：60秒</span></span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;maximumPoolSize&quot;</span>, <span class="string">&quot;10&quot;</span>); <span class="comment">// 最大连接数：10</span></span><br><span class="line"><span class="type">DataSource</span> <span class="variable">ds</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HikariDataSource</span>(config);</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> ds.getConnection()) &#123; <span class="comment">// 在此获取连接</span></span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="comment">// 在此“关闭”连接</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>database</category>
+      </categories>
+      <tags>
+        <tag>database</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
   </entry>
   <entry>
     <title>common-commands</title>
@@ -535,177 +656,10 @@
       </tags>
   </entry>
   <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
     <title>pic_test</title>
     <url>/2024/04/12/pic-test/</url>
     <content><![CDATA[<p>图片插入测试：</p>
 <img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>pytorch_learning_record</title>
-    <url>/2024/05/08/pytorch-learning-record/</url>
-    <content><![CDATA[<p>dqn与pytorch</p>
-<span id="more"></span>
-
-<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
-<p>主要属性</p>
-<ul>
-<li><p>T: dimensions reversed</p>
-</li>
-<li><p>H: 共轭转置</p>
-</li>
-<li><p>data: 值</p>
-</li>
-<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
-</li>
-<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
-</li>
-<li><p>is_leaf: 指示是否叶子节点</p>
-</li>
-<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
-</li>
-<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
-</li>
-<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
-</li>
-<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
-<p>Sub代表减法；</p>
-<p>Mul代表乘法；</p>
-<p>Mm代表矩阵乘法；</p>
-<p>Div代表除法；</p>
-<p>T代表矩阵转置；</p>
-<p>Pow代表乘方；</p>
-<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
-<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
-<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
-<p>y &#x3D; (x + w) * (w + 1)</p>
-<p>a &#x3D; x+w</p>
-<p>b &#x3D; w + 1</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
-
-
-
-<p>通常</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>自动梯度</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>torchviz</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
-
-<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
-<ul>
-<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
-<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
-<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
-<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
-<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
-<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
-<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
-</ul>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
-
-
-
-<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>optimizer.step()</p>
-<p>优化器执行一次梯度更新</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
-
-<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
-<p>optimizer.zero_grad()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
-
-<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
-
-
-
-<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
-<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
-<p> tensor的requires_grad的属性默认为False。</p>
-<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>.grad_fn 属性</p>
-<p>tensor在计算图中的父运算函数</p>
-<p>.detach()与.detach_()</p>
-<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
-<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
-<p>相同：</p>
-<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
-<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
-<p>不同：</p>
-<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
-<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
-<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-<p>torch.no_grad()</p>
-<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
-<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
-<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>.backward()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
-
-<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
-<p>.backward()方法仅适用于标量</p>
-<p>.register_hook()</p>
-<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
-<p>获取中间tensor的grad值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <tags>
-        <tag>python, pytorch</tag>
-      </tags>
   </entry>
   <entry>
     <title>reinforce-learning-record</title>
@@ -1912,6 +1866,165 @@
       </categories>
       <tags>
         <tag>java, Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pytorch_learning_record</title>
+    <url>/2024/05/08/pytorch-learning-record/</url>
+    <content><![CDATA[<p>dqn与pytorch</p>
+<span id="more"></span>
+
+<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
+<p>主要属性</p>
+<ul>
+<li><p>T: dimensions reversed</p>
+</li>
+<li><p>H: 共轭转置</p>
+</li>
+<li><p>data: 值</p>
+</li>
+<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
+</li>
+<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
+</li>
+<li><p>is_leaf: 指示是否叶子节点</p>
+</li>
+<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
+</li>
+<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
+</li>
+<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
+</li>
+<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
+<p>Sub代表减法；</p>
+<p>Mul代表乘法；</p>
+<p>Mm代表矩阵乘法；</p>
+<p>Div代表除法；</p>
+<p>T代表矩阵转置；</p>
+<p>Pow代表乘方；</p>
+<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
+<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
+<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
+<p>y &#x3D; (x + w) * (w + 1)</p>
+<p>a &#x3D; x+w</p>
+<p>b &#x3D; w + 1</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
+
+
+
+<p>通常</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>自动梯度</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>torchviz</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
+
+<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
+<ul>
+<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
+<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
+<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
+<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
+<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
+<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
+<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
+</ul>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
+
+
+
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>optimizer.step()</p>
+<p>优化器执行一次梯度更新</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
+
+<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
+<p>optimizer.zero_grad()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
+
+<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
+
+
+
+<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
+<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
+<p> tensor的requires_grad的属性默认为False。</p>
+<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>.grad_fn 属性</p>
+<p>tensor在计算图中的父运算函数</p>
+<p>.detach()与.detach_()</p>
+<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
+<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
+<p>相同：</p>
+<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
+<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
+<p>不同：</p>
+<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
+<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
+<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p>torch.no_grad()</p>
+<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
+<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
+<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>.backward()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
+
+<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
+<p>.backward()方法仅适用于标量</p>
+<p>.register_hook()</p>
+<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
+<p>获取中间tensor的grad值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <tags>
+        <tag>python, pytorch</tag>
       </tags>
   </entry>
   <entry>
