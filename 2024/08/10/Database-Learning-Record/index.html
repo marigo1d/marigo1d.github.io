@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919155834155.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919160103358.png">
 <meta property="article:published_time" content="2024-08-10T01:52:46.000Z">
-<meta property="article:modified_time" content="2024-10-05T07:15:14.753Z">
+<meta property="article:modified_time" content="2024-12-23T11:42:24.304Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="database">
 <meta name="twitter:card" content="summary">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-10-05 15:15:14" itemprop="dateModified" datetime="2024-10-05T15:15:14+08:00">2024-10-05</time>
+                <time title="Modified: 2024-12-23 19:42:24" itemprop="dateModified" datetime="2024-12-23T19:42:24+08:00">2024-12-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -252,7 +252,170 @@
 
 
 
-<h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database Learning Record"></a>Database Learning Record</h1><h2 id="property"><a href="#property" class="headerlink" title="property"></a>property</h2><h3 id="数据库事务的-ACID-特性"><a href="#数据库事务的-ACID-特性" class="headerlink" title="数据库事务的 ACID 特性"></a>数据库事务的 ACID 特性</h3><p>ACID 是数据库事务的四个重要特性，它们保证了事务的可靠性和一致性。</p>
+<h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database Learning Record"></a>Database Learning Record</h1><h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="operator">&lt;</span>cte_name<span class="operator">&gt;</span> <span class="keyword">AS</span> ( <span class="operator">&lt;</span>cte_query<span class="operator">&gt;</span> ) [, <span class="operator">&lt;</span>cte_name<span class="operator">&gt;</span> <span class="keyword">AS</span> ( <span class="operator">&lt;</span>cte_query<span class="operator">&gt;</span> )]...  <span class="comment">-- Common Table Expressions (可选)</span></span><br><span class="line"><span class="keyword">SELECT</span> [<span class="keyword">DISTINCT</span> <span class="operator">|</span> <span class="keyword">ALL</span>] <span class="operator">&lt;</span>select_list<span class="operator">&gt;</span>  <span class="comment">-- 选择哪些列</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="operator">&lt;</span>table_name<span class="operator">&gt;</span> <span class="operator">|</span> <span class="operator">&lt;</span>view_name<span class="operator">&gt;</span> <span class="operator">|</span> <span class="operator">&lt;</span>joined_tables<span class="operator">&gt;</span>  <span class="comment">-- 从哪个表/视图/连接结果中选择</span></span><br><span class="line"><span class="keyword">WHERE</span> <span class="operator">&lt;</span>search_condition<span class="operator">&gt;</span>  <span class="comment">-- 过滤行</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="operator">&lt;</span>grouping_columns<span class="operator">&gt;</span>  <span class="comment">-- 分组行</span></span><br><span class="line"><span class="keyword">HAVING</span> <span class="operator">&lt;</span>group_condition<span class="operator">&gt;</span>  <span class="comment">-- 过滤分组后的行</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="operator">&lt;</span>ordering_columns<span class="operator">&gt;</span> [<span class="keyword">ASC</span> <span class="operator">|</span> <span class="keyword">DESC</span>]  <span class="comment">-- 排序结果</span></span><br><span class="line">LIMIT <span class="operator">&lt;</span>row_count<span class="operator">&gt;</span> <span class="keyword">OFFSET</span> <span class="operator">&lt;</span><span class="keyword">offset</span><span class="operator">&gt;</span>  <span class="comment">-- 限制返回的行数 (某些数据库使用不同的语法，例如 TOP)</span></span><br><span class="line"><span class="keyword">UNION</span> [<span class="keyword">ALL</span>] <span class="operator">&lt;</span>another_select_statement<span class="operator">&gt;</span>  <span class="comment">-- 合并多个查询结果 (可选)</span></span><br><span class="line"><span class="keyword">INTERSECT</span> <span class="operator">&lt;</span>another_select_statement<span class="operator">&gt;</span>  <span class="comment">-- 返回多个查询结果的交集 (可选)</span></span><br><span class="line"><span class="keyword">EXCEPT</span> <span class="operator">|</span> MINUS <span class="operator">&lt;</span>another_select_statement<span class="operator">&gt;</span>  <span class="comment">-- 返回第一个查询结果中存在但第二个查询结果中不存在的行 (可选)</span></span><br><span class="line"><span class="keyword">FOR</span> <span class="keyword">UPDATE</span> [<span class="keyword">OF</span> <span class="operator">&lt;</span>column_list<span class="operator">&gt;</span>]  <span class="comment">-- 锁定选定的行以进行更新 (可选)</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>WHERE</strong> </p>
+<blockquote>
+<p>where可以筛查符合目标的行，<strong>被筛列可以不在select中</strong></p>
+<p>where确定输入数据行，select确定返回列</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> device_id <span class="keyword">FROM</span> user_profile <span class="keyword">WHERE</span> gpa <span class="operator">&gt;</span> <span class="number">3.5</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><strong>比较运算符:</strong></p>
+<ul>
+<li><strong><code>=</code>:</strong> 等于</li>
+<li><strong><code>!=</code> 或 <code>&lt;&gt;</code>:</strong> 不等于</li>
+<li><strong><code>&gt;</code>:</strong> 大于</li>
+<li><strong><code>&lt;</code>:</strong> 小于</li>
+<li><strong><code>&gt;=</code>:</strong> 大于等于</li>
+<li><strong><code>&lt;=</code>:</strong> 小于等于</li>
+</ul>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> salary <span class="operator">&gt;</span> <span class="number">50000</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;Electronics&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>逻辑运算符:</strong></p>
+<ul>
+<li><strong><code>AND</code>:</strong> 两个条件都必须为真</li>
+<li><strong><code>OR</code>:</strong> 至少一个条件为真</li>
+<li><strong><code>NOT</code>:</strong>  取反条件</li>
+</ul>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department <span class="operator">=</span> <span class="string">&#x27;Sales&#x27;</span> <span class="keyword">AND</span> salary <span class="operator">&gt;</span> <span class="number">60000</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;Electronics&#x27;</span> <span class="keyword">OR</span> category <span class="operator">=</span> <span class="string">&#x27;Books&#x27;</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> <span class="keyword">NOT</span> country <span class="operator">=</span> <span class="string">&#x27;USA&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>BETWEEN</code> 运算符:</strong></p>
+<p>检查值是否在指定范围内。</p>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> orders <span class="keyword">WHERE</span> order_date <span class="keyword">BETWEEN</span> <span class="string">&#x27;2023-01-01&#x27;</span> <span class="keyword">AND</span> <span class="string">&#x27;2023-12-31&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>LIKE</code> 运算符:</strong></p>
+<p>用于模式匹配。</p>
+<blockquote>
+<p>SQL <code>LIKE</code> 运算符用于模式匹配，允许你搜索包含特定字符序列的数据。<code>LIKE</code> 运算符通常与通配符一起使用，以创建更灵活的搜索模式。以下是常用的 <code>LIKE</code> 通配符：</p>
+<ul>
+<li><p><strong><code>%</code> (百分号):</strong> 匹配任意字符序列（包括空序列）。它可以用于匹配字符串的开头、结尾或中间的任意部分。</p>
+<ul>
+<li><strong>示例:</strong><ul>
+<li><code>LIKE &#39;A%&#39;</code>: 匹配以 “A” 开头的任何字符串，例如 “Apple”、”Airplane”、”A”。</li>
+<li><code>LIKE &#39;%e&#39;</code>: 匹配以 “e” 结尾的任何字符串，例如 “Apple”、”Orange”、”e”。</li>
+<li><code>LIKE &#39;%app%&#39;</code>: 匹配包含 “app” 的任何字符串，例如 “Apple”、”Application”、”Happy”。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>_</code> (下划线):</strong> 匹配任何单个字符。</p>
+<ul>
+<li><strong>示例:</strong><ul>
+<li><code>LIKE &#39;A_&#39;</code>: 匹配以 “A” 开头且后面跟着一个任意字符的字符串，例如 “Ab”、”Ac”、”A1”。</li>
+<li><code>LIKE &#39;_pple&#39;</code>: 匹配以任意字符开头且后面跟着 “pple” 的字符串，例如 “Apple”、”ipple”。</li>
+<li><code>LIKE &#39;a__le&#39;</code>: 匹配以 “a” 开头，后面跟着两个任意字符，再跟着 “le” 的字符串，例如 “apple”、”azble”。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>[]</code> (方括号):</strong> 匹配指定集合中的任何单个字符。</p>
+<ul>
+<li><strong>示例:</strong><ul>
+<li><code>LIKE &#39;[ABC]%&#39;</code>: 匹配以 “A”、”B” 或 “C” 开头的任何字符串。</li>
+<li><code>LIKE &#39;h[aeiou]t&#39;</code>: 匹配 “hat”、”het”、”hit”、”hot” 或 “hut”。</li>
+<li><code>LIKE &#39;[A-Z]%&#39;</code>: 匹配以任何大写字母开头的字符串。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>[^]</code> (方括号加脱字符):</strong> 匹配不在指定集合中的任何单个字符。</p>
+<ul>
+<li><strong>示例:</strong><ul>
+<li><code>LIKE &#39;[^ABC]%&#39;</code>: 匹配不以 “A”、”B” 或 “C” 开头的任何字符串。</li>
+<li><code>LIKE &#39;h[^aeiou]t&#39;</code>: 匹配以 “h” 开头，第二个字符不是元音字母，以 “t” 结尾的字符串。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>转义字符:</strong></p>
+<p>如果需要在 <code>LIKE</code> 模式中匹配通配符字符本身（例如，你想查找包含 “%” 的字符串），你需要使用转义字符。 你可以在 <code>LIKE</code> 子句中使用 <code>ESCAPE</code> 关键字来指定转义字符为<code>!</code>。</p>
+<ul>
+<li><strong>示例:</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> product_name <span class="keyword">LIKE</span> <span class="string">&#x27;%10\% off%&#x27;</span>; <span class="comment">-- 错误，会将 &quot;%&quot; 视为通配符</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> product_name <span class="keyword">LIKE</span> <span class="string">&#x27;%10!% off%&#x27;</span> <span class="keyword">ESCAPE</span> <span class="string">&#x27;!&#x27;</span>;  <span class="comment">-- 正确，使用 &quot;!&quot; 作为转义字符，查找包含 &quot;10% off&quot; 的字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，<code>ESCAPE &#39;!&#39;</code>  指定 “!” 作为转义字符。 因此，<code>!%</code> 被解释为字面上的 “%” 字符，而不是通配符。</p>
+<p><strong>结合使用:</strong></p>
+<ul>
+<li><strong>示例:</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> email <span class="keyword">LIKE</span> <span class="string">&#x27;[a-z]%@[a-z]%.[a-z]%&#x27;</span>;  <span class="comment">-- 匹配简单的电子邮件地址格式</span></span><br></pre></td></tr></table></figure>
+
+</blockquote>
+<p><strong><code>IN</code> 运算符:</strong></p>
+<p>检查值是否在指定的值列表中。</p>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="keyword">IN</span> (<span class="string">&#x27;Electronics&#x27;</span>, <span class="string">&#x27;Books&#x27;</span>, <span class="string">&#x27;Clothing&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>IS NULL</code> 运算符:</strong></p>
+<p>检查值是否为 NULL。</p>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> email <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>IS NOT NULL</code> 运算符:</strong></p>
+<p>检查值是否不为 NULL。</p>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> email <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+<p>其他运算符:</p>
+<p>一些数据库系统还支持其他运算符，例如：</p>
+<ul>
+<li><strong><code>EXISTS</code>:</strong> 检查子查询是否返回任何行。</li>
+<li><strong><code>ANY</code> &#x2F; <code>SOME</code> &#x2F; <code>ALL</code>:</strong>  与子查询一起使用，比较值与子查询返回的所有值。</li>
+</ul>
+<p><strong>GROUP BY [column]:</strong>  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> CustomerID, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> OrderCount</span><br><span class="line"><span class="keyword">FROM</span> Orders</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> CustomerID;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> Region, Product, <span class="built_in">SUM</span>(Sales) <span class="keyword">AS</span> TotalSales</span><br><span class="line"><span class="keyword">FROM</span> Sales</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> Region, Product;</span><br></pre></td></tr></table></figure>
+
+<p>当使用 GROUP BY 子句时，SELECT 列表中只能包含以下两类列：</p>
+<ol>
+<li>出现在 GROUP BY 子句中的列。</li>
+<li>使用聚合函数（如 COUNT、SUM、AVG、MAX、MIN 等）的列。</li>
+</ol>
+<p>GROUP BY 子句可以按多列进行分组。 这允许你根据多个列的组合创建组，并对每个组执行聚合计算。在这个例子中，GROUP BY Region, Product 首先按 Region 分组，然后在每个 Region 组内再按 Product 分组。 SUM(Sales) 计算每个 Region 和 Product 组合的总销售额。</p>
+<p>函数</p>
+<p><strong>标量函数 (Scalar Functions):</strong> 标量函数对每一行输入都返回一个单一的值。 大多数字符串函数、数值函数、日期函数以及一些其他函数（如 COALESCE 和 NULLIF）都属于标量函数。</p>
+<p><strong>数值函数:</strong></p>
+<ul>
+<li><strong>ABS:</strong> 返回数值的绝对值。</li>
+<li><strong>ROUND:</strong> 将数值四舍五入到指定的小数位数。</li>
+<li><strong>TRUNC 或 TRUNCATE:</strong> 截断数值到指定的小数位数。</li>
+<li><strong>CEIL 或 CEILING:</strong> 返回大于或等于指定数值的最小整数。</li>
+<li><strong>FLOOR:</strong> 返回小于或等于指定数值的最大整数。</li>
+<li><strong>MOD:</strong> 返回两个数值相除的余数。</li>
+<li><strong>POWER:</strong> 返回一个数值的指定次幂。</li>
+<li><strong>SQRT:</strong> 返回数值的平方根。</li>
+</ul>
+<p><strong>聚合函数:</strong>  聚合函数对一组值进行计算并返回一个单一的值</p>
+<ul>
+<li><strong>COUNT:</strong> 计算行数。<ul>
+<li><strong>COUNT(*):</strong> 计算表中的所有行数，包括包含 NULL 值的行。它本质上是计算表中的总行数。</li>
+<li><strong>COUNT(column):</strong> 计算指定列中非 NULL 值的行数。如果指定列中的某个值为 NULL，则该行不会被计入。</li>
+</ul>
+</li>
+<li><strong>SUM:</strong> 计算数值的总和。</li>
+<li><strong>AVG:</strong> 计算数值的平均值。</li>
+<li><strong>MAX:</strong> 返回最大值。</li>
+<li><strong>MIN:</strong> 返回最小值。</li>
+</ul>
+<p><strong>LIMIT 1:</strong></p>
+<p>LIMIT约束返回值结果数量</p>
+<p><strong>子查询</strong></p>
+<blockquote>
+<p>推荐使用子查询</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> region, total_sales</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> region, <span class="built_in">SUM</span>(amount) <span class="keyword">AS</span> total_sales</span><br><span class="line">    <span class="keyword">FROM</span> sales</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> region</span><br><span class="line">) <span class="keyword">AS</span> regional_sales</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> total_sales <span class="keyword">DESC</span></span><br><span class="line">LIMIT <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> employee_id, first_name, last_name, salary</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">WHERE</span> salary <span class="operator">&gt;</span> (<span class="keyword">SELECT</span> <span class="built_in">AVG</span>(salary) <span class="keyword">FROM</span> employees);</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="property"><a href="#property" class="headerlink" title="property"></a>property</h2><h3 id="数据库事务的-ACID-特性"><a href="#数据库事务的-ACID-特性" class="headerlink" title="数据库事务的 ACID 特性"></a>数据库事务的 ACID 特性</h3><p>ACID 是数据库事务的四个重要特性，它们保证了事务的可靠性和一致性。</p>
 <p><strong>1. 原子性 (Atomicity)</strong></p>
 <ul>
 <li><strong>定义:</strong> 一个事务的所有操作要么全部成功执行，要么全部不执行，不会出现部分成功部分失败的情况。</li>
@@ -453,7 +616,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-JDBC"><span class="nav-text">java JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%BA%8B%E5%8A%A1"><span class="nav-text">JDBC事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E6%89%B9%E5%A4%84%E7%90%86"><span class="nav-text">JDBC批处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="nav-text">JDBC连接池</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-JDBC"><span class="nav-text">java JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%BA%8B%E5%8A%A1"><span class="nav-text">JDBC事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E6%89%B9%E5%A4%84%E7%90%86"><span class="nav-text">JDBC批处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="nav-text">JDBC连接池</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

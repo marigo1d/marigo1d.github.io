@@ -1,6 +1,303 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Database-Learning-Record</title>
+    <url>/2024/08/10/Database-Learning-Record/</url>
+    <content><![CDATA[<p>MySQL和Redis数据库相关学习记录</p>
+<span id="more"></span>
+
+
+
+<h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database Learning Record"></a>Database Learning Record</h1><h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="operator">&lt;</span>cte_name<span class="operator">&gt;</span> <span class="keyword">AS</span> ( <span class="operator">&lt;</span>cte_query<span class="operator">&gt;</span> ) [, <span class="operator">&lt;</span>cte_name<span class="operator">&gt;</span> <span class="keyword">AS</span> ( <span class="operator">&lt;</span>cte_query<span class="operator">&gt;</span> )]...  <span class="comment">-- Common Table Expressions (可选)</span></span><br><span class="line"><span class="keyword">SELECT</span> [<span class="keyword">DISTINCT</span> <span class="operator">|</span> <span class="keyword">ALL</span>] <span class="operator">&lt;</span>select_list<span class="operator">&gt;</span>  <span class="comment">-- 选择哪些列</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="operator">&lt;</span>table_name<span class="operator">&gt;</span> <span class="operator">|</span> <span class="operator">&lt;</span>view_name<span class="operator">&gt;</span> <span class="operator">|</span> <span class="operator">&lt;</span>joined_tables<span class="operator">&gt;</span>  <span class="comment">-- 从哪个表/视图/连接结果中选择</span></span><br><span class="line"><span class="keyword">WHERE</span> <span class="operator">&lt;</span>search_condition<span class="operator">&gt;</span>  <span class="comment">-- 过滤行</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="operator">&lt;</span>grouping_columns<span class="operator">&gt;</span>  <span class="comment">-- 分组行</span></span><br><span class="line"><span class="keyword">HAVING</span> <span class="operator">&lt;</span>group_condition<span class="operator">&gt;</span>  <span class="comment">-- 过滤分组后的行</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="operator">&lt;</span>ordering_columns<span class="operator">&gt;</span> [<span class="keyword">ASC</span> <span class="operator">|</span> <span class="keyword">DESC</span>]  <span class="comment">-- 排序结果</span></span><br><span class="line">LIMIT <span class="operator">&lt;</span>row_count<span class="operator">&gt;</span> <span class="keyword">OFFSET</span> <span class="operator">&lt;</span><span class="keyword">offset</span><span class="operator">&gt;</span>  <span class="comment">-- 限制返回的行数 (某些数据库使用不同的语法，例如 TOP)</span></span><br><span class="line"><span class="keyword">UNION</span> [<span class="keyword">ALL</span>] <span class="operator">&lt;</span>another_select_statement<span class="operator">&gt;</span>  <span class="comment">-- 合并多个查询结果 (可选)</span></span><br><span class="line"><span class="keyword">INTERSECT</span> <span class="operator">&lt;</span>another_select_statement<span class="operator">&gt;</span>  <span class="comment">-- 返回多个查询结果的交集 (可选)</span></span><br><span class="line"><span class="keyword">EXCEPT</span> <span class="operator">|</span> MINUS <span class="operator">&lt;</span>another_select_statement<span class="operator">&gt;</span>  <span class="comment">-- 返回第一个查询结果中存在但第二个查询结果中不存在的行 (可选)</span></span><br><span class="line"><span class="keyword">FOR</span> <span class="keyword">UPDATE</span> [<span class="keyword">OF</span> <span class="operator">&lt;</span>column_list<span class="operator">&gt;</span>]  <span class="comment">-- 锁定选定的行以进行更新 (可选)</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>WHERE</strong> </p>
+<blockquote>
+<p>where可以筛查符合目标的行，<strong>被筛列可以不在select中</strong></p>
+<p>where确定输入数据行，select确定返回列</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> device_id <span class="keyword">FROM</span> user_profile <span class="keyword">WHERE</span> gpa <span class="operator">&gt;</span> <span class="number">3.5</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><strong>比较运算符:</strong></p>
+<ul>
+<li><strong><code>=</code>:</strong> 等于</li>
+<li><strong><code>!=</code> 或 <code>&lt;&gt;</code>:</strong> 不等于</li>
+<li><strong><code>&gt;</code>:</strong> 大于</li>
+<li><strong><code>&lt;</code>:</strong> 小于</li>
+<li><strong><code>&gt;=</code>:</strong> 大于等于</li>
+<li><strong><code>&lt;=</code>:</strong> 小于等于</li>
+</ul>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> salary <span class="operator">&gt;</span> <span class="number">50000</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;Electronics&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>逻辑运算符:</strong></p>
+<ul>
+<li><strong><code>AND</code>:</strong> 两个条件都必须为真</li>
+<li><strong><code>OR</code>:</strong> 至少一个条件为真</li>
+<li><strong><code>NOT</code>:</strong>  取反条件</li>
+</ul>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department <span class="operator">=</span> <span class="string">&#x27;Sales&#x27;</span> <span class="keyword">AND</span> salary <span class="operator">&gt;</span> <span class="number">60000</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;Electronics&#x27;</span> <span class="keyword">OR</span> category <span class="operator">=</span> <span class="string">&#x27;Books&#x27;</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> <span class="keyword">NOT</span> country <span class="operator">=</span> <span class="string">&#x27;USA&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>BETWEEN</code> 运算符:</strong></p>
+<p>检查值是否在指定范围内。</p>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> orders <span class="keyword">WHERE</span> order_date <span class="keyword">BETWEEN</span> <span class="string">&#x27;2023-01-01&#x27;</span> <span class="keyword">AND</span> <span class="string">&#x27;2023-12-31&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>LIKE</code> 运算符:</strong></p>
+<p>用于模式匹配。</p>
+<blockquote>
+<p>SQL <code>LIKE</code> 运算符用于模式匹配，允许你搜索包含特定字符序列的数据。<code>LIKE</code> 运算符通常与通配符一起使用，以创建更灵活的搜索模式。以下是常用的 <code>LIKE</code> 通配符：</p>
+<ul>
+<li><p><strong><code>%</code> (百分号):</strong> 匹配任意字符序列（包括空序列）。它可以用于匹配字符串的开头、结尾或中间的任意部分。</p>
+<ul>
+<li><strong>示例:</strong><ul>
+<li><code>LIKE &#39;A%&#39;</code>: 匹配以 “A” 开头的任何字符串，例如 “Apple”、”Airplane”、”A”。</li>
+<li><code>LIKE &#39;%e&#39;</code>: 匹配以 “e” 结尾的任何字符串，例如 “Apple”、”Orange”、”e”。</li>
+<li><code>LIKE &#39;%app%&#39;</code>: 匹配包含 “app” 的任何字符串，例如 “Apple”、”Application”、”Happy”。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>_</code> (下划线):</strong> 匹配任何单个字符。</p>
+<ul>
+<li><strong>示例:</strong><ul>
+<li><code>LIKE &#39;A_&#39;</code>: 匹配以 “A” 开头且后面跟着一个任意字符的字符串，例如 “Ab”、”Ac”、”A1”。</li>
+<li><code>LIKE &#39;_pple&#39;</code>: 匹配以任意字符开头且后面跟着 “pple” 的字符串，例如 “Apple”、”ipple”。</li>
+<li><code>LIKE &#39;a__le&#39;</code>: 匹配以 “a” 开头，后面跟着两个任意字符，再跟着 “le” 的字符串，例如 “apple”、”azble”。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>[]</code> (方括号):</strong> 匹配指定集合中的任何单个字符。</p>
+<ul>
+<li><strong>示例:</strong><ul>
+<li><code>LIKE &#39;[ABC]%&#39;</code>: 匹配以 “A”、”B” 或 “C” 开头的任何字符串。</li>
+<li><code>LIKE &#39;h[aeiou]t&#39;</code>: 匹配 “hat”、”het”、”hit”、”hot” 或 “hut”。</li>
+<li><code>LIKE &#39;[A-Z]%&#39;</code>: 匹配以任何大写字母开头的字符串。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>[^]</code> (方括号加脱字符):</strong> 匹配不在指定集合中的任何单个字符。</p>
+<ul>
+<li><strong>示例:</strong><ul>
+<li><code>LIKE &#39;[^ABC]%&#39;</code>: 匹配不以 “A”、”B” 或 “C” 开头的任何字符串。</li>
+<li><code>LIKE &#39;h[^aeiou]t&#39;</code>: 匹配以 “h” 开头，第二个字符不是元音字母，以 “t” 结尾的字符串。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>转义字符:</strong></p>
+<p>如果需要在 <code>LIKE</code> 模式中匹配通配符字符本身（例如，你想查找包含 “%” 的字符串），你需要使用转义字符。 你可以在 <code>LIKE</code> 子句中使用 <code>ESCAPE</code> 关键字来指定转义字符为<code>!</code>。</p>
+<ul>
+<li><strong>示例:</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> product_name <span class="keyword">LIKE</span> <span class="string">&#x27;%10\% off%&#x27;</span>; <span class="comment">-- 错误，会将 &quot;%&quot; 视为通配符</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> product_name <span class="keyword">LIKE</span> <span class="string">&#x27;%10!% off%&#x27;</span> <span class="keyword">ESCAPE</span> <span class="string">&#x27;!&#x27;</span>;  <span class="comment">-- 正确，使用 &quot;!&quot; 作为转义字符，查找包含 &quot;10% off&quot; 的字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，<code>ESCAPE &#39;!&#39;</code>  指定 “!” 作为转义字符。 因此，<code>!%</code> 被解释为字面上的 “%” 字符，而不是通配符。</p>
+<p><strong>结合使用:</strong></p>
+<ul>
+<li><strong>示例:</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> email <span class="keyword">LIKE</span> <span class="string">&#x27;[a-z]%@[a-z]%.[a-z]%&#x27;</span>;  <span class="comment">-- 匹配简单的电子邮件地址格式</span></span><br></pre></td></tr></table></figure>
+
+</blockquote>
+<p><strong><code>IN</code> 运算符:</strong></p>
+<p>检查值是否在指定的值列表中。</p>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="keyword">IN</span> (<span class="string">&#x27;Electronics&#x27;</span>, <span class="string">&#x27;Books&#x27;</span>, <span class="string">&#x27;Clothing&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>IS NULL</code> 运算符:</strong></p>
+<p>检查值是否为 NULL。</p>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> email <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>IS NOT NULL</code> 运算符:</strong></p>
+<p>检查值是否不为 NULL。</p>
+<p>示例:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> email <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+<p>其他运算符:</p>
+<p>一些数据库系统还支持其他运算符，例如：</p>
+<ul>
+<li><strong><code>EXISTS</code>:</strong> 检查子查询是否返回任何行。</li>
+<li><strong><code>ANY</code> &#x2F; <code>SOME</code> &#x2F; <code>ALL</code>:</strong>  与子查询一起使用，比较值与子查询返回的所有值。</li>
+</ul>
+<p><strong>GROUP BY [column]:</strong>  </p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> CustomerID, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> OrderCount</span><br><span class="line"><span class="keyword">FROM</span> Orders</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> CustomerID;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> Region, Product, <span class="built_in">SUM</span>(Sales) <span class="keyword">AS</span> TotalSales</span><br><span class="line"><span class="keyword">FROM</span> Sales</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> Region, Product;</span><br></pre></td></tr></table></figure>
+
+<p>当使用 GROUP BY 子句时，SELECT 列表中只能包含以下两类列：</p>
+<ol>
+<li>出现在 GROUP BY 子句中的列。</li>
+<li>使用聚合函数（如 COUNT、SUM、AVG、MAX、MIN 等）的列。</li>
+</ol>
+<p>GROUP BY 子句可以按多列进行分组。 这允许你根据多个列的组合创建组，并对每个组执行聚合计算。在这个例子中，GROUP BY Region, Product 首先按 Region 分组，然后在每个 Region 组内再按 Product 分组。 SUM(Sales) 计算每个 Region 和 Product 组合的总销售额。</p>
+<p>函数</p>
+<p><strong>标量函数 (Scalar Functions):</strong> 标量函数对每一行输入都返回一个单一的值。 大多数字符串函数、数值函数、日期函数以及一些其他函数（如 COALESCE 和 NULLIF）都属于标量函数。</p>
+<p><strong>数值函数:</strong></p>
+<ul>
+<li><strong>ABS:</strong> 返回数值的绝对值。</li>
+<li><strong>ROUND:</strong> 将数值四舍五入到指定的小数位数。</li>
+<li><strong>TRUNC 或 TRUNCATE:</strong> 截断数值到指定的小数位数。</li>
+<li><strong>CEIL 或 CEILING:</strong> 返回大于或等于指定数值的最小整数。</li>
+<li><strong>FLOOR:</strong> 返回小于或等于指定数值的最大整数。</li>
+<li><strong>MOD:</strong> 返回两个数值相除的余数。</li>
+<li><strong>POWER:</strong> 返回一个数值的指定次幂。</li>
+<li><strong>SQRT:</strong> 返回数值的平方根。</li>
+</ul>
+<p><strong>聚合函数:</strong>  聚合函数对一组值进行计算并返回一个单一的值</p>
+<ul>
+<li><strong>COUNT:</strong> 计算行数。<ul>
+<li><strong>COUNT(*):</strong> 计算表中的所有行数，包括包含 NULL 值的行。它本质上是计算表中的总行数。</li>
+<li><strong>COUNT(column):</strong> 计算指定列中非 NULL 值的行数。如果指定列中的某个值为 NULL，则该行不会被计入。</li>
+</ul>
+</li>
+<li><strong>SUM:</strong> 计算数值的总和。</li>
+<li><strong>AVG:</strong> 计算数值的平均值。</li>
+<li><strong>MAX:</strong> 返回最大值。</li>
+<li><strong>MIN:</strong> 返回最小值。</li>
+</ul>
+<p><strong>LIMIT 1:</strong></p>
+<p>LIMIT约束返回值结果数量</p>
+<p><strong>子查询</strong></p>
+<blockquote>
+<p>推荐使用子查询</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> region, total_sales</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> region, <span class="built_in">SUM</span>(amount) <span class="keyword">AS</span> total_sales</span><br><span class="line">    <span class="keyword">FROM</span> sales</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> region</span><br><span class="line">) <span class="keyword">AS</span> regional_sales</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> total_sales <span class="keyword">DESC</span></span><br><span class="line">LIMIT <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> employee_id, first_name, last_name, salary</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">WHERE</span> salary <span class="operator">&gt;</span> (<span class="keyword">SELECT</span> <span class="built_in">AVG</span>(salary) <span class="keyword">FROM</span> employees);</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="property"><a href="#property" class="headerlink" title="property"></a>property</h2><h3 id="数据库事务的-ACID-特性"><a href="#数据库事务的-ACID-特性" class="headerlink" title="数据库事务的 ACID 特性"></a>数据库事务的 ACID 特性</h3><p>ACID 是数据库事务的四个重要特性，它们保证了事务的可靠性和一致性。</p>
+<p><strong>1. 原子性 (Atomicity)</strong></p>
+<ul>
+<li><strong>定义:</strong> 一个事务的所有操作要么全部成功执行，要么全部不执行，不会出现部分成功部分失败的情况。</li>
+<li><strong>作用:</strong> 保证数据库状态的一致性，即使事务执行过程中发生错误，数据库也能回滚到事务开始前的状态，就像什么都没发生过一样。</li>
+<li><strong>举例:</strong> 转账操作需要从账户 A 扣款并向账户 B 加款，这两个操作必须作为一个整体执行，要么都成功，要么都失败。如果只扣款成功而加款失败，就会导致数据不一致。</li>
+</ul>
+<p><strong>2. 一致性 (Consistency)</strong></p>
+<ul>
+<li><strong>定义:</strong> 事务执行前后，数据库必须保持一致的状态，满足所有预定义的约束和规则。</li>
+<li><strong>作用:</strong> 保证数据库数据的完整性和正确性，防止数据出现逻辑上的错误。</li>
+<li><strong>举例:</strong> 银行账户的余额不能小于零。如果一个事务导致账户余额变为负数，则该事务违反了一致性约束，数据库会回滚事务，保持数据一致性。</li>
+</ul>
+<p><strong>3. 隔离性 (Isolation)</strong></p>
+<ul>
+<li><strong>定义:</strong> 多个事务并发执行时，彼此之间相互隔离，互不干扰，就像每个事务都是独立执行的一样。</li>
+<li><strong>作用:</strong> 防止并发事务之间的数据冲突，保证每个事务都能看到一致的数据。</li>
+<li><strong>举例:</strong> 用户 A 和用户 B 同时读取账户 C 的余额，然后分别进行转账操作。隔离性保证了用户 A 和用户 B 的操作不会相互影响，每个用户都能看到正确的账户余额。</li>
+</ul>
+<p><strong>4. 持久性 (Durability)</strong></p>
+<ul>
+<li><strong>定义:</strong> 一旦事务提交成功，其对数据库的修改将永久保存，即使数据库发生故障也不会丢失。</li>
+<li><strong>作用:</strong> 保证数据的可靠性和安全性，即使系统崩溃，数据也能恢复到最新状态。</li>
+<li><strong>举例:</strong> 用户 A 成功转账后，即使数据库突然断电，转账操作的结果也不会丢失，数据库重启后，账户 A 和账户 B 的余额仍然会反映转账后的状态。</li>
+</ul>
+<h3 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h3><p><strong>1. Read Uncommitted (读未提交)</strong></p>
+<ul>
+<li><strong>特点:</strong> 事务可以读取到其他未提交事务的数据。</li>
+<li><strong>问题:</strong><ul>
+<li><strong>脏读 (Dirty Read):</strong> 事务 A 读取了事务 B 未提交的数据，如果事务 B 回滚，事务 A 读取的数据就是无效的。</li>
+</ul>
+</li>
+<li><strong>应用场景:</strong> 几乎没有实际应用场景，因为脏读会导致数据严重不一致。</li>
+</ul>
+<p><strong>2. Read Committed (读已提交)</strong></p>
+<ul>
+<li><strong>特点:</strong> 事务只能读取到其他已提交事务的数据。</li>
+<li><strong>问题:</strong><ul>
+<li><strong>不可重复读 (Non-repeatable Read):</strong> 同一个事务内多次读取同一数据，读取到的结果可能不同，因为其他事务可能已经修改并提交了该数据。</li>
+</ul>
+</li>
+<li><strong>应用场景:</strong> 大多数数据库默认的隔离级别，可以避免脏读，但存在不可重复读的问题。</li>
+</ul>
+<p><strong>3. Repeatable Read (可重复读)</strong></p>
+<ul>
+<li><strong>特点:</strong> 同一个事务内多次读取同一数据，读取到的结果相同，即使其他事务已经修改并提交了该数据。</li>
+<li><strong>问题:</strong><ul>
+<li><strong>幻读 (Phantom Read):</strong> 事务 A 读取某个范围的数据，事务 B 在该范围内插入或删除了数据，导致事务 A 再次读取时，发现结果集发生了变化。</li>
+</ul>
+</li>
+<li><strong>应用场景:</strong> MySQL InnoDB 引擎默认的隔离级别，可以避免脏读和不可重复读，但存在幻读的问题。</li>
+</ul>
+<p><strong>4. Serializable (串行化)</strong></p>
+<ul>
+<li><strong>特点:</strong> 所有事务串行执行，相当于只有一个事务在执行，避免了所有并发问题。</li>
+<li><strong>问题:</strong> 并发性能极低，因为所有事务都需要排队执行。</li>
+<li><strong>应用场景:</strong> 对数据一致性要求极高的场景，例如金融交易。</li>
+</ul>
+<h2 id="MySQL-Struc"><a href="#MySQL-Struc" class="headerlink" title="MySQL Struc"></a>MySQL Struc</h2><img src="/2024/08/10/Database-Learning-Record/image-20240919111718667.png" class="" title="image-20240919111718667">
+
+
+
+<p><strong>基本信息</strong></p>
+<p>页 作为 B树的节点</p>
+<p>B树的节点，每个节点均包含数条数据</p>
+<p>页中 行的主键作为B树节点的key</p>
+<img src="/2024/08/10/Database-Learning-Record/image-20240919155834155.png" class="" title="image-20240919155834155">
+
+<p>B+树</p>
+<p>将原B树的 <strong>非叶子节点的数据行</strong> 存放在 <strong>叶子节点</strong>，原 <strong>非叶子节点的数据行</strong> 数据区域变更为保存目标页地址 -&gt; 稳定查询次数</p>
+<p><strong>非叶子节点</strong>由于不再保存真实数据，可保存条目增加 -&gt; 树高度降低</p>
+<p>叶子节点通过指针连接 -&gt; 范围查询</p>
+<img src="/2024/08/10/Database-Learning-Record/image-20240919160103358.png" class="" title="image-20240919160103358">
+
+
+
+<p><strong>Buffer Pool</strong></p>
+<p>存储页</p>
+<p><strong>自适应哈希索引 (Adaptive Hash Index, AHI)</strong> </p>
+<ol>
+<li><strong>监控热点页:</strong> InnoDB 引擎会监控索引页的访问频率。当某个索引页被频繁访问，达到预设阈值后，会被认为是热点页。</li>
+<li><strong>创建哈希索引:</strong> InnoDB 引擎会自动为热点页创建哈希索引，并将哈希索引存储在内存的哈希表中。</li>
+<li><strong>加速查询:</strong> 当执行查询时，InnoDB 引擎会先查找哈希索引。如果找到匹配项，可以直接定位到对应的索引页，避免了 B-tree 索引的多次查找，从而提升查询效率。</li>
+</ol>
+<p><strong>Undo Buffer &amp;&amp; Undo Tablespace</strong></p>
+<p>Undo Log 记录了事务中每一个数据修改操作的反向操作，例如：</p>
+<ul>
+<li>插入操作的 Undo Log 记录了删除相应记录的操作。</li>
+<li>更新操作的 Undo Log 记录了将数据恢复到旧值的操作。</li>
+<li>删除操作的 Undo Log 记录了插入被删除记录的操作。</li>
+</ul>
+<p><strong>Undo Log</strong> 主要用于事务回滚和实现 MVCC</p>
+<blockquote>
+<p><strong>读取一致性 (MVCC)：</strong> 即使事务 A 已经提交，其他未提交的事务或使用了快照读的事务仍然可能需要访问事务 A 修改之前的数据版本。Undo Log 中保留的事务 A 的记录可以用来构建这些旧版本的数据，保证读取一致性。</p>
+</blockquote>
+<p>Undo Log 存储在 Undo Tablespace 中，可以配置为独立的表空间或 InnoDB 系统表空间的一部分</p>
+<p><strong>Redo Log Buffer &amp;&amp;  Redo Log Files</strong></p>
+<p>Redo Log 记录了数据库的物理修改，例如：</p>
+<ul>
+<li>在哪个数据页修改了哪个字节，修改后的值是什么。</li>
+</ul>
+<p>当事务修改数据时，先将修改记录写入 Redo Log Buffer, 在事务提交时，将 Redo Log Buffer 中的内容刷新到 Redo Log Files, 数据库崩溃恢复&#x2F;内存掉电数据清空时，会读取 Redo Log Files，重新执行其中的修改操作，将数据库恢复到崩溃前的最新状态。</p>
+<p><strong>Redo Log 的作用是保证已提交事务的持久性，而不是未提交事务的恢复。</strong></p>
+<p>Redo Log 存储在 Redo Log Files 中，通常是两个或多个循环使用的文件。</p>
+<h2 id="java-JDBC"><a href="#java-JDBC" class="headerlink" title="java JDBC"></a>java JDBC</h2><p>常见用法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConnectionExample</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SQLException &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// JDBC连接的URL, 不同数据库有不同的格式:</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_URL</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>;</span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_USER</span> <span class="operator">=</span> <span class="string">&quot;root&quot;</span>;</span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_PASSWORD</span> <span class="operator">=</span> <span class="string">&quot;password&quot;</span>;</span><br><span class="line">		<span class="comment">// 获取连接:</span></span><br><span class="line">		<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 1. createStatement(): 创建一个Statement对象，用于向数据库发送SQL语句。</span></span><br><span class="line">            <span class="type">Statement</span> <span class="variable">stmt</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line">            <span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> stmt.executeQuery(<span class="string">&quot;SELECT * FROM my_table&quot;</span>);</span><br><span class="line">            <span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">                <span class="comment">// Process results</span></span><br><span class="line">            &#125;</span><br><span class="line">            rs.close();</span><br><span class="line">            stmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 2. prepareStatement(): 创建一个PreparedStatement对象，用于发送参数化的SQL语句。这有助于防止SQL注入漏洞。</span></span><br><span class="line">            <span class="type">PreparedStatement</span> <span class="variable">pstmt</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;INSERT INTO my_table (column1, column2) VALUES (?, ?)&quot;</span>);</span><br><span class="line">            pstmt.setString(<span class="number">1</span>, <span class="string">&quot;value1&quot;</span>);</span><br><span class="line">            pstmt.setInt(<span class="number">2</span>, <span class="number">123</span>);</span><br><span class="line">            <span class="type">int</span> <span class="variable">rowsAffected</span> <span class="operator">=</span> pstmt.executeUpdate();</span><br><span class="line">            pstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 3. prepareCall(): 创建一个CallableStatement对象，用于调用存储过程。</span></span><br><span class="line">            <span class="type">CallableStatement</span> <span class="variable">cstmt</span> <span class="operator">=</span> conn.prepareCall(<span class="string">&quot;&#123;call my_procedure(?, ?)&#125;&quot;</span>);</span><br><span class="line">            cstmt.setInt(<span class="number">1</span>, <span class="number">456</span>);</span><br><span class="line">            cstmt.registerOutParameter(<span class="number">2</span>, Types.VARCHAR); <span class="comment">// Register output parameter</span></span><br><span class="line">            cstmt.execute();</span><br><span class="line">            <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> cstmt.getString(<span class="number">2</span>); <span class="comment">// Retrieve output parameter value</span></span><br><span class="line">            cstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 4. setAutoCommit(boolean): 控制连接是否处于自动提交模式。</span></span><br><span class="line">            conn.setAutoCommit(<span class="literal">false</span>); <span class="comment">// 禁用自动提交以启动事务</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 5. commit(): 提交当前事务。</span></span><br><span class="line">            conn.commit();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 6. rollback(): 回滚当前事务。</span></span><br><span class="line">            <span class="comment">//  conn.rollback();  // In case of an error</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 7. close(): Closes the connection.  VERY IMPORTANT!</span></span><br><span class="line">            conn.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 8. isClosed(): Checks if the connection is closed.</span></span><br><span class="line">            <span class="type">boolean</span> <span class="variable">isClosed</span> <span class="operator">=</span> conn.isClosed();</span><br><span class="line">            System.out.println(<span class="string">&quot;Connection closed: &quot;</span> + isClosed);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 9. getMetaData(): 返回一个DatabaseMetaData对象，其中包含有关数据库的信息。</span></span><br><span class="line">            <span class="type">DatabaseMetaData</span> <span class="variable">metaData</span> <span class="operator">=</span> conn.getMetaData();</span><br><span class="line">            <span class="type">String</span> <span class="variable">databaseProductName</span> <span class="operator">=</span> metaData.getDatabaseProductName();</span><br><span class="line">            System.out.println(<span class="string">&quot;Database Product: &quot;</span> + databaseProductName);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 10. setTransactionIsolation(int level) : 设置事务隔离级别</span></span><br><span class="line">            <span class="comment">// Example: conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">            System.err.println(<span class="string">&quot;SQL Exception: &quot;</span> + e.getMessage());</span><br><span class="line">            <span class="keyword">if</span> (conn != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    conn.rollback(); <span class="comment">// Rollback on error if auto-commit is off</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (SQLException ex) &#123;</span><br><span class="line">                    System.err.println(<span class="string">&quot;Rollback failed: &quot;</span> + ex.getMessage());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="JDBC事务"><a href="#JDBC事务" class="headerlink" title="JDBC事务"></a>JDBC事务</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> openConnection();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 关闭自动提交:</span></span><br><span class="line">    conn.setAutoCommit(<span class="literal">false</span>);</span><br><span class="line">    <span class="comment">// 执行多条SQL语句:</span></span><br><span class="line">    insert(); update(); delete();</span><br><span class="line">    <span class="comment">// 提交事务:</span></span><br><span class="line">    conn.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">    <span class="comment">// 回滚事务:</span></span><br><span class="line">    conn.rollback();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    conn.setAutoCommit(<span class="literal">true</span>);</span><br><span class="line">    conn.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，开启事务的关键代码是<code>conn.setAutoCommit(false)</code>，表示关闭自动提交。提交事务的代码在执行完指定的若干条SQL语句后，调用<code>conn.commit()</code>。要注意事务不是总能成功，如果事务提交失败，会抛出SQL异常（也可能在执行SQL语句的时候就抛出了），此时我们必须捕获并调用<code>conn.rollback()</code>回滚事务。最后，在<code>finally</code>中通过<code>conn.setAutoCommit(true)</code>把<code>Connection</code>对象的状态恢复到初始值。</p>
+<p>实际上，默认情况下，我们获取到<code>Connection</code>连接后，总是处于“自动提交”模式，也就是每执行一条SQL都是作为事务自动执行的，这也是为什么前面几节我们的更新操作总能成功的原因：因为默认有这种“隐式事务”。只要关闭了<code>Connection</code>的<code>autoCommit</code>，那么就可以在一个事务中执行多条语句，事务以<code>commit()</code>方法结束。</p>
+<h3 id="JDBC批处理"><a href="#JDBC批处理" class="headerlink" title="JDBC批处理"></a>JDBC批处理</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> (<span class="type">PreparedStatement</span> <span class="variable">ps</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;INSERT INTO students (name, gender, grade, score) VALUES (?, ?, ?, ?)&quot;</span>)) &#123;</span><br><span class="line">    <span class="comment">// 对同一个PreparedStatement反复设置参数并调用addBatch():</span></span><br><span class="line">    <span class="keyword">for</span> (Student s : students) &#123;</span><br><span class="line">        ps.setString(<span class="number">1</span>, s.name);</span><br><span class="line">        ps.setBoolean(<span class="number">2</span>, s.gender);</span><br><span class="line">        ps.setInt(<span class="number">3</span>, s.grade);</span><br><span class="line">        ps.setInt(<span class="number">4</span>, s.score);</span><br><span class="line">        ps.addBatch(); <span class="comment">// 添加到batch</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 执行batch:</span></span><br><span class="line">    <span class="type">int</span>[] ns = ps.executeBatch();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n : ns) &#123;</span><br><span class="line">        System.out.println(n + <span class="string">&quot; inserted.&quot;</span>); <span class="comment">// batch中每个SQL执行的结果数量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="JDBC连接池"><a href="#JDBC连接池" class="headerlink" title="JDBC连接池"></a>JDBC连接池</h3><p>创建 <code>DataSource</code> 连接池：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">HikariConfig</span> <span class="variable">config</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HikariConfig</span>();</span><br><span class="line">config.setJdbcUrl(<span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>);</span><br><span class="line">config.setUsername(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">config.setPassword(<span class="string">&quot;password&quot;</span>);</span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;connectionTimeout&quot;</span>, <span class="string">&quot;1000&quot;</span>); <span class="comment">// 连接超时：1秒</span></span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;idleTimeout&quot;</span>, <span class="string">&quot;60000&quot;</span>); <span class="comment">// 空闲超时：60秒</span></span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;maximumPoolSize&quot;</span>, <span class="string">&quot;10&quot;</span>); <span class="comment">// 最大连接数：10</span></span><br><span class="line"><span class="type">DataSource</span> <span class="variable">ds</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HikariDataSource</span>(config);</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> ds.getConnection()) &#123; <span class="comment">// 在此获取连接</span></span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="comment">// 在此“关闭”连接</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>database</category>
+      </categories>
+      <tags>
+        <tag>database</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Algo Learning Record</title>
     <url>/2024/04/25/Algo-Learning-Record/</url>
     <content><![CDATA[<p>算法相关学习记录</p>
@@ -30,7 +327,7 @@
 
 
 
-<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p>Map</p>
+<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p>Map</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line">Map&lt;String, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">map.put(<span class="string">&quot;Alice&quot;</span>, <span class="number">90</span>);  <span class="comment">// 添加键值对</span></span><br><span class="line">map.get(<span class="string">&quot;Alice&quot;</span>);  <span class="comment">// 根据键获取值</span></span><br><span class="line"><span class="comment">// 遍历键值对</span></span><br><span class="line"><span class="keyword">for</span> (Map.Entry&lt;String, Integer&gt; entry : map.entrySet()) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;姓名: &quot;</span> + entry.getKey() + <span class="string">&quot;, 分数: &quot;</span> + entry.getValue());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 检查是否包含某键或某值</span></span><br><span class="line">System.out.println(<span class="string">&quot;是否包含Bob: &quot;</span> + map.containsKey(<span class="string">&quot;Bob&quot;</span>));</span><br><span class="line">System.out.println(<span class="string">&quot;是否包含分数85: &quot;</span> + map.containsValue(<span class="number">85</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除键值对</span></span><br><span class="line">map.remove(<span class="string">&quot;Charlie&quot;</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;删除后HashMap内容: &quot;</span> + map);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 超实用！！！如果key不存在，设置默认值为0；key存在，则value+1</span></span><br><span class="line">map.compute(key, (k, v) -&gt; (v == <span class="literal">null</span>) ? <span class="number">1</span> : v + <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
 
 
@@ -52,7 +349,7 @@
 
 
 
-<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序*"></a>快速排序*</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickSort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">quickSort</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> low, <span class="type">int</span> high)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (low &lt; high) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">pi</span> <span class="operator">=</span> partition(arr, low, high);</span><br><span class="line">            quickSort(arr, low, pi - <span class="number">1</span>);</span><br><span class="line">            quickSort(arr, pi + <span class="number">1</span>, high);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">// 选择一个基准值（pivot）。</span></span><br><span class="line">	<span class="comment">// 将小于基准值的元素放到左侧，大于基准值的元素放到右侧。</span></span><br><span class="line">	<span class="comment">// 对左右部分递归排序，直到数组被完全排序。</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">partition</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> low, <span class="type">int</span> high)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pivot</span> <span class="operator">=</span> arr[high];</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> low - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> low; j &lt; high; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (arr[j] &lt; pivot) &#123;</span><br><span class="line">                i++;</span><br><span class="line">                <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> arr[i];</span><br><span class="line">                arr[i] = arr[j];</span><br><span class="line">                arr[j] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> arr[i + <span class="number">1</span>];</span><br><span class="line">        arr[i + <span class="number">1</span>] = arr[high];</span><br><span class="line">        arr[high] = temp;</span><br><span class="line">        <span class="keyword">return</span> i + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序*"></a>快速排序*</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickSort</span> &#123;</span><br><span class="line">    <span class="comment">// 选择一个基准值（pivot）。</span></span><br><span class="line">	<span class="comment">// 将小于基准值的元素放到左侧，大于基准值的元素放到右侧。</span></span><br><span class="line">	<span class="comment">// 对左右部分递归排序，直到数组被完全排序。</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">quickSort</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> low, <span class="type">int</span> high)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (low &lt; high) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">pi</span> <span class="operator">=</span> partition(arr, low, high);</span><br><span class="line">            quickSort(arr, low, pi - <span class="number">1</span>);</span><br><span class="line">            quickSort(arr, pi + <span class="number">1</span>, high);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">partition</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> low, <span class="type">int</span> high)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pivot</span> <span class="operator">=</span> arr[high];  <span class="comment">// 选择最右端元素为枢值并取出</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> low - <span class="number">1</span>;  <span class="comment">// 小于枢值的元素组的最右端索引</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> low; j &lt; high; j++) &#123; <span class="comment">// 遍历范围[low, high - 1]</span></span><br><span class="line">            <span class="keyword">if</span> (arr[j] &lt; pivot) &#123;  <span class="comment">// 元素值小于枢值</span></span><br><span class="line">                i++;  <span class="comment">// 将该元素交换到小于枢值的元素组的最右端</span></span><br><span class="line">                <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> arr[i];</span><br><span class="line">                arr[i] = arr[j];</span><br><span class="line">                arr[j] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> arr[i + <span class="number">1</span>];  <span class="comment">// 将枢值插回小于枢值的元素组的最右端的右侧</span></span><br><span class="line">        arr[i + <span class="number">1</span>] = arr[high];</span><br><span class="line">        arr[high] = temp;</span><br><span class="line">        <span class="keyword">return</span> i + <span class="number">1</span>; <span class="comment">// 返回枢值索引</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -306,148 +603,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Database-Learning-Record</title>
-    <url>/2024/08/10/Database-Learning-Record/</url>
-    <content><![CDATA[<p>MySQL和Redis数据库相关学习记录</p>
-<span id="more"></span>
-
-
-
-<h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database Learning Record"></a>Database Learning Record</h1><h2 id="property"><a href="#property" class="headerlink" title="property"></a>property</h2><h3 id="数据库事务的-ACID-特性"><a href="#数据库事务的-ACID-特性" class="headerlink" title="数据库事务的 ACID 特性"></a>数据库事务的 ACID 特性</h3><p>ACID 是数据库事务的四个重要特性，它们保证了事务的可靠性和一致性。</p>
-<p><strong>1. 原子性 (Atomicity)</strong></p>
-<ul>
-<li><strong>定义:</strong> 一个事务的所有操作要么全部成功执行，要么全部不执行，不会出现部分成功部分失败的情况。</li>
-<li><strong>作用:</strong> 保证数据库状态的一致性，即使事务执行过程中发生错误，数据库也能回滚到事务开始前的状态，就像什么都没发生过一样。</li>
-<li><strong>举例:</strong> 转账操作需要从账户 A 扣款并向账户 B 加款，这两个操作必须作为一个整体执行，要么都成功，要么都失败。如果只扣款成功而加款失败，就会导致数据不一致。</li>
-</ul>
-<p><strong>2. 一致性 (Consistency)</strong></p>
-<ul>
-<li><strong>定义:</strong> 事务执行前后，数据库必须保持一致的状态，满足所有预定义的约束和规则。</li>
-<li><strong>作用:</strong> 保证数据库数据的完整性和正确性，防止数据出现逻辑上的错误。</li>
-<li><strong>举例:</strong> 银行账户的余额不能小于零。如果一个事务导致账户余额变为负数，则该事务违反了一致性约束，数据库会回滚事务，保持数据一致性。</li>
-</ul>
-<p><strong>3. 隔离性 (Isolation)</strong></p>
-<ul>
-<li><strong>定义:</strong> 多个事务并发执行时，彼此之间相互隔离，互不干扰，就像每个事务都是独立执行的一样。</li>
-<li><strong>作用:</strong> 防止并发事务之间的数据冲突，保证每个事务都能看到一致的数据。</li>
-<li><strong>举例:</strong> 用户 A 和用户 B 同时读取账户 C 的余额，然后分别进行转账操作。隔离性保证了用户 A 和用户 B 的操作不会相互影响，每个用户都能看到正确的账户余额。</li>
-</ul>
-<p><strong>4. 持久性 (Durability)</strong></p>
-<ul>
-<li><strong>定义:</strong> 一旦事务提交成功，其对数据库的修改将永久保存，即使数据库发生故障也不会丢失。</li>
-<li><strong>作用:</strong> 保证数据的可靠性和安全性，即使系统崩溃，数据也能恢复到最新状态。</li>
-<li><strong>举例:</strong> 用户 A 成功转账后，即使数据库突然断电，转账操作的结果也不会丢失，数据库重启后，账户 A 和账户 B 的余额仍然会反映转账后的状态。</li>
-</ul>
-<h3 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h3><p><strong>1. Read Uncommitted (读未提交)</strong></p>
-<ul>
-<li><strong>特点:</strong> 事务可以读取到其他未提交事务的数据。</li>
-<li><strong>问题:</strong><ul>
-<li><strong>脏读 (Dirty Read):</strong> 事务 A 读取了事务 B 未提交的数据，如果事务 B 回滚，事务 A 读取的数据就是无效的。</li>
-</ul>
-</li>
-<li><strong>应用场景:</strong> 几乎没有实际应用场景，因为脏读会导致数据严重不一致。</li>
-</ul>
-<p><strong>2. Read Committed (读已提交)</strong></p>
-<ul>
-<li><strong>特点:</strong> 事务只能读取到其他已提交事务的数据。</li>
-<li><strong>问题:</strong><ul>
-<li><strong>不可重复读 (Non-repeatable Read):</strong> 同一个事务内多次读取同一数据，读取到的结果可能不同，因为其他事务可能已经修改并提交了该数据。</li>
-</ul>
-</li>
-<li><strong>应用场景:</strong> 大多数数据库默认的隔离级别，可以避免脏读，但存在不可重复读的问题。</li>
-</ul>
-<p><strong>3. Repeatable Read (可重复读)</strong></p>
-<ul>
-<li><strong>特点:</strong> 同一个事务内多次读取同一数据，读取到的结果相同，即使其他事务已经修改并提交了该数据。</li>
-<li><strong>问题:</strong><ul>
-<li><strong>幻读 (Phantom Read):</strong> 事务 A 读取某个范围的数据，事务 B 在该范围内插入或删除了数据，导致事务 A 再次读取时，发现结果集发生了变化。</li>
-</ul>
-</li>
-<li><strong>应用场景:</strong> MySQL InnoDB 引擎默认的隔离级别，可以避免脏读和不可重复读，但存在幻读的问题。</li>
-</ul>
-<p><strong>4. Serializable (串行化)</strong></p>
-<ul>
-<li><strong>特点:</strong> 所有事务串行执行，相当于只有一个事务在执行，避免了所有并发问题。</li>
-<li><strong>问题:</strong> 并发性能极低，因为所有事务都需要排队执行。</li>
-<li><strong>应用场景:</strong> 对数据一致性要求极高的场景，例如金融交易。</li>
-</ul>
-<h2 id="MySQL-Struc"><a href="#MySQL-Struc" class="headerlink" title="MySQL Struc"></a>MySQL Struc</h2><img src="/2024/08/10/Database-Learning-Record/image-20240919111718667.png" class="" title="image-20240919111718667">
-
-
-
-<p><strong>基本信息</strong></p>
-<p>页 作为 B树的节点</p>
-<p>B树的节点，每个节点均包含数条数据</p>
-<p>页中 行的主键作为B树节点的key</p>
-<img src="/2024/08/10/Database-Learning-Record/image-20240919155834155.png" class="" title="image-20240919155834155">
-
-<p>B+树</p>
-<p>将原B树的 <strong>非叶子节点的数据行</strong> 存放在 <strong>叶子节点</strong>，原 <strong>非叶子节点的数据行</strong> 数据区域变更为保存目标页地址 -&gt; 稳定查询次数</p>
-<p><strong>非叶子节点</strong>由于不再保存真实数据，可保存条目增加 -&gt; 树高度降低</p>
-<p>叶子节点通过指针连接 -&gt; 范围查询</p>
-<img src="/2024/08/10/Database-Learning-Record/image-20240919160103358.png" class="" title="image-20240919160103358">
-
-
-
-<p><strong>Buffer Pool</strong></p>
-<p>存储页</p>
-<p><strong>自适应哈希索引 (Adaptive Hash Index, AHI)</strong> </p>
-<ol>
-<li><strong>监控热点页:</strong> InnoDB 引擎会监控索引页的访问频率。当某个索引页被频繁访问，达到预设阈值后，会被认为是热点页。</li>
-<li><strong>创建哈希索引:</strong> InnoDB 引擎会自动为热点页创建哈希索引，并将哈希索引存储在内存的哈希表中。</li>
-<li><strong>加速查询:</strong> 当执行查询时，InnoDB 引擎会先查找哈希索引。如果找到匹配项，可以直接定位到对应的索引页，避免了 B-tree 索引的多次查找，从而提升查询效率。</li>
-</ol>
-<p><strong>Undo Buffer &amp;&amp; Undo Tablespace</strong></p>
-<p>Undo Log 记录了事务中每一个数据修改操作的反向操作，例如：</p>
-<ul>
-<li>插入操作的 Undo Log 记录了删除相应记录的操作。</li>
-<li>更新操作的 Undo Log 记录了将数据恢复到旧值的操作。</li>
-<li>删除操作的 Undo Log 记录了插入被删除记录的操作。</li>
-</ul>
-<p><strong>Undo Log</strong> 主要用于事务回滚和实现 MVCC</p>
-<blockquote>
-<p><strong>读取一致性 (MVCC)：</strong> 即使事务 A 已经提交，其他未提交的事务或使用了快照读的事务仍然可能需要访问事务 A 修改之前的数据版本。Undo Log 中保留的事务 A 的记录可以用来构建这些旧版本的数据，保证读取一致性。</p>
-</blockquote>
-<p>Undo Log 存储在 Undo Tablespace 中，可以配置为独立的表空间或 InnoDB 系统表空间的一部分</p>
-<p><strong>Redo Log Buffer &amp;&amp;  Redo Log Files</strong></p>
-<p>Redo Log 记录了数据库的物理修改，例如：</p>
-<ul>
-<li>在哪个数据页修改了哪个字节，修改后的值是什么。</li>
-</ul>
-<p>当事务修改数据时，先将修改记录写入 Redo Log Buffer, 在事务提交时，将 Redo Log Buffer 中的内容刷新到 Redo Log Files, 数据库崩溃恢复&#x2F;内存掉电数据清空时，会读取 Redo Log Files，重新执行其中的修改操作，将数据库恢复到崩溃前的最新状态。</p>
-<p><strong>Redo Log 的作用是保证已提交事务的持久性，而不是未提交事务的恢复。</strong></p>
-<p>Redo Log 存储在 Redo Log Files 中，通常是两个或多个循环使用的文件。</p>
-<h2 id="java-JDBC"><a href="#java-JDBC" class="headerlink" title="java JDBC"></a>java JDBC</h2><p>常见用法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConnectionExample</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SQLException &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// JDBC连接的URL, 不同数据库有不同的格式:</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_URL</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>;</span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_USER</span> <span class="operator">=</span> <span class="string">&quot;root&quot;</span>;</span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_PASSWORD</span> <span class="operator">=</span> <span class="string">&quot;password&quot;</span>;</span><br><span class="line">		<span class="comment">// 获取连接:</span></span><br><span class="line">		<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 1. createStatement(): 创建一个Statement对象，用于向数据库发送SQL语句。</span></span><br><span class="line">            <span class="type">Statement</span> <span class="variable">stmt</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line">            <span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> stmt.executeQuery(<span class="string">&quot;SELECT * FROM my_table&quot;</span>);</span><br><span class="line">            <span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">                <span class="comment">// Process results</span></span><br><span class="line">            &#125;</span><br><span class="line">            rs.close();</span><br><span class="line">            stmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 2. prepareStatement(): 创建一个PreparedStatement对象，用于发送参数化的SQL语句。这有助于防止SQL注入漏洞。</span></span><br><span class="line">            <span class="type">PreparedStatement</span> <span class="variable">pstmt</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;INSERT INTO my_table (column1, column2) VALUES (?, ?)&quot;</span>);</span><br><span class="line">            pstmt.setString(<span class="number">1</span>, <span class="string">&quot;value1&quot;</span>);</span><br><span class="line">            pstmt.setInt(<span class="number">2</span>, <span class="number">123</span>);</span><br><span class="line">            <span class="type">int</span> <span class="variable">rowsAffected</span> <span class="operator">=</span> pstmt.executeUpdate();</span><br><span class="line">            pstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 3. prepareCall(): 创建一个CallableStatement对象，用于调用存储过程。</span></span><br><span class="line">            <span class="type">CallableStatement</span> <span class="variable">cstmt</span> <span class="operator">=</span> conn.prepareCall(<span class="string">&quot;&#123;call my_procedure(?, ?)&#125;&quot;</span>);</span><br><span class="line">            cstmt.setInt(<span class="number">1</span>, <span class="number">456</span>);</span><br><span class="line">            cstmt.registerOutParameter(<span class="number">2</span>, Types.VARCHAR); <span class="comment">// Register output parameter</span></span><br><span class="line">            cstmt.execute();</span><br><span class="line">            <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> cstmt.getString(<span class="number">2</span>); <span class="comment">// Retrieve output parameter value</span></span><br><span class="line">            cstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 4. setAutoCommit(boolean): 控制连接是否处于自动提交模式。</span></span><br><span class="line">            conn.setAutoCommit(<span class="literal">false</span>); <span class="comment">// 禁用自动提交以启动事务</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 5. commit(): 提交当前事务。</span></span><br><span class="line">            conn.commit();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 6. rollback(): 回滚当前事务。</span></span><br><span class="line">            <span class="comment">//  conn.rollback();  // In case of an error</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 7. close(): Closes the connection.  VERY IMPORTANT!</span></span><br><span class="line">            conn.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 8. isClosed(): Checks if the connection is closed.</span></span><br><span class="line">            <span class="type">boolean</span> <span class="variable">isClosed</span> <span class="operator">=</span> conn.isClosed();</span><br><span class="line">            System.out.println(<span class="string">&quot;Connection closed: &quot;</span> + isClosed);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 9. getMetaData(): 返回一个DatabaseMetaData对象，其中包含有关数据库的信息。</span></span><br><span class="line">            <span class="type">DatabaseMetaData</span> <span class="variable">metaData</span> <span class="operator">=</span> conn.getMetaData();</span><br><span class="line">            <span class="type">String</span> <span class="variable">databaseProductName</span> <span class="operator">=</span> metaData.getDatabaseProductName();</span><br><span class="line">            System.out.println(<span class="string">&quot;Database Product: &quot;</span> + databaseProductName);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 10. setTransactionIsolation(int level) : 设置事务隔离级别</span></span><br><span class="line">            <span class="comment">// Example: conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">            System.err.println(<span class="string">&quot;SQL Exception: &quot;</span> + e.getMessage());</span><br><span class="line">            <span class="keyword">if</span> (conn != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    conn.rollback(); <span class="comment">// Rollback on error if auto-commit is off</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (SQLException ex) &#123;</span><br><span class="line">                    System.err.println(<span class="string">&quot;Rollback failed: &quot;</span> + ex.getMessage());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="JDBC事务"><a href="#JDBC事务" class="headerlink" title="JDBC事务"></a>JDBC事务</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> openConnection();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 关闭自动提交:</span></span><br><span class="line">    conn.setAutoCommit(<span class="literal">false</span>);</span><br><span class="line">    <span class="comment">// 执行多条SQL语句:</span></span><br><span class="line">    insert(); update(); delete();</span><br><span class="line">    <span class="comment">// 提交事务:</span></span><br><span class="line">    conn.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">    <span class="comment">// 回滚事务:</span></span><br><span class="line">    conn.rollback();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    conn.setAutoCommit(<span class="literal">true</span>);</span><br><span class="line">    conn.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中，开启事务的关键代码是<code>conn.setAutoCommit(false)</code>，表示关闭自动提交。提交事务的代码在执行完指定的若干条SQL语句后，调用<code>conn.commit()</code>。要注意事务不是总能成功，如果事务提交失败，会抛出SQL异常（也可能在执行SQL语句的时候就抛出了），此时我们必须捕获并调用<code>conn.rollback()</code>回滚事务。最后，在<code>finally</code>中通过<code>conn.setAutoCommit(true)</code>把<code>Connection</code>对象的状态恢复到初始值。</p>
-<p>实际上，默认情况下，我们获取到<code>Connection</code>连接后，总是处于“自动提交”模式，也就是每执行一条SQL都是作为事务自动执行的，这也是为什么前面几节我们的更新操作总能成功的原因：因为默认有这种“隐式事务”。只要关闭了<code>Connection</code>的<code>autoCommit</code>，那么就可以在一个事务中执行多条语句，事务以<code>commit()</code>方法结束。</p>
-<h3 id="JDBC批处理"><a href="#JDBC批处理" class="headerlink" title="JDBC批处理"></a>JDBC批处理</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> (<span class="type">PreparedStatement</span> <span class="variable">ps</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;INSERT INTO students (name, gender, grade, score) VALUES (?, ?, ?, ?)&quot;</span>)) &#123;</span><br><span class="line">    <span class="comment">// 对同一个PreparedStatement反复设置参数并调用addBatch():</span></span><br><span class="line">    <span class="keyword">for</span> (Student s : students) &#123;</span><br><span class="line">        ps.setString(<span class="number">1</span>, s.name);</span><br><span class="line">        ps.setBoolean(<span class="number">2</span>, s.gender);</span><br><span class="line">        ps.setInt(<span class="number">3</span>, s.grade);</span><br><span class="line">        ps.setInt(<span class="number">4</span>, s.score);</span><br><span class="line">        ps.addBatch(); <span class="comment">// 添加到batch</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 执行batch:</span></span><br><span class="line">    <span class="type">int</span>[] ns = ps.executeBatch();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n : ns) &#123;</span><br><span class="line">        System.out.println(n + <span class="string">&quot; inserted.&quot;</span>); <span class="comment">// batch中每个SQL执行的结果数量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="JDBC连接池"><a href="#JDBC连接池" class="headerlink" title="JDBC连接池"></a>JDBC连接池</h3><p>创建 <code>DataSource</code> 连接池：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">HikariConfig</span> <span class="variable">config</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HikariConfig</span>();</span><br><span class="line">config.setJdbcUrl(<span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>);</span><br><span class="line">config.setUsername(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">config.setPassword(<span class="string">&quot;password&quot;</span>);</span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;connectionTimeout&quot;</span>, <span class="string">&quot;1000&quot;</span>); <span class="comment">// 连接超时：1秒</span></span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;idleTimeout&quot;</span>, <span class="string">&quot;60000&quot;</span>); <span class="comment">// 空闲超时：60秒</span></span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;maximumPoolSize&quot;</span>, <span class="string">&quot;10&quot;</span>); <span class="comment">// 最大连接数：10</span></span><br><span class="line"><span class="type">DataSource</span> <span class="variable">ds</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HikariDataSource</span>(config);</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> ds.getConnection()) &#123; <span class="comment">// 在此获取连接</span></span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="comment">// 在此“关闭”连接</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>database</category>
-      </categories>
-      <tags>
-        <tag>database</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
-  </entry>
-  <entry>
     <title>common-commands</title>
     <url>/2024/06/22/common-commands/</url>
     <content><![CDATA[<p>常用指令</p>
@@ -579,33 +734,99 @@
 <p><code>docker ps</code> 命令用于列出当前正在运行的容器，包括容器的 ID、状态、端口映射等信息。加上 <code>-a</code> 选项可以列出所有容器，包括已停止的容器。</p>
 </li>
 </ol>
-<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p><a href="https://learngitbranching.js.org/">https://learngitbranching.js.org/</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在桌面创建test目录</span></span><br><span class="line"><span class="built_in">mkdir</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到test目录</span></span><br><span class="line"><span class="built_in">cd</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并初始化git库</span></span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接到远程git仓库 </span></span><br><span class="line"><span class="comment"># -t 默认使用远程仓库的 main 分支，origin为远程仓库别名（替换链接）</span></span><br><span class="line">git remote add origin -t main https://github.com/xx/xxx.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将远程git库下载到本地</span></span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将目录下所有文件都增加到本地库中。</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更改到本地仓库</span></span><br><span class="line">git commit -m <span class="string">&#x27;提交注释&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span></span><br><span class="line"><span class="comment"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span></span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地修改推到github上</span></span><br><span class="line">git push -u origin main  <span class="comment"># 首次</span></span><br><span class="line">git push origin main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件夹</span></span><br><span class="line">git <span class="built_in">rm</span> -r --cached <span class="built_in">dir</span>/</span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件</span></span><br><span class="line">git <span class="built_in">rm</span> --cached file</span><br></pre></td></tr></table></figure>
+<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p>Git 的设计是基于不可变的 DAG（有向无环图）</p>
+<p><strong>工作区</strong>：开发者在工作区中进行日常的代码开发和修改工作（就是什么git操作都没有做直接改代码，这个地方就是工作区</p>
+<p><strong>暂存区</strong>：<code>git add</code> 会将文件的当前状态（即 <strong>修改后的内容</strong>）从 <strong>工作区</strong> 拷贝到 <strong>暂存区</strong>。如果此时再次修改 <strong>工作区</strong> 内容， <strong>暂存区</strong> 内容不受影响。</p>
+<p><a href="https://learngitbranching.js.org/">https://learngitbranching.js.org/</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在桌面创建test目录</span></span><br><span class="line"><span class="built_in">mkdir</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到test目录</span></span><br><span class="line"><span class="built_in">cd</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并初始化git库</span></span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接到远程git仓库 </span></span><br><span class="line"><span class="comment"># -t 默认使用远程仓库的 main 分支，origin为远程仓库别名（替换链接）</span></span><br><span class="line"><span class="comment"># 为本地分支 main 设置了上游跟踪分支为 origin/main。这意味着当执行 git pull 或 git push 不带分支参数 时，Git 会默认使用 main 分支与 origin/main 同步</span></span><br><span class="line">git remote add origin -t main https://github.com/xx/xxx.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将远程git库下载到本地</span></span><br><span class="line">git pull origin/main</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将目录下所有文件都增加到本地库中。</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更改到本地仓库</span></span><br><span class="line">git commit -m <span class="string">&#x27;提交注释&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span></span><br><span class="line"><span class="comment"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span></span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地修改推到github上</span></span><br><span class="line">git push -u origin main  <span class="comment"># 首次</span></span><br><span class="line">git push origin main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件夹</span></span><br><span class="line">git <span class="built_in">rm</span> -r --cached <span class="built_in">dir</span>/</span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件</span></span><br><span class="line">git <span class="built_in">rm</span> --cached file</span><br></pre></td></tr></table></figure>
 
+
+
+<p>branch</p>
+<p> <strong>创建一个新的分支指针</strong>，并将它指向当前的 <code>HEAD</code> 所在的检查点（即当前的 commit）。这个新的分支指针会指向当前分支的最新提交，或者如果你在一个 <strong>detached HEAD</strong> 状态下，它会指向 <code>HEAD</code> 当前指向的 commit。</p>
+<ul>
+<li><p><strong>分支指针始终指向该分支最新的 commit（HEAD 的位置）。</strong></p>
+</li>
+<li><p>当在该分支上提交新的 commit 时，分支指针会自动前移到新 commit。</p>
+</li>
+<li><p>注意，分支指针指向的是最新的 commit，而不是所有 commit。历史 commit 通过链式引用联系在一起。</p>
+</li>
+</ul>
 <p>commit</p>
-<p>创建检查点</p>
+<p>创建检查点，每个 commit 都有一个或多个后继引用它（例如分支或标签），但它不“属于”任何特定分支。</p>
+<p><strong>判断一个节点是否是“野生”的，核心就是看是否有任何分支指针通过回溯能够遍历到它。</strong></p>
+<p>add</p>
+<p>将工作区内容<strong>覆写</strong>到暂存区</p>
 <p>checkout</p>
+<p>使<strong>head指针</strong>指向<strong>指定branch指针</strong>或<strong>检查点</strong></p>
 <p>git checkout main  # 切换head指向main分支指针</p>
-<p>git checkout C1  # 切换head指向检查点，<strong>此时head指针与main指针分离！！！</strong></p>
+<p>git checkout C1  # 切换head指向检查点，<strong>此时head指针与main指针分离！！！</strong>，后续提交的节点为”野生”节点</p>
 <blockquote>
 <p>当 HEAD 指针移动到 main 分支上的非最新提交 c1 (最新提交是 c2) 后，执行commit指令</p>
 <ol>
 <li><strong>HEAD 指针移动:</strong> git checkout c1 命令会将 HEAD 指针移动到 c1 提交，此时处于 “分离 HEAD 状态”。</li>
 <li><strong>新提交产生:</strong> 当进行新的提交时，Git 会创建一个新的提交对象 c3，并将 c1 作为 c3 的父提交。</li>
-<li><strong>HEAD 指针移动:</strong> c3 提交创建后，HEAD 指针会指向新的提交 c3。</li>
+<li><strong>HEAD 指针移动:</strong> c3 提交创建后，HEAD 指针会指向新的提交 c3。新的检查点将不属于任何branch，可能在未来的被垃圾回收</li>
 </ol>
 </blockquote>
 <p>reset</p>
-<p>git reset head~1  # 切换head指向上一检查点</p>
-<p>rebase </p>
-<ul>
-<li>改变当前分支的基底分支，将当前分支的提交记录“复制”到目标分支的最新提交之后，并移动head指针和分支指针。</li>
+<p>移动当前branch指针到指定检查点</p>
+<p>假设有以下历史：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">A---B---C---D  (main)</span><br><span class="line">            ^</span><br><span class="line">           HEAD</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>**<code>git reset --soft B</code>**：<ul>
+<li>HEAD 指向 <code>B</code>。</li>
+<li><code>C</code> 和 <code>D</code> 被“取消”，但它们的更改仍然在暂存区中（即提交<code>C</code>和<code>D</code>的修改内容全部保存在暂存区</li>
 </ul>
-<p>(当前分支 bugFix)</p>
-<p>git rebase main  # 原bugFix的内容<strong>仍然存在</strong>，只是 HEAD 指针和分支指针发生了移动，指向bugFix最新提交记录的复制。</p>
-<p>merge</p>
-<p>(当前分支 main)</p>
-<p>git merge bugFix  # 将bugFix 分支合并到当前分支，创建新的检查点，该检查点存在两个父节点（bugFix分支的最新检查点和main分支的最新检查点），并移动head指针和分支指针。</p>
+</li>
+<li>**<code>git reset --mixed B</code>**：<ul>
+<li>HEAD 指向 <code>B</code>。</li>
+<li><code>C</code> 和 <code>D</code> 的更改从暂存区移到工作区。</li>
+</ul>
+</li>
+<li>**<code>git reset --hard B</code>**：<ul>
+<li>HEAD 指向 <code>B</code>。</li>
+<li><code>C</code> 和 <code>D</code> 被丢弃，暂存区和工作区都回到 <code>B</code> 的状态。</li>
+</ul>
+</li>
+</ol>
+<p>rebase [target branch] [source branch(可选)]</p>
+<p>假设有以下分支结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">A---B---C  (current-branch)</span><br><span class="line"> \</span><br><span class="line">  D---E---F  (target-branch)</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>current-branch</code> 上运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git rebase target-branch</span><br></pre></td></tr></table></figure>
+
+<p>Rebase 会执行以下步骤：</p>
+<ol>
+<li><strong>找到共同祖先</strong>：<ul>
+<li><code>A</code> 是 <code>current-branch</code> 和 <code>target-branch</code> 的共同祖先。</li>
+</ul>
+</li>
+<li><strong>暂存当前分支的提交</strong>：<ul>
+<li>提取 <code>B</code> 和 <code>C</code>，准备在目标分支上重新应用。</li>
+</ul>
+</li>
+<li><strong>在目标分支的基础上重新应用</strong>：<ul>
+<li><code>B</code> 被重新应用到 <code>F</code> 之后，产生一个新的 commit（假设为 <code>B&#39;</code>）。</li>
+<li><code>C</code> 被重新应用到 <code>B&#39;</code> 之后，产生另一个新的 commit（假设为 <code>C&#39;</code>）。</li>
+</ul>
+</li>
+<li><strong>移动当前分支的指针</strong>：<ul>
+<li><code>current-branch</code> 的指针被移动到 <code>C&#39;</code>。</li>
+</ul>
+</li>
+</ol>
+<p>最终的结构变成：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">D---E---F---B&#x27;---C&#x27;  (current-branch)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>merge [target branch]</p>
+<p>创建新的检查点，该检查点的父节点为<strong>当前branch指针所指向节点</strong>和<strong>目标branch指针所指向节点</strong>，<strong>移动当前branch指针指向新创建节点</strong>。</p>
 <p>fetch</p>
 <ul>
 <li>fetch将下载远程仓库的内容，并移动 远程指针 &lt;远程仓库名&gt;&#x2F;&lt;分支&gt; 指向与远程仓库同步的位置</li>
@@ -617,10 +838,17 @@
 
 
 
-<p>pull</p>
+<p>pull [remote] [remote branch1] [remote branch2]</p>
 <ul>
-<li>pull指令为fetch和merge指令的和</li>
+<li>pull指令为fetch和merge指令的和，因此会使当前branch指针移动</li>
+<li><code>git pull</code> 拉取时，默认是针对当前分支关联的单个远程分支进行操作</li>
 </ul>
+<p><strong><code>git pull origin main</code></strong> 从远程分支 <code>origin/main</code> 拉取最新的更新，并合并到当前本地分支 <code>master</code>。</p>
+<p>push [remote branch] [local branch]</p>
+<ul>
+<li>push指令</li>
+</ul>
+<p><strong><code>git push origin main</code></strong> 将本地 <code>main</code> 分支推送到远程仓库 <code>origin/main</code>。</p>
 <h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
 
@@ -660,6 +888,173 @@
     <url>/2024/04/12/pic-test/</url>
     <content><![CDATA[<p>图片插入测试：</p>
 <img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>pytorch_learning_record</title>
+    <url>/2024/05/08/pytorch-learning-record/</url>
+    <content><![CDATA[<p>dqn与pytorch</p>
+<span id="more"></span>
+
+<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
+<p>主要属性</p>
+<ul>
+<li><p>T: dimensions reversed</p>
+</li>
+<li><p>H: 共轭转置</p>
+</li>
+<li><p>data: 值</p>
+</li>
+<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
+</li>
+<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
+</li>
+<li><p>is_leaf: 指示是否叶子节点</p>
+</li>
+<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
+</li>
+<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
+</li>
+<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
+</li>
+<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
+<p>Sub代表减法；</p>
+<p>Mul代表乘法；</p>
+<p>Mm代表矩阵乘法；</p>
+<p>Div代表除法；</p>
+<p>T代表矩阵转置；</p>
+<p>Pow代表乘方；</p>
+<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
+<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
+<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
+<p>y &#x3D; (x + w) * (w + 1)</p>
+<p>a &#x3D; x+w</p>
+<p>b &#x3D; w + 1</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
+
+
+
+<p>通常</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>自动梯度</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>torchviz</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
+
+<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
+<ul>
+<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
+<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
+<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
+<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
+<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
+<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
+<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
+</ul>
+<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
+
+
+
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>optimizer.step()</p>
+<p>优化器执行一次梯度更新</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
+
+<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
+<p>optimizer.zero_grad()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
+
+<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
+<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
+
+
+
+<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
+<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
+<p> tensor的requires_grad的属性默认为False。</p>
+<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>.grad_fn 属性</p>
+<p>tensor在计算图中的父运算函数</p>
+<p>.detach()与.detach_()</p>
+<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
+<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
+<p>相同：</p>
+<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
+<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
+<p>不同：</p>
+<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
+<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
+<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p>torch.no_grad()</p>
+<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
+<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
+<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>.backward()</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
+
+<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
+<p>.backward()方法仅适用于标量</p>
+<p>.register_hook()</p>
+<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
+<p>获取中间tensor的grad值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <tags>
+        <tag>python, pytorch</tag>
+      </tags>
   </entry>
   <entry>
     <title>reinforce-learning-record</title>
@@ -1866,165 +2261,6 @@
       </categories>
       <tags>
         <tag>java, Spring</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pytorch_learning_record</title>
-    <url>/2024/05/08/pytorch-learning-record/</url>
-    <content><![CDATA[<p>dqn与pytorch</p>
-<span id="more"></span>
-
-<h1 id="pytorch-learning-record"><a href="#pytorch-learning-record" class="headerlink" title="pytorch_learning_record"></a>pytorch_learning_record</h1><h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p>附带额外属性的标量，二维数组，多维数组…</p>
-<p>主要属性</p>
-<ul>
-<li><p>T: dimensions reversed</p>
-</li>
-<li><p>H: 共轭转置</p>
-</li>
-<li><p>data: 值</p>
-</li>
-<li><p>grad_fn: 创建该Tensor所使用的函数，在子节点标记为requires_grad时存在</p>
-</li>
-<li><p>requires_grad: 该Tensor是否需要梯度，生成该Tensor的子节点若为true，该节点同为true</p>
-</li>
-<li><p>is_leaf: 指示是否叶子节点</p>
-</li>
-<li><p>dtype: 张量的数据类型，如 torch.FloatTensor，torch.cuda.FloatTensor</p>
-</li>
-<li><p>shape: 张量的形状。如 (64, 3, 224, 224)</p>
-</li>
-<li><p>device: 张量所在设备 (CPU&#x2F;GPU)</p>
-</li>
-<li><p>grad: 张量的梯度，该属性在进行backforward后被填充，非叶节点默认为None。节点的grad属性值在每次backward后进行值的追加</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor(data, dtype=<span class="literal">None</span>, device=<span class="literal">None</span>, requires_grad=<span class="literal">False</span>, pin_memory=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">arr = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">t= torch.tensor(arr)</span><br><span class="line"></span><br><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)  <span class="comment"># 1.的原因是Only Tensors of floating point and complex dtype can require gradients</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>Add代表加法；</p>
-<p>Sub代表减法；</p>
-<p>Mul代表乘法；</p>
-<p>Mm代表矩阵乘法；</p>
-<p>Div代表除法；</p>
-<p>T代表矩阵转置；</p>
-<p>Pow代表乘方；</p>
-<p>Squeeze, Unsqueeze, Relu, Sigmoid？</p>
-<h2 id="计算图"><a href="#计算图" class="headerlink" title="计算图"></a>计算图</h2><p>pytorch为动态图计算机制，在每一次反向传播计算梯度的循环内，pytorch先建立正向计算图，然后使用反向传播计算梯度，同时被销毁计算图</p>
-<p>自动求导机制中只保存叶子节点的grad，中间tensor即使是requires_grad &#x3D; True在计算完成梯度后会自动释放以节省空间，不会保存，即在进行backward后 中间tensor.grad &#x3D; None</p>
-<p>y &#x3D; (x + w) * (w + 1)</p>
-<p>a &#x3D; x+w</p>
-<p>b &#x3D; w + 1</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508155001152.png" class="" title="image-20240508155001152">
-
-
-
-<p>通常</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">w = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># y=(x+w)*(w+1)</span></span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">y.backward()  <span class="comment"># backward方法默认释放计算图</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(w.grad)</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line"><span class="built_in">print</span>(a.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br><span class="line"><span class="built_in">print</span>(b.grad)  <span class="comment"># 非叶子节点的梯度为空，可使用retain_grad()保留</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>自动梯度</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.autograd.grad(outputs,</span><br><span class="line">	inputs,grad_outputs=<span class="literal">None</span>,</span><br><span class="line">	retain_graph=<span class="literal">None</span>,create_graph=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># outputs对inputs求导</span></span><br><span class="line"><span class="comment"># create_graph: 创建计算图</span></span><br><span class="line"><span class="comment"># retain_graph: 保存计算图</span></span><br><span class="line"><span class="comment"># grad_outputs: 多梯度权重</span></span><br><span class="line">	</span><br><span class="line">x = torch.tensor([<span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.<span class="built_in">pow</span>(x, <span class="number">2</span>)     <span class="comment"># y = x**2</span></span><br><span class="line"></span><br><span class="line">grad_1 = torch.autograd.grad(y, x, create_graph=<span class="literal">True</span>)   <span class="comment"># grad_1 = dy/dx = 2x = 2 * 3 = 6</span></span><br><span class="line"><span class="built_in">print</span>(grad_1)</span><br><span class="line"></span><br><span class="line">grad_2 = torch.autograd.grad(grad_1[<span class="number">0</span>], x)              <span class="comment"># grad_2 = d(dy/dx)/dx = d(2x)/dx = 2，create_graph=True的作用在此，使grad_1的grad_fn属性存在，可以继续求导</span></span><br><span class="line"><span class="built_in">print</span>(grad_2)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>torchviz</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">4</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.5</span>],dtype=torch.float32,requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">h = w*x + b</span><br><span class="line">graph_forward = make_dot(h)</span><br></pre></td></tr></table></figure>
-
-<p>图中节点的说明（以下由 AI 生成，使用的模型为 ChatGPT ）：</p>
-<ul>
-<li>AccumulateGrad: 这个节点表示梯度的累积。在反向传播过程中，梯度是被累积的，因为在每一次反向传播调用中，梯度都会被计算并加到之前的梯度上，以便进行梯度下降更新。</li>
-<li>TBackward0: 这个节点通常代表Tensor的反向传播操作。当在Tensor上进行某些操作并计算梯度时，这个节点将会出现，表示该Tensor的反向传播。</li>
-<li>AddmmBackward0: 这是矩阵乘法操作的反向传播。在神经网络中，矩阵乘法常用于线性层（fully connected layer）的计算，而这个节点则表示反向传播的计算。</li>
-<li>ConvolutionBackward0: 这是卷积操作的反向传播。在卷积神经网络中，卷积操作是一种常见的操作，这个节点表示卷积层的反向传播计算。</li>
-<li>MaxPool2DWithIndicesBackward0: 这个节点是最大池化操作的反向传播。在最大池化层中，通过取池化窗口中的最大值来减小输入的空间大小，这个节点表示最大池化操作的反向传播。</li>
-<li>ReluBackward0: 这是ReLU激活函数的反向传播。ReLU函数是一种常用的非线性激活函数，在深度学习中广泛使用。这个节点表示ReLU函数的反向传播计算。</li>
-<li>ReshapeAliasBackward0: 这个节点是reshape操作的反向传播。当对张量进行reshape操作时，这个节点表示reshape操作的反向传播计算。</li>
-</ul>
-<img src="/2024/05/08/pytorch-learning-record/image-20240508181305285.png" class="" title="image-20240508181305285">
-
-
-
-<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Optimizer</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params, defaults</span>): </span><br><span class="line">        self.defaults = defaults</span><br><span class="line">        self.state = defaultdict(<span class="built_in">dict</span>)</span><br><span class="line">        self.param_groups = []  <span class="comment"># 优化器所管理的参数组</span></span><br><span class="line">        </span><br><span class="line">        self.optimizer = </span><br><span class="line">        </span><br><span class="line">torch.optim.Adam(self.eval_net.parameters(), lr=LR) <span class="comment">#  lr为学习率</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>optimizer.step()</p>
-<p>优化器执行一次梯度更新</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">weight = torch.randn((<span class="number">2</span>, <span class="number">2</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">weight.grad = torch.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">optimizer = optim.SGD([weight], lr=<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight before step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br><span class="line">optimizer.step()        <span class="comment"># lr为0.1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;weight after step:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(weight.data))</span><br></pre></td></tr></table></figure>
-
-<p>即为weight.data - 0.1 * [[1, 1], [1, 1]]</p>
-<p>optimizer.zero_grad()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">zero_grad</span>(<span class="params">self</span>):  <span class="comment"># 循环将所管理的tensor的grad清零</span></span><br><span class="line">    <span class="keyword">for</span> group <span class="keyword">in</span> self.param_groups:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> group[<span class="string">&#x27;params&#x27;</span>]:</span><br><span class="line">            <span class="keyword">if</span> p.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                p.grad.detach_()</span><br><span class="line">                p.grad.zero_()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="nn-Module"><a href="#nn-Module" class="headerlink" title="nn.Module"></a>nn.Module</h2><p>使用 Pytorch 的 nn.Module 建立网络时，其网络内部参数自动设置为 requires_grad&#x3D;True </p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511103728550.png" class="" title="image-20240511103728550">
-
-<p>而我们使用反向传播时，其实根据全连接层的偏导数计算公式，可知链式求导和 <em>w</em> ，<em>b</em> 的梯度无关，而与其中一个连接层的输出梯度有关，这也是为什么冻结了网络的参数，还是可以输出对输入求导。如下式：</p>
-<img src="/2024/05/08/pytorch-learning-record/image-20240511100910357.png" class="" title="image-20240511100910357">
-
-
-
-<h2 id="Method-and-Attr"><a href="#Method-and-Attr" class="headerlink" title="Method and Attr"></a>Method and Attr</h2><p>.requires_grad 属性</p>
-<p>在pytorch中，tensor有一个requires_grad参数，如果设置为True，则反向传播时，该tensor若为叶节点则其grad值会被写入。</p>
-<p> tensor的requires_grad的属性默认为False。</p>
-<p>若一个节点requires_grad被设置为True，那么它的所有子节点requires_grad都为True （即使子节点的其他父节点的requires_grad &#x3D; False）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = torch.tensor(<span class="number">5.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad值为6</span></span><br><span class="line">g = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">False</span>) <span class="comment"># grad值为None</span></span><br><span class="line">r3 = f * g</span><br><span class="line">r3.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>.grad_fn 属性</p>
-<p>tensor在计算图中的父运算函数</p>
-<p>.detach()与.detach_()</p>
-<p>[.detach()]: <a href="https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach">https://pytorch.org/docs/stable/generated/torch.Tensor.detach.html#torch.Tensor.detach</a>	“Returned Tensor shares the same storage with the original one. In-place modifications on either of them will be seen, and may trigger errors in correctness checks.”</p>
-<p><code>.detach_()</code>: is the inplace operation of <code>detach()</code>.</p>
-<p>相同：</p>
-<p>新tensor的requires_grad为False，grad_fn为None，为<strong>叶节点</strong>；</p>
-<p><strong>修改新tensor时原tensor同样发生改变；</strong></p>
-<p>不同：</p>
-<p>m.detach()后m不发生改变，原m在计算图中的父子关系不改变；</p>
-<p>m.detach_()后m发生改变，原m在计算图中和父节点断开，子节点关系不改变;</p>
-<p>#与父节点断开不影响梯度传导至叶子节点？？</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">2.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 4</span></span><br><span class="line">b = torch.tensor(<span class="number">4.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 2</span></span><br><span class="line">c = torch.tensor(<span class="number">6.</span>, requires_grad=<span class="literal">True</span>)  <span class="comment"># grad = 1 + 1</span></span><br><span class="line">m = a * b</span><br><span class="line">r1 = m + c</span><br><span class="line"></span><br><span class="line">m_ = m.detach()</span><br><span class="line"><span class="comment"># 执行后仅m_的requires_grad=False</span></span><br><span class="line">m_ = m.detach_()</span><br><span class="line"><span class="comment"># 执行后c和out均为requires_grad=False</span></span><br><span class="line"></span><br><span class="line">r2 = m_ + c</span><br><span class="line">r1.backward()</span><br><span class="line">r2.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-<p>torch.no_grad()</p>
-<p>是一个上下文管理器，被该语句 wrap 起来的部分将不会track梯度。</p>
-<p>with torch.no_grad()所包裹的语句或者@torch.no_grad()所修饰的函数中发生改变或新建的tensor的requires_grad为False</p>
-<p>例外：所有factory function，或者创建一个新的tensor时显式指明requires_grad&#x3D;True，都不会受到这种模式的影响。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y = x * <span class="number">2</span>  <span class="comment"># requires_grad=False</span></span><br><span class="line">    z = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>) <span class="comment">#   requires_grad=True</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">doubler</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">z = doubler(x)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>.backward()</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = a**<span class="number">2</span></span><br><span class="line">d = b*c</span><br><span class="line">c.backward()  <span class="comment"># c.backward(retain_graph=True)</span></span><br><span class="line">d.backward()</span><br></pre></td></tr></table></figure>
-
-<p>当在调用.backward()或autograd.grad()时，将释放图中保存的中间值。如果需要第二次向后遍历图，或者在调用backward后需要访问保存的张量，则指定retain_graph&#x3D;True。</p>
-<p>.backward()方法仅适用于标量</p>
-<p>.register_hook()</p>
-<p><a href="https://oldpan.me/archives/pytorch-autograd-hook">https://oldpan.me/archives/pytorch-autograd-hook</a></p>
-<p>获取中间tensor的grad值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = torch.tensor(<span class="number">1.5</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor(<span class="number">2.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">c = torch.tensor(<span class="number">3.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">m1 = a * b</span><br><span class="line">m1.register_hook(<span class="built_in">print</span>)  <span class="comment"># 控制台输出tensor(1.)</span></span><br><span class="line">r1 = m1 + c</span><br><span class="line">r1.backward()</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <tags>
-        <tag>python, pytorch</tag>
       </tags>
   </entry>
   <entry>
@@ -3385,6 +3621,46 @@
 <p>add -&gt; true || IllegalStateException</p>
 <p>Arrays.asList() 返回的是一个存储 Integer 对象的 List</p>
 <p>new int[]{} 返回的是一个存储 int 类型的 数组</p>
+<h3 id="this-static-class与内部类"><a href="#this-static-class与内部类" class="headerlink" title="this, static class与内部类"></a>this, static class与内部类</h3><blockquote>
+<p>Java 的语言设计中，不支持在顶层声明一个静态类！！！</p>
+</blockquote>
+<p>优先级：方法参数 &gt; 当前类变量 &gt; 外部类变量</p>
+<p>作用域：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>内部类</th>
+<th>静态内部类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>访问外部类实例变量</td>
+<td>可以直接访问</td>
+<td>不能直接访问</td>
+</tr>
+<tr>
+<td>访问外部类静态变量</td>
+<td>可以直接访问</td>
+<td>可以直接访问</td>
+</tr>
+<tr>
+<td>持有外部类实例引用</td>
+<td>隐式持有</td>
+<td>不持有</td>
+</tr>
+<tr>
+<td>作用域关系</td>
+<td>嵌套在外部类作用域内</td>
+<td>嵌套在外部类作用域内</td>
+</tr>
+</tbody></table>
+<p><code>this</code> refers to the current <strong>instance</strong> of the class</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">staticVar</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">StaticTest</span> <span class="operator">=</span> <span class="number">123</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">instanceVar</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">test</span> <span class="operator">=</span> <span class="number">666</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">InnerClass</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">instanceVar</span> <span class="operator">=</span> <span class="number">30</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="type">int</span> <span class="variable">staticVar</span> <span class="operator">=</span> <span class="number">40</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="type">int</span> <span class="variable">StaticTest</span> <span class="operator">=</span> <span class="number">501231</span>;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">interMethod</span><span class="params">(<span class="type">int</span> <span class="keyword">var</span>)</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Local variable: &quot;</span> + <span class="keyword">var</span>); <span class="comment">// 参数 instanceVar</span></span><br><span class="line">            System.out.println(<span class="string">&quot;InnerClass variable: &quot;</span> + <span class="built_in">this</span>.instanceVar); <span class="comment">// InnerClass实例的 instanceVar</span></span><br><span class="line">            System.out.println(<span class="string">&quot;priority test: &quot;</span> + instanceVar);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">StaticInnerClass</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">instanceVar</span> <span class="operator">=</span> <span class="number">40</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="type">int</span> <span class="variable">staticVar</span> <span class="operator">=</span> <span class="number">50</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="type">int</span> <span class="variable">ccc</span> <span class="operator">=</span> <span class="number">12315</span>;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">interMethod</span><span class="params">(<span class="type">int</span> instanceVar)</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Parameter variable: &quot;</span> + instanceVar);</span><br><span class="line">            System.out.println(<span class="string">&quot;Outter static variable: &quot;</span> + MyClass.staticVar);</span><br><span class="line">            System.out.println(<span class="string">&quot;Local variable: &quot;</span> + <span class="built_in">this</span>.instanceVar);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">interStaticMethod</span><span class="params">(<span class="type">int</span> instanceVar)</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Parameter variable: &quot;</span> + instanceVar);</span><br><span class="line">            System.out.println(<span class="string">&quot;Outter static variable1: &quot;</span> + MyClass.staticVar);</span><br><span class="line">            System.out.println(<span class="string">&quot;Outter static variable2: &quot;</span> + StaticTest);</span><br><span class="line">            System.out.println(<span class="string">&quot;Local static variable: &quot;</span> + staticVar);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">myMethod</span><span class="params">(<span class="type">int</span> instanceVar)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Local variable: &quot;</span> + instanceVar);</span><br><span class="line">        System.out.println(<span class="string">&quot;Parameter: &quot;</span> + <span class="built_in">this</span>.instanceVar);</span><br><span class="line">        System.out.println(<span class="string">&quot;Instance variable without this &quot;</span> + test);</span><br><span class="line">        System.out.println(<span class="string">&quot;Instance variable: &quot;</span> + <span class="built_in">this</span>.instanceVar);</span><br><span class="line">        System.out.println(<span class="string">&quot;Static variable (discouraged): &quot;</span> + <span class="built_in">this</span>.staticVar);</span><br><span class="line">        System.out.println(<span class="string">&quot;Static variable (preferred): &quot;</span> + MyClass.staticVar);</span><br><span class="line">        System.out.println(<span class="string">&quot;InnnerClass static variable: &quot;</span> + InnerClass.staticVar);</span><br><span class="line">        System.out.println(<span class="string">&quot;InnnerStaticClass static variable: &quot;</span> + StaticInnerClass.staticVar);</span><br><span class="line"><span class="comment">//        System.out.println(&quot;InnnerClass static variable without classname: &quot; + ccc);</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">MyClass</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyClass</span>();</span><br><span class="line"><span class="comment">//        MyClass.InnerClass interObj = new MyClass.InnerClass(); // 错误：非（静态内部类）的实例化必须依赖于实例了的外部类</span></span><br><span class="line">        MyClass.<span class="type">InnerClass</span> <span class="variable">interObj</span> <span class="operator">=</span> obj.<span class="keyword">new</span> <span class="title class_">InnerClass</span>(); <span class="comment">// 正确</span></span><br><span class="line">        interObj.interMethod(<span class="number">40</span>);</span><br><span class="line">        MyClass.StaticInnerClass.interStaticMethod(<span class="number">123</span>);</span><br><span class="line">        MyClass.<span class="type">StaticInnerClass</span> <span class="variable">staticObj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyClass</span>.StaticInnerClass();</span><br><span class="line">        staticObj.interMethod(<span class="number">40</span>);</span><br><span class="line">        obj.myMethod(<span class="number">40</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
 <h3 id="包"><a href="#包" class="headerlink" title="包"></a>包</h3><p>对于<code>com.example.project</code></p>
 <p>其中， <code>com</code> 是顶层包, <code>example</code> 是 <code>com</code> 包的子包, <code>project</code> 是 <code>com.example</code> 包的子包。</p>
 <p>在文件系统中，存在以下的层次结构：</p>
@@ -3652,7 +3928,7 @@
 </ul>
 <h3 id="匿名内部类与Lambda表达式"><a href="#匿名内部类与Lambda表达式" class="headerlink" title="匿名内部类与Lambda表达式"></a>匿名内部类与Lambda表达式</h3><ul>
 <li><strong>Lambda 表达式没有自己的 this 指针。</strong> 在 Lambda 表达式内部，this 关键字仍然指向外部类实例。</li>
-<li><strong>Lambda 表达式可以隐式地访问外部类的成员变量和方法，</strong> 而不需要使用 外部类名.this 的方式。</li>
+<li><strong>Lambda 表达式可以隐式地访问外部类的成员变量和方法。</strong></li>
 </ul>
 <h3 id="线程与同步"><a href="#线程与同步" class="headerlink" title="线程与同步"></a>线程与同步</h3><img src="/2024/07/28/Android-Learning-Record/image-20240729104740287.png" class="" title="image-20240729104740287">
 
