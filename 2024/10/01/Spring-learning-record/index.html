@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/10/01/Spring-learning-record/1492929553651_7.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/10/01/Spring-learning-record/1492930243286_8.png">
 <meta property="article:published_time" content="2024-10-01T10:30:43.000Z">
-<meta property="article:modified_time" content="2024-12-29T10:56:00.661Z">
+<meta property="article:modified_time" content="2025-01-07T12:12:01.387Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="java, Spring">
 <meta name="twitter:card" content="summary">
@@ -227,7 +227,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-12-29 18:56:00" itemprop="dateModified" datetime="2024-12-29T18:56:00+08:00">2024-12-29</time>
+                <time title="Modified: 2025-01-07 20:12:01" itemprop="dateModified" datetime="2025-01-07T20:12:01+08:00">2025-01-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -695,7 +695,17 @@
 </ul>
 </li>
 </ul>
-<h2 id="Bean的创建"><a href="#Bean的创建" class="headerlink" title="Bean的创建"></a>Bean的创建</h2><h3 id="使用构造函数注入-使用-Setter-方法注入"><a href="#使用构造函数注入-使用-Setter-方法注入" class="headerlink" title="使用构造函数注入 &amp;&amp; 使用 Setter 方法注入"></a>使用构造函数注入 &amp;&amp; 使用 Setter 方法注入</h3><p><strong>构造函数注入</strong></p>
+<h2 id="Bean的创建"><a href="#Bean的创建" class="headerlink" title="Bean的创建"></a>Bean的创建</h2><h3 id="使用构造函数注入-使用-Setter-方法注入"><a href="#使用构造函数注入-使用-Setter-方法注入" class="headerlink" title="使用构造函数注入 &amp;&amp; 使用 Setter 方法注入"></a>使用构造函数注入 &amp;&amp; 使用 Setter 方法注入</h3><blockquote>
+<p>为什么不使用autowire注入？</p>
+<p>构造函数注入的优点</p>
+<ol>
+<li><p>注入的目标变量可以是final的</p>
+</li>
+<li><p>被注入的对象必须存在，即注入的目标变量注入后不会为null</p>
+</li>
+</ol>
+</blockquote>
+<p><strong>构造函数注入</strong></p>
 <p>假设我们有两个类：<code>UserService</code> 和 <code>EmailService</code>，<code>UserService</code> 依赖于 <code>EmailService</code>。</p>
 <p><strong>EmailService 类：</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EmailService</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendEmail</span><span class="params">(String to, String subject, String body)</span> &#123;</span><br><span class="line">    	System.out.println(<span class="string">&quot;Sending email to &quot;</span> + to + <span class="string">&quot;:\nSubject: &quot;</span> + subject + <span class="string">&quot;\nBody: &quot;</span> + body);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -706,7 +716,7 @@
 
 
 <p><strong>Setter 方法注入</strong></p>
-<p>假设我们仍然使用 <code>UserService</code> 和 <code>EmailService</code>，但这次使用 Setter 方法注入 <code>EmailService</code>。</p>
+<p>仍使用 <code>UserService</code> 和 <code>EmailService</code>，使用 Setter 方法注入 <code>EmailService</code>。</p>
 <p><strong>EmailService 类：</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EmailService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendEmail</span><span class="params">(String to, String subject, String body)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Sending email to &quot;</span> + to + <span class="string">&quot;:\nSubject: &quot;</span> + subject + <span class="string">&quot;\nBody: &quot;</span> + body);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
