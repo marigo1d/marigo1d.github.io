@@ -31,8 +31,9 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919111718667.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919155834155.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919160103358.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/19063731-d7bc5026051ea412.png">
 <meta property="article:published_time" content="2024-08-10T01:52:46.000Z">
-<meta property="article:modified_time" content="2025-01-17T09:12:40.571Z">
+<meta property="article:modified_time" content="2025-01-22T13:39:14.119Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="database">
 <meta name="twitter:card" content="summary">
@@ -225,7 +226,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-01-17 17:12:40" itemprop="dateModified" datetime="2025-01-17T17:12:40+08:00">2025-01-17</time>
+                <time title="Modified: 2025-01-22 21:39:14" itemprop="dateModified" datetime="2025-01-22T21:39:14+08:00">2025-01-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -651,26 +652,42 @@
 
 
 
-<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><p>redis所有数据结构均为 key - value结构</p>
-<p><strong>value可为以下结构</strong></p>
+<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>指令 对象 [value]&#x2F;[key-value]</p>
+<h3 id="数据结构-底层原理"><a href="#数据结构-底层原理" class="headerlink" title="数据结构&amp;底层原理"></a>数据结构&amp;底层原理</h3><p>redis所有数据结构均为 key - value结构</p>
+<p><strong>value为以下结构</strong></p>
+<p>String(~)</p>
+<p>Hash(H~)</p>
 <ul>
-<li><p>String(~)</p>
-</li>
-<li><p>Hash(H~)</p>
-</li>
-<li><p>List(L~)</p>
-</li>
-<li><p>Set(S~)</p>
-</li>
-<li><p>Sorted Set(Z~)</p>
-</li>
-<li><p>Bitmap(~BIT)</p>
-</li>
-<li><p>Geo(GEO)</p>
+<li>压缩列表（字典中单个K-V小于64字节，字典中中K-V个数小于512个）</li>
+<li>散列表<ul>
+<li>自动扩容 + 链表（隔壁java使用红黑树）</li>
+</ul>
 </li>
 </ul>
+<p>List(L~)</p>
+<ul>
+<li>压缩列表（列表中单个数据小于64字节，列表中数据个数小于512个）<ul>
+<li>每个元素使用（数据长+数据值）存储，每个元素size不等</li>
+<li>不等长元素压缩了存储空间</li>
+</ul>
+</li>
+<li>双向循环列表</li>
+</ul>
+<p>Set(S~)</p>
+<ul>
+<li>有序数组（元素均为整数，元素个数小于512个）</li>
+<li>散列表</li>
+</ul>
+<p>Sorted Set(Z~)</p>
+<ul>
+<li>压缩列表（元素size小于64字节，元素个数小于512个）</li>
+<li>跳表</li>
+</ul>
+<img src="/2024/08/10/Database-Learning-Record/19063731-d7bc5026051ea412.png" class="" title="skip-pic">
+
+<p>Bitmap(~BIT)</p>
+<p>Geo(GEO)</p>
 <h3 id="Redis持久化"><a href="#Redis持久化" class="headerlink" title="Redis持久化"></a>Redis持久化</h3><p>Redis 的数据持久化机制允许将内存中的数据保存到磁盘文件，以便在服务重启或宕机后可以恢复数据。主要有以下两种机制：</p>
-<hr>
 <p><strong>RDB（Redis DataBase）持久化</strong></p>
 <p>RDB 是 Redis 的快照方式，定期将内存中的数据以二进制文件的形式保存到磁盘。</p>
 <p><strong>工作原理：</strong></p>
@@ -784,7 +801,7 @@
 <li><strong>实现</strong>：Redis 通过维护一个计数器（<code>counter</code>）跟踪每个键的访问频率，采用递减机制避免计数器无限增长。</li>
 </ul>
 </blockquote>
-<h3 id="Lua脚本-与-Redis事务"><a href="#Lua脚本-与-Redis事务" class="headerlink" title="Lua脚本 与 Redis事务"></a>Lua脚本 与 Redis事务</h3><p><strong>Lua脚本</strong>：</p>
+<h3 id="Redis高可用"><a href="#Redis高可用" class="headerlink" title="Redis高可用"></a>Redis高可用</h3><h4 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h4><h4 id="集群哨兵"><a href="#集群哨兵" class="headerlink" title="集群哨兵"></a>集群哨兵</h4><h3 id="Lua脚本-与-Redis事务"><a href="#Lua脚本-与-Redis事务" class="headerlink" title="Lua脚本 与 Redis事务"></a>Lua脚本 与 Redis事务</h3><p><strong>Lua脚本</strong>：</p>
 <ul>
 <li>Redis 在执行 Lua 脚本时，保证脚本中的所有命令在一个原子操作内完成。即使脚本包含多个 Redis 命令，这些命令也不会被其他客户端的命令插入。</li>
 <li>Redis 使用单线程模型，Lua 脚本执行期间不会有其他命令被执行，因此具备天然的原子性。</li>
@@ -798,6 +815,35 @@
 <blockquote>
 <p>“事务本质上是批量发送命令”，这意味着如果多个客户端向redis服务端发送事务块，由于一个redis服务端执行命令是单线程的，<strong>有很大可能这多个客户端的事务块中的命令是交错执行的</strong>，没有保证原子性</p>
 </blockquote>
+<h3 id="Redis-分布式锁"><a href="#Redis-分布式锁" class="headerlink" title="Redis 分布式锁"></a><strong>Redis 分布式锁</strong></h3><p><strong>场景</strong></p>
+<p>假设在一个电商系统中，多个服务实例同时对商品库存进行扣减操作，为了防止超卖问题，需要引入分布式锁来保证同一时间只有一个实例可以操作某件商品的库存。</p>
+<p><strong>实现</strong></p>
+<p>使用 Redis 的 <code>SET</code> 指令实现分布式锁：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接 Redis</span></span><br><span class="line">redis_client = redis.StrictRedis(host=<span class="string">&#x27;localhost&#x27;</span>, port=<span class="number">6379</span>, decode_responses=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">acquire_lock</span>(<span class="params">lock_key, lock_value, expire_time</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    尝试获取锁</span></span><br><span class="line"><span class="string">    :param lock_key: 锁的键</span></span><br><span class="line"><span class="string">    :param lock_value: 锁的唯一标识值（通常用 UUID）</span></span><br><span class="line"><span class="string">    :param expire_time: 锁的过期时间（单位：秒）</span></span><br><span class="line"><span class="string">    :return: True 获取成功，False 获取失败</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> redis_client.<span class="built_in">set</span>(lock_key, lock_value, ex=expire_time, nx=<span class="literal">True</span>)  // 使用SETNX实现</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">release_lock</span>(<span class="params">lock_key, lock_value</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    释放锁</span></span><br><span class="line"><span class="string">    :param lock_key: 锁的键</span></span><br><span class="line"><span class="string">    :param lock_value: 锁的唯一标识值</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    script = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    if redis.call(&quot;GET&quot;, KEYS[1]) == ARGV[1] then</span></span><br><span class="line"><span class="string">        return redis.call(&quot;DEL&quot;, KEYS[1])</span></span><br><span class="line"><span class="string">    else</span></span><br><span class="line"><span class="string">        return 0</span></span><br><span class="line"><span class="string">    end</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    redis_client.<span class="built_in">eval</span>(script, <span class="number">1</span>, lock_key, lock_value)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例：使用锁</span></span><br><span class="line">lock_key = <span class="string">&quot;product_123_lock&quot;</span></span><br><span class="line">lock_value = <span class="string">&quot;unique_id_456&quot;</span>  <span class="comment"># 通常用 UUID 生成</span></span><br><span class="line">expire_time = <span class="number">10</span>  <span class="comment"># 锁的过期时间为 10 秒</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> acquire_lock(lock_key, lock_value, expire_time):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;获取锁成功，处理逻辑...&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">5</span>)  <span class="comment"># 模拟业务逻辑</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        release_lock(lock_key, lock_value)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;锁已释放&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;获取锁失败，稍后再试&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键点</strong></p>
+<ol>
+<li>SET 命令的参数：<ul>
+<li><code>NX</code> 表示当键不存在时才设置。</li>
+<li><code>EX</code> 表示设置键的过期时间。</li>
+</ul>
+</li>
+<li>使用 Lua 脚本保证释放锁的原子性。</li>
+<li>锁的 <code>value</code> 必须唯一，用于避免误释放其他线程的锁。</li>
+</ol>
+<h3 id="Redis-分布式会话"><a href="#Redis-分布式会话" class="headerlink" title="Redis 分布式会话"></a><strong>Redis 分布式会话</strong></h3><p><strong>场景</strong></p>
+<p>在分布式系统中，用户的会话信息（如登录状态）需要共享在多个实例之间。Redis 是常用的分布式会话存储解决方案。</p>
+<p><strong>实现</strong></p>
+<p>假设用户登录系统后，生成一个会话 ID（如 <code>session_id</code>），将用户信息存储到 Redis 中。</p>
+<p><strong>代码示例</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接 Redis</span></span><br><span class="line">redis_client = redis.StrictRedis(host=<span class="string">&#x27;localhost&#x27;</span>, port=<span class="number">6379</span>, decode_responses=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_session</span>(<span class="params">user_id</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    创建会话</span></span><br><span class="line"><span class="string">    :param user_id: 用户 ID</span></span><br><span class="line"><span class="string">    :return: session_id</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    session_id = <span class="built_in">str</span>(uuid.uuid4())  <span class="comment"># 生成唯一会话 ID</span></span><br><span class="line">    session_key = <span class="string">f&quot;session:<span class="subst">&#123;session_id&#125;</span>&quot;</span></span><br><span class="line">    session_data = &#123;<span class="string">&quot;user_id&quot;</span>: user_id, <span class="string">&quot;login_time&quot;</span>: time.time()&#125;</span><br><span class="line">    redis_client.hmset(session_key, session_data)</span><br><span class="line">    redis_client.expire(session_key, <span class="number">3600</span>)  <span class="comment"># 设置过期时间为 1 小时</span></span><br><span class="line">    <span class="keyword">return</span> session_id</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_session</span>(<span class="params">session_id</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    获取会话信息</span></span><br><span class="line"><span class="string">    :param session_id: 会话 ID</span></span><br><span class="line"><span class="string">    :return: 会话数据</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    session_key = <span class="string">f&quot;session:<span class="subst">&#123;session_id&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> redis_client.hgetall(session_key)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete_session</span>(<span class="params">session_id</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    删除会话</span></span><br><span class="line"><span class="string">    :param session_id: 会话 ID</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    session_key = <span class="string">f&quot;session:<span class="subst">&#123;session_id&#125;</span>&quot;</span></span><br><span class="line">    redis_client.delete(session_key)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例：创建和获取会话</span></span><br><span class="line">user_id = <span class="number">101</span></span><br><span class="line">session_id = create_session(user_id)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;新会话创建成功：<span class="subst">&#123;session_id&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取会话</span></span><br><span class="line">session_data = get_session(session_id)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;会话数据：<span class="subst">&#123;session_data&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除会话</span></span><br><span class="line">delete_session(session_id)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;会话已删除&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键点</strong></p>
+<ol>
+<li><strong>会话 ID</strong>：每个用户对应一个唯一会话 ID，可通过 <code>uuid</code> 生成。</li>
+<li><strong>会话存储格式</strong>：通常使用 Redis 的哈希结构（<code>HSET</code>）存储用户数据。</li>
+<li><strong>会话过期时间</strong>：通过 <code>EXPIRE</code> 设置会话的有效期，超时后自动清除。</li>
+</ol>
 <h2 id="Redis-与-数据库-数据一致性"><a href="#Redis-与-数据库-数据一致性" class="headerlink" title="Redis 与 数据库 数据一致性"></a>Redis 与 数据库 数据一致性</h2><p>假设 redis，数据库 存在相同数据</p>
 <p><strong>方案 1：缓存优先，异步双写</strong></p>
 <p><strong>流程：</strong></p>
@@ -908,7 +954,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%88%97%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">多列索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-JDBC"><span class="nav-text">Java JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%BA%8B%E5%8A%A1"><span class="nav-text">JDBC事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E6%89%B9%E5%A4%84%E7%90%86"><span class="nav-text">JDBC批处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="nav-text">JDBC连接池</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%88%97%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">多列索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-JDBC"><span class="nav-text">Java JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%BA%8B%E5%8A%A1"><span class="nav-text">JDBC事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E6%89%B9%E5%A4%84%E7%90%86"><span class="nav-text">JDBC批处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="nav-text">JDBC连接池</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">主从复制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
