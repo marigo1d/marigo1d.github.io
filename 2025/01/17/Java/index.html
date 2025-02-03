@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/image-20240814162137394.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/image-20240814162220131.png">
 <meta property="article:published_time" content="2025-01-17T02:43:18.000Z">
-<meta property="article:modified_time" content="2025-02-03T03:03:17.050Z">
+<meta property="article:modified_time" content="2025-02-03T06:17:57.522Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-03 11:03:17" itemprop="dateModified" datetime="2025-02-03T11:03:17+08:00">2025-02-03</time>
+                <time title="Modified: 2025-02-03 14:17:57" itemprop="dateModified" datetime="2025-02-03T14:17:57+08:00">2025-02-03</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -766,7 +766,45 @@
 <li><strong>Lambda 表达式没有自己的 this 指针。</strong> 在 Lambda 表达式内部，this 关键字仍然指向外部类实例。</li>
 <li><strong>Lambda 表达式可以隐式地访问外部类的成员变量和方法。</strong></li>
 </ul>
-<h2 id="JUC"><a href="#JUC" class="headerlink" title="JUC"></a>JUC</h2><h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><p>每个<strong>线程类</strong>持有 <code>ThreadLocalMap</code> 实例</p>
+<h2 id="JUC"><a href="#JUC" class="headerlink" title="JUC"></a>JUC</h2><h3 id="JMM"><a href="#JMM" class="headerlink" title="JMM"></a>JMM</h3><p>Java Memory Model，Java内存模型，关于多线程环境下的共享变量可见性、指令重排等方式的设计</p>
+<p>Java使用<strong>共享内存并发模型</strong></p>
+<p>在共享内存并发模型中，多个线程或进程共享同一块内存区域，所有线程都可以读取和写入这些共享内存中的数据。为了确保多个线程或进程之间的同步，通常需要使用锁（如互斥锁、读写锁等）或其他同步机制。</p>
+<blockquote>
+<p>存在其他并发内存模型：消息传递并发模型</p>
+<p>在消息传递并发模型中，线程或进程通过发送和接收消息来进行通信。每个线程或进程都有自己的私有内存区域，不能直接访问其他线程或进程的内存。当需要交换信息时，它们通过消息传递机制来进行。这种模型不涉及共享内存，因此不需要锁等同步机制，通常更易于避免竞态条件。</p>
+</blockquote>
+<p><strong>特性</strong></p>
+<ul>
+<li>可见性：当一个线程修改了共享变量的值，其他线程立即可见（通过 <code>volatile</code> 关键字实现）</li>
+<li>原子性：操作为一个整体，不会被其他操作打断（禁止对 <code>volatile</code> 变量的操作进行指令重排序）</li>
+<li>有序性：程序执行顺序按照代码先后顺序执行（通过关键字 <code>synchronized</code> 和 <code>volatile</code> 实现）</li>
+</ul>
+<blockquote>
+<p>volatile 禁止指令重排</p>
+<p>volatile 修饰变量要么在堆，要么在元空间</p>
+<p>准确来说不是禁止了指令重排，而是确保volatile关键字修饰的变量的写入指令之前的指令重排后仍在其之前，volatile关键字修饰的变量的读取指令之后的指令重排后仍在其之后</p>
+<ul>
+<li>当程序执行到 volatile 变量的读操作或者写操作时，在其前面操作的更改肯定已经全部进行，且结果对后面的操作可见；在其后面的操作肯定还没有进行；</li>
+<li>在进行指令优化时，不能将 volatile 变量的语句放在其后面执行，也不能把 volatile 变量后面的语句放到其前面执行。</li>
+</ul>
+</blockquote>
+<p><strong>内存</strong></p>
+<ul>
+<li>主内存：堆中对象实例</li>
+<li>工作内存：线程栈</li>
+</ul>
+<p><strong>Happens-Before 关系</strong>：</p>
+<ul>
+<li><strong>Happens-Before</strong> 关系是 JMM 中定义的一个重要概念，确保在某些操作发生之后，其他操作的结果是可见的。</li>
+<li>比如，某个线程对共享变量的写操作，在另一个线程的读操作之前发生，Java 保证第一个线程的写操作会在第二个线程的读操作之前“可见”。</li>
+<li>JMM 定义了多个规则来确定操作之间的 Happens-Before 关系，例如：<ul>
+<li>程序顺序规则：一个线程中的操作按代码顺序执行。</li>
+<li>锁规则：释放锁的操作 happens-before 后续的获取锁操作。</li>
+<li>volatile 规则：对一个 <code>volatile</code> 变量的写操作 happens-before 后续对该变量的读操作。</li>
+</ul>
+</li>
+</ul>
+<h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><p>每个<strong>线程类</strong>持有 <code>ThreadLocalMap</code> 实例</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Thread 类中的定义（简化版）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Thread</span> &#123;</span><br><span class="line">    <span class="comment">// 每个线程持有一个 ThreadLocalMap 实例</span></span><br><span class="line">    ThreadLocal.<span class="type">ThreadLocalMap</span> <span class="variable">threadLocals</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p> <code>ThreadLocalMap</code> 为 key-value结构</p>
@@ -805,7 +843,7 @@
 <li><strong>join():</strong> 适用于需要等待某个线程执行完毕后再继续执行的场景。</li>
 </ul>
 <h4 id="Thread-join"><a href="#Thread-join" class="headerlink" title="Thread.join()"></a>Thread.join()</h4><blockquote>
-<p>其实ThreadX.join()就是加入线程X的等待队列</p>
+<p>谁调用ThreadX.join()，谁加入线程X的等待队列，等待线程X执行完成</p>
 </blockquote>
 <p><strong>对于线程 ThreadA 和线程 ThreadB:</strong> </p>
 <p>若 ThreadA 在运行过程中执行 ThreadB.join()，</p>
@@ -829,7 +867,7 @@
 </ul>
 <p><strong>Object.wait()</strong></p>
 <p>让当前线程（假设是 ThreadA）<strong>无限期地释放锁对象，并进入 WAITING 状态</strong>，直到其他线程（例如 ThreadB）调用 notify() 或 notifyAll() 方法唤醒它。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当前线程为 ThreadA</span></span><br><span class="line"><span class="keyword">synchronized</span>(lockObject) &#123; <span class="comment">// lockObject 是共享锁对象</span></span><br><span class="line">  <span class="keyword">while</span> (!someCondition) &#123; <span class="comment">// someCondition 是线程等待的条件</span></span><br><span class="line">    lockObject.wait(); <span class="comment">// ThreadA 释放锁，进入 WAITING 状态</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// someCondition 为 true，ThreadA 被唤醒后，会重新尝试获取锁</span></span><br><span class="line">  <span class="comment">// ... 执行操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当前线程为 ThreadA</span></span><br><span class="line"><span class="keyword">synchronized</span>(lockObject) &#123; <span class="comment">// lockObject 是共享锁对象，ThreadA 为 Running 状态，ThreadB 为 Block 状态</span></span><br><span class="line">  <span class="keyword">while</span> (!someCondition) &#123; <span class="comment">// someCondition 是线程等待的条件</span></span><br><span class="line">    lockObject.wait(); <span class="comment">// ThreadA 释放锁，进入 WAITING 状态；ThreadB 进入 Ready 状态</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// someCondition 为 true，ThreadA 被唤醒后，会重新尝试获取锁</span></span><br><span class="line">  <span class="comment">// ... 执行操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -1650,7 +1688,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java"><span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-text">String</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE"><span class="nav-text">枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">常用容器与初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this-static-class%E4%B8%8E%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-text">this, static class与内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85"><span class="nav-text">包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">泛型与通配符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">类加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-text">反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E4%B8%8EAPT"><span class="nav-text">注解与APT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E4%B8%8ELambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">匿名内部类与Lambda表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JUC"><span class="nav-text">JUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-text">ThreadLocal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="nav-text">线程与同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-join"><span class="nav-text">Thread.join()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wait-%E5%92%8C-notify"><span class="nav-text">wait() 和 notify()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LockSupport"><span class="nav-text">LockSupport</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lock"><span class="nav-text">Lock</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-text">分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#volatile"><span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CAS"><span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#synchronized"><span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ReentrantLock"><span class="nav-text">ReentrantLock</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sychronize-%E5%92%8C-ReentrantLock-%E5%AF%B9%E6%AF%94"><span class="nav-text">sychronize 和 ReentrantLock 对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%86%85%E5%AD%98"><span class="nav-text">JVM内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nonheap%EF%BC%88%E9%9D%9E%E5%A0%86%EF%BC%89"><span class="nav-text">Nonheap（非堆）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heap-%E5%A0%86"><span class="nav-text">Heap (堆)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-text">Thread (线程)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC"><span class="nav-text">GC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A0%86%E5%86%85%E5%AD%98%E5%88%92%E5%88%86"><span class="nav-text">堆内存划分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">垃圾收集类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E8%BD%AC%E7%A7%BB"><span class="nav-text">对象转移</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">垃圾回收算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-text">常见垃圾收集器</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java"><span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-text">String</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE"><span class="nav-text">枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">常用容器与初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this-static-class%E4%B8%8E%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-text">this, static class与内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85"><span class="nav-text">包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">泛型与通配符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">类加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-text">反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E4%B8%8EAPT"><span class="nav-text">注解与APT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E4%B8%8ELambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">匿名内部类与Lambda表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JUC"><span class="nav-text">JUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JMM"><span class="nav-text">JMM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-text">ThreadLocal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="nav-text">线程与同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-join"><span class="nav-text">Thread.join()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wait-%E5%92%8C-notify"><span class="nav-text">wait() 和 notify()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LockSupport"><span class="nav-text">LockSupport</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lock"><span class="nav-text">Lock</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-text">分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#volatile"><span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CAS"><span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#synchronized"><span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ReentrantLock"><span class="nav-text">ReentrantLock</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sychronize-%E5%92%8C-ReentrantLock-%E5%AF%B9%E6%AF%94"><span class="nav-text">sychronize 和 ReentrantLock 对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%86%85%E5%AD%98"><span class="nav-text">JVM内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nonheap%EF%BC%88%E9%9D%9E%E5%A0%86%EF%BC%89"><span class="nav-text">Nonheap（非堆）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heap-%E5%A0%86"><span class="nav-text">Heap (堆)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-text">Thread (线程)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC"><span class="nav-text">GC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A0%86%E5%86%85%E5%AD%98%E5%88%92%E5%88%86"><span class="nav-text">堆内存划分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">垃圾收集类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E8%BD%AC%E7%A7%BB"><span class="nav-text">对象转移</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">垃圾回收算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-text">常见垃圾收集器</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1666,7 +1704,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
