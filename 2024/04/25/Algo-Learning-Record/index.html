@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/25/Algo-Learning-Record/image-20240426101614103.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/04/25/Algo-Learning-Record/image-20240426102031155.png">
 <meta property="article:published_time" content="2024-04-25T11:05:30.000Z">
-<meta property="article:modified_time" content="2025-02-03T03:31:27.051Z">
+<meta property="article:modified_time" content="2025-02-03T07:20:34.070Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="algorithm, Java">
 <meta name="twitter:card" content="summary">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-03 11:31:27" itemprop="dateModified" datetime="2025-02-03T11:31:27+08:00">2025-02-03</time>
+                <time title="Modified: 2025-02-03 15:20:34" itemprop="dateModified" datetime="2025-02-03T15:20:34+08:00">2025-02-03</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -394,15 +394,17 @@
 <td>大规模数据，需要原地排序</td>
 </tr>
 </tbody></table>
-<h1 id="算法题目与设计模式"><a href="#算法题目与设计模式" class="headerlink" title="算法题目与设计模式"></a>算法题目与设计模式</h1><h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><p>平衡二叉树树</p>
+<h1 id="算法题目与设计模式"><a href="#算法题目与设计模式" class="headerlink" title="算法题目与设计模式"></a>算法题目与设计模式</h1><h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><p>改进平衡二叉树</p>
 <ul>
 <li>根节点为黑</li>
 <li>不存在红节点相邻</li>
 <li>黑高一致</li>
 <li>叶节点为黑（NIL节点或空节点）</li>
 </ul>
+<p>黑高不一致&#x2F;红节点相邻时 <strong>发生平衡</strong></p>
 <p><strong>默认插入节点为红色</strong></p>
-<p>通过染色+旋转修复</p>
+<p>按平衡二叉树逻辑插入红色新节点，交替以下过程</p>
+<p>1.父节点重新染色 &lt;-&gt; 2.从下往上第一个黑高不一致节点旋转</p>
 <h2 id="B树与B-树"><a href="#B树与B-树" class="headerlink" title="B树与B+树"></a>B树与B+树</h2><p>二叉搜索树</p>
 <ul>
 <li><p>所有非叶子结点至多拥有两个儿子（Left和Right）；</p>
