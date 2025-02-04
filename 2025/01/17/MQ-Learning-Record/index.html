@@ -27,11 +27,14 @@
 <meta property="og:site_name" content="Marigold">
 <meta property="og:description" content="MQ相关学习记录">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2025/01/17/MQ-Learning-Record/rabbitmq_1.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/01/17/MQ-Learning-Record/1460000038173889">
 <meta property="article:published_time" content="2025-01-17T09:14:31.000Z">
-<meta property="article:modified_time" content="2025-01-22T13:14:14.243Z">
+<meta property="article:modified_time" content="2025-02-04T08:16:00.566Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Message Queue, Java">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://marigo1d.github.io/2025/01/17/MQ-Learning-Record/rabbitmq_1.png">
 
 <link rel="canonical" href="https://marigo1d.github.io/2025/01/17/MQ-Learning-Record/">
 
@@ -220,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-01-22 21:14:14" itemprop="dateModified" datetime="2025-01-22T21:14:14+08:00">2025-01-22</time>
+                <time title="Modified: 2025-02-04 16:16:00" itemprop="dateModified" datetime="2025-02-04T16:16:00+08:00">2025-02-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -301,6 +304,11 @@
 <p>节点挂一个仍然可用</p>
 <p>镜像集群</p>
 <p>每个节点均有完整数据；主从同步；</p>
+<h2 id="Rabbit-MQ"><a href="#Rabbit-MQ" class="headerlink" title="Rabbit MQ"></a>Rabbit MQ</h2><p>ref: <a target="_blank" rel="noopener" href="https://kangshitao.github.io/2021/10/26/rabbitmq/">https://kangshitao.github.io/2021/10/26/rabbitmq/</a></p>
+<img src="/2025/01/17/MQ-Learning-Record/rabbitmq_1.png" class="" title="rabbitmq">
+
+
+
 <h2 id="Rabbit-MQ-消息送达保证"><a href="#Rabbit-MQ-消息送达保证" class="headerlink" title="Rabbit MQ 消息送达保证"></a><strong>Rabbit MQ 消息送达保证</strong></h2><p>确保消息发送到MQ</p>
 <ul>
 <li>发送方确认机制：启用 <code>ConfirmCallback</code> 和 <code>ReturnCallback</code>，确保消息被 RabbitMQ 成功接收。</li>
@@ -341,6 +349,15 @@
 <li><p>为单独消息队列加锁</p>
 </li>
 </ul>
+<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>ref: <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000038173886">https://segmentfault.com/a/1190000038173886</a></p>
+<img src="/2025/01/17/MQ-Learning-Record/1460000038173889" class="" title="kafka">
+
+<p>黑色直角边矩形：一个Broker</p>
+<p>Broker内蓝色圆角矩形：一个partition</p>
+<p>Leader - Follower：主从复制</p>
+<p>Topic-Partition：物理上把 topic 分成一个或多个 patition（对应 server.properties 中的 num.partitions&#x3D;3 配置），每个 patition 物理上对应一个文件夹（该文件夹存储该 patition 的所有消息和索引文件）</p>
+<p>controller：kafka 集群中的其中一个服务器，用来进行 leader election 以及 各种 failover。</p>
+<p>zookeeper：kafka 通过 zookeeper 来存储集群的 meta 信息。</p>
 
     </div>
 
@@ -424,7 +441,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Message-Queue"><span class="nav-text">Message Queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">基础概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97"><span class="nav-text">死信队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97"><span class="nav-text">延迟队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MQ%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">MQ高可用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rabbit-MQ-%E6%B6%88%E6%81%AF%E9%80%81%E8%BE%BE%E4%BF%9D%E8%AF%81"><span class="nav-text">Rabbit MQ 消息送达保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E5%A4%8D%E6%B6%88%E6%81%AF%E4%BA%A7%E7%94%9F-%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E5%B9%82%E7%AD%89%E6%80%A7%E4%BF%9D%E8%AF%81"><span class="nav-text">重复消息产生&amp;消息消费幂等性保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F%E4%BF%9D%E8%AF%81"><span class="nav-text">消息消费顺序保证</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Message-Queue"><span class="nav-text">Message Queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">基础概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97"><span class="nav-text">死信队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97"><span class="nav-text">延迟队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MQ%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">MQ高可用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rabbit-MQ"><span class="nav-text">Rabbit MQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rabbit-MQ-%E6%B6%88%E6%81%AF%E9%80%81%E8%BE%BE%E4%BF%9D%E8%AF%81"><span class="nav-text">Rabbit MQ 消息送达保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E5%A4%8D%E6%B6%88%E6%81%AF%E4%BA%A7%E7%94%9F-%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E5%B9%82%E7%AD%89%E6%80%A7%E4%BF%9D%E8%AF%81"><span class="nav-text">重复消息产生&amp;消息消费幂等性保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F%E4%BF%9D%E8%AF%81"><span class="nav-text">消息消费顺序保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka"><span class="nav-text">Kafka</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
