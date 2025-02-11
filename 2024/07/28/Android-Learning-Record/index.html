@@ -40,12 +40,12 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/944365-34992eb46bdf93e7.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240831191655656.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240831192314544.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/944365-c1adb9dd2d22c056.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/944365-858de1faa38df1b2.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240831145006895.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240831150437519.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240831152442110.png">
 <meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7cc27655e1184f1fa60b1b8ac4ed4a3b~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/944365-c1adb9dd2d22c056.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/944365-858de1faa38df1b2.png">
 <meta property="og:image" content="https://marigo1d.github.io/Android-learning-record/image-20240714103234291.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240731155705321.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240731160912852.png">
@@ -63,7 +63,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193338222.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193638556.png">
 <meta property="article:published_time" content="2024-07-28T02:16:25.000Z">
-<meta property="article:modified_time" content="2025-02-11T00:50:08.602Z">
+<meta property="article:modified_time" content="2025-02-11T12:47:38.404Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Android, Java">
 <meta name="twitter:card" content="summary">
@@ -256,7 +256,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-11 08:50:08" itemprop="dateModified" datetime="2025-02-11T08:50:08+08:00">2025-02-11</time>
+                <time title="Modified: 2025-02-11 20:47:38" itemprop="dateModified" datetime="2025-02-11T20:47:38+08:00">2025-02-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -274,14 +274,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>54k</span>
+              <span>58k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1:38</span>
+              <span>1:46</span>
             </span>
 
         </div>
@@ -459,6 +459,7 @@
 <h3 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h3><p><strong>文件存储</strong></p>
 <p><strong>SharedPreference</strong></p>
 <p><strong>SQLite</strong></p>
+<h3 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a>Adapter</h3><p>实现 数据 - View 绑定</p>
 <h3 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h3><p>为了解决手动内存管理带来的问题而设计的。它们通过引用计数来跟踪有多少个指针指向同一个对象。</p>
 <ul>
 <li>当你创建一个指向对象的智能指针时，对象的引用计数加 1。</li>
@@ -600,7 +601,7 @@
 
 
 
-<h3 id="Handler，Looper与MessageQueue"><a href="#Handler，Looper与MessageQueue" class="headerlink" title="Handler，Looper与MessageQueue"></a>Handler，Looper与MessageQueue</h3><p><strong>Message</strong></p>
+<h3 id="Message"><a href="#Message" class="headerlink" title="Message"></a>Message</h3><h4 id="Handler，Looper与MessageQueue"><a href="#Handler，Looper与MessageQueue" class="headerlink" title="Handler，Looper与MessageQueue"></a>Handler，Looper与MessageQueue</h4><p><strong>Message</strong></p>
 <img src="/2024/07/28/Android-Learning-Record/image-20240813144056439.png" class="" title="image-20240813144056439">
 
 <ul>
@@ -672,10 +673,8 @@
 
 
 
-
-
-
-
+<h4 id="同步屏障"><a href="#同步屏障" class="headerlink" title="同步屏障"></a>同步屏障</h4><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6924733444509892622">图示Android系统原理之Handler同步屏障（二）答：Demo工程中详细演示了插入屏障消息的方式。插入和移除屏障消 - 掘金</a></p>
+<p>输入事件&#x2F;invalidate方法请求屏幕刷新后，会产生同步屏障，屏蔽同步消息的处理，直到一下次Vsync信号到达→Choreographer撤销同步屏障，执行measure, layout, draw</p>
 <h3 id="进程间交互"><a href="#进程间交互" class="headerlink" title="进程间交互"></a>进程间交互</h3><p>平时我们所熟知的前端（Web\Android\iOS）通过网络与服务器通信是客户端-服务端模式的体现，而在Android Framework中，四大组件的创建、生命周期也是通过这样的模式进行通信：</p>
 <ul>
 <li>服务器端(server)指的就是SystemServer进程，这个进程提供了很多服务，比如AMS、PMS、WMS等等，所有的APP进程都可以与其通信。</li>
@@ -974,41 +973,6 @@
 <p>​			-&gt; generateDecor() -&gt;new DecorView(getContext(), -1)</p>
 <p>​			    generateLayout(mDecor)</p>
 <p>​	InitWindowDecorActionBar</p>
-<h4 id="绘制流程"><a href="#绘制流程" class="headerlink" title="绘制流程"></a>绘制流程</h4><img src="/2024/07/28/Android-Learning-Record/944365-c1adb9dd2d22c056.png" class="" title="image-20240831192540253">
-
-<img src="/2024/07/28/Android-Learning-Record/944365-858de1faa38df1b2.png" class="" title="image-20240831192606617">
-
-<p>Android View 绘制流程</p>
-<p><strong>测量阶段（Measure Phase）</strong></p>
-<ul>
-<li><code>onMeasure()</code>方法： 在这个阶段，系统计算 <code>View</code> 的宽度和高度。<code>View</code> 会通过 <code>onMeasure()</code> 方法告诉其父布局应该给它分配多大的空间。父布局会依此来决定子视图的尺寸。<ul>
-<li>父布局会调用子视图的 <code>onMeasure()</code> 方法，传入一个 <code>widthMeasureSpec</code> 和 <code>heightMeasureSpec</code>，其中包含了父布局对子视图尺寸的要求。</li>
-<li>子视图根据这些规格来测量自己的大小，并最终通过 <code>setMeasuredWidth()</code> 和 <code>setMeasuredHeight()</code> 设置自己测量出的尺寸。</li>
-</ul>
-</li>
-</ul>
-<p><strong>布局阶段（Layout Phase）</strong></p>
-<ul>
-<li><code>onLayout()</code> 方法： 在测量阶段完成后，系统会调用 <code>onLayout()</code> 方法来安排每个子视图在父布局中的具体位置。<ul>
-<li>该方法会告诉每个子视图的左上角位置，通常会通过 <code>layout()</code> 方法来设置视图的边界。</li>
-<li>子视图的父布局调用 <code>onLayout()</code> 来确定子视图在父视图中的位置。</li>
-</ul>
-</li>
-</ul>
-<p><strong>绘制阶段（Draw Phase）</strong></p>
-<ul>
-<li><code>onDraw()</code> 方法： 这个阶段是视图的渲染过程，<code>View</code> 在这里绘制自己。系统会调用  <code>onDraw()</code> 方法，视图在此方法内使用 <code>Canvas</code> 对象来进行绘制工作。<ul>
-<li><code>Canvas</code> 提供了一些绘制方法，如 <code>drawText()</code>, <code>drawRect()</code>, <code>drawBitmap()</code> 等，可以用来绘制各种图形和文字。</li>
-<li>如果 <code>View</code> 的 <code>onDraw()</code> 方法需要自定义绘制逻辑，可以在此方法内进行。</li>
-</ul>
-</li>
-</ul>
-<p><strong>额外：刷新阶段（Invalidate Phase）</strong></p>
-<ul>
-<li>当视图的内容发生变化，或者它的位置&#x2F;尺寸发生变化时，可以调用 <code>invalidate()</code> 方法请求重新绘制。</li>
-<li><code>invalidate()</code> 方法会导致 <code>View</code> 重新进入绘制流程，并调用 <code>onDraw()</code> 方法来进行刷新操作。</li>
-</ul>
-<p>自定义View必须重写View的构造函数</p>
 <p><strong>message，handler与View交互案例</strong></p>
 <ol>
 <li>触摸事件的产生：<br>当用户触摸屏幕时，Android系统的底层（Input系统）会捕获这个物理事件。</li>
@@ -1080,15 +1044,164 @@
 
 
 
-<h4 id="RecyclerView缓存机制"><a href="#RecyclerView缓存机制" class="headerlink" title="RecyclerView缓存机制"></a>RecyclerView缓存机制</h4><p><strong>每当 RecyclerView 的子项出现在屏幕上时或将要出现在屏幕上时，系统会按照如下的顺序调用函数</strong></p>
+<h3 id="RecyclerView与ListView缓存机制"><a href="#RecyclerView与ListView缓存机制" class="headerlink" title="RecyclerView与ListView缓存机制"></a>RecyclerView与ListView缓存机制</h3><p>ListView的缓存分为两级</p>
+<p>ListView存在内部类 RecycleBin，RecycleBin存在对象Active View和Scrap View</p>
+<ul>
+<li><p>Active View</p>
+</li>
+<li><p>Scrap view</p>
+</li>
+</ul>
+<p>Active View是在屏幕内的ItemView，当列表数据发生变化时，屏幕内的数据可以直接拿来复用，无须进行数据绑定。</p>
+<p>Scrap view是在屏幕外的ItemView，这里所有的缓存的数据都是’脏的’，也就是数据需要重新绑定，也就是说屏幕外的所有数据在进入屏幕的时候需要执行 <code>getView()</code> 方法。</p>
+<p>ListView缓存机制：</p>
+<p>在mActiveViews缓存集合中查找，成功返回itemView，失败进入下一级缓存；</p>
+<p>下一级缓存mScrapViews中进行查找，成功返回itemView，失败创建CreateView。</p>
+<p>RecyclerView 的缓存分为四级</p>
+<ul>
+<li><p>AttachedScrap</p>
+</li>
+<li><p>CachedViews</p>
+</li>
+<li><p>ViewCacheExtension</p>
+</li>
+<li><p>RecycledViewPool</p>
+</li>
+</ul>
+<p>Scrap 对应 ListView 的 Active View，为屏幕内缓存数据；</p>
+<blockquote>
+<p>ChangedScrap内ViewHolder在复用时，需调用 onBindViewHolder(ViewHolder viewHolder, int position) 方法将数据绑定在 ViewHolder 对象中。</p>
+</blockquote>
+<p>CachedViews 为最近移出屏幕的 ViewHolder，默认大小是2个；当其容量满时且出现新的数据添加时，会根据FIFO原则，原 ViewHolder 移出并放到下一级缓存。</p>
+<p>CachedViews 里面的数据是干净的，也就是携带了原来的 ViewHolder 的所有数据信息，数据可以直接来拿来复用。需要注意的是，CachedViews 是根据 position 来寻找数据的，这个 postion 是根据第一个或者最后一个可见的 item 的 position 以及用户操作行为（上拉还是下拉）。</p>
+<blockquote>
+<p>例：当前屏幕内第一个可见的 item 的 position 是1，用户进行了一个下拉操作，那么当前预测的 position 就相当于（1-1&#x3D;0），也就是 position &#x3D; 0 的那个 item 要被拉回到屏幕，此时 RecyclerView 就从 Cache 里面找 position&#x3D;0 的数据，如果找到了就直接拿来复用。</p>
+</blockquote>
+<p>ViewCacheExtension 是 google 留给开发者自己来自定义缓存的</p>
+<p>RecycledViewPool 对比于 Cache 默认缓存数量是2个，当 Cache 缓存满了以后会根据 FIFO 把 Cache 中的 ViewHolder 移出并缓存到 RecycledViewPool 中，RecycledViewPool 默认缓存数为5。</p>
+<p>RecycledViewPool 与 Cache 相比不同的是，从 Cache 里面移出的 ViewHolder 在存入 RecycledViewPool 之前，该 ViewHolder 的数据会被全部重置，相当于一个新的 ViewHolder ；同时 Cache 是根据 position 来获取 ViewHolder，而 RecycledViewPool 是根据 itemType 获取的，如果没有重写 <code>getItemType()</code> 方法，itemType 就是默认的。由于 RecycledViewPool 缓存的 ViewHolder 是全新的，所以取出来的时候需要执行 <code>onBindViewHolder()</code> 方法。</p>
+<p>RecyclerView的复用整体流程：</p>
+<p>首先会去 Scrap 这个集合 mAttachedScrap 中找是否有 ViewHolder，有就复用 ViewHolder，没有就去下一级缓存集合 mCachedViews 中查找，找到就直接复用，没有就去下一级缓存自定义的 mViewCacheExtension 这个类中查找，但是基本很少用，没找到就去下一级 RecyclerViewPool 中查找，找到就直接复用，没找到就会调用我们在adapter中重写的方法 onCreateViewHolder 新建。</p>
+<p><strong>每当 RecyclerView 的子项出现在屏幕上时或将要出现在屏幕上时，系统会按照如下的顺序调用函数</strong></p>
 <p>1 调用 getItemCount() 方法获取子项的数量。</p>
 <p>2 调用 onCreateViewHolder(ViewGroup parent, int viewType) 方法加载每一个子项的布局</p>
 <p>3 构造一个 ViewHolder 对象。</p>
 <p>4 调用 onBindViewHolder(ViewHolder viewHolder, int position) 方法将数据绑定在 ViewHolder 对象中。</p>
 <p><strong>每个子项在创建的时候会重复循环上面4个步骤，直到所有的子项加载完</strong></p>
 <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7cc27655e1184f1fa60b1b8ac4ed4a3b~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="recyclerView"></p>
-<p>通过mAttachedScrap、mCachedViews及mViewCacheExtension获取的ViewHolder不需要重新创建布局及绑定数据；通过缓存池mRecyclerPool获取的ViewHolder不需要重新创建布局，但是需要重新绑定数据；如果上述缓存中都没有获取到目标ViewHolder，那么就会回调Adapter#onCreateViewHolder创建布局，以及回调Adapter#onBindViewHolder来绑定数据。</p>
+<p>通过mAttachedScrap、mCachedViews及mViewCacheExtension获取的ViewHolder不需要重新创建布局(<code>onCreateViewHolder()</code>)及绑定数据(<code>onBindViewHolder()</code>)；通过缓存池mRecyclerPool获取的ViewHolder不需要重新创建布局，但是需要重新绑定数据；如果上述缓存中都没有获取到目标ViewHolder，那么就会回调Adapter#onCreateViewHolder创建布局，以及回调Adapter#onBindViewHolder来绑定数据。</p>
 <p>作者：<em>小马快跑</em><br>链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7229895703392518205">https://juejin.cn/post/7229895703392518205</a></p>
+<h3 id="屏幕刷新"><a href="#屏幕刷新" class="headerlink" title="屏幕刷新"></a>屏幕刷新</h3><p>画面撕裂：Display在读取buffer内数据时，被读取数据被CPU&#x2F;GPU修改，导致当前画面左上部分和右下部分来自不同帧</p>
+<p>双缓冲（显示器使用Frame Buffer，CPU&#x2F;GPU使用Back Buffer）</p>
+<p>BackBuffer的数据就绪后，写数据到FrameBuffer，防止画面撕裂</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7163858831309537294">“一文读懂”系列：Android屏幕刷新机制为什么要学习屏幕刷新知识？ 很多同学觉得屏幕刷新绘制知识点对他们开发不重要， - 掘金</a></p>
+<p>作者：胡飞洋链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6863756420380196877%E6%9D%A5%E6%BA%90%EF%BC%9A%E7%A8%80%E5%9C%9F%E6%8E%98%E9%87%91%E8%91%97%E4%BD%9C%E6%9D%83%E5%BD%92%E4%BD%9C%E8%80%85%E6%89%80%E6%9C%89%E3%80%82%E5%95%86%E4%B8%9A%E8%BD%AC%E8%BD%BD%E8%AF%B7%E8%81%94%E7%B3%BB%E4%BD%9C%E8%80%85%E8%8E%B7%E5%BE%97%E6%8E%88%E6%9D%83%EF%BC%8C%E9%9D%9E%E5%95%86%E4%B8%9A%E8%BD%AC%E8%BD%BD%E8%AF%B7%E6%B3%A8%E6%98%8E%E5%87%BA%E5%A4%84%E3%80%82">https://juejin.cn/post/6863756420380196877来源：稀土掘金著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</a></p>
+<p>VSync(垂直同步):</p>
+<p>垂直同步利用VBI时期出现的vertical sync pulse（垂直同步脉冲）来保证双缓冲在最佳时间点才进行交换。</p>
+<p>当扫描完一个屏幕后，设备需要重新回到第一行以进入下一次的循环，此时有一段时间空隙，称为VerticalBlanking Interval(VBI)。此个时间点就是我们进行缓冲区交换的最佳时间。因为此时屏幕没有在刷新，也就避免了交换过程中出现 screen tearing的状况。</p>
+<p>以时间的顺序来看下将会发生的过程：</p>
+<ol>
+<li>Display显示第0帧数据，此时CPU和GPU渲染第1帧画面，且在Display显示下一帧前完成</li>
+<li>因为渲染及时，Display在第0帧显示完成后，也就是第1个VSync后，缓存进行交换，然后正常显示第1帧</li>
+<li>接着第2帧开始处理，是直到第2个VSync快来前才开始处理的。</li>
+<li>第2个VSync来时，由于第2帧数据还没有准备就绪，缓存没有交换，显示的还是第1帧。这种情况被Android开发组命名为“Jank”，即发生了<strong>丢帧</strong>。</li>
+<li>当第2帧数据准备完成后，它并不会马上被显示，而是要等待下一个VSync 进行缓存交换再显示。</li>
+</ol>
+<p>所以总的来说，就是屏幕平白无故地多显示了一次第1帧。</p>
+<p>原因是 第2帧的CPU&#x2F;GPU计算 没能在VSync信号到来前完成 。</p>
+<p><strong>一旦收到VSync通知（16ms触发一次），CPU和GPU 才立刻开始计算然后把数据写入buffer</strong>。</p>
+<p><strong>VSync同步使得CPU&#x2F;GPU充分利用了16.6ms时间，减少jank。</strong></p>
+<p>问题又来了，如果界面比较复杂，CPU&#x2F;GPU的处理时间较长 超过了16.6ms呢？</p>
+<ol>
+<li>在第二个时间段内，但却因 GPU 还在处理 B 帧，缓存没能交换，导致 A 帧被重复显示。</li>
+<li>而B完成后，又因为缺乏VSync pulse信号，它只能等待下一个signal的来临。于是在这一过程中，有一大段时间是被浪费的。</li>
+<li>当下一个VSync出现时，CPU&#x2F;GPU马上执行操作（A帧），且缓存交换，相应的显示屏对应的就是B。这时看起来就是正常的。只不过由于执行时间仍然超过16ms，导致下一次应该执行的缓冲区交换又被推迟了——如此循环反复，便出现了越来越多的“Jank”。</li>
+</ol>
+<p><strong>三缓存</strong></p>
+<p>就是在双缓冲机制基础上增加了一个 Graphic Buffer 缓冲区，这样可以最大限度的利用空闲时间，带来的坏处是多使用的一个 Graphic Buffer 所占用的内存。</p>
+<ol>
+<li>第一个Jank，是不可避免的。但是在第二个 16ms 时间段，CPU&#x2F;GPU 使用 <strong>第三个 Buffer</strong> 完成C帧的计算，虽然还是会多显示一次 A 帧，但后续显示就比较顺畅了，有效避免 Jank 的进一步加剧。</li>
+<li>注意在第3段中，A帧的计算已完成，但是在第4个vsync来的时候才显示，如果是双缓冲，那在第三个vynsc就可以显示了。</li>
+</ol>
+<p><strong>三缓冲有效利用了等待vysnc的时间，减少了jank，但是带来了延迟。</strong></p>
+<p><strong>谷歌在4.1之后对屏幕绘制与刷新过程引入了Project Butter（黄油工程），系统在收到VSync信号之后，马上进行CPU的绘制以及GPU的buffer写入</strong>。</p>
+<h3 id="View绘制流程"><a href="#View绘制流程" class="headerlink" title="View绘制流程"></a>View绘制流程</h3><img src="/2024/07/28/Android-Learning-Record/944365-c1adb9dd2d22c056.png" class="" title="image-20240831192540253">
+
+<img src="/2024/07/28/Android-Learning-Record/944365-858de1faa38df1b2.png" class="" title="image-20240831192606617">
+
+
+
+<p>View绘制流程</p>
+<p>创建Activity调用onCreate方法，方法内调用handleResumeActivity(…)</p>
+<p>handleResumeActivity(…)调用performResumeActivity(token, clearHide)，获得ActivityClientRecord r</p>
+<p>通过r获取DecorView和WindowManager</p>
+<p>使用WindowManager执行方法addView</p>
+<p>addView方法创建ViewRootImpl实例，<em>把DecorView加载到Window中</em></p>
+<p>绘制会从根视图ViewRoot的performTraversals()方法开始，从上到下遍历整个视图树，每个View控件负责绘制自己，而ViewGroup还需要负责通知自己的子View进行绘制操作。</p>
+<p>performTraversals {getRootMeasureSpec + performMeasure + performLayout + performDraw}</p>
+<p>绘制流程从根视图 <code>ViewRootImpl</code> 的 <code>performTraversals()</code> 方法开始，按照 <strong>Measure → Layout → Draw</strong> 的顺序，自顶向下遍历整个视图树进行绘制。每个 <code>View</code> 负责绘制自身，而 <code>ViewGroup</code> 还需要通知其子 <code>View</code> 进行测量、布局和绘制操作。</p>
+<p><code>performTraversals()</code> 方法依次执行以下步骤：</p>
+<ol>
+<li><strong>获取根视图的 MeasureSpec</strong>（<code>getRootMeasureSpec</code>）</li>
+<li><strong>执行测量流程</strong>（<code>performMeasure</code>）</li>
+<li><strong>执行布局流程</strong>（<code>performLayout</code>）</li>
+<li><strong>执行绘制流程</strong>（<code>performDraw</code>）</li>
+</ol>
+<p><strong>测量（performMeasure）</strong></p>
+<p>视图的测量流程是一个 <strong>递归</strong> 过程：</p>
+<ul>
+<li><code>ViewGroup</code> 递归调用子 <code>View</code> 的 <code>measure()</code> 方法，子 <code>View</code> 再根据父 <code>View</code> 传递的 <code>MeasureSpec</code> 计算自身的尺寸。</li>
+<li><code>MeasureSpec</code> 计算规则：<ul>
+<li><strong>对于 <code>DecorView</code>（根视图）</strong>：<code>MeasureSpec</code> 由窗口尺寸和 <code>LayoutParams</code> 共同决定。</li>
+<li>**对于普通 <code>View</code>**：<code>MeasureSpec</code> 由父视图的 <code>MeasureSpec</code> 和 <code>LayoutParams</code> 共同决定。</li>
+</ul>
+</li>
+<li><code>MeasureSpec</code> 由两部分组成：<ul>
+<li>模式（Mode）：<ul>
+<li><code>EXACTLY</code>（精确模式）：View 的尺寸已经确定，使用指定的值。</li>
+<li><code>AT_MOST</code>（最大模式）：View 的最大尺寸由 <code>MeasureSpec</code> 限制，实际大小不能超过此值。</li>
+<li><code>UNSPECIFIED</code>（未指定模式）：View 的大小不受限制，通常用于 <code>ScrollView</code> 这类场景。</li>
+</ul>
+</li>
+<li><strong>大小（Size）</strong>：具体的数值。</li>
+</ul>
+</li>
+</ul>
+<p><strong>布局（performLayout）</strong></p>
+<ul>
+<li><code>ViewGroup</code> 递归调用子 <code>View</code> 的 <code>layout()</code> 方法，子 <code>View</code> 再根据父 <code>View</code> 分配的位置和自身的测量结果，确定自己的最终位置。</li>
+<li><strong><code>layout(left, top, right, bottom)</code></strong> 方法用于确定 <code>View</code> 的摆放位置。</li>
+<li><code>ViewGroup</code> 需要遍历所有子 <code>View</code> 并调用它们的 <code>layout()</code> 方法，以确保每个 <code>View</code> 在正确的位置上。</li>
+</ul>
+<p><strong>绘制（performDraw）</strong></p>
+<p>绘制流程同样是一个 <strong>递归</strong> 过程，每个 <code>View</code> 负责绘制自身，而 <code>ViewGroup</code> 还需要通知子 <code>View</code> 进行绘制。</p>
+<p><strong>绘制的6个步骤</strong></p>
+<ol>
+<li>绘制 <code>View</code> 的背景<ul>
+<li>调用 <code>drawBackground(canvas)</code> 方法，如果 <code>View</code> 设置了背景，则会先绘制背景。</li>
+</ul>
+</li>
+<li>如果需要的话，保存 <code>Canvas</code> 的图层，为 <code>fading</code> 做准备<ul>
+<li>主要用于 <code>FadingEdge</code>（渐变边缘效果），如果 <code>View</code> 具有 <code>fading edge</code>，则会保存 <code>Canvas</code> 以便后续恢复。</li>
+</ul>
+</li>
+<li>绘制 <code>View</code> 的内容<ul>
+<li>调用 <code>onDraw(canvas)</code>，绘制 <code>View</code> 的主体内容（如 <code>TextView</code> 绘制文本、<code>ImageView</code> 绘制图片等）。</li>
+</ul>
+</li>
+<li>绘制 <code>View</code> 的子 <code>View</code><ul>
+<li>如果当前 <code>View</code> 是 <code>ViewGroup</code>，会遍历所有子 <code>View</code> 并调用 <code>drawChild(canvas, child, drawingTime)</code> 递归绘制。</li>
+</ul>
+</li>
+<li>如果需要的话，绘制 <code>View</code> 的 <code>fading</code> 边缘并恢复 <code>Canvas</code><ul>
+<li>处理 <code>FadingEdge</code>，绘制 <code>View</code> 边缘的渐变效果，并恢复 <code>Canvas</code> 以保证后续绘制不受影响。</li>
+</ul>
+</li>
+<li>绘制 <code>View</code> 的装饰（如滚动条等）<ul>
+<li>如果 <code>View</code> 需要滚动条，则会在 <code>dispatchDraw()</code> 之后绘制滚动条。</li>
+</ul>
+</li>
+</ol>
 <h3 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h3><p>每个 Gradle 项目都由一个或多个 Project 构成，每个 Project 又都由 Task 构成。一个 <code>build.gradle</code>文件便是对一个 Project 对象的配置。在 Android 项目中，根目录会存在一个<code>build.gradle</code>文件，每个模块下也会有一个<code>build.gradle</code>文件。</p>
 <p><strong>闭包</strong></p>
 <p><strong>封装代码块</strong>: 就像普通的函数一样，闭包封装了一段可以执行的代码块。</p>
@@ -1449,7 +1562,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Learning-Record"><span class="nav-text">Android Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%A8%8B%E5%BA%8F"><span class="nav-text">Android程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Context"><span class="nav-text">Context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6"><span class="nav-text">四大组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%B1%82%E4%B8%8ENative%E5%B1%82"><span class="nav-text">Java层与Native层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E6%83%85%E5%86%B5"><span class="nav-text">常见内存泄露情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Handler%EF%BC%8CLooper%E4%B8%8EMessageQueue"><span class="nav-text">Handler，Looper与MessageQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E4%BA%A4%E4%BA%92"><span class="nav-text">进程间交互</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AIDL%E4%B8%8EBinder"><span class="nav-text">AIDL与Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder%E5%AE%9E%E7%8E%B0"><span class="nav-text">Binder实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Message%E8%B7%A8%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-text">Message跨进程通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6"><span class="nav-text">View与事件分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-text">事件分发流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="nav-text">绘制流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E5%86%B2%E7%AA%81%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="nav-text">滑动冲突与解决</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RecyclerView%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-text">RecyclerView缓存机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle"><span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E5%90%AF%E5%8A%A8"><span class="nav-text">Android启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Init%E8%BF%9B%E7%A8%8B"><span class="nav-text">Init进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zygote%E8%BF%9B%E7%A8%8B"><span class="nav-text">Zygote进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SystemServer%E8%BF%9B%E7%A8%8B"><span class="nav-text">SystemServer进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP%E8%BF%9B%E7%A8%8B"><span class="nav-text">APP进程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A1%86%E6%9E%B6"><span class="nav-text">常用框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Glide"><span class="nav-text">Glide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#okHttp"><span class="nav-text">okHttp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrofit"><span class="nav-text">Retrofit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RxJava"><span class="nav-text">RxJava</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Learning-Record"><span class="nav-text">Android Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%A8%8B%E5%BA%8F"><span class="nav-text">Android程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Context"><span class="nav-text">Context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6"><span class="nav-text">四大组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapter"><span class="nav-text">Adapter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%B1%82%E4%B8%8ENative%E5%B1%82"><span class="nav-text">Java层与Native层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E6%83%85%E5%86%B5"><span class="nav-text">常见内存泄露情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Message"><span class="nav-text">Message</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Handler%EF%BC%8CLooper%E4%B8%8EMessageQueue"><span class="nav-text">Handler，Looper与MessageQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%B1%8F%E9%9A%9C"><span class="nav-text">同步屏障</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E4%BA%A4%E4%BA%92"><span class="nav-text">进程间交互</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AIDL%E4%B8%8EBinder"><span class="nav-text">AIDL与Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder%E5%AE%9E%E7%8E%B0"><span class="nav-text">Binder实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Message%E8%B7%A8%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-text">Message跨进程通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6"><span class="nav-text">View与事件分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-text">事件分发流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E5%86%B2%E7%AA%81%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="nav-text">滑动冲突与解决</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RecyclerView%E4%B8%8EListView%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-text">RecyclerView与ListView缓存机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%8F%E5%B9%95%E5%88%B7%E6%96%B0"><span class="nav-text">屏幕刷新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="nav-text">View绘制流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle"><span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E5%90%AF%E5%8A%A8"><span class="nav-text">Android启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Init%E8%BF%9B%E7%A8%8B"><span class="nav-text">Init进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zygote%E8%BF%9B%E7%A8%8B"><span class="nav-text">Zygote进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SystemServer%E8%BF%9B%E7%A8%8B"><span class="nav-text">SystemServer进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP%E8%BF%9B%E7%A8%8B"><span class="nav-text">APP进程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A1%86%E6%9E%B6"><span class="nav-text">常用框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Glide"><span class="nav-text">Glide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#okHttp"><span class="nav-text">okHttp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrofit"><span class="nav-text">Retrofit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RxJava"><span class="nav-text">RxJava</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1517,12 +1630,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">285k</span>
+    <span title="Symbols count total">289k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">8:38</span>
+    <span title="Reading time total">8:46</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
