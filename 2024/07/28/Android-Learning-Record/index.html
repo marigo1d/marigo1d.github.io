@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240806155033149.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805194744173.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240721155920403-1722133033018.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240812184518922.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/944365-34992eb46bdf93e7.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240831191655656.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240831192314544.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/944365-c1adb9dd2d22c056.png">
@@ -63,7 +63,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193338222.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193638556.png">
 <meta property="article:published_time" content="2024-07-28T02:16:25.000Z">
-<meta property="article:modified_time" content="2025-02-10T12:42:06.998Z">
+<meta property="article:modified_time" content="2025-02-11T00:50:08.602Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Android, Java">
 <meta name="twitter:card" content="summary">
@@ -256,7 +256,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-10 20:42:06" itemprop="dateModified" datetime="2025-02-10T20:42:06+08:00">2025-02-10</time>
+                <time title="Modified: 2025-02-11 08:50:08" itemprop="dateModified" datetime="2025-02-11T08:50:08+08:00">2025-02-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -274,14 +274,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>53k</span>
+              <span>54k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1:36</span>
+              <span>1:38</span>
             </span>
 
         </div>
@@ -845,7 +845,57 @@
 
 
 
-<h3 id="View与事件分发机制"><a href="#View与事件分发机制" class="headerlink" title="View与事件分发机制"></a>View与事件分发机制</h3><p><strong>坐标系</strong></p>
+<h3 id="View与事件分发机制"><a href="#View与事件分发机制" class="headerlink" title="View与事件分发机制"></a>View与事件分发机制</h3><h4 id="事件分发流程"><a href="#事件分发流程" class="headerlink" title="事件分发流程"></a>事件分发流程</h4><p>参考链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6931914294980411406">https://juejin.cn/post/6931914294980411406</a></p>
+<p>每次进行事件传递的是单个事件，即 ACTION_DOWN, ACTION_MOVE, ACTION_UP, 并非事件序列</p>
+<p>case 1: -&gt; dispatch -&gt; dispatch -&gt; InterceptTouchEvent -&gt; TouchEvent - &gt; TouchEvent</p>
+<p>case 2: -&gt; dispatch -&gt; dispatch -&gt; TouchEvent - &gt; TouchEvent</p>
+<p>case 3: -&gt; dispatch -&gt; dispatch -&gt; TouchEvent</p>
+<ol>
+<li><p><strong>事件传递：</strong> 当用户触摸屏幕时，系统会将事件封装成 MotionEvent 对象，并将其传递给当前 Activity 的 dispatchTouchEvent(…) 方法。</p>
+</li>
+<li><p><strong>分发：</strong> Activity 会将事件传递给其根视图ViewGroup（通常是 DecorView）的 dispatchTouchEvent(…) 方法。ViewGroup和View将继续调用dispatchTouchEvent(…) 方法分发该动作。</p>
+</li>
+</ol>
+<ul>
+<li>如果返回 true，则表示<strong>当前事件在此 View 及其子 View 中被处理</strong>，后续事件序列将被继续下发。</li>
+<li>如果返回 false，则表示<strong>当前事件在此 View 及其子 View 中未被处理</strong>，后续事件序列将不会到达此View</li>
+</ul>
+<ol start="3">
+<li><strong>拦截：</strong> ViewGroup 在接收到事件后，会调用自身的 onInterceptTouchEvent() 方法判断是否拦截该事件。</li>
+</ol>
+<ul>
+<li>如果返回 true，则表示拦截该事件，事件将由 ViewGroup 自身处理，调用自身的 onTouchEvent() 方法。<ul>
+<li>如果返回 false，则表示不拦截该事件，事件将继续传递给其子 View 或 ViewGroup 进行分发。</li>
+</ul>
+</li>
+</ul>
+<ol start="4">
+<li><p><strong>处理：</strong> View 和 ViewGroup 接收到事件后，会调用自身的 onTouchEvent() 方法进行处理。 ACTION_DOWN 事件在处理后，将归属于该View进行完整事件序列处理。</p>
+<ul>
+<li>如果返回 true，则表示该事件被消费，事件传递结束。</li>
+<li>如果返回 false，则表示该事件没有被消费，事件将回传给父 View 的 onTouchEvent() 方法进行处理。</li>
+</ul>
+</li>
+<li><p><strong>事件回传：</strong> 如果事件没有被任何 View 消费，最终会回到 Activity 的 onTouchEvent() 方法进行处理。</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>事件传递方向：</strong></p>
+<ul>
+<li>向下传递（分发）： 事件是从根视图 (DecorView) 开始，沿着视图树 <strong>逐层向下</strong> 分发，直到传递到最终处理该事件的子视图或被某个 ViewGroup 拦截。</li>
+<li>向上回传： 如果事件没有被任何子视图消费，则会 <strong>原路返回</strong>，沿着视图树 <strong>逐层向上</strong> 回传，直到被某个 View 或 ViewGroup 处理或最终到达 Activity。</li>
+</ul>
+<p><strong>事件拦截</strong></p>
+<p>在正常情况下，一个事件序列只应该由单独一个 View 或者 ViewGroup 进行处理。这意味着， 哪个 View 消费了 ACTION_DOWN 事件，哪个 View 就会接管整个事件序列的处理，不再经过其他事件</p>
+<ol>
+<li><p>拦截&amp;处理：整个事件序列将直接传递给该ViewGroup处理，不再经过其他事件</p>
+</li>
+<li><p>拦截&amp;不处理：后续事件序列将不会再传递给该 ViewGroup，而是直接交给其父视图处理</p>
+</li>
+</ol>
+<p>ext：若所有View和ViewGroup均不处理 ACTION_DOWN 事件，后续事件序列将直接由Activity处理；</p>
+</blockquote>
+<p><strong>坐标系</strong></p>
 <p><strong>屏幕坐标系</strong>： Raw 以屏幕左上角作为坐标原点，水平向右方向为 X 轴正轴方向，竖直向下方向为 Y 轴正轴方向。</p>
 <p><strong>View 坐标系</strong>： 默认 以 View 所在的 ViewGroup 的左上角作为坐标原点，水平向右方向为 X 轴正轴方向，竖直向下方向为 Y 轴正轴方向。View 类包含了以下几个方法用于获取其相对父容器 ViewGroup 的距离：</p>
 <ul>
@@ -901,10 +951,10 @@
 <p>StatusBar (状态栏) 不属于 当前Activity，位于屏幕最上方</p>
 <p>TitleBar&#x2F;ActionBar 属于 DecorView，位于 StatusBar (状态栏) 下方</p>
 </blockquote>
-<img src="/2024/07/28/Android-Learning-Record/image-20240812184518922.png" class="" title="image-20240812184518922">
+<img src="/2024/07/28/Android-Learning-Record/944365-34992eb46bdf93e7.png" class="" title="image-20240812184518922">
 <p>参考链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6931914294980411406">https://juejin.cn/post/6931914294980411406</a></p>
 <blockquote>
-<p>硬件 -&gt; ViewRootImpl -&gt; DecorView -&gt; Activity -&gt; PhoneWindow -&gt; (DecorView -&gt; ViewGroup -&gt; View)</p>
+<p>硬件 -&gt; WindowManager -&gt; ViewRoot(ViewRootImpl类，连接层) -&gt; DecorView -&gt; Activity-PhoneWindow-DecorView -&gt; ViewGroup -&gt; View</p>
 <p>这三者之间的联系又是怎样的呢？这样兜兜转转一圈，其实就是 DecorView 先将事件传给了 Activity，Activity 又传给了 PhoneWindow，PhoneWindow 又将事件传给了 DecorView，DecorView 最后又按照 ViewGroup 默认的方式进行事件分发，看起来就是在绕圈，这样设计的意义是什么呢？</p>
 <p>其实，DecorView 作为触摸事件的第一个接收者，是触摸事件从系统下发到 Activity 之间的一个沟通桥梁，而开发者可以直接接触并继承的是 Activity。DecorView 需要先将事件转发给最外层的 Activity，使得开发者可以通过重写 dispatchTouchEvent 和 onTouchEvent 方法以达到对当前屏幕触摸事件进行拦截的目的。DecorView 作为 View 树的根节点，从 PhoneWindow 接收到事件后，又负责将将事件事件分发给子 View，从而将整个事件链给串联了起来</p>
 </blockquote>
@@ -928,62 +978,37 @@
 
 <img src="/2024/07/28/Android-Learning-Record/944365-858de1faa38df1b2.png" class="" title="image-20240831192606617">
 
-
-
-
-
-
-
-<h4 id="事件分发流程"><a href="#事件分发流程" class="headerlink" title="事件分发流程"></a>事件分发流程</h4><p>参考链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6931914294980411406">https://juejin.cn/post/6931914294980411406</a></p>
-<p>每次进行事件传递的是单个事件，即 ACTION_DOWN, ACTION_MOVE, ACTION_UP, 并非事件序列</p>
-<p>case 1: -&gt; dispatch -&gt; dispatch -&gt; InterceptTouchEvent -&gt; TouchEvent - &gt; TouchEvent</p>
-<p>case 2: -&gt; dispatch -&gt; dispatch -&gt; TouchEvent - &gt; TouchEvent</p>
-<p>case 3: -&gt; dispatch -&gt; dispatch -&gt; TouchEvent</p>
-<ol>
-<li><p><strong>事件传递：</strong> 当用户触摸屏幕时，系统会将事件封装成 MotionEvent 对象，并将其传递给当前 Activity 的 dispatchTouchEvent(…) 方法。</p>
-</li>
-<li><p><strong>分发：</strong> Activity 会将事件传递给其根视图ViewGroup（通常是 DecorView）的 dispatchTouchEvent(…) 方法。ViewGroup和View将继续调用dispatchTouchEvent(…) 方法分发该动作。</p>
-</li>
-</ol>
+<p>Android View 绘制流程</p>
+<p><strong>测量阶段（Measure Phase）</strong></p>
 <ul>
-<li>如果返回 true，则表示<strong>当前事件在此 View 及其子 View 中被处理</strong>，后续事件序列将被继续下发。</li>
-<li>如果返回 false，则表示<strong>当前事件在此 View 及其子 View 中未被处理</strong>，后续事件序列将不会到达此View</li>
+<li><code>onMeasure()</code>方法： 在这个阶段，系统计算 <code>View</code> 的宽度和高度。<code>View</code> 会通过 <code>onMeasure()</code> 方法告诉其父布局应该给它分配多大的空间。父布局会依此来决定子视图的尺寸。<ul>
+<li>父布局会调用子视图的 <code>onMeasure()</code> 方法，传入一个 <code>widthMeasureSpec</code> 和 <code>heightMeasureSpec</code>，其中包含了父布局对子视图尺寸的要求。</li>
+<li>子视图根据这些规格来测量自己的大小，并最终通过 <code>setMeasuredWidth()</code> 和 <code>setMeasuredHeight()</code> 设置自己测量出的尺寸。</li>
 </ul>
-<ol start="3">
-<li><strong>拦截：</strong> ViewGroup 在接收到事件后，会调用自身的 onInterceptTouchEvent() 方法判断是否拦截该事件。</li>
-</ol>
+</li>
+</ul>
+<p><strong>布局阶段（Layout Phase）</strong></p>
 <ul>
-<li>如果返回 true，则表示拦截该事件，事件将由 ViewGroup 自身处理，调用自身的 onTouchEvent() 方法。<ul>
-<li>如果返回 false，则表示不拦截该事件，事件将继续传递给其子 View 或 ViewGroup 进行分发。</li>
+<li><code>onLayout()</code> 方法： 在测量阶段完成后，系统会调用 <code>onLayout()</code> 方法来安排每个子视图在父布局中的具体位置。<ul>
+<li>该方法会告诉每个子视图的左上角位置，通常会通过 <code>layout()</code> 方法来设置视图的边界。</li>
+<li>子视图的父布局调用 <code>onLayout()</code> 来确定子视图在父视图中的位置。</li>
 </ul>
 </li>
 </ul>
-<ol start="4">
-<li><p><strong>处理：</strong> View 和 ViewGroup 接收到事件后，会调用自身的 onTouchEvent() 方法进行处理。 ACTION_DOWN 事件在处理后，将归属于该View进行完整事件序列处理。</p>
+<p><strong>绘制阶段（Draw Phase）</strong></p>
 <ul>
-<li>如果返回 true，则表示该事件被消费，事件传递结束。</li>
-<li>如果返回 false，则表示该事件没有被消费，事件将回传给父 View 的 onTouchEvent() 方法进行处理。</li>
+<li><code>onDraw()</code> 方法： 这个阶段是视图的渲染过程，<code>View</code> 在这里绘制自己。系统会调用  <code>onDraw()</code> 方法，视图在此方法内使用 <code>Canvas</code> 对象来进行绘制工作。<ul>
+<li><code>Canvas</code> 提供了一些绘制方法，如 <code>drawText()</code>, <code>drawRect()</code>, <code>drawBitmap()</code> 等，可以用来绘制各种图形和文字。</li>
+<li>如果 <code>View</code> 的 <code>onDraw()</code> 方法需要自定义绘制逻辑，可以在此方法内进行。</li>
 </ul>
 </li>
-<li><p><strong>事件回传：</strong> 如果事件没有被任何 View 消费，最终会回到 Activity 的 onTouchEvent() 方法进行处理。</p>
-</li>
-</ol>
-<blockquote>
-<p><strong>事件传递方向：</strong></p>
+</ul>
+<p><strong>额外：刷新阶段（Invalidate Phase）</strong></p>
 <ul>
-<li>向下传递（分发）： 事件是从根视图 (DecorView) 开始，沿着视图树 <strong>逐层向下</strong> 分发，直到传递到最终处理该事件的子视图或被某个 ViewGroup 拦截。</li>
-<li>向上回传： 如果事件没有被任何子视图消费，则会 <strong>原路返回</strong>，沿着视图树 <strong>逐层向上</strong> 回传，直到被某个 View 或 ViewGroup 处理或最终到达 Activity。</li>
+<li>当视图的内容发生变化，或者它的位置&#x2F;尺寸发生变化时，可以调用 <code>invalidate()</code> 方法请求重新绘制。</li>
+<li><code>invalidate()</code> 方法会导致 <code>View</code> 重新进入绘制流程，并调用 <code>onDraw()</code> 方法来进行刷新操作。</li>
 </ul>
-<p><strong>事件拦截</strong></p>
-<p>在正常情况下，一个事件序列只应该由单独一个 View 或者 ViewGroup 进行处理。这意味着， 哪个 View 消费了 ACTION_DOWN 事件，哪个 View 就会接管整个事件序列的处理，不再经过其他事件</p>
-<ol>
-<li><p>拦截&amp;处理：整个事件序列将直接传递给该ViewGroup处理，不再经过其他事件</p>
-</li>
-<li><p>拦截&amp;不处理：后续事件序列将不会再传递给该 ViewGroup，而是直接交给其父视图处理</p>
-</li>
-</ol>
-<p>ext：若所有View和ViewGroup均不处理 ACTION_DOWN 事件，后续事件序列将直接由Activity处理；</p>
-</blockquote>
+<p>自定义View必须重写View的构造函数</p>
 <p><strong>message，handler与View交互案例</strong></p>
 <ol>
 <li>触摸事件的产生：<br>当用户触摸屏幕时，Android系统的底层（Input系统）会捕获这个物理事件。</li>
@@ -1055,7 +1080,13 @@
 
 
 
-<h4 id="RecyclerView缓存机制"><a href="#RecyclerView缓存机制" class="headerlink" title="RecyclerView缓存机制"></a>RecyclerView缓存机制</h4><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7cc27655e1184f1fa60b1b8ac4ed4a3b~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="recyclerView"></p>
+<h4 id="RecyclerView缓存机制"><a href="#RecyclerView缓存机制" class="headerlink" title="RecyclerView缓存机制"></a>RecyclerView缓存机制</h4><p><strong>每当 RecyclerView 的子项出现在屏幕上时或将要出现在屏幕上时，系统会按照如下的顺序调用函数</strong></p>
+<p>1 调用 getItemCount() 方法获取子项的数量。</p>
+<p>2 调用 onCreateViewHolder(ViewGroup parent, int viewType) 方法加载每一个子项的布局</p>
+<p>3 构造一个 ViewHolder 对象。</p>
+<p>4 调用 onBindViewHolder(ViewHolder viewHolder, int position) 方法将数据绑定在 ViewHolder 对象中。</p>
+<p><strong>每个子项在创建的时候会重复循环上面4个步骤，直到所有的子项加载完</strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7cc27655e1184f1fa60b1b8ac4ed4a3b~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="recyclerView"></p>
 <p>通过mAttachedScrap、mCachedViews及mViewCacheExtension获取的ViewHolder不需要重新创建布局及绑定数据；通过缓存池mRecyclerPool获取的ViewHolder不需要重新创建布局，但是需要重新绑定数据；如果上述缓存中都没有获取到目标ViewHolder，那么就会回调Adapter#onCreateViewHolder创建布局，以及回调Adapter#onBindViewHolder来绑定数据。</p>
 <p>作者：<em>小马快跑</em><br>链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7229895703392518205">https://juejin.cn/post/7229895703392518205</a></p>
 <h3 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h3><p>每个 Gradle 项目都由一个或多个 Project 构成，每个 Project 又都由 Task 构成。一个 <code>build.gradle</code>文件便是对一个 Project 对象的配置。在 Android 项目中，根目录会存在一个<code>build.gradle</code>文件，每个模块下也会有一个<code>build.gradle</code>文件。</p>
@@ -1418,7 +1449,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Learning-Record"><span class="nav-text">Android Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%A8%8B%E5%BA%8F"><span class="nav-text">Android程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Context"><span class="nav-text">Context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6"><span class="nav-text">四大组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%B1%82%E4%B8%8ENative%E5%B1%82"><span class="nav-text">Java层与Native层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E6%83%85%E5%86%B5"><span class="nav-text">常见内存泄露情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Handler%EF%BC%8CLooper%E4%B8%8EMessageQueue"><span class="nav-text">Handler，Looper与MessageQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E4%BA%A4%E4%BA%92"><span class="nav-text">进程间交互</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AIDL%E4%B8%8EBinder"><span class="nav-text">AIDL与Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder%E5%AE%9E%E7%8E%B0"><span class="nav-text">Binder实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Message%E8%B7%A8%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-text">Message跨进程通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6"><span class="nav-text">View与事件分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="nav-text">绘制流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-text">事件分发流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E5%86%B2%E7%AA%81%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="nav-text">滑动冲突与解决</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RecyclerView%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-text">RecyclerView缓存机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle"><span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E5%90%AF%E5%8A%A8"><span class="nav-text">Android启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Init%E8%BF%9B%E7%A8%8B"><span class="nav-text">Init进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zygote%E8%BF%9B%E7%A8%8B"><span class="nav-text">Zygote进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SystemServer%E8%BF%9B%E7%A8%8B"><span class="nav-text">SystemServer进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP%E8%BF%9B%E7%A8%8B"><span class="nav-text">APP进程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A1%86%E6%9E%B6"><span class="nav-text">常用框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Glide"><span class="nav-text">Glide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#okHttp"><span class="nav-text">okHttp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrofit"><span class="nav-text">Retrofit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RxJava"><span class="nav-text">RxJava</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Learning-Record"><span class="nav-text">Android Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%A8%8B%E5%BA%8F"><span class="nav-text">Android程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Context"><span class="nav-text">Context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6"><span class="nav-text">四大组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%B1%82%E4%B8%8ENative%E5%B1%82"><span class="nav-text">Java层与Native层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E6%83%85%E5%86%B5"><span class="nav-text">常见内存泄露情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Handler%EF%BC%8CLooper%E4%B8%8EMessageQueue"><span class="nav-text">Handler，Looper与MessageQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E4%BA%A4%E4%BA%92"><span class="nav-text">进程间交互</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AIDL%E4%B8%8EBinder"><span class="nav-text">AIDL与Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder%E5%AE%9E%E7%8E%B0"><span class="nav-text">Binder实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Message%E8%B7%A8%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-text">Message跨进程通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6"><span class="nav-text">View与事件分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-text">事件分发流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="nav-text">绘制流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E5%86%B2%E7%AA%81%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="nav-text">滑动冲突与解决</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RecyclerView%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-text">RecyclerView缓存机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle"><span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E5%90%AF%E5%8A%A8"><span class="nav-text">Android启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Init%E8%BF%9B%E7%A8%8B"><span class="nav-text">Init进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zygote%E8%BF%9B%E7%A8%8B"><span class="nav-text">Zygote进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SystemServer%E8%BF%9B%E7%A8%8B"><span class="nav-text">SystemServer进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP%E8%BF%9B%E7%A8%8B"><span class="nav-text">APP进程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A1%86%E6%9E%B6"><span class="nav-text">常用框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Glide"><span class="nav-text">Glide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#okHttp"><span class="nav-text">okHttp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrofit"><span class="nav-text">Retrofit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RxJava"><span class="nav-text">RxJava</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1486,12 +1517,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">284k</span>
+    <span title="Symbols count total">285k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">8:36</span>
+    <span title="Reading time total">8:38</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
