@@ -262,27 +262,20 @@
 <li><p>所有关键字均在叶子节点出现</p>
 </li>
 </ul>
-<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><h3 id="创建者模式"><a href="#创建者模式" class="headerlink" title="创建者模式"></a>创建者模式</h3><h4 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h4><p>传入所需类型至工厂，工厂内实现类的创建</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 传入所需类型给工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StoreFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ICommodity <span class="title function_">getCommodityService</span><span class="params">(Integer commodityType)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> == commodityType) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">1</span> == commodityType) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CouponCommodityService</span>();</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">2</span> == commodityType) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">GoodsCommodityService</span>();</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">3</span> == commodityType) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CardCommodityService</span>();</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;不存在的商品服务类型&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="type">StoreFactory</span> <span class="variable">storeFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StoreFactory</span>();</span><br><span class="line"><span class="type">ICommodity</span> <span class="variable">commodityService_1</span> <span class="operator">=</span> storeFactory.getCommodityService(<span class="number">1</span>);</span><br><span class="line">commodityService_1.sendCommodity(<span class="string">&quot;10001&quot;</span>, <span class="string">&quot;EGM1023938910232121323432&quot;</span>, <span class="string">&quot;791098764902132&quot;</span>, <span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h4><p>多层工厂</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="type">CacheService</span> <span class="variable">proxy_EGM</span> <span class="operator">=</span> JDKProxy.getProxy(CacheServiceImpl.class, <span class="keyword">new</span> <span class="title class_">EGMCacheAdapter</span>());</span><br><span class="line"><span class="comment">// JDKProxy.getProxy为第一层工厂，负责创建CacheService类</span></span><br><span class="line"><span class="comment">// EGMCacheAdapter为第二层工厂，负责包装差异化方法名</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h4><p>传入所需组合的类型至建造者，建造者组合基本元素实现类的创建</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用</span></span><br><span class="line">builder.levelOne(<span class="number">132.52D</span>).getDetail()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 建造者</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">builder</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> IMenu <span class="title function_">levelOne</span><span class="params">(Double area)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DecorationPackageMenu</span>(area, <span class="string">&quot;豪华欧式&quot;</span>)</span><br><span class="line">        .appendCeiling(<span class="keyword">new</span> <span class="title class_">LevelTwoCeiling</span>())    <span class="comment">// 组合1</span></span><br><span class="line">        .appendCoat(<span class="keyword">new</span> <span class="title class_">DuluxCoat</span>())             <span class="comment">// 组合2</span></span><br><span class="line">        .appendFloor(<span class="keyword">new</span> <span class="title class_">ShengXiangFloor</span>());     <span class="comment">// 组合3</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DecorationPackageMenu</span> <span class="keyword">implements</span> <span class="title class_">IMenu</span> &#123;</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DecorationPackageMenu</span><span class="params">(Double area, String grade)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.area = <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(area);</span><br><span class="line">        <span class="built_in">this</span>.grade = grade;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模式优点：需要增加组合件时可以直接在这里添加&amp;组合</span></span><br><span class="line">    <span class="keyword">public</span> IMenu <span class="title function_">appendCeiling</span><span class="params">(Matter matter)</span> &#123;</span><br><span class="line">        list.add(matter);</span><br><span class="line">        price = price.add(area.multiply(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.2&quot;</span>)).multiply(matter.price()));</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h4><p>通过克隆创建重复对象</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="type">QuestionBankController</span> <span class="variable">questionBankController</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">QuestionBankController</span>();</span><br><span class="line">        System.out.println(questionBankController.createPaper(<span class="string">&quot;花花&quot;</span>, <span class="string">&quot;1000001921032&quot;</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuestionBankController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">QuestionBank</span> <span class="variable">questionBank</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">QuestionBank</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuestionBankController</span><span class="params">()</span> &#123;...&#125;  <span class="comment">// 向QuestionBank添加题目</span></span><br><span class="line">    </span><br><span class="line">        <span class="keyword">public</span> String <span class="title function_">createPaper</span><span class="params">(String candidate, String number)</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;</span><br><span class="line">        <span class="type">QuestionBank</span> <span class="variable">questionBankClone</span> <span class="operator">=</span> (QuestionBank) questionBank.clone();  <span class="comment">// 通过克隆得到新QuestionBank对象</span></span><br><span class="line">        questionBankClone.setCandidate(candidate);</span><br><span class="line">        questionBankClone.setNumber(number);</span><br><span class="line">        <span class="keyword">return</span> questionBankClone.toString();  <span class="comment">// 打印题目</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuestionBank</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// clone方法实现题目乱序</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;</span><br><span class="line">        <span class="type">QuestionBank</span> <span class="variable">questionBank</span> <span class="operator">=</span> (QuestionBank) <span class="built_in">super</span>.clone();</span><br><span class="line">        questionBank.choiceQuestionList = (ArrayList&lt;ChoiceQuestion&gt;) choiceQuestionList.clone();</span><br><span class="line">        questionBank.answerQuestionList = (ArrayList&lt;AnswerQuestion&gt;) answerQuestionList.clone();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 题目乱序</span></span><br><span class="line">        Collections.shuffle(questionBank.choiceQuestionList);</span><br><span class="line">        Collections.shuffle(questionBank.answerQuestionList);</span><br><span class="line">        <span class="comment">// 答案乱序</span></span><br><span class="line">        ArrayList&lt;ChoiceQuestion&gt; choiceQuestionList = questionBank.choiceQuestionList;</span><br><span class="line">        <span class="keyword">for</span> (ChoiceQuestion question : choiceQuestionList) &#123;</span><br><span class="line">            <span class="type">Topic</span> <span class="variable">random</span> <span class="operator">=</span> TopicRandomUtil.random(question.getOption(), question.getKey());</span><br><span class="line">            question.setOption(random.getOption());</span><br><span class="line">            question.setKey(random.getKey());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> questionBank;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h4><p>唯一对象</p>
+<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><p>环境中仅存在唯一的对象</p>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><p>适用于多种相似类型的类的创建</p>
+<p>例如：工厂类存在方法A和方法B</p>
+<p>方法A用于创建实现了接口A的类A1和类A2，通过传入参数区别；</p>
+<p>方法B用于创建实现了接口B的类B1和类B2，通过传入参数区别；</p>
+<h3 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h3><p>构造时允许某些参数不传递（可选参数）和链式创建（User.builder().name().age().email().build()）</p>
+<p>例如：Lombok注解</p>
+<p><code>@Builder</code> 自动生成构造方法</p>
+<h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><p>被调类实现适配器接口，调用类可以统一调用</p>
+<p>例如： Spring MVC 里的 <code>HandlerAdapter</code></p>
+<p>数据库驱动 <code>JDBC DriverManager</code></p>
+<h3 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h3><p>例如：Spring AOP &#x2F; python 装饰器</p>
+<p>Open&#x2F;Closed Principle，OCP</p>
+<p><strong>对扩展开放（Open for extension），对修改关闭（Closed for modification）</strong>。</p>
 <h2 id="常见架构"><a href="#常见架构" class="headerlink" title="常见架构"></a>常见架构</h2><h3 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h3><p> MVC 架构调用流程</p>
 <img src="/2024/04/25/Algo-Learning-Record/road-map-230623-02.png" class="" title="MVC">
 
@@ -331,6 +324,8 @@
 <p>字典树每个节点由 词结束标（当前节点是否为一个词的结尾字符） + 节点数组（数组中不为null的位置的索引对应于该节点所表示的字符，该位置的值为指向下一个节点的指针） 组成</p>
 <p>根节点的节点数组不含词信息，仅作为出发点使用</p>
 <p>ref: <a href="https://blog.csdn.net/m0_46202073/article/details/107253959">https://blog.csdn.net/m0_46202073/article/details/107253959</a></p>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><p><a href="https://leetcode.cn/problems/kth-largest-element-in-an-array/">数组中的第K个最大元素</a></p>
+<p>从mid向前遍历到root，调用 自上而下 的最大堆函数，实现最大堆建立</p>
 <h3 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h3><p>画出回溯树！</p>
 <p>回溯体：叶节点处理-&gt;左子树进入-&gt;右子树进入</p>
 <p><a href="https://leetcode.cn/problems/subsets/">子集</a></p>
@@ -1249,7 +1244,137 @@
 <h3 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h3><p><strong>文件存储</strong></p>
 <p><strong>SharedPreference</strong></p>
 <p><strong>SQLite</strong></p>
-<h3 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a>Adapter</h3><p>实现 数据 - View 绑定</p>
+<h3 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a>Adapter</h3><p><code>Adapter</code> 负责：</p>
+<ul>
+<li>从数据源获取数据</li>
+<li>创建 <code>View</code> 并将数据绑定到 <code>View</code> 上</li>
+<li>通过 <code>notifyDataSetChanged()</code> 动态更新 UI</li>
+</ul>
+<p>View → adapter → data</p>
+<h3 id="Activity与Fragment生命周期"><a href="#Activity与Fragment生命周期" class="headerlink" title="Activity与Fragment生命周期"></a>Activity与Fragment生命周期</h3><img src="/2024/07/28/Android-Learning-Record/activity_lifecycle.png" class="" title="image1.png">
+
+<p>单个Activity:</p>
+<p>应用开启时：onCreate() -&gt; onStart() -&gt; onResume();</p>
+<p>按下返回键：onPause() -&gt; onStop() -&gt; onDestory();</p>
+<p>多个Activity之间交互时：</p>
+<p>从第一个Activity启动第二个Activity时：</p>
+<table>
+<thead>
+<tr>
+<th>FirstActivity</th>
+<th>SecondActivity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>onPause()</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onCreate()</td>
+</tr>
+<tr>
+<td></td>
+<td>onStart()</td>
+</tr>
+<tr>
+<td></td>
+<td>onResume()</td>
+</tr>
+<tr>
+<td>onStop()</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>按下锁屏键时</p>
+<table>
+<thead>
+<tr>
+<th>SecondActivity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>onPause()</td>
+</tr>
+<tr>
+<td>onStop()</td>
+</tr>
+</tbody></table>
+<p>屏幕解锁</p>
+<table>
+<thead>
+<tr>
+<th>SecondActivity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>onRestart()</td>
+</tr>
+<tr>
+<td>OnStart()</td>
+</tr>
+<tr>
+<td>OnResume()</td>
+</tr>
+</tbody></table>
+<p>按下返回键 &#x2F; SecondActivity调用 <code>finish()</code></p>
+<table>
+<thead>
+<tr>
+<th>FirstActivity</th>
+<th>SecondActivity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>onPause()</td>
+</tr>
+<tr>
+<td>onRestart()</td>
+<td></td>
+</tr>
+<tr>
+<td>onStart()</td>
+<td></td>
+</tr>
+<tr>
+<td>onResume()</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onStop()</td>
+</tr>
+<tr>
+<td></td>
+<td>onDestory()</td>
+</tr>
+</tbody></table>
+<p>Fragment</p>
+<p>在创建的过程中，是Activity带领Fragment执行生命周期中的方法，所以生命周期方法的执行顺序是这样的：</p>
+<p>1.Activity–onCreate();</p>
+<p>2.Fragment–onAttach();</p>
+<p>3.Fragment–onCreate();</p>
+<p>4.Fragment–onCreateView();</p>
+<p>5.Fragment–onActivityCreated();</p>
+<p>接着是这样的：</p>
+<p>6.Activity–onStart();</p>
+<p>7.Fragment–onStart();</p>
+<p>8.Activity–onResume();</p>
+<p>9.Fragment–onResume();</p>
+<p>我们知道，无论对于Activity还是对于Fragment，onResume这个生命周期都是他们执行时间最长的，当我们的Activity或者Fragment打开之后，它就一直处于这个生命周期中。</p>
+<p>当销毁的时候，春江水暖鸭先知，当然是Fragment先感知到，于是销毁的时候就是Fragment带领Activity：</p>
+<p>10.Fragment–onPause();</p>
+<p>11.Activity–onPause();</p>
+<p>12.Fragment–onStop();</p>
+<p>13.Activity–onStop();</p>
+<p>14.Fragment–onDestroyView();</p>
+<p>15.Fragment–onDestroy();</p>
+<p>16.Fragment–onDetach();</p>
+<p>17.Activity–onDestroy();</p>
+<p>上面这个顺序有一个前提，就是我们所有的日志打印代码都是紧挨着super方法写。因为如果我们如果把Fragment写在了布局文件中，同时又在Activity的onCreate()方法中的setContentView之后打印日志，那么我们看到的生命周期的执行顺序就会有所不同，不过只是细微的差别，这点大家自己研究，道理也很好明白。</p>
+<p>总之一句话，在创建的过程中，是Activity带领着Fragment，在销毁的过程中，是Fragment带领着Activity。</p>
+<p>文章来源: <a href="http://wangsong.blog.csdn.net/">wangsong.blog.csdn.net</a>，作者：_江南一点雨，版权归原作者所有，如需转载，请联系作者。</p>
 <h3 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h3><p>为了解决手动内存管理带来的问题而设计的。它们通过引用计数来跟踪有多少个指针指向同一个对象。</p>
 <ul>
 <li>当你创建一个指向对象的智能指针时，对象的引用计数加 1。</li>
@@ -2275,6 +2400,302 @@
       </categories>
       <tags>
         <tag>Android, Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MQ-Learning-Record</title>
+    <url>/2025/01/17/MQ-Learning-Record/</url>
+    <content><![CDATA[<p>MQ相关学习记录</p>
+<span id="more"></span>
+
+<h1 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h1><h2 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h2><p><strong>使用MQ原因</strong></p>
+<p>解耦：将后续工作与前序工作解耦</p>
+<p>异步：将需要完成的工作压入消息队列</p>
+<p>削峰：使大量涌入的事件得到稳定的处理</p>
+<p><strong>消息队列差异</strong></p>
+<p>Rabbit MQ*</p>
+<ul>
+<li><p>Producers 将消息发送给 Exchanges，Exchanges 根据路由规则（如 direct、fanout、topic 等）将消息分发到 Queues，Consumers 从 Queues 中消费消息。通过绑定键可以灵活实现消息路由。</p>
+</li>
+<li><p>轻量，开箱即用</p>
+</li>
+<li><p>消息堆积支持差，并发低，难以二次开发</p>
+</li>
+</ul>
+<p>Kafka-zooKeeper</p>
+<ul>
+<li>分布式，Producers 将消息发送到 Primary Broker，Broker 基于分区将消息写入日志文件；同时，通过 Replicas (Brokers) 实现消息备份，Consumers 从 Brokers 中指定的分区消费消息。ZooKeeper 负责集群管理，如 Broker 的元数据和 Leader 选举。</li>
+<li>性能好，并发高</li>
+<li>延迟高，topic多导致性能不好</li>
+</ul>
+<p>Rocket MQ</p>
+<ul>
+<li>分布式，Producers 从 Name Server 发现 Broker（类似于域名查找），然后将将消息发送至获取到的 Broker 集群，Broker 通过主从复制机制（Master-Slave）进行数据备份，Consumers 根据订阅模型消费消息，支持点对点（P2P）和发布-订阅（Pub&#x2F;Sub）两种消费模式。</li>
+</ul>
+<h2 id="死信队列"><a href="#死信队列" class="headerlink" title="死信队列"></a>死信队列</h2><p><strong>定义</strong></p>
+<p>死信队列是一种特殊的队列，用于存储无法被正常消费的消息（即“死信”消息）。消息成为死信的原因通常包括以下几种：</p>
+<ol>
+<li><strong>消息被拒绝</strong>：消费者使用 <code>basicNack</code> 或 <code>basicReject</code> 且 <code>requeue</code> 参数设置为 <code>false</code>。</li>
+<li><strong>消息过期</strong>：消息设置了 <code>TTL</code>（Time-To-Live）属性并超过了有效期。</li>
+<li><strong>队列长度限制</strong>：队列达到最大长度后，新的消息无法进入队列而被转为死信。</li>
+</ol>
+<p><strong>处理方式</strong></p>
+<ol>
+<li>配置一个普通队列（主队列），并绑定一个死信交换器（DLX，Dead Letter Exchange）。</li>
+<li>当主队列中的消息因上述原因成为死信时，会自动路由到死信交换器，再由死信交换器路由到死信队列。</li>
+</ol>
+<h2 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h2><p><strong>定义</strong></p>
+<p>延迟队列是一种消息队列，其中的消息会在指定的时间后被消费。延迟队列的实现通常依赖于消息的 <code>TTL</code>（Time-To-Live）属性和死信机制。</p>
+<p><strong>处理方式</strong></p>
+<p>消息 TTL 和死信机制实现：</p>
+<ul>
+<li>为延迟队列设置消息的 <code>TTL</code> 属性。</li>
+<li>配置一个死信交换器，消息在 TTL 到期后进入死信交换器，再路由到目标队列。</li>
+</ul>
+<p>插件实现：</p>
+<ul>
+<li>使用 RabbitMQ 的官方延迟队列插件（<code>rabbitmq_delayed_message_exchange</code>），允许直接为消息设置延迟时间。</li>
+</ul>
+<h2 id="MQ高可用"><a href="#MQ高可用" class="headerlink" title="MQ高可用"></a>MQ高可用</h2><p>普通集群</p>
+<p>仅一个节点上存放元数据和实际数据</p>
+<p>其他节点仅保存元数据</p>
+<p>消费者可从其他节点拉取元数据，由其他节点向完整节点拉取数据；</p>
+<p>节点挂一个仍然可用</p>
+<p>镜像集群</p>
+<p>每个节点均有完整数据；主从同步；</p>
+<h2 id="Rabbit-MQ"><a href="#Rabbit-MQ" class="headerlink" title="Rabbit MQ"></a>Rabbit MQ</h2><p>ref: <a href="https://kangshitao.github.io/2021/10/26/rabbitmq/">https://kangshitao.github.io/2021/10/26/rabbitmq/</a></p>
+<img src="/2025/01/17/MQ-Learning-Record/rabbitmq_1.png" class="" title="rabbitmq">
+
+
+
+<h2 id="Rabbit-MQ-消息送达保证"><a href="#Rabbit-MQ-消息送达保证" class="headerlink" title="Rabbit MQ 消息送达保证"></a><strong>Rabbit MQ 消息送达保证</strong></h2><p>确保消息发送到MQ</p>
+<ul>
+<li>发送方确认机制：启用 <code>ConfirmCallback</code> 和 <code>ReturnCallback</code>，确保消息被 RabbitMQ 成功接收。</li>
+</ul>
+<p>确保消息路由到正确的队列</p>
+<ul>
+<li>路由失败通知：启用 <code>mandatory</code> 属性，并使用 <code>ReturnCallback</code> 监听未成功路由的消息。</li>
+</ul>
+<p>确保消息在队列中正确的存储</p>
+<ul>
+<li>持久化：Exchangers，Queue内的消息需要持久化</li>
+</ul>
+<p>确保消息从队列中正确的投递到消费者</p>
+<ul>
+<li>消费者手动ACK确认</li>
+</ul>
+<p>Producer</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReliableRabbitMQProducer</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">EXCHANGE_NAME</span> <span class="operator">=</span> <span class="string">&quot;reliable_exchange&quot;</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">ROUTING_KEY</span> <span class="operator">=</span> <span class="string">&quot;reliable_key&quot;</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">QUEUE_NAME</span> <span class="operator">=</span> <span class="string">&quot;reliable_queue&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ConnectionFactory</span> <span class="variable">factory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConnectionFactory</span>();</span><br><span class="line">        factory.setHost(<span class="string">&quot;localhost&quot;</span>);</span><br><span class="line">        factory.setUsername(<span class="string">&quot;guest&quot;</span>);</span><br><span class="line">        factory.setPassword(<span class="string">&quot;guest&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> factory.newConnection();</span><br><span class="line">             <span class="type">Channel</span> <span class="variable">channel</span> <span class="operator">=</span> connection.createChannel()) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 声明交换器（持久化）</span></span><br><span class="line">            channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">&quot;direct&quot;</span>, <span class="literal">true</span>);</span><br><span class="line">            <span class="comment">// 声明队列（持久化）</span></span><br><span class="line">            channel.queueDeclare(QUEUE_NAME, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">            <span class="comment">// 绑定队列到交换器</span></span><br><span class="line">            channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 配置 ReturnCallback</span></span><br><span class="line">            channel.addReturnListener((replyCode, replyText, exchange, routingKey, properties, body) -&gt; &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(body);</span><br><span class="line">                System.err.println(<span class="string">&quot;Message returned: &quot;</span> + message + <span class="string">&quot;, ReplyCode: &quot;</span> + replyCode);</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 启用发送方确认机制</span></span><br><span class="line">            channel.confirmSelect();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 发送消息</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="string">&quot;Reliable Message&quot;</span>;</span><br><span class="line">            channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, <span class="literal">true</span>,</span><br><span class="line">                    <span class="keyword">new</span> <span class="title class_">AMQP</span>.BasicProperties.Builder()</span><br><span class="line">                            .deliveryMode(<span class="number">2</span>) <span class="comment">// 持久化消息</span></span><br><span class="line">                            .build(),</span><br><span class="line">                    message.getBytes());</span><br><span class="line">            System.out.println(<span class="string">&quot; [x] Sent: &#x27;&quot;</span> + message + <span class="string">&quot;&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 确认回调</span></span><br><span class="line">            channel.addConfirmListener(</span><br><span class="line">                    (deliveryTag, multiple) -&gt; System.out.println(<span class="string">&quot;Message confirmed: &quot;</span> + deliveryTag),</span><br><span class="line">                    (deliveryTag, multiple) -&gt; System.err.println(<span class="string">&quot;Message not confirmed: &quot;</span> + deliveryTag)</span><br><span class="line">            );</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Comsumer</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReliableRabbitMQConsumer</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">QUEUE_NAME</span> <span class="operator">=</span> <span class="string">&quot;reliable_queue&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ConnectionFactory</span> <span class="variable">factory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConnectionFactory</span>();</span><br><span class="line">        factory.setHost(<span class="string">&quot;localhost&quot;</span>);</span><br><span class="line">        factory.setUsername(<span class="string">&quot;guest&quot;</span>);</span><br><span class="line">        factory.setPassword(<span class="string">&quot;guest&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> factory.newConnection();</span><br><span class="line">             <span class="type">Channel</span> <span class="variable">channel</span> <span class="operator">=</span> connection.createChannel()) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 声明队列（持久化，确保消费者在队列存在时连接）</span></span><br><span class="line">            channel.queueDeclare(QUEUE_NAME, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot; [*] Waiting for messages. To exit press CTRL+C&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 消费消息</span></span><br><span class="line">            <span class="type">DeliverCallback</span> <span class="variable">deliverCallback</span> <span class="operator">=</span> (consumerTag, delivery) -&gt; &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(delivery.getBody(), <span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line">                System.out.println(<span class="string">&quot; [x] Received: &#x27;&quot;</span> + message + <span class="string">&quot;&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 模拟处理完成后手动ACK</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">100</span>); <span class="comment">// 模拟处理时间</span></span><br><span class="line">                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), <span class="literal">false</span>);</span><br><span class="line">                    System.out.println(<span class="string">&quot; [x] Message acknowledged&quot;</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    System.err.println(<span class="string">&quot;Failed to process message: &quot;</span> + e.getMessage());</span><br><span class="line">                    <span class="comment">// 消息未处理成功可选择 requeue</span></span><br><span class="line">                    channel.basicNack(delivery.getEnvelope().getDeliveryTag(), <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 开启手动ACK</span></span><br><span class="line">            channel.basicConsume(QUEUE_NAME, <span class="literal">false</span>, deliverCallback, consumerTag -&gt; &#123;&#125;);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="重复消息产生-消息消费幂等性保证"><a href="#重复消息产生-消息消费幂等性保证" class="headerlink" title="重复消息产生&amp;消息消费幂等性保证"></a>重复消息产生&amp;消息消费幂等性保证</h2><p>重复消息产生</p>
+<ul>
+<li>MQ没有正确告知生产者消息已接收</li>
+<li>消费者没有正确告知MQ成功消费</li>
+</ul>
+<p>消息消费幂等性保证</p>
+<ul>
+<li>消息携带唯一id，消费者接受到消息后<strong>查询记录：id是否被处理过</strong></li>
+</ul>
+<h2 id="消息消费顺序保证"><a href="#消息消费顺序保证" class="headerlink" title="消息消费顺序保证"></a>消息消费顺序保证</h2><p>局部消息顺序性</p>
+<ul>
+<li><p>有顺序的消息被存入同一个消息队列</p>
+</li>
+<li><p>为单独消息队列加锁</p>
+</li>
+</ul>
+<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>ref: <a href="https://segmentfault.com/a/1190000038173886">https://segmentfault.com/a/1190000038173886</a></p>
+<img src="/2025/01/17/MQ-Learning-Record/1460000038173889" class="" title="kafka">
+
+<p>黑色直角边矩形：一个Broker</p>
+<p>Broker内蓝色圆角矩形：一个partition</p>
+<p>Leader - Follower：主从复制</p>
+<p>Topic-Partition：物理上把 topic 分成一个或多个 patition（对应 server.properties 中的 num.partitions&#x3D;3 配置），每个 patition 物理上对应一个文件夹（该文件夹存储该 patition 的所有消息和索引文件）</p>
+<p>controller：kafka 集群中的其中一个服务器，用来进行 leader election 以及 各种 failover。</p>
+<p>zookeeper：kafka 通过 zookeeper 来存储集群的 meta 信息。</p>
+]]></content>
+      <categories>
+        <category>Message Queue</category>
+      </categories>
+      <tags>
+        <tag>Message Queue, Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QuestionBank</title>
+    <url>/2025/02/03/QuestionBank/</url>
+    <content><![CDATA[<p>夺命连环问！</p>
+<span id="more"></span>
+
+
+
+<h1 id="Java-Question-Bank"><a href="#Java-Question-Bank" class="headerlink" title="Java Question Bank"></a>Java Question Bank</h1><blockquote>
+<p>以下问题为转载，提供答案为AI生成，仅作参考和可能提问范围学习</p>
+</blockquote>
+<p>ref: <a href="https://www.v2ex.com/t/1106872">https://www.v2ex.com/t/1106872</a></p>
+<h2 id="后端问题"><a href="#后端问题" class="headerlink" title="后端问题"></a>后端问题</h2><p>Q: </p>
+<p>HashSet 的底层实现说下？为什么内置 HashMap ？说下它的数据结构，为什么 loadFactor 是 0.75 ？你说泊松分布，什么是泊松分布？为什么要高位参与与运算？为什么它的 size 是 2 的 n 次方？为什么默认是 16 ？讲下它的扩容机制。什么时候转红黑树，为什么要转红黑树？为什么它是线程不安全的，它的哪些方法是线程不安全的？为什么会造成死循环？ 1.8 是如何解决这个问题的？它的线程安全的实现有什么？ ConcurrentHashMap 和 HashTable 有什么区别？说下它 1.7 和 1.8 的实现是什么？有什么区别？为什么要这么做？为什么说 ConcurrentHashMap 是线程安全的？它的 get 操作是有锁的吗？它是强一致性的吗？它为什么是弱一致性的？ ConcurrentHashMap 1.7 和 1.8 是如何扩容的？ sizeCtl 参数是干什么的，讲讲变换过程？为什么要用 volatile 修饰？说说它的功能？什么是 MESI 协议？ CPU 原语是什么？什么是可见性？ JMM 说说是什么？为什么要有 JMM ？ Happened-before 是什么？它和 synchronized 的区别是什么？锁的升级与降级说下是什么？自旋锁是什么？偏向锁是什么？ Mark-Word 说下？锁的粒度是什么？锁消除了解吗？锁会被合并吗？什么时候会发生？你刚才说了 CAS ，你能说下它是什么东西吗？为什么要引入 CAS ？ ABA 问题是如何解决的？ AQS 了解吗？它是如何实现的？ CLH 又是什么？ ReentrantLock 和 synchronized 区别是什么？为什么 ReetrantLock 能实现公平锁？默认构造器是公平锁吗？为什么不是？ Copy-on-Write 了解吗？ Fork&#x2F;Join 又是什么？什么是线程，什么是协程？你刚才说了管程？你能说下这几个到底是做什么的吗？线程池说下参数，四种内置的拒绝策略，以及它的执行流程。你用过吗？为什么要这么设置参数？ I&#x2F;O 密集型应用和计算密集型应用如何设置其参数？你具体的业务线程池的参数是怎么设计的？为什么？测过吗？你定制化开发过吗？线程池预留了 3 个供子类扩展的方法你知道是哪三个吗？能做什么你知道吗？ ThreadLocal 是什么？它为什么会造成内存泄漏？你实际开发中用到过吗？ Spring 事务用这个干什么的？什么是 Spring 事务的 SavePoint ？你知道死锁吗？如何解决死锁？ sleep 和 wait 的区别是什么？ BIO 、NIO 、AIO 是什么？说下区别，以及如何使用？了解 Netty 吗？如何解决粘包问题？ ChannelPipeline 又是什么？ ByteBuf 知道吗？读写指针又是什么？为什么要用它，解决了 NIO 类库的 ByteBuffer 什么问题？它和 mina 的区别是什么？它的 Zero-Copy ？了解过 FastThreadLocal 吗？它为什么比 ThreadLocal 快？有看过其中源码吗？ Netty 解决了 NIO 类库的什么问题？空轮询又是什么？ RPC 又是什么？序列化和反序列化又是什么？几个核心抽象说下。是干什么的？讲讲 Netty 的线程模型。</p>
+<p>Q: </p>
+<p>你说你了解虚拟机，你知道虚拟机的运行时数据区吗？哪些是线程共享的，哪些是线程独有的？你了解 JVM 调优吗？调优过吗？为什么要这么设置？垃圾回收算法有几种？为什么要分代收集？ Young 区说说它的分布结构，为什么 Eden 区 80%？为什么大对象直接进入老年代？控制的参数是什么？一个对象如果不是大对象，怎样才能进入老年代？控制的参数是什么？什么时候会发生 OOM ？你遇到过吗？怎么解决的？为什么低版本的 JDK 要把永久代内存调大点？默认大小是多少你知道吗？什么是 Major GC ，什么是 Minor GC ？什么情况下会频繁 GC ？你查看过 GC 日志吗？什么时候回收对象？引用计数和可达性分析是什么？为什么 Java 使用后者？ Python 使用前者？什么是 GCRoot ？什么类型的对象可以作为 GCRoot ？什么时候对象不可达？ Java 的四种引用说下，分别用在什么场景？你知道 JDK 源码哪里有用到 WeakReference 吗？什么是 STW ？什么是 Safepoint ？类加载的过程说下，什么时候优化，以及不同的阶段的主要优化是什么？解语法糖是什么时候？为什么在编译的时候解语法糖？什么是双亲委派模型？可以破坏吗？各个 ClassLoader 加载哪部分类的？你自定义过 ClassLoader 吗？你说你用过 Jstack 诊断 CPU 使用率飙升的情况，说下具体步骤？ Arthas 用过吗？ Class 文件格式说下，什么是魔数，Class 文件的魔数是什么？ JMX 了解吗？生产上有碰到过虚拟机的问题吗？怎么解决的？</p>
+<p>ACID 说下是什么，如何实现的？你说你优化过 SQL ，怎么优化的说下。like ‘%xx%’，like ‘%xx’，like ‘xx%’ 哪种情况会用到索引，为什么？说下 MySQL 执行流程。WAL(Write-Ahead Logging) 知道吗？ redo log 和 undo log 是什么，它们作用说下。你说你改过 buffer_pool_size 等参数，为什么要改它？它里面的数据结构说下是什么？为什么冷热 3:7 ？ join_buffer 你说你也改了，为什么？什么是驱动表和被驱动表？如何优化？你说你建了索引，什么是蔟集索引，什么是非蔟集索引？什么是回表？什么时候会索引失效？你的二级索引什么用得多？为什么优先使用普通索引，而不是唯一索引？ MySQL 会死锁吗？什么是间隙锁？它会导致什么问题？ MVCC 说下是什么？ 4 种事务说下是什么？哪种或者哪几种事务隔离级别能避免幻读？能避免脏读？你说你还开启了 binlog ，能说说是什么吗？ binlog 有几种格式？你选的是哪个？为什么？ canal 用过吗？说说它的原理。MySQL 主从模式如何开启？你是如何优化 SQL 的？上亿级别的数据你是如何优化分页的？为什么不建议在 MySQL 中使用分区机制？几个主要的线程说下它们是什么？做什么的？ MySQL 读写了解吗？如何实现的？能做到强一致性吗？为什么？为什么删了数据还是磁盘空间不变？自增主键用完了会怎么样？如何解决这个问题？自增主键什么时候是不连续的？这样做的好处是什么？为什么推荐用自增主键？ B+ Tree 又是什么？如何迁移数据库？为什么不建议使用外键？在高版本的 MySQL 中 count(1) 和 count(*) 区别是什么？ order by 是如何工作的？分页机制又是什么？ ACL 和 RBAC 是什么？ PBAC 和 ABAC 知道吗说下？ grant 之后一定要刷新吗？视图用过吗？它的作用说下。视图和表的区别说下。存储过程写过吗？存储函数和存储过程的区别说下。为什么要分库分表？分库分表如何做到动态缩容&#x2F;扩容？ NoSQL 用过吗？ OceanBase 了解吗？ HBase 了解吗？ HBase 有哪些坑，你碰到过吗？什么是 RegionServer ？什么时候用 NoSQL ，它能取代 RDBMS 吗？你说你用过 Elasticsearch ，能说下它的请求执行过程吗？它的总体架构说下，画一下。它的插件你用过吗？你们的分词策略是什么？倒排索引说下是什么。</p>
+<p>线程和进程说下区别？线程的几种状态说下。Java 中的线程和操作系统的线程关系？动态内存分配和回收策略是什么？什么是空闲列表和指针碰撞？具体用什么数据结构存的？什么时候用它们？空闲列表四种策略说下。Page Cache 知道吗，说说它的作用。Redis 和 Kafka 中间件如何通过 Page Cache 来优化？哪些类型会导致内存泄漏？ TCP 和 HTTP 是什么？它们之间的关系说下。OSI 七层是哪七层？分别是干什么的？ TCP 和 UDP 区别是什么？什么时候会导致 TCP 抖动？ TCP 是如何保证稳定的？我就要用 UDP ，如何使它和 TCP 一样能保证数据到达？ CPU 是如何执行任务的？你知道 numa 架构吗？哪些中间件可以通过这个来怎么优化？为什么绑核能优化？什么是 Zero-Copy ？你用的中间件中有哪些用到了这个特性？内核态和用户态是什么？硬件你了解过吗？什么是 x86 ？什么是 ARM ？你说精简指令集？它精简了什么？ ARM 架构的 CPU 是什么样的？画一下。M1 芯片为什么这么快，有了解吗？ 5G 有了解吗？有点题外话了，最后问你个问题，你说你是软件通信工程，通信学的什么？选修了什么？通信是学硬件吗？光纤为什么这么快？ 8 根线和 4 根线区别？傅立叶变换说下是什么？数字信号模拟信号？你大学在班级定位？前几？</p>
+<p>Redis 它的 5 种基础类型和 6 个数据结构说下。HyperLogLog 、BitMap 、GEO 、Stream 有接触过吗？什么时候用这些特殊数据结构？跳表又是什么，画一下？为什么使用跳表？为什么不用红黑树？全局 Hash 表又是什么？如何扩容的？什么是渐进式 rehash ？ Redis 怎么做到的？ IO 多路复用是什么？多路是什么？复用了什么？ AOF 和 RDB 又是什么？为什么 Redis 没有实现 WAL 机制？ AOF 持久化策略有哪三种？你们是怎么选的？ AOF 什么时候重写？为什么重写？主从复制用到了哪种日志？主从复制过程说下。主从复制什么时候增量，什么时候全量？第一次连接时，网络中断了怎么办？ Redis 主从是什么？主从从又是什么？为什么主从从可以减少主库压力？从库可以设置可写吗？从库可写会带来什么问题？主从什么时候会导致数据丢失？ Redis 十万并发能支撑住吗？如何支撑十万以上并发？为什么操作大对象支持不了十万并发？ Redis Cluster 是什么？ 你说到了 CRC16 ，你知道一致性哈希算法吗，能说下是什么吗？你说虚拟节点，说下如何实现？ Codis 了解吗？你们的 Redis 集群方案是什么？ Redis 是如何保证高可用的？哨兵机制了解吗？什么是主观下线什么是客观下线？选主的四个筛选条件优先级的条件依次递减分别是什么？打分又是什么？如何打分？缓存击穿、缓存雪崩、缓存穿透说下？如何解决？布隆过滤器又是什么？能手写个布隆过滤器吗？数据倾斜知道吗，如何解决？分布式锁了解过吗？讲讲分布式锁实现原理？ Redisson 源码看过吗？它是如何实现的分布式锁？ Lua 脚本保证原子性吗？分布式锁需要注意哪四个问题？ Redis 事务说下。缓存污染知道是什么吗？如何淘汰数据的？分别是哪八种策略？ Redis 对 lru 做了什么改变吗？ lfu 又是什么？ Redis 做了什么优化？ Redis 多线程是什么多线程？默认开启吗？你们生产中用了吗？ Redis 6 还有什么新特性？自定义过 Redis 数据类型吗？自定义过 Redis 命令吗？如何解决数据库和缓存数据不一致问题？ Pika 知道吗？ Tendis 和它的区别？如何实现一个 Key 千万并发？（这个有个群的群友的 Zoom 面试题）</p>
+<p>消息中间件解决了哪几个问题？简单介绍下你用的 Kafka 。从 Topic -&gt; Record&lt;Key,Value&gt; -&gt; Producer -&gt; acks -&gt; Interceptor -&gt; Broker -&gt; Page Cache -&gt; Controller -&gt; Coordinator -&gt; Partition -&gt; Replica -&gt; Leader Replica -&gt; Follower Replica -&gt; ISR -&gt; Unclean Leader Election -&gt; Consumer -&gt; Consumer Group -&gt; Consumer Offset -&gt; Consumer Group Offset -&gt; Idempotence -&gt; Transaction -&gt; Rebalance -&gt; High Watermark -&gt; Log Deletion -&gt; Leader Epoch -&gt; LEO -&gt; Zero Copy -&gt; Consumer Heartbeat -&gt; Zookeeper 到这结束。它和 RocketMQ 、RabbitMQ 有什么区别？什么时候消息会丢失？ Producer 网络抖动后，它的消息在哪存着，内存还是磁盘还是哪里？ Producer 和 Consumer 什么时候建立的 TCP 连接？为什么这么做？ Consumer 为什么要采取 pull 的方式？ Producer 为什么采用 push 的方式？为什么用 TCP 不用 HTTP ？高水位、LEO 是什么？ Lead Epoch 知道吗？幂等性是如何实现的？说下 Kafka 事务，Kafka 事务实现的事务隔离级别？什么时候触发 Rebalance ？如何避免？如何指定发送消息到指定 Partition ？消息交付可靠性保障承诺三个说下，以及 Kafka 是如何实现它们的？哦，你说精准一次，怎么实现的？根据消息数以及消息大小，计算需要多少磁盘容量和带宽。Kafka 的 JVM 参数调优说下。JMS 了解吗？</p>
+<p>Spring Bean Scope 说下。Spring 的注入方式有几种，为什么推荐用构造器注入？@Resource 和 @<a href="https://www.v2ex.com/member/Autowired">Autowired</a> 区别说下。什么是 IoC 和 AOP ？ Spring 解决了什么？@Bean 和 @<a href="https://www.v2ex.com/member/Component">Component</a> 区别说下。Spring Bean 的生命周期说下。Spring AOP 原理，各种 Advice 和 Advisor 说下。AOP 的两种代理方式是什么？ AOP 一般作用说下。三级缓存解决循环依赖的过程说下。Spring 的事务传播行为说下。Spring 事务隔离级别说下。Spring 事务实现原理。Spring 用到了哪些设计模式，能分别讲讲它是如何实现的吗，具体是哪些类？ BeanFactory 和 ApplicationContext 说下区别。说下 BeanFactory 和 FactoryBean 区别？ BeanPostProcessor 和 BeanFactoryPostProcessor 区别是什么？ Spring 事件知道吗？ Spring 如何自定义 XML 解析？各种 Smart 开头的 Bean 的前置处理器，什么时候被调用，你知道吗？ Spring Cache 是如何实现的？ Spring Data JPA 呢？ 注解扫描如何实现的，你能手写个吗？写过 Spring 的插件吗？如何实现的？代码开源了吗？</p>
+<p>Q: </p>
+<p>Spring MVC 执行流程说下。 @<a href="https://www.v2ex.com/member/RestController">RestController</a> 和 @<a href="https://www.v2ex.com/member/Controller">Controller</a> 区别说下。怎么取得 URL 中的 { } 里面的变量？ Spring MVC 和 Struts2 比有什么优点？ Spring MVC 怎么样设定重定向和转发的？说下 Spring MVC 的常用注解。如何解决 POST 请求中文乱码问题，GET 的又如何处理呢？ Interceptor 和 Filter 区别？ Spring MVC 的异常处理 ？怎样在方法里面得到 Request ，或者 Session ？ Spring MVC 中函数的返回值是什么？怎么样把 ModelMap 里面的数据放入 Session 里面？ Spring MVC 的控制器是不是单例模式,如果是,有什么问题,怎么解决？ Spring MVC 的 RequestMapping 的方法是线程安全的吗？为什么？介绍下 WebApplicationContext 。跨域问题如何解决？如何解决全局异常？ validation 有了解吗？用过吗？ Json 处理如何实现的？哦，你刚才说了父子容器，能讲讲什么是父子容器吗？ Spring MVC 国际化有了解过吗？怎么实现的</p>
+<p>A: </p>
+<p>Q: </p>
+<p>Spring Boot 是如何实现自动装配的？运行 Spring Boot 有几种方式？ Spring Boot Starter 工作原理。Spring Boot 核心注解说下。 @<a href="https://www.v2ex.com/member/Enable">Enable</a> 类型注解是如何实现的？@Conditional 类型注解呢？自定义过吗？说下异步调用 @<a href="https://www.v2ex.com/member/Async">Async</a> 。什么是 YAML ？ Spring Boot Profiles 如何实现的？ bootstrap.properties 和 application.properties 说下区别。Spring Boot 事件和 Spring 事件有什么关系？ Spring Boot Actuator 了解过吗？说一下。Spring Batcher 用过吗，说下。Spring Boot 是如何实现内嵌 Servlet 容器的，在哪行代码启动的？ Spring Boot 完美实现了模块化编程，你认同吗？</p>
+<p>A: </p>
+<p>Q: </p>
+<p>Spring Cloud Netflix 听说你了解。画一下 Spring Cloud Netflix 架构图。说说 Eureka 默认多少秒发送心跳？增量还是全量？ CP 还是 AP ？如何防止脑裂的？二级缓存知道吗？ Eureaka 的自我保护模式说下。ServiceInstance 和 DiscoryClient 知道吗？是干嘛的？分布式事务除了两段提交，还有什么实现方式？哦，你说 Saga ，Saga 你说下是什么？ Ribbon 是什么说一下，它解决了什么问题？ Feign 又是什么？它和 Ribbon 什么关系？ Dubbo 和 Feign 区别？ Dubbo 的 SPI 知道吗？ Zuul 是什么？它和 Nginx 有什么区别？除了 Zuul 还有什么网关可选？ Hystrix 是什么？它是如何实现的？熔断、降级和限流他们的区别说一下。Hystrix 信号量机制，隔离策略细粒度控制如何做的？了解过他们的源码实现吗？看过源码吗？你优化过吗？微服务十一点说一下分别是什么？分布式配置中心有哪些？你们用的 Apollo 还是 Spring Config 还是其他的？为什么？服务监控有了解吗？什么是幂等？如何实现接口幂等？如何实现分布式 Session ？有更好的方法吗？哦，你说了 JWT ，能详细说下吗？不同系统的间授权的 OAuth2 了解吗？</p>
+<p>A: </p>
+<p>Q:</p>
+<p>MyBatis 了解吗？一级缓存，二级缓存？# 和 $ 说下。如何实现的动态 SQL ？ ORM 是什么？和 Hibernate 区别？ MyBatis 工作原理？ MyBatis 都有哪些 Executor 执行器？它们之间的区别是什么？ MyBatis 中如何指定使用哪一种 Executor 执行器？模糊查询 like 语句该怎么写？ MyBatis 是否支持延迟加载？如果支持，它的实现原理是什么？ MyBatis 如何执行批量操作？ SqlSessionFactoryBean 是什么？如何实现和 Spring 的整合的？ Mapper 方法可以重载吗？为什么不可以？ MyBatis 是如何将 SQL 执行结果封装为目标对象并返回的？都有哪些映射形式？哦，你说简单封装了 JDBC ，说下 JDBC 几个重要的类。为什么要预编译？有什么好处吗？</p>
+<p>A:</p>
+<p>Q: </p>
+<p>Nginx 了解吗，说下其优缺点？怎么实现 Nginx 集群？什么是反向代理？和正向代理区别是什么？ Tomcat 和 Nginx 区别？限流怎么做的，有哪三种？令牌桶和漏斗算法是什么，区别是什么？如何在其之上使用 Lua 脚本？有几种负载均衡策略？你们生产上用的哪个？为什么？为什么 Nginx 性能这么高？有没有更高的？ F5 又是什么？ Nginx 是怎么处理请求的？ Nginx 目录有哪些？ nginx.conf 配置过吗？有哪些属性模块？静态资源放哪？虚拟主机配置？ location 说下。location 语法说下。</p>
+<p>A: </p>
+<p><strong>Nginx 了解吗，说下其优缺点？</strong></p>
+<p><strong>优点：</strong></p>
+<ol>
+<li><strong>高性能</strong>：Nginx 采用事件驱动架构，能够处理大量并发连接，适合高并发场景。</li>
+<li><strong>轻量级</strong>：资源占用少，适合在资源有限的服务器上运行。</li>
+<li><strong>反向代理</strong>：支持反向代理，负载均衡，缓存等功能。</li>
+<li><strong>高扩展性</strong>：支持模块化设计，可以通过第三方模块扩展功能。</li>
+<li><strong>热部署</strong>：支持不停止服务的情况下更新配置和升级。</li>
+</ol>
+<p><strong>缺点：</strong></p>
+<ol>
+<li><strong>动态内容处理能力较弱</strong>：Nginx 本身不擅长处理动态内容，通常需要与后端应用服务器（如 Tomcat）配合使用。</li>
+<li><strong>配置复杂</strong>：对于初学者来说，Nginx 的配置文件可能比较复杂，学习曲线较陡。</li>
+</ol>
+<p><strong>怎么实现 Nginx 集群？</strong></p>
+<p>Nginx 集群通常通过以下方式实现：</p>
+<ol>
+<li><strong>负载均衡</strong>：使用 Nginx 作为负载均衡器，将请求分发到多个后端服务器。</li>
+<li><strong>高可用</strong>：通过 Keepalived 或 HAProxy 实现 Nginx 的高可用，避免单点故障。</li>
+<li><strong>DNS 轮询</strong>：通过 DNS 轮询将请求分发到多个 Nginx 服务器。</li>
+<li><strong>分布式部署</strong>：在不同地理位置的服务器上部署 Nginx，通过 CDN 或全局负载均衡器进行请求分发。</li>
+</ol>
+<p><strong>什么是反向代理？和正向代理区别是什么？</strong></p>
+<ul>
+<li><strong>反向代理</strong>：客户端请求发送到反向代理服务器，反向代理服务器将请求转发到后端服务器，并将后端服务器的响应返回给客户端。客户端不知道后端服务器的存在。</li>
+<li><strong>正向代理</strong>：客户端通过正向代理服务器访问外部资源，外部资源不知道客户端的真实 IP，只知道代理服务器的 IP。</li>
+</ul>
+<p><strong>Tomcat 和 Nginx 区别？</strong></p>
+<ul>
+<li><strong>Nginx</strong>：主要用于处理静态内容、反向代理、负载均衡等，适合高并发场景。</li>
+<li><strong>Tomcat</strong>：是一个 Java 应用服务器，主要用于处理动态内容，如 JSP、Servlet 等。</li>
+</ul>
+<p><strong>限流怎么做的，有哪三种？</strong></p>
+<ol>
+<li><strong>计数器算法</strong>：在固定时间窗口内限制请求数量。</li>
+<li><strong>令牌桶算法</strong>：以固定速率生成令牌，请求需要消耗令牌才能被处理。</li>
+<li><strong>漏桶算法</strong>：请求以固定速率被处理，超出速率的请求会被丢弃或排队。</li>
+</ol>
+<p><strong>令牌桶和漏斗算法是什么，区别是什么？</strong></p>
+<ul>
+<li><strong>令牌桶算法</strong>：以固定速率生成令牌，令牌被放入桶中，请求需要消耗令牌才能被处理。允许突发流量。</li>
+<li><strong>漏桶算法</strong>：请求以固定速率被处理，超出速率的请求会被丢弃或排队。不允许突发流量。</li>
+</ul>
+<p><strong>如何在其之上使用 Lua 脚本？</strong></p>
+<p>Nginx 通过 <code>ngx_lua</code> 模块支持 Lua 脚本，可以在配置文件中嵌入 Lua 代码，实现复杂的逻辑处理。</p>
+<p><strong>有几种负载均衡策略？你们生产上用的哪个？为什么？</strong></p>
+<p>常见的负载均衡策略：</p>
+<ol>
+<li><strong>轮询（Round Robin）</strong>：依次将请求分发到每个服务器。</li>
+<li><strong>加权轮询（Weighted Round Robin）</strong>：根据服务器权重分配请求。</li>
+<li><strong>IP Hash</strong>：根据客户端 IP 分配请求，确保同一客户端始终访问同一服务器。</li>
+<li><strong>最少连接（Least Connections）</strong>：将请求分发到当前连接数最少的服务器。</li>
+</ol>
+<p>生产环境通常使用<strong>加权轮询</strong>或<strong>最少连接</strong>，因为它们能更好地平衡服务器负载。</p>
+<p><strong>为什么 Nginx 性能这么高？有没有更高的？</strong></p>
+<p>Nginx 性能高的原因：</p>
+<ol>
+<li><strong>事件驱动架构</strong>：非阻塞 I&#x2F;O 模型，能够高效处理大量并发连接。</li>
+<li><strong>多进程模型</strong>：利用多核 CPU，每个工作进程独立处理请求。</li>
+<li><strong>内存管理优化</strong>：减少内存分配和释放的开销。</li>
+</ol>
+<p>更高的性能可以选择 <strong>Caddy</strong> 或 <strong>Envoy</strong>，它们在特定场景下可能表现更好。</p>
+<p><strong>F5 又是什么？</strong></p>
+<p>F5 是一家提供应用交付控制器（ADC）和负载均衡解决方案的公司，其产品（如 BIG-IP）常用于企业级负载均衡和应用加速。</p>
+<p><strong>Nginx 是怎么处理请求的？</strong></p>
+<ol>
+<li><strong>接收请求</strong>：Nginx 监听端口，接收客户端请求。</li>
+<li><strong>解析请求</strong>：解析 HTTP 请求头，确定请求的虚拟主机和 location。</li>
+<li><strong>处理请求</strong>：根据配置文件的规则处理请求，如静态文件直接返回，动态请求转发到后端服务器。</li>
+<li><strong>返回响应</strong>：将处理结果返回给客户端。</li>
+</ol>
+<p><strong>Nginx 目录有哪些？</strong></p>
+<ul>
+<li><strong>&#x2F;usr&#x2F;local&#x2F;nginx</strong>：Nginx 安装目录。</li>
+<li><strong>&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf</strong>：配置文件目录，包含 <code>nginx.conf</code>。</li>
+<li><strong>&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs</strong>：日志文件目录。</li>
+<li><strong>&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;html</strong>：默认的静态文件存放目录。</li>
+</ul>
+<p><strong>nginx.conf 配置过吗？有哪些属性模块？</strong></p>
+<p><code>nginx.conf</code> 是 Nginx 的主配置文件，常见的配置模块包括：</p>
+<ul>
+<li><strong>http</strong>：HTTP 相关配置。</li>
+<li><strong>server</strong>：虚拟主机配置。</li>
+<li><strong>location</strong>：URL 路径匹配和处理规则。</li>
+<li><strong>events</strong>：事件处理模型配置。</li>
+<li><strong>upstream</strong>：负载均衡后端服务器配置。</li>
+</ul>
+<p>实例：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 全局配置</span></span><br><span class="line"><span class="attribute">user</span>  nginx;</span><br><span class="line"><span class="attribute">worker_processes</span>  auto;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line">    <span class="attribute">worker_connections</span>  <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="comment"># 网站 A 的虚拟主机配置</span></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span>       <span class="number">80</span>;</span><br><span class="line">        <span class="attribute">server_name</span>  www.example.com;</span><br><span class="line"></span><br><span class="line">        <span class="section">location</span> / &#123;</span><br><span class="line">            <span class="attribute">root</span>   /var/www/example;</span><br><span class="line">            <span class="attribute">index</span>  index.html;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 网站 B 的虚拟主机配置</span></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span>       <span class="number">80</span>;</span><br><span class="line">        <span class="attribute">server_name</span>  www.test.com;</span><br><span class="line"></span><br><span class="line">        <span class="section">location</span> / &#123;</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://127.0.0.1:8080;  <span class="comment"># 将请求转发到本地的 8080 端口</span></span><br><span class="line">            <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">            <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>静态资源放哪？</strong></p>
+<p>静态资源通常放在 Nginx 的 <code>html</code> 目录下，或者通过 <code>location</code> 配置指定其他目录。</p>
+<p><strong>虚拟主机配置？</strong></p>
+<p>虚拟主机配置在 <code>nginx.conf</code> 中的 <code>server</code> 块中，通过 <code>server_name</code> 指定域名，<code>listen</code> 指定端口。</p>
+<p><strong>location 说下。</strong></p>
+<p><code>location</code> 用于匹配 URL 路径，并指定如何处理请求。例如：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">location</span> /static/ &#123;</span><br><span class="line">    <span class="attribute">root</span> /var/www/html;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>location 语法说下。</strong></p>
+<p><code>location</code> 语法：</p>
+<ul>
+<li>**&#x3D;**：精确匹配。</li>
+<li>**~**：区分大小写的正则匹配。</li>
+<li>**~***：不区分大小写的正则匹配。</li>
+<li>**^~**：前缀匹配，不进行正则匹配。</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">location</span> = /exact &#123;</span><br><span class="line">    <span class="comment"># 精确匹配 /exact</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">location</span> <span class="regexp">~* \.php$</span> &#123;</span><br><span class="line">    <span class="comment"># 不区分大小写匹配 .php 结尾的 URL</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>Q: </p>
+<p>Tomcat 你也了解？什么是 Tomcat 的 Connector ？ Service 、Connector 、Container 介绍下它们。详细说下它们是如何处理请求的，能画下它们的架构图吗？如何部署的？一定要放到 webapps 目录下吗？在哪配置？为什么不用 Jetty ？区别是什么？ Servlet 是线程安全的吗？为什么？怎样让它线程安全？ Servlet 初始化过程？ init 方法什么时候调用？ Servlet 什么时候第一次初始化？ JSP 知道吗？有几个内置对象？你说 JSP 是特殊的 Servlet ，你看过源码吗？ JSP 如何热部署的？ EL 表达式知道吗？如何实现的？（大四神州集团校招的时候被问到的）。</p>
+<p>A:</p>
+<p>云原生了解吗？云原生十二要素说下。Cloud Foundry 平台你知道吗？ HeroKu ？ Kong ？</p>
+<p>Q: </p>
+<p>哦？你说是六边形架构？你说下什么是六边形架构？整洁架构呢？它们之间的区别？分层架构了解吗？ MVP 、MVC 架构说下。负载均衡算法七种说下。如何实现一个秒杀系统。一定不会超卖吗？如何解决？什么是 SOA ？什么是微服务？以及两者的区别。什么是事件驱动架构？ CAP 和 BASE 说下是什么？最终一致性和人弱一致性什么关系？画一下你们系统的整体架构图。QPS 和 TPS ？你们的 QPS 是多少知道吗？压测过吗？说下点击网页的请求过程。哦，你说你是蓝绿部署，什么是蓝绿部署？什么是金丝雀发布？如何实现？</p>
+<p>A:</p>
+<p>Q: </p>
+<p>Docker 你也用？怎么构建 Docker 镜像？ Docker 和虚拟机的区别？ Docker 好处说下？ Kubernetes 你也知道，说下它的组成结构？ etcd 是什么？为什么不用 Zookeeper ？ pod 又是什么？你们生产上怎么用的？如何控制滚动更新过程？</p>
+<p>A:</p>
+<p>Q:</p>
+<p>你说你知道 DDD ？能简单说下吗？你们代码落地了吗？是如何拆分服务的？事件风暴又是什么？你们有 Code Review 吗？具体规矩？领域事件是什么？子域、通用域、核心域、支撑域、限界上下文、聚合、聚合根、实体、值对象又是什么？你们有 EventBus 吗？如何使用的？</p>
+<p>A:</p>
+<h2 id="刷题"><a href="#刷题" class="headerlink" title="刷题"></a>刷题</h2><p>剑指 offer <a href="https://www.nowcoder.com/exam/oj/ta?page=1&tpId=13&type=13">https://www.nowcoder.com/exam/oj/ta?page=1&amp;tpId=13&amp;type=13</a></p>
+<p>leetcode hot 100 <a href="https://leetcode.cn/studyplan/top-100-liked/">https://leetcode.cn/studyplan/top-100-liked/</a></p>
+<p>给二叉树后序和中序遍历，写前序遍历。手写个快排。翻转一下链表。O(1) 空间复杂度找出链表有环。DFS 找出二叉树搜索树第 k 大节点（这些都真的碰过了）。</p>
+<p>实现一个多线程类，并用该线程类实例化 3 个线程 A,B,C ； A 线程打印字符 A,B 线程打印字符 B ，C 线程打印字符 C ；启动这 3 个线程，要求启动线程的顺序为 C 线程-&gt;B 线程-&gt;A 线程，并且最后输出内容为：A B C 。禁止使用 sleep 函数。阿里应该还有各种多线程打印的问题，这个得准备。这些只是最最最基础的内容。</p>
+<p>接下来应该是更高级的算法题目，至少是 LeetCode Menium 难度的，翻转链表确实有点初级，练个半个小时就搞定了。暂时还没碰到，碰到我也挂了。应该是动态规划，滑动窗口，字符串的问题，手写 O(1) 时间复杂度的 LRU ，回溯，贪心。</p>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm, Java</tag>
       </tags>
   </entry>
   <entry>
@@ -3766,129 +4187,6 @@
       </tags>
   </entry>
   <entry>
-    <title>MQ-Learning-Record</title>
-    <url>/2025/01/17/MQ-Learning-Record/</url>
-    <content><![CDATA[<p>MQ相关学习记录</p>
-<span id="more"></span>
-
-<h1 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h1><h2 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h2><p><strong>使用MQ原因</strong></p>
-<p>解耦：将后续工作与前序工作解耦</p>
-<p>异步：将需要完成的工作压入消息队列</p>
-<p>削峰：使大量涌入的事件得到稳定的处理</p>
-<p><strong>消息队列差异</strong></p>
-<p>Rabbit MQ*</p>
-<ul>
-<li><p>Producers 将消息发送给 Exchanges，Exchanges 根据路由规则（如 direct、fanout、topic 等）将消息分发到 Queues，Consumers 从 Queues 中消费消息。通过绑定键可以灵活实现消息路由。</p>
-</li>
-<li><p>轻量，开箱即用</p>
-</li>
-<li><p>消息堆积支持差，并发低，难以二次开发</p>
-</li>
-</ul>
-<p>Kafka-zooKeeper</p>
-<ul>
-<li>分布式，Producers 将消息发送到 Primary Broker，Broker 基于分区将消息写入日志文件；同时，通过 Replicas (Brokers) 实现消息备份，Consumers 从 Brokers 中指定的分区消费消息。ZooKeeper 负责集群管理，如 Broker 的元数据和 Leader 选举。</li>
-<li>性能好，并发高</li>
-<li>延迟高，topic多导致性能不好</li>
-</ul>
-<p>Rocket MQ</p>
-<ul>
-<li>分布式，Producers 从 Name Server 发现 Broker（类似于域名查找），然后将将消息发送至获取到的 Broker 集群，Broker 通过主从复制机制（Master-Slave）进行数据备份，Consumers 根据订阅模型消费消息，支持点对点（P2P）和发布-订阅（Pub&#x2F;Sub）两种消费模式。</li>
-</ul>
-<h2 id="死信队列"><a href="#死信队列" class="headerlink" title="死信队列"></a>死信队列</h2><p><strong>定义</strong></p>
-<p>死信队列是一种特殊的队列，用于存储无法被正常消费的消息（即“死信”消息）。消息成为死信的原因通常包括以下几种：</p>
-<ol>
-<li><strong>消息被拒绝</strong>：消费者使用 <code>basicNack</code> 或 <code>basicReject</code> 且 <code>requeue</code> 参数设置为 <code>false</code>。</li>
-<li><strong>消息过期</strong>：消息设置了 <code>TTL</code>（Time-To-Live）属性并超过了有效期。</li>
-<li><strong>队列长度限制</strong>：队列达到最大长度后，新的消息无法进入队列而被转为死信。</li>
-</ol>
-<p><strong>处理方式</strong></p>
-<ol>
-<li>配置一个普通队列（主队列），并绑定一个死信交换器（DLX，Dead Letter Exchange）。</li>
-<li>当主队列中的消息因上述原因成为死信时，会自动路由到死信交换器，再由死信交换器路由到死信队列。</li>
-</ol>
-<h2 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h2><p><strong>定义</strong></p>
-<p>延迟队列是一种消息队列，其中的消息会在指定的时间后被消费。延迟队列的实现通常依赖于消息的 <code>TTL</code>（Time-To-Live）属性和死信机制。</p>
-<p><strong>处理方式</strong></p>
-<p>消息 TTL 和死信机制实现：</p>
-<ul>
-<li>为延迟队列设置消息的 <code>TTL</code> 属性。</li>
-<li>配置一个死信交换器，消息在 TTL 到期后进入死信交换器，再路由到目标队列。</li>
-</ul>
-<p>插件实现：</p>
-<ul>
-<li>使用 RabbitMQ 的官方延迟队列插件（<code>rabbitmq_delayed_message_exchange</code>），允许直接为消息设置延迟时间。</li>
-</ul>
-<h2 id="MQ高可用"><a href="#MQ高可用" class="headerlink" title="MQ高可用"></a>MQ高可用</h2><p>普通集群</p>
-<p>仅一个节点上存放元数据和实际数据</p>
-<p>其他节点仅保存元数据</p>
-<p>消费者可从其他节点拉取元数据，由其他节点向完整节点拉取数据；</p>
-<p>节点挂一个仍然可用</p>
-<p>镜像集群</p>
-<p>每个节点均有完整数据；主从同步；</p>
-<h2 id="Rabbit-MQ"><a href="#Rabbit-MQ" class="headerlink" title="Rabbit MQ"></a>Rabbit MQ</h2><p>ref: <a href="https://kangshitao.github.io/2021/10/26/rabbitmq/">https://kangshitao.github.io/2021/10/26/rabbitmq/</a></p>
-<img src="/2025/01/17/MQ-Learning-Record/rabbitmq_1.png" class="" title="rabbitmq">
-
-
-
-<h2 id="Rabbit-MQ-消息送达保证"><a href="#Rabbit-MQ-消息送达保证" class="headerlink" title="Rabbit MQ 消息送达保证"></a><strong>Rabbit MQ 消息送达保证</strong></h2><p>确保消息发送到MQ</p>
-<ul>
-<li>发送方确认机制：启用 <code>ConfirmCallback</code> 和 <code>ReturnCallback</code>，确保消息被 RabbitMQ 成功接收。</li>
-</ul>
-<p>确保消息路由到正确的队列</p>
-<ul>
-<li>路由失败通知：启用 <code>mandatory</code> 属性，并使用 <code>ReturnCallback</code> 监听未成功路由的消息。</li>
-</ul>
-<p>确保消息在队列中正确的存储</p>
-<ul>
-<li>持久化：Exchangers，Queue内的消息需要持久化</li>
-</ul>
-<p>确保消息从队列中正确的投递到消费者</p>
-<ul>
-<li>消费者手动ACK确认</li>
-</ul>
-<p>Producer</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReliableRabbitMQProducer</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">EXCHANGE_NAME</span> <span class="operator">=</span> <span class="string">&quot;reliable_exchange&quot;</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">ROUTING_KEY</span> <span class="operator">=</span> <span class="string">&quot;reliable_key&quot;</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">QUEUE_NAME</span> <span class="operator">=</span> <span class="string">&quot;reliable_queue&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ConnectionFactory</span> <span class="variable">factory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConnectionFactory</span>();</span><br><span class="line">        factory.setHost(<span class="string">&quot;localhost&quot;</span>);</span><br><span class="line">        factory.setUsername(<span class="string">&quot;guest&quot;</span>);</span><br><span class="line">        factory.setPassword(<span class="string">&quot;guest&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> factory.newConnection();</span><br><span class="line">             <span class="type">Channel</span> <span class="variable">channel</span> <span class="operator">=</span> connection.createChannel()) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 声明交换器（持久化）</span></span><br><span class="line">            channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">&quot;direct&quot;</span>, <span class="literal">true</span>);</span><br><span class="line">            <span class="comment">// 声明队列（持久化）</span></span><br><span class="line">            channel.queueDeclare(QUEUE_NAME, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">            <span class="comment">// 绑定队列到交换器</span></span><br><span class="line">            channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 配置 ReturnCallback</span></span><br><span class="line">            channel.addReturnListener((replyCode, replyText, exchange, routingKey, properties, body) -&gt; &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(body);</span><br><span class="line">                System.err.println(<span class="string">&quot;Message returned: &quot;</span> + message + <span class="string">&quot;, ReplyCode: &quot;</span> + replyCode);</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 启用发送方确认机制</span></span><br><span class="line">            channel.confirmSelect();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 发送消息</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="string">&quot;Reliable Message&quot;</span>;</span><br><span class="line">            channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, <span class="literal">true</span>,</span><br><span class="line">                    <span class="keyword">new</span> <span class="title class_">AMQP</span>.BasicProperties.Builder()</span><br><span class="line">                            .deliveryMode(<span class="number">2</span>) <span class="comment">// 持久化消息</span></span><br><span class="line">                            .build(),</span><br><span class="line">                    message.getBytes());</span><br><span class="line">            System.out.println(<span class="string">&quot; [x] Sent: &#x27;&quot;</span> + message + <span class="string">&quot;&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 确认回调</span></span><br><span class="line">            channel.addConfirmListener(</span><br><span class="line">                    (deliveryTag, multiple) -&gt; System.out.println(<span class="string">&quot;Message confirmed: &quot;</span> + deliveryTag),</span><br><span class="line">                    (deliveryTag, multiple) -&gt; System.err.println(<span class="string">&quot;Message not confirmed: &quot;</span> + deliveryTag)</span><br><span class="line">            );</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>Comsumer</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReliableRabbitMQConsumer</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">QUEUE_NAME</span> <span class="operator">=</span> <span class="string">&quot;reliable_queue&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ConnectionFactory</span> <span class="variable">factory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConnectionFactory</span>();</span><br><span class="line">        factory.setHost(<span class="string">&quot;localhost&quot;</span>);</span><br><span class="line">        factory.setUsername(<span class="string">&quot;guest&quot;</span>);</span><br><span class="line">        factory.setPassword(<span class="string">&quot;guest&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> factory.newConnection();</span><br><span class="line">             <span class="type">Channel</span> <span class="variable">channel</span> <span class="operator">=</span> connection.createChannel()) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 声明队列（持久化，确保消费者在队列存在时连接）</span></span><br><span class="line">            channel.queueDeclare(QUEUE_NAME, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot; [*] Waiting for messages. To exit press CTRL+C&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 消费消息</span></span><br><span class="line">            <span class="type">DeliverCallback</span> <span class="variable">deliverCallback</span> <span class="operator">=</span> (consumerTag, delivery) -&gt; &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(delivery.getBody(), <span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line">                System.out.println(<span class="string">&quot; [x] Received: &#x27;&quot;</span> + message + <span class="string">&quot;&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 模拟处理完成后手动ACK</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">100</span>); <span class="comment">// 模拟处理时间</span></span><br><span class="line">                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), <span class="literal">false</span>);</span><br><span class="line">                    System.out.println(<span class="string">&quot; [x] Message acknowledged&quot;</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    System.err.println(<span class="string">&quot;Failed to process message: &quot;</span> + e.getMessage());</span><br><span class="line">                    <span class="comment">// 消息未处理成功可选择 requeue</span></span><br><span class="line">                    channel.basicNack(delivery.getEnvelope().getDeliveryTag(), <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 开启手动ACK</span></span><br><span class="line">            channel.basicConsume(QUEUE_NAME, <span class="literal">false</span>, deliverCallback, consumerTag -&gt; &#123;&#125;);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="重复消息产生-消息消费幂等性保证"><a href="#重复消息产生-消息消费幂等性保证" class="headerlink" title="重复消息产生&amp;消息消费幂等性保证"></a>重复消息产生&amp;消息消费幂等性保证</h2><p>重复消息产生</p>
-<ul>
-<li>MQ没有正确告知生产者消息已接收</li>
-<li>消费者没有正确告知MQ成功消费</li>
-</ul>
-<p>消息消费幂等性保证</p>
-<ul>
-<li>消息携带唯一id，消费者接受到消息后<strong>查询记录：id是否被处理过</strong></li>
-</ul>
-<h2 id="消息消费顺序保证"><a href="#消息消费顺序保证" class="headerlink" title="消息消费顺序保证"></a>消息消费顺序保证</h2><p>局部消息顺序性</p>
-<ul>
-<li><p>有顺序的消息被存入同一个消息队列</p>
-</li>
-<li><p>为单独消息队列加锁</p>
-</li>
-</ul>
-<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>ref: <a href="https://segmentfault.com/a/1190000038173886">https://segmentfault.com/a/1190000038173886</a></p>
-<img src="/2025/01/17/MQ-Learning-Record/1460000038173889" class="" title="kafka">
-
-<p>黑色直角边矩形：一个Broker</p>
-<p>Broker内蓝色圆角矩形：一个partition</p>
-<p>Leader - Follower：主从复制</p>
-<p>Topic-Partition：物理上把 topic 分成一个或多个 patition（对应 server.properties 中的 num.partitions&#x3D;3 配置），每个 patition 物理上对应一个文件夹（该文件夹存储该 patition 的所有消息和索引文件）</p>
-<p>controller：kafka 集群中的其中一个服务器，用来进行 leader election 以及 各种 failover。</p>
-<p>zookeeper：kafka 通过 zookeeper 来存储集群的 meta 信息。</p>
-]]></content>
-      <categories>
-        <category>Message Queue</category>
-      </categories>
-      <tags>
-        <tag>Message Queue, Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Op_sys Learning Record</title>
     <url>/2024/04/12/Op-sys-Learning-Record/</url>
     <content><![CDATA[<p>操作系统相关学习记录</p>
@@ -5070,6 +5368,323 @@
       </tags>
   </entry>
   <entry>
+    <title>common-commands</title>
+    <url>/2024/06/22/common-commands/</url>
+    <content><![CDATA[<p>常用指令</p>
+<span id="more"></span>
+
+
+
+<h1 id="Common-Commands"><a href="#Common-Commands" class="headerlink" title="Common Commands"></a>Common Commands</h1><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p><a href="https://zhuanlan.zhihu.com/p/69746955">https://zhuanlan.zhihu.com/p/69746955</a></p>
+<p>python变量，函数均为对象</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>() : </span><br><span class="line">    <span class="comment">#函数在创建时同时生成变量对象hello和函数对象（函数对象名为hello）</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    x=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(test())<span class="comment">#函数默认返回值为None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">say = hello</span><br><span class="line"> </span><br><span class="line"><span class="keyword">del</span> hello <span class="comment">#del删除了hello变量对象</span></span><br><span class="line">say()</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say)<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say.__name__) <span class="comment">##对象属性,查看对象名</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>python类</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    def my_method(self, arg1, arg2):</span><br><span class="line">    #类的方法第一个参数为self</span><br><span class="line">        # 方法体</span><br><span class="line"></span><br><span class="line">#Bound Method</span><br><span class="line">obj = MyClass()#类 实例化</span><br><span class="line">obj.my_method(arg1, arg2)#实例对象调用方法</span><br><span class="line"></span><br><span class="line">#Unbound Method</span><br><span class="line">MyClass.my_method(obj, arg1, arg2)</span><br><span class="line">	#原因：可以直接通过类访问方法，但是必须指定类的实例</span><br></pre></td></tr></table></figure>
+
+
+
+<p>函数内部函数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> test</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hello()())</span><br><span class="line"><span class="comment">#首先hello()返回函数对象test，然后调用 test()</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>函数装饰器</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">f</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">f</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inn</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;inner&quot;</span>)</span><br><span class="line">        f()</span><br><span class="line">    <span class="keyword">return</span> inn</span><br><span class="line"></span><br><span class="line"><span class="meta">@hello</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#等价于</span></span><br><span class="line">test=hello(test)<span class="comment">#原函数对象test仍存在，变量对象test指向新函数hello(test)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#test &lt;function test at 0x000001821AE551C0&gt;</span></span><br><span class="line"><span class="comment">#test() None</span></span><br><span class="line"><span class="comment">#test为函数对象，test()为（执行函数对象后的）返回值</span></span><br><span class="line">test()</span><br><span class="line"><span class="built_in">print</span>(test.__name__)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>with语句 上下文对象管理</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">with open(&#x27;myfile.txt&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">    contents = f.read()</span><br><span class="line">    print(contents)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**open(‘myfile.txt’, ‘r’)**：这是一个上下文管理器，它打开文件并返回一个文件对象。</li>
+<li><strong>as f</strong>：将文件对象赋值给变量 f，以便在 with 代码块中使用。</li>
+<li>在 with 代码块中，我们可以使用 f 读取文件内容。</li>
+<li>当 with 代码块执行完毕后，文件会自动关闭，即使在读取过程中发生异常。</li>
+</ul>
+<p>Python类型注解</p>
+<p><a href="https://zhuanlan.zhihu.com/p/419955374">https://zhuanlan.zhihu.com/p/419955374</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment">#规定函数传入参数为str类型，返回值为str类型</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Hello <span class="subst">&#123;name&#125;</span>!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mix</span>(<span class="params">scores: <span class="built_in">list</span>[<span class="built_in">int</span>], ages: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]</span>) -&gt; <span class="built_in">tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>]:</span><br><span class="line">    <span class="comment">#容器注解</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">seq: Seq1[<span class="built_in">str</span>]</span>):</span><br><span class="line">    <span class="comment">#传入参数为（列表+元组）的泛化：序列Seq</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> seq:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="type">Optional</span>[<span class="built_in">str</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为None或为str</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Yeah&#x27;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>() -&gt; <span class="type">Union</span>[<span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为str，int，float 三选一</span></span><br><span class="line">    <span class="comment">#Optional[int] 和 Union[int, None] 是等价的。</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#T为泛型，T必须为str或int</span></span><br><span class="line">T = TypeVar(<span class="string">&#x27;T&#x27;</span>, <span class="built_in">str</span>, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">a: T, b: T</span>) -&gt; <span class="type">List</span>[T]:</span><br><span class="line">    <span class="keyword">return</span> [a, b]</span><br><span class="line"></span><br><span class="line"><span class="comment"># K的具体类型没有限制</span></span><br><span class="line">K = TypeVar(<span class="string">&quot;K&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="python-环境"><a href="#python-环境" class="headerlink" title="python 环境"></a>python 环境</h2><p>sudo apt-get update  # 更新包管理器</p>
+<p>sudo apt-get install python3-venv  # 安装Python虚拟环境工具</p>
+<p>cd &#x2F;path&#x2F;to&#x2F;your&#x2F;project</p>
+<p>python3 -m venv venv</p>
+<p>source venv&#x2F;bin&#x2F;activate</p>
+<p>pip install -r requirements.txt</p>
+<p>deactivate</p>
+<p>conda指令</p>
+<p>conda env list</p>
+<p>conda create –name your_env_name python&#x3D;3.5 numpy scipy</p>
+<p>conda remove –<em>name</em> <em>your_env_name</em> –all</p>
+<p>conda install</p>
+<p>​	conda install numpy&#x3D;1.9.3</p>
+<p>activate your_env_name</p>
+<p>deactivate</p>
+<p>conda clean –all</p>
+<p>当前conda虚拟环境中存在pip时，使用pip指令将优先使用环境中pip而非全局pip，可通过pip list（当前环境必须已安装pip）和 conda list 查看当前环境包列表</p>
+<p>出现报错</p>
+<p>PackagesNotFoundError: The following packages are not available from current channels</p>
+<p>尝试在<a href="https://anaconda.org直接搜索该包并使用网站所提供的指令安装/">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ol>
+<li><p>**<code>docker pull</code>**：用于从 Docker 镜像仓库下载镜像到本地主机。</p>
+<ul>
+<li>语法：<code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></li>
+<li>示例：<code>docker pull ubuntu:20.04</code></li>
+</ul>
+<p>这个命令用于获取 Docker 镜像，其中 <code>NAME</code> 表示镜像的名称，<code>TAG</code> 表示镜像的标签，或者可以使用 <code>@DIGEST</code> 来指定镜像的摘要。如果不指定标签，将默认获取 <code>latest</code> 标签的镜像。</p>
+</li>
+<li><p>**<code>docker load</code>**：用于从文件加载镜像，通常是以 tar 归档文件的形式。</p>
+<ul>
+<li>语法：<code>docker load [OPTIONS]</code></li>
+<li>示例：<code>docker load -i myimage.tar</code></li>
+</ul>
+<p>这个命令用于加载以 tar 归档文件格式存储的 Docker 镜像。通常用于将镜像从一个环境传输到另一个环境。</p>
+</li>
+<li><p>**<code>docker save</code>**：用于将 Docker 镜像保存为 tar 归档文件。</p>
+<ul>
+<li>语法：<code>docker save [OPTIONS] IMAGE [IMAGE...]</code></li>
+<li>示例：<code>docker save -o myimage.tar myimage:tag</code></li>
+</ul>
+<p>这个命令允许你将一个或多个 Docker 镜像保存为 tar 归档文件，通常用于导出镜像以便在不同环境中使用。</p>
+</li>
+<li><p>**<code>docker run</code>**：用于创建和启动 Docker 容器。</p>
+<ul>
+<li>语法：<code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></li>
+<li>示例：<code>docker run -d -p 8080:80 my-web-app</code></li>
+</ul>
+<p>这个命令用于在 Docker 容器中运行一个镜像，你需要指定镜像的名称、容器选项（如端口映射、环境变量、容器名称等），以及容器内要执行的命令。</p>
+</li>
+<li><p>**<code>docker build</code>**：用于构建自定义 Docker 镜像，通常通过 Dockerfile 文件定义构建步骤。</p>
+<ul>
+<li>语法：<code>docker build [OPTIONS] PATH | URL | -</code></li>
+<li>示例：<code>docker build -t my-custom-image .</code></li>
+</ul>
+<p><code>docker build</code> 命令用于基于 Dockerfile 构建自定义镜像。你需要提供包含 Dockerfile 的路径，以及可选的选项和标签。</p>
+<p>Dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 使用官方 Python 3 镜像作为基础镜像</span><br><span class="line">FROM python:3.8</span><br><span class="line"></span><br><span class="line"># 设置工作目录</span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"># 复制本地项目到容器中</span><br><span class="line">COPY ./myproject /app</span><br><span class="line"></span><br><span class="line"># 安装项目依赖</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 指定容器启动命令</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+<li><p>**<code>docker rm</code>**：用于删除已停止的容器。</p>
+<ul>
+<li>语法：<code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></li>
+<li>示例：<code>docker rm my-container</code></li>
+</ul>
+<p>这个命令用于删除一个或多个已经停止的容器，释放资源并清理系统。</p>
+</li>
+<li><p>**<code>docker stop</code>**：用于停止运行中的容器。</p>
+<ul>
+<li>语法：<code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></li>
+<li>示例：<code>docker stop my-container</code></li>
+</ul>
+<p>这个命令用于停止一个或多个正在运行的容器，使它们从运行状态转换为停止状态。</p>
+</li>
+<li><p>**<code>docker ps</code>**：用于列出正在运行的容器。</p>
+<ul>
+<li>语法：<code>docker ps [OPTIONS]</code></li>
+<li>示例：<code>docker ps -a</code></li>
+</ul>
+<p><code>docker ps</code> 命令用于列出当前正在运行的容器，包括容器的 ID、状态、端口映射等信息。加上 <code>-a</code> 选项可以列出所有容器，包括已停止的容器。</p>
+</li>
+</ol>
+<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p>Git 的设计是基于不可变的 DAG（有向无环图）</p>
+<p><strong>工作区</strong>：开发者在工作区中进行日常的代码开发和修改工作（就是什么git操作都没有做直接改代码，这个地方就是工作区</p>
+<p><strong>暂存区</strong>：<code>git add</code> 会将文件的当前状态（即 <strong>修改后的内容</strong>）从 <strong>工作区</strong> 拷贝到 <strong>暂存区</strong>。如果此时再次修改 <strong>工作区</strong> 内容， <strong>暂存区</strong> 内容不受影响。</p>
+<p><a href="https://learngitbranching.js.org/">https://learngitbranching.js.org/</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在桌面创建test目录</span></span><br><span class="line"><span class="built_in">mkdir</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到test目录</span></span><br><span class="line"><span class="built_in">cd</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并初始化git库</span></span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接到远程git仓库 </span></span><br><span class="line"><span class="comment"># -t 默认使用远程仓库的 main 分支，origin为远程仓库别名（替换链接）</span></span><br><span class="line"><span class="comment"># 为本地分支 main 设置了上游跟踪分支为 origin/main。这意味着当执行 git pull 或 git push 不带分支参数 时，Git 会默认使用 main 分支与 origin/main 同步</span></span><br><span class="line">git remote add origin -t main https://github.com/xx/xxx.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将远程git库下载到本地</span></span><br><span class="line">git pull origin/main</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将目录下所有文件都增加到本地库中。</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更改到本地仓库</span></span><br><span class="line">git commit -m <span class="string">&#x27;提交注释&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span></span><br><span class="line"><span class="comment"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span></span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地修改推到github上</span></span><br><span class="line">git push -u origin main  <span class="comment"># 首次</span></span><br><span class="line">git push origin main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件夹</span></span><br><span class="line">git <span class="built_in">rm</span> -r --cached <span class="built_in">dir</span>/</span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件</span></span><br><span class="line">git <span class="built_in">rm</span> --cached file</span><br></pre></td></tr></table></figure>
+
+
+
+<p>branch</p>
+<p> <strong>创建一个新的分支指针</strong>，并将它指向当前的 <code>HEAD</code> 所在的检查点（即当前的 commit）。这个新的分支指针会指向当前分支的最新提交，或者如果你在一个 <strong>detached HEAD</strong> 状态下，它会指向 <code>HEAD</code> 当前指向的 commit。</p>
+<ul>
+<li><p><strong>分支指针始终指向该分支最新的 commit（HEAD 的位置）。</strong></p>
+</li>
+<li><p>当在该分支上提交新的 commit 时，分支指针会自动前移到新 commit。</p>
+</li>
+<li><p>注意，分支指针指向的是最新的 commit，而不是所有 commit。历史 commit 通过链式引用联系在一起。</p>
+</li>
+</ul>
+<p>commit</p>
+<p>创建检查点，每个 commit 都有一个或多个后继引用它（例如分支或标签），但它不“属于”任何特定分支。</p>
+<p><strong>判断一个节点是否是“野生”的，核心就是看是否有任何分支指针通过回溯能够遍历到它。</strong></p>
+<p>add</p>
+<p>将工作区内容<strong>覆写</strong>到暂存区</p>
+<p>checkout</p>
+<p>使<strong>head指针</strong>指向<strong>指定branch指针</strong>或<strong>检查点</strong></p>
+<p>git checkout main  # 切换head指向main分支指针</p>
+<p>git checkout C1  # 切换head指向检查点，<strong>此时head指针与main指针分离！！！</strong>，后续提交的节点为”野生”节点</p>
+<blockquote>
+<p>当 HEAD 指针移动到 main 分支上的非最新提交 c1 (最新提交是 c2) 后，执行commit指令</p>
+<ol>
+<li><strong>HEAD 指针移动:</strong> git checkout c1 命令会将 HEAD 指针移动到 c1 提交，此时处于 “分离 HEAD 状态”。</li>
+<li><strong>新提交产生:</strong> 当进行新的提交时，Git 会创建一个新的提交对象 c3，并将 c1 作为 c3 的父提交。</li>
+<li><strong>HEAD 指针移动:</strong> c3 提交创建后，HEAD 指针会指向新的提交 c3。新的检查点将不属于任何branch，可能在未来的被垃圾回收</li>
+</ol>
+</blockquote>
+<p>reset</p>
+<p>移动当前branch指针到指定检查点</p>
+<p>假设有以下历史：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">A---B---C---D  (main)</span><br><span class="line">            ^</span><br><span class="line">           HEAD</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>**<code>git reset --soft B</code>**：<ul>
+<li>HEAD 指向 <code>B</code>。</li>
+<li><code>C</code> 和 <code>D</code> 被“取消”，但它们的更改仍然在暂存区中（即提交<code>C</code>和<code>D</code>的修改内容全部保存在暂存区</li>
+</ul>
+</li>
+<li>**<code>git reset --mixed B</code>**：<ul>
+<li>HEAD 指向 <code>B</code>。</li>
+<li><code>C</code> 和 <code>D</code> 的更改从暂存区移到工作区。</li>
+</ul>
+</li>
+<li>**<code>git reset --hard B</code>**：<ul>
+<li>HEAD 指向 <code>B</code>。</li>
+<li><code>C</code> 和 <code>D</code> 被丢弃，暂存区和工作区都回到 <code>B</code> 的状态。</li>
+</ul>
+</li>
+</ol>
+<p>rebase [target branch] [source branch(可选)]</p>
+<p>假设有以下分支结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">A---B---C  (current-branch)</span><br><span class="line"> \</span><br><span class="line">  D---E---F  (target-branch)</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>current-branch</code> 上运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git rebase target-branch</span><br></pre></td></tr></table></figure>
+
+<p>Rebase 会执行以下步骤：</p>
+<ol>
+<li><strong>找到共同祖先</strong>：<ul>
+<li><code>A</code> 是 <code>current-branch</code> 和 <code>target-branch</code> 的共同祖先。</li>
+</ul>
+</li>
+<li><strong>暂存当前分支的提交</strong>：<ul>
+<li>提取 <code>B</code> 和 <code>C</code>，准备在目标分支上重新应用。</li>
+</ul>
+</li>
+<li><strong>在目标分支的基础上重新应用</strong>：<ul>
+<li><code>B</code> 被重新应用到 <code>F</code> 之后，产生一个新的 commit（假设为 <code>B&#39;</code>）。</li>
+<li><code>C</code> 被重新应用到 <code>B&#39;</code> 之后，产生另一个新的 commit（假设为 <code>C&#39;</code>）。</li>
+</ul>
+</li>
+<li><strong>移动当前分支的指针</strong>：<ul>
+<li><code>current-branch</code> 的指针被移动到 <code>C&#39;</code>。</li>
+</ul>
+</li>
+</ol>
+<p>最终的结构变成：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">D---E---F---B&#x27;---C&#x27;  (current-branch)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>merge [target branch]</p>
+<p>创建新的检查点，该检查点的父节点为<strong>当前branch指针所指向节点</strong>和<strong>目标branch指针所指向节点</strong>，<strong>移动当前branch指针指向新创建节点</strong>。</p>
+<p>fetch</p>
+<ul>
+<li>fetch将下载远程仓库的内容，并移动 远程指针 &lt;远程仓库名&gt;&#x2F;&lt;分支&gt; 指向与远程仓库同步的位置</li>
+<li>不更新本地指针！！！这意味着，如果本地main分支指针现在指向C2，远程指针指向C1，远程仓库已更新至C3，执行fetch后会存在以下情况</li>
+</ul>
+<img src="/2024/06/22/common-commands/image-20240823160319940.png" class="" title="image-20240823160319940">
+
+<img src="/2024/06/22/common-commands/image-20240823160406360.png" class="" title="image-20240823160406360">
+
+
+
+<p>pull</p>
+<ul>
+<li>pull指令为fetch和merge指令的和，因此会使当前branch指针移动</li>
+<li><code>git pull</code> 拉取时，默认是针对当前分支关联的单个远程分支进行操作</li>
+</ul>
+<p> <code>git pull</code> 的一些常见行为：</p>
+<ul>
+<li><p><strong><code>git pull</code> (不带参数):</strong> 这是最常用的方式。它会从当前分支追踪的远程分支获取最新提交，并尝试将其合并到当前分支。如果你的当前分支已经设置了上游分支 (upstream branch)，那么 <code>git pull</code> 将会使用这个上游分支。你可以使用 <code>git branch -vv</code> 查看当前分支追踪的远程分支。</p>
+</li>
+<li><p>**<code>git pull &lt;remote&gt; &lt;branch&gt;</code>: ** 这会从指定的远程仓库 <code>&lt;remote&gt;</code> 的 <code>&lt;branch&gt;</code> 分支获取最新提交，并尝试将其合并到当前分支。 例如，<code>git pull origin develop</code> 会从远程仓库 <code>origin</code> 的 <code>develop</code> 分支获取更新，并合并到当前分支。</p>
+</li>
+<li><p><strong><code>git pull --rebase</code>:</strong> 这会使用 <code>git rebase</code> 而不是 <code>git merge</code> 来整合远程分支的更改。<code>rebase</code> 会将你的本地提交放在远程分支的最新提交之后，从而创建一个更线性的提交历史。  可以通过 <code>git config --global pull.rebase true</code> 设置全局使用 rebase 模式。</p>
+</li>
+</ul>
+<p>push</p>
+<ul>
+<li><code>git push</code> 命令默认只推送<strong>当前分支</strong>到远程对应的分支。</li>
+</ul>
+<p>几种 <code>git push</code> 的行为：</p>
+<ul>
+<li><p><strong><code>git push</code> (不带任何参数):</strong>  推送当前分支到其upstream分支。如果当前分支没有设置upstream分支，会报错。  这是最常用的方式。</p>
+</li>
+<li><p><strong><code>git push &lt;remote&gt;</code>:</strong> 推送当前分支到指定远程仓库 <code>&lt;remote&gt;</code> 的同名分支。例如 <code>git push origin</code> 会将当前分支推送到名为 <code>origin</code> 的远程仓库的同名分支。</p>
+</li>
+<li><p><strong><code>git push &lt;remote&gt; &lt;branch&gt;</code>:</strong> 将本地 <code>&lt;branch&gt;</code> 分支推送到远程仓库 <code>&lt;remote&gt;</code> 的 <code>&lt;branch&gt;</code> 分支。例如 <code>git push origin develop</code> 会将本地的 <code>develop</code> 分支推送到远程仓库 <code>origin</code> 的 <code>develop</code> 分支。</p>
+</li>
+<li><p><strong><code>git push &lt;remote&gt; &lt;local_branch&gt;:&lt;remote_branch&gt;</code>:</strong> 将本地 <code>&lt;local_branch&gt;</code> 分支推送到远程仓库 <code>&lt;remote&gt;</code> 的 <code>&lt;remote_branch&gt;</code> 分支。 这允许你将本地分支推送到远程的不同名分支。例如 <code>git push origin feature/new-login:develop</code> 会将本地的 <code>feature/new-login</code> 分支推送到远程仓库 <code>origin</code> 的 <code>develop</code> 分支。</p>
+</li>
+<li><p><strong><code>git push &lt;remote&gt; --all</code>:</strong> 推送所有本地分支到远程仓库 <code>&lt;remote&gt;</code>。</p>
+</li>
+<li><p><strong><code>git push &lt;remote&gt; --tags</code>:</strong>  推送所有本地标签到远程仓库 <code>&lt;remote&gt;</code>。</p>
+</li>
+</ul>
+<h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h2><p>hello.c -预处理 -E-&gt; hello.i -编译 -S-&gt; hello.s -汇编 -c-&gt; hello.o -链接 -&gt; hello</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc  main.cpp hello.cpp factorial.cpp -o hello</span><br></pre></td></tr></table></figure>
+
+<p>使用gcc 将多个文件 <strong>生成</strong> 为 hello可执行文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">	gcc test.c</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件。这里未指定输出文件，默认输出为 a.out。</span><br><span class="line"></span><br><span class="line">-o：指定生成的输出文件；</span><br><span class="line">	gcc test.c -o test</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件 test。-o 选项用来指定输出文件的文件名。</span><br><span class="line">	</span><br><span class="line">-E：仅执行编译预处理；</span><br><span class="line">	gcc -E test.c -o test.i</span><br><span class="line">	将 test.c 预处理输出 test.i 文件。</span><br><span class="line"></span><br><span class="line">-S：将C代码转换为汇编代码；</span><br><span class="line">	gcc -S test.i</span><br><span class="line">	将预处理输出文件 test.i 汇编成 test.s 文件。</span><br><span class="line"></span><br><span class="line">-wall：显示警告信息；</span><br><span class="line"></span><br><span class="line">-c：仅执行编译操作，不进行连接操作。</span><br><span class="line">	gcc -c test.s</span><br><span class="line">	将汇编输出文件 test.s 编译输出 test.o 文件。</span><br><span class="line"></span><br><span class="line">-l：用来指定程序要链接的库，-l参数紧接着就是库名</span><br><span class="line"></span><br><span class="line">-I：寻找头文件的目录</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">make main</span><br><span class="line">make -f config.txt //指定makefile文件</span><br><span class="line">make --file=config.txt</span><br></pre></td></tr></table></figure>
+
+<p>使用Make指令执行Makefile文件(make指令自动寻找当前文件夹下的Makefile文件)</p>
+<p>Makefile文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;target&gt; : &lt;prerequisites&gt;	//目标，前置条件</span><br><span class="line">[tab] &lt;commands&gt;	//命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.PHONY: clean	//声明目标clean为伪目标</span><br><span class="line">clean:</span><br><span class="line">    rm -rf *.o</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个简单的实例</span><br><span class="line">main:main.o fun0.o fun1.o fun2.0	</span><br><span class="line">	gcc -o main main.o fun0.o fun1.o fun2.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个复杂的实例</span><br><span class="line"># Define required macros here</span><br><span class="line">SHELL = /bin/sh		//宏定义</span><br><span class="line">OBJS =  main.o factorial.o hello.o</span><br><span class="line">CFLAG = -Wall -g</span><br><span class="line">CC = gcc</span><br><span class="line">INCLUDE =</span><br><span class="line">LIBS = -lm</span><br><span class="line">hello:$&#123;OBJ&#125;	//$&#123;&#125;表示变量</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -o $@ $&#123;OBJS&#125; $&#123;LIBS&#125;</span><br><span class="line">clean:</span><br><span class="line">   -rm -f *.o core *.core	//类似于bash,?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意个字符，&#123;a,b,c&#125;表示匹配a或b或c</span><br><span class="line">.cpp.o:</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -c</span><br></pre></td></tr></table></figure>
+
+<p>冒号左侧：目标文件</p>
+<p>冒号右侧：被依赖文件，前置条件</p>
+<p>前置条件决定 “目标” 是否需要重新构建。只要前置条件中列出的文件中，有任何一个文件被更新（即前置条件列出的文件的最后修改时间比目标的最后修改时间新），或者 “目标” 不存在，那 “目标” 就需要重新构建。</p>
+<p>如果前置条件中列出的文件中有任何一个文件不存在，那么 Make 就需要在 Makefile 文件中寻找并执行能够生成该文件的规则，也就是说缺失文件本身也是一个 “目标”，需要先将该 “目标” 构建出来才能利用它去构建当前 “目标”（构建 A 时发现 A 需要依赖 B，所以要先构建 B 才能继续构建 A，简称递归生成依赖）。</p>
+<p><code>$@</code>，<code>$^</code>，<code>$&lt;</code> 这种符号，这种符号称为自动变量。自动变量是局部变量，作用域范围在当前的规则内（即自动化变量只应该出现在 Makefile 目标规则中）</p>
+<p><code>$@</code> 指代当前目标， Make 命令意图构建的目标</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hello: hello.o</span><br><span class="line">    gcc hello.o -o $@	//$@为hello</span><br></pre></td></tr></table></figure>
+
+<p><code>$&lt;</code> 指代第一个前置条件。比如规则为 hello: a b，那么 <code>$&lt;</code> 就指代 a。</p>
+<p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 hello: a b，那么 <code>$^</code> 就指代 a 和 b。</p>
+]]></content>
+      <tags>
+        <tag>command</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2024/04/11/first_post/</url>
+    <content><![CDATA[<p>写一个测试试一下</p>
+<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
+<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>pic_test</title>
+    <url>/2024/04/12/pic-test/</url>
+    <content><![CDATA[<p>图片插入测试：</p>
+<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
+  </entry>
+  <entry>
     <title>Spring-learning-record</title>
     <url>/2024/10/01/Spring-learning-record/</url>
     <content><![CDATA[<p>Spring相关学习记录</p>
@@ -6165,496 +6780,6 @@
       <tags>
         <tag>java, Spring</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>common-commands</title>
-    <url>/2024/06/22/common-commands/</url>
-    <content><![CDATA[<p>常用指令</p>
-<span id="more"></span>
-
-
-
-<h1 id="Common-Commands"><a href="#Common-Commands" class="headerlink" title="Common Commands"></a>Common Commands</h1><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p><a href="https://zhuanlan.zhihu.com/p/69746955">https://zhuanlan.zhihu.com/p/69746955</a></p>
-<p>python变量，函数均为对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>() : </span><br><span class="line">    <span class="comment">#函数在创建时同时生成变量对象hello和函数对象（函数对象名为hello）</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    x=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(test())<span class="comment">#函数默认返回值为None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">say = hello</span><br><span class="line"> </span><br><span class="line"><span class="keyword">del</span> hello <span class="comment">#del删除了hello变量对象</span></span><br><span class="line">say()</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say)<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say.__name__) <span class="comment">##对象属性,查看对象名</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>python类</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    def my_method(self, arg1, arg2):</span><br><span class="line">    #类的方法第一个参数为self</span><br><span class="line">        # 方法体</span><br><span class="line"></span><br><span class="line">#Bound Method</span><br><span class="line">obj = MyClass()#类 实例化</span><br><span class="line">obj.my_method(arg1, arg2)#实例对象调用方法</span><br><span class="line"></span><br><span class="line">#Unbound Method</span><br><span class="line">MyClass.my_method(obj, arg1, arg2)</span><br><span class="line">	#原因：可以直接通过类访问方法，但是必须指定类的实例</span><br></pre></td></tr></table></figure>
-
-
-
-<p>函数内部函数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> test</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hello()())</span><br><span class="line"><span class="comment">#首先hello()返回函数对象test，然后调用 test()</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>函数装饰器</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">f</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">f</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inn</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;inner&quot;</span>)</span><br><span class="line">        f()</span><br><span class="line">    <span class="keyword">return</span> inn</span><br><span class="line"></span><br><span class="line"><span class="meta">@hello</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#等价于</span></span><br><span class="line">test=hello(test)<span class="comment">#原函数对象test仍存在，变量对象test指向新函数hello(test)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#test &lt;function test at 0x000001821AE551C0&gt;</span></span><br><span class="line"><span class="comment">#test() None</span></span><br><span class="line"><span class="comment">#test为函数对象，test()为（执行函数对象后的）返回值</span></span><br><span class="line">test()</span><br><span class="line"><span class="built_in">print</span>(test.__name__)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>with语句 上下文对象管理</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">with open(&#x27;myfile.txt&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">    contents = f.read()</span><br><span class="line">    print(contents)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>**open(‘myfile.txt’, ‘r’)**：这是一个上下文管理器，它打开文件并返回一个文件对象。</li>
-<li><strong>as f</strong>：将文件对象赋值给变量 f，以便在 with 代码块中使用。</li>
-<li>在 with 代码块中，我们可以使用 f 读取文件内容。</li>
-<li>当 with 代码块执行完毕后，文件会自动关闭，即使在读取过程中发生异常。</li>
-</ul>
-<p>Python类型注解</p>
-<p><a href="https://zhuanlan.zhihu.com/p/419955374">https://zhuanlan.zhihu.com/p/419955374</a></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment">#规定函数传入参数为str类型，返回值为str类型</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Hello <span class="subst">&#123;name&#125;</span>!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mix</span>(<span class="params">scores: <span class="built_in">list</span>[<span class="built_in">int</span>], ages: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]</span>) -&gt; <span class="built_in">tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>]:</span><br><span class="line">    <span class="comment">#容器注解</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">seq: Seq1[<span class="built_in">str</span>]</span>):</span><br><span class="line">    <span class="comment">#传入参数为（列表+元组）的泛化：序列Seq</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> seq:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="type">Optional</span>[<span class="built_in">str</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为None或为str</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Yeah&#x27;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>() -&gt; <span class="type">Union</span>[<span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为str，int，float 三选一</span></span><br><span class="line">    <span class="comment">#Optional[int] 和 Union[int, None] 是等价的。</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#T为泛型，T必须为str或int</span></span><br><span class="line">T = TypeVar(<span class="string">&#x27;T&#x27;</span>, <span class="built_in">str</span>, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">a: T, b: T</span>) -&gt; <span class="type">List</span>[T]:</span><br><span class="line">    <span class="keyword">return</span> [a, b]</span><br><span class="line"></span><br><span class="line"><span class="comment"># K的具体类型没有限制</span></span><br><span class="line">K = TypeVar(<span class="string">&quot;K&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="python-环境"><a href="#python-环境" class="headerlink" title="python 环境"></a>python 环境</h2><p>sudo apt-get update  # 更新包管理器</p>
-<p>sudo apt-get install python3-venv  # 安装Python虚拟环境工具</p>
-<p>cd &#x2F;path&#x2F;to&#x2F;your&#x2F;project</p>
-<p>python3 -m venv venv</p>
-<p>source venv&#x2F;bin&#x2F;activate</p>
-<p>pip install -r requirements.txt</p>
-<p>deactivate</p>
-<p>conda指令</p>
-<p>conda env list</p>
-<p>conda create –name your_env_name python&#x3D;3.5 numpy scipy</p>
-<p>conda remove –<em>name</em> <em>your_env_name</em> –all</p>
-<p>conda install</p>
-<p>​	conda install numpy&#x3D;1.9.3</p>
-<p>activate your_env_name</p>
-<p>deactivate</p>
-<p>conda clean –all</p>
-<p>当前conda虚拟环境中存在pip时，使用pip指令将优先使用环境中pip而非全局pip，可通过pip list（当前环境必须已安装pip）和 conda list 查看当前环境包列表</p>
-<p>出现报错</p>
-<p>PackagesNotFoundError: The following packages are not available from current channels</p>
-<p>尝试在<a href="https://anaconda.org直接搜索该包并使用网站所提供的指令安装/">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
-<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ol>
-<li><p>**<code>docker pull</code>**：用于从 Docker 镜像仓库下载镜像到本地主机。</p>
-<ul>
-<li>语法：<code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></li>
-<li>示例：<code>docker pull ubuntu:20.04</code></li>
-</ul>
-<p>这个命令用于获取 Docker 镜像，其中 <code>NAME</code> 表示镜像的名称，<code>TAG</code> 表示镜像的标签，或者可以使用 <code>@DIGEST</code> 来指定镜像的摘要。如果不指定标签，将默认获取 <code>latest</code> 标签的镜像。</p>
-</li>
-<li><p>**<code>docker load</code>**：用于从文件加载镜像，通常是以 tar 归档文件的形式。</p>
-<ul>
-<li>语法：<code>docker load [OPTIONS]</code></li>
-<li>示例：<code>docker load -i myimage.tar</code></li>
-</ul>
-<p>这个命令用于加载以 tar 归档文件格式存储的 Docker 镜像。通常用于将镜像从一个环境传输到另一个环境。</p>
-</li>
-<li><p>**<code>docker save</code>**：用于将 Docker 镜像保存为 tar 归档文件。</p>
-<ul>
-<li>语法：<code>docker save [OPTIONS] IMAGE [IMAGE...]</code></li>
-<li>示例：<code>docker save -o myimage.tar myimage:tag</code></li>
-</ul>
-<p>这个命令允许你将一个或多个 Docker 镜像保存为 tar 归档文件，通常用于导出镜像以便在不同环境中使用。</p>
-</li>
-<li><p>**<code>docker run</code>**：用于创建和启动 Docker 容器。</p>
-<ul>
-<li>语法：<code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></li>
-<li>示例：<code>docker run -d -p 8080:80 my-web-app</code></li>
-</ul>
-<p>这个命令用于在 Docker 容器中运行一个镜像，你需要指定镜像的名称、容器选项（如端口映射、环境变量、容器名称等），以及容器内要执行的命令。</p>
-</li>
-<li><p>**<code>docker build</code>**：用于构建自定义 Docker 镜像，通常通过 Dockerfile 文件定义构建步骤。</p>
-<ul>
-<li>语法：<code>docker build [OPTIONS] PATH | URL | -</code></li>
-<li>示例：<code>docker build -t my-custom-image .</code></li>
-</ul>
-<p><code>docker build</code> 命令用于基于 Dockerfile 构建自定义镜像。你需要提供包含 Dockerfile 的路径，以及可选的选项和标签。</p>
-<p>Dockerfile</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 使用官方 Python 3 镜像作为基础镜像</span><br><span class="line">FROM python:3.8</span><br><span class="line"></span><br><span class="line"># 设置工作目录</span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"># 复制本地项目到容器中</span><br><span class="line">COPY ./myproject /app</span><br><span class="line"></span><br><span class="line"># 安装项目依赖</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 指定容器启动命令</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-</li>
-<li><p>**<code>docker rm</code>**：用于删除已停止的容器。</p>
-<ul>
-<li>语法：<code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></li>
-<li>示例：<code>docker rm my-container</code></li>
-</ul>
-<p>这个命令用于删除一个或多个已经停止的容器，释放资源并清理系统。</p>
-</li>
-<li><p>**<code>docker stop</code>**：用于停止运行中的容器。</p>
-<ul>
-<li>语法：<code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></li>
-<li>示例：<code>docker stop my-container</code></li>
-</ul>
-<p>这个命令用于停止一个或多个正在运行的容器，使它们从运行状态转换为停止状态。</p>
-</li>
-<li><p>**<code>docker ps</code>**：用于列出正在运行的容器。</p>
-<ul>
-<li>语法：<code>docker ps [OPTIONS]</code></li>
-<li>示例：<code>docker ps -a</code></li>
-</ul>
-<p><code>docker ps</code> 命令用于列出当前正在运行的容器，包括容器的 ID、状态、端口映射等信息。加上 <code>-a</code> 选项可以列出所有容器，包括已停止的容器。</p>
-</li>
-</ol>
-<h2 id="Git操作实例"><a href="#Git操作实例" class="headerlink" title="Git操作实例"></a><strong>Git操作实例</strong></h2><p>Git 的设计是基于不可变的 DAG（有向无环图）</p>
-<p><strong>工作区</strong>：开发者在工作区中进行日常的代码开发和修改工作（就是什么git操作都没有做直接改代码，这个地方就是工作区</p>
-<p><strong>暂存区</strong>：<code>git add</code> 会将文件的当前状态（即 <strong>修改后的内容</strong>）从 <strong>工作区</strong> 拷贝到 <strong>暂存区</strong>。如果此时再次修改 <strong>工作区</strong> 内容， <strong>暂存区</strong> 内容不受影响。</p>
-<p><a href="https://learngitbranching.js.org/">https://learngitbranching.js.org/</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在桌面创建test目录</span></span><br><span class="line"><span class="built_in">mkdir</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到test目录</span></span><br><span class="line"><span class="built_in">cd</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并初始化git库</span></span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接到远程git仓库 </span></span><br><span class="line"><span class="comment"># -t 默认使用远程仓库的 main 分支，origin为远程仓库别名（替换链接）</span></span><br><span class="line"><span class="comment"># 为本地分支 main 设置了上游跟踪分支为 origin/main。这意味着当执行 git pull 或 git push 不带分支参数 时，Git 会默认使用 main 分支与 origin/main 同步</span></span><br><span class="line">git remote add origin -t main https://github.com/xx/xxx.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将远程git库下载到本地</span></span><br><span class="line">git pull origin/main</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将目录下所有文件都增加到本地库中。</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更改到本地仓库</span></span><br><span class="line">git commit -m <span class="string">&#x27;提交注释&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span></span><br><span class="line"><span class="comment"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span></span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地修改推到github上</span></span><br><span class="line">git push -u origin main  <span class="comment"># 首次</span></span><br><span class="line">git push origin main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件夹</span></span><br><span class="line">git <span class="built_in">rm</span> -r --cached <span class="built_in">dir</span>/</span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件</span></span><br><span class="line">git <span class="built_in">rm</span> --cached file</span><br></pre></td></tr></table></figure>
-
-
-
-<p>branch</p>
-<p> <strong>创建一个新的分支指针</strong>，并将它指向当前的 <code>HEAD</code> 所在的检查点（即当前的 commit）。这个新的分支指针会指向当前分支的最新提交，或者如果你在一个 <strong>detached HEAD</strong> 状态下，它会指向 <code>HEAD</code> 当前指向的 commit。</p>
-<ul>
-<li><p><strong>分支指针始终指向该分支最新的 commit（HEAD 的位置）。</strong></p>
-</li>
-<li><p>当在该分支上提交新的 commit 时，分支指针会自动前移到新 commit。</p>
-</li>
-<li><p>注意，分支指针指向的是最新的 commit，而不是所有 commit。历史 commit 通过链式引用联系在一起。</p>
-</li>
-</ul>
-<p>commit</p>
-<p>创建检查点，每个 commit 都有一个或多个后继引用它（例如分支或标签），但它不“属于”任何特定分支。</p>
-<p><strong>判断一个节点是否是“野生”的，核心就是看是否有任何分支指针通过回溯能够遍历到它。</strong></p>
-<p>add</p>
-<p>将工作区内容<strong>覆写</strong>到暂存区</p>
-<p>checkout</p>
-<p>使<strong>head指针</strong>指向<strong>指定branch指针</strong>或<strong>检查点</strong></p>
-<p>git checkout main  # 切换head指向main分支指针</p>
-<p>git checkout C1  # 切换head指向检查点，<strong>此时head指针与main指针分离！！！</strong>，后续提交的节点为”野生”节点</p>
-<blockquote>
-<p>当 HEAD 指针移动到 main 分支上的非最新提交 c1 (最新提交是 c2) 后，执行commit指令</p>
-<ol>
-<li><strong>HEAD 指针移动:</strong> git checkout c1 命令会将 HEAD 指针移动到 c1 提交，此时处于 “分离 HEAD 状态”。</li>
-<li><strong>新提交产生:</strong> 当进行新的提交时，Git 会创建一个新的提交对象 c3，并将 c1 作为 c3 的父提交。</li>
-<li><strong>HEAD 指针移动:</strong> c3 提交创建后，HEAD 指针会指向新的提交 c3。新的检查点将不属于任何branch，可能在未来的被垃圾回收</li>
-</ol>
-</blockquote>
-<p>reset</p>
-<p>移动当前branch指针到指定检查点</p>
-<p>假设有以下历史：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">A---B---C---D  (main)</span><br><span class="line">            ^</span><br><span class="line">           HEAD</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>**<code>git reset --soft B</code>**：<ul>
-<li>HEAD 指向 <code>B</code>。</li>
-<li><code>C</code> 和 <code>D</code> 被“取消”，但它们的更改仍然在暂存区中（即提交<code>C</code>和<code>D</code>的修改内容全部保存在暂存区</li>
-</ul>
-</li>
-<li>**<code>git reset --mixed B</code>**：<ul>
-<li>HEAD 指向 <code>B</code>。</li>
-<li><code>C</code> 和 <code>D</code> 的更改从暂存区移到工作区。</li>
-</ul>
-</li>
-<li>**<code>git reset --hard B</code>**：<ul>
-<li>HEAD 指向 <code>B</code>。</li>
-<li><code>C</code> 和 <code>D</code> 被丢弃，暂存区和工作区都回到 <code>B</code> 的状态。</li>
-</ul>
-</li>
-</ol>
-<p>rebase [target branch] [source branch(可选)]</p>
-<p>假设有以下分支结构：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">A---B---C  (current-branch)</span><br><span class="line"> \</span><br><span class="line">  D---E---F  (target-branch)</span><br></pre></td></tr></table></figure>
-
-<p>在 <code>current-branch</code> 上运行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git rebase target-branch</span><br></pre></td></tr></table></figure>
-
-<p>Rebase 会执行以下步骤：</p>
-<ol>
-<li><strong>找到共同祖先</strong>：<ul>
-<li><code>A</code> 是 <code>current-branch</code> 和 <code>target-branch</code> 的共同祖先。</li>
-</ul>
-</li>
-<li><strong>暂存当前分支的提交</strong>：<ul>
-<li>提取 <code>B</code> 和 <code>C</code>，准备在目标分支上重新应用。</li>
-</ul>
-</li>
-<li><strong>在目标分支的基础上重新应用</strong>：<ul>
-<li><code>B</code> 被重新应用到 <code>F</code> 之后，产生一个新的 commit（假设为 <code>B&#39;</code>）。</li>
-<li><code>C</code> 被重新应用到 <code>B&#39;</code> 之后，产生另一个新的 commit（假设为 <code>C&#39;</code>）。</li>
-</ul>
-</li>
-<li><strong>移动当前分支的指针</strong>：<ul>
-<li><code>current-branch</code> 的指针被移动到 <code>C&#39;</code>。</li>
-</ul>
-</li>
-</ol>
-<p>最终的结构变成：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">D---E---F---B&#x27;---C&#x27;  (current-branch)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>merge [target branch]</p>
-<p>创建新的检查点，该检查点的父节点为<strong>当前branch指针所指向节点</strong>和<strong>目标branch指针所指向节点</strong>，<strong>移动当前branch指针指向新创建节点</strong>。</p>
-<p>fetch</p>
-<ul>
-<li>fetch将下载远程仓库的内容，并移动 远程指针 &lt;远程仓库名&gt;&#x2F;&lt;分支&gt; 指向与远程仓库同步的位置</li>
-<li>不更新本地指针！！！这意味着，如果本地main分支指针现在指向C2，远程指针指向C1，远程仓库已更新至C3，执行fetch后会存在以下情况</li>
-</ul>
-<img src="/2024/06/22/common-commands/image-20240823160319940.png" class="" title="image-20240823160319940">
-
-<img src="/2024/06/22/common-commands/image-20240823160406360.png" class="" title="image-20240823160406360">
-
-
-
-<p>pull</p>
-<ul>
-<li>pull指令为fetch和merge指令的和，因此会使当前branch指针移动</li>
-<li><code>git pull</code> 拉取时，默认是针对当前分支关联的单个远程分支进行操作</li>
-</ul>
-<p> <code>git pull</code> 的一些常见行为：</p>
-<ul>
-<li><p><strong><code>git pull</code> (不带参数):</strong> 这是最常用的方式。它会从当前分支追踪的远程分支获取最新提交，并尝试将其合并到当前分支。如果你的当前分支已经设置了上游分支 (upstream branch)，那么 <code>git pull</code> 将会使用这个上游分支。你可以使用 <code>git branch -vv</code> 查看当前分支追踪的远程分支。</p>
-</li>
-<li><p>**<code>git pull &lt;remote&gt; &lt;branch&gt;</code>: ** 这会从指定的远程仓库 <code>&lt;remote&gt;</code> 的 <code>&lt;branch&gt;</code> 分支获取最新提交，并尝试将其合并到当前分支。 例如，<code>git pull origin develop</code> 会从远程仓库 <code>origin</code> 的 <code>develop</code> 分支获取更新，并合并到当前分支。</p>
-</li>
-<li><p><strong><code>git pull --rebase</code>:</strong> 这会使用 <code>git rebase</code> 而不是 <code>git merge</code> 来整合远程分支的更改。<code>rebase</code> 会将你的本地提交放在远程分支的最新提交之后，从而创建一个更线性的提交历史。  可以通过 <code>git config --global pull.rebase true</code> 设置全局使用 rebase 模式。</p>
-</li>
-</ul>
-<p>push</p>
-<ul>
-<li><code>git push</code> 命令默认只推送<strong>当前分支</strong>到远程对应的分支。</li>
-</ul>
-<p>几种 <code>git push</code> 的行为：</p>
-<ul>
-<li><p><strong><code>git push</code> (不带任何参数):</strong>  推送当前分支到其upstream分支。如果当前分支没有设置upstream分支，会报错。  这是最常用的方式。</p>
-</li>
-<li><p><strong><code>git push &lt;remote&gt;</code>:</strong> 推送当前分支到指定远程仓库 <code>&lt;remote&gt;</code> 的同名分支。例如 <code>git push origin</code> 会将当前分支推送到名为 <code>origin</code> 的远程仓库的同名分支。</p>
-</li>
-<li><p><strong><code>git push &lt;remote&gt; &lt;branch&gt;</code>:</strong> 将本地 <code>&lt;branch&gt;</code> 分支推送到远程仓库 <code>&lt;remote&gt;</code> 的 <code>&lt;branch&gt;</code> 分支。例如 <code>git push origin develop</code> 会将本地的 <code>develop</code> 分支推送到远程仓库 <code>origin</code> 的 <code>develop</code> 分支。</p>
-</li>
-<li><p><strong><code>git push &lt;remote&gt; &lt;local_branch&gt;:&lt;remote_branch&gt;</code>:</strong> 将本地 <code>&lt;local_branch&gt;</code> 分支推送到远程仓库 <code>&lt;remote&gt;</code> 的 <code>&lt;remote_branch&gt;</code> 分支。 这允许你将本地分支推送到远程的不同名分支。例如 <code>git push origin feature/new-login:develop</code> 会将本地的 <code>feature/new-login</code> 分支推送到远程仓库 <code>origin</code> 的 <code>develop</code> 分支。</p>
-</li>
-<li><p><strong><code>git push &lt;remote&gt; --all</code>:</strong> 推送所有本地分支到远程仓库 <code>&lt;remote&gt;</code>。</p>
-</li>
-<li><p><strong><code>git push &lt;remote&gt; --tags</code>:</strong>  推送所有本地标签到远程仓库 <code>&lt;remote&gt;</code>。</p>
-</li>
-</ul>
-<h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h2><p>hello.c -预处理 -E-&gt; hello.i -编译 -S-&gt; hello.s -汇编 -c-&gt; hello.o -链接 -&gt; hello</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gcc  main.cpp hello.cpp factorial.cpp -o hello</span><br></pre></td></tr></table></figure>
-
-<p>使用gcc 将多个文件 <strong>生成</strong> 为 hello可执行文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">	gcc test.c</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件。这里未指定输出文件，默认输出为 a.out。</span><br><span class="line"></span><br><span class="line">-o：指定生成的输出文件；</span><br><span class="line">	gcc test.c -o test</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件 test。-o 选项用来指定输出文件的文件名。</span><br><span class="line">	</span><br><span class="line">-E：仅执行编译预处理；</span><br><span class="line">	gcc -E test.c -o test.i</span><br><span class="line">	将 test.c 预处理输出 test.i 文件。</span><br><span class="line"></span><br><span class="line">-S：将C代码转换为汇编代码；</span><br><span class="line">	gcc -S test.i</span><br><span class="line">	将预处理输出文件 test.i 汇编成 test.s 文件。</span><br><span class="line"></span><br><span class="line">-wall：显示警告信息；</span><br><span class="line"></span><br><span class="line">-c：仅执行编译操作，不进行连接操作。</span><br><span class="line">	gcc -c test.s</span><br><span class="line">	将汇编输出文件 test.s 编译输出 test.o 文件。</span><br><span class="line"></span><br><span class="line">-l：用来指定程序要链接的库，-l参数紧接着就是库名</span><br><span class="line"></span><br><span class="line">-I：寻找头文件的目录</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">make main</span><br><span class="line">make -f config.txt //指定makefile文件</span><br><span class="line">make --file=config.txt</span><br></pre></td></tr></table></figure>
-
-<p>使用Make指令执行Makefile文件(make指令自动寻找当前文件夹下的Makefile文件)</p>
-<p>Makefile文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;target&gt; : &lt;prerequisites&gt;	//目标，前置条件</span><br><span class="line">[tab] &lt;commands&gt;	//命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.PHONY: clean	//声明目标clean为伪目标</span><br><span class="line">clean:</span><br><span class="line">    rm -rf *.o</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个简单的实例</span><br><span class="line">main:main.o fun0.o fun1.o fun2.0	</span><br><span class="line">	gcc -o main main.o fun0.o fun1.o fun2.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个复杂的实例</span><br><span class="line"># Define required macros here</span><br><span class="line">SHELL = /bin/sh		//宏定义</span><br><span class="line">OBJS =  main.o factorial.o hello.o</span><br><span class="line">CFLAG = -Wall -g</span><br><span class="line">CC = gcc</span><br><span class="line">INCLUDE =</span><br><span class="line">LIBS = -lm</span><br><span class="line">hello:$&#123;OBJ&#125;	//$&#123;&#125;表示变量</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -o $@ $&#123;OBJS&#125; $&#123;LIBS&#125;</span><br><span class="line">clean:</span><br><span class="line">   -rm -f *.o core *.core	//类似于bash,?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意个字符，&#123;a,b,c&#125;表示匹配a或b或c</span><br><span class="line">.cpp.o:</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -c</span><br></pre></td></tr></table></figure>
-
-<p>冒号左侧：目标文件</p>
-<p>冒号右侧：被依赖文件，前置条件</p>
-<p>前置条件决定 “目标” 是否需要重新构建。只要前置条件中列出的文件中，有任何一个文件被更新（即前置条件列出的文件的最后修改时间比目标的最后修改时间新），或者 “目标” 不存在，那 “目标” 就需要重新构建。</p>
-<p>如果前置条件中列出的文件中有任何一个文件不存在，那么 Make 就需要在 Makefile 文件中寻找并执行能够生成该文件的规则，也就是说缺失文件本身也是一个 “目标”，需要先将该 “目标” 构建出来才能利用它去构建当前 “目标”（构建 A 时发现 A 需要依赖 B，所以要先构建 B 才能继续构建 A，简称递归生成依赖）。</p>
-<p><code>$@</code>，<code>$^</code>，<code>$&lt;</code> 这种符号，这种符号称为自动变量。自动变量是局部变量，作用域范围在当前的规则内（即自动化变量只应该出现在 Makefile 目标规则中）</p>
-<p><code>$@</code> 指代当前目标， Make 命令意图构建的目标</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hello: hello.o</span><br><span class="line">    gcc hello.o -o $@	//$@为hello</span><br></pre></td></tr></table></figure>
-
-<p><code>$&lt;</code> 指代第一个前置条件。比如规则为 hello: a b，那么 <code>$&lt;</code> 就指代 a。</p>
-<p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 hello: a b，那么 <code>$^</code> 就指代 a 和 b。</p>
-]]></content>
-      <tags>
-        <tag>command</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>QuestionBank</title>
-    <url>/2025/02/03/QuestionBank/</url>
-    <content><![CDATA[<p>夺命连环问！</p>
-<span id="more"></span>
-
-
-
-<h1 id="Java-Question-Bank"><a href="#Java-Question-Bank" class="headerlink" title="Java Question Bank"></a>Java Question Bank</h1><blockquote>
-<p>以下问题为转载，提供答案为AI生成，仅作参考和可能提问范围学习</p>
-</blockquote>
-<p>ref: <a href="https://www.v2ex.com/t/1106872">https://www.v2ex.com/t/1106872</a></p>
-<h2 id="后端问题"><a href="#后端问题" class="headerlink" title="后端问题"></a>后端问题</h2><p>Q: </p>
-<p>HashSet 的底层实现说下？为什么内置 HashMap ？说下它的数据结构，为什么 loadFactor 是 0.75 ？你说泊松分布，什么是泊松分布？为什么要高位参与与运算？为什么它的 size 是 2 的 n 次方？为什么默认是 16 ？讲下它的扩容机制。什么时候转红黑树，为什么要转红黑树？为什么它是线程不安全的，它的哪些方法是线程不安全的？为什么会造成死循环？ 1.8 是如何解决这个问题的？它的线程安全的实现有什么？ ConcurrentHashMap 和 HashTable 有什么区别？说下它 1.7 和 1.8 的实现是什么？有什么区别？为什么要这么做？为什么说 ConcurrentHashMap 是线程安全的？它的 get 操作是有锁的吗？它是强一致性的吗？它为什么是弱一致性的？ ConcurrentHashMap 1.7 和 1.8 是如何扩容的？ sizeCtl 参数是干什么的，讲讲变换过程？为什么要用 volatile 修饰？说说它的功能？什么是 MESI 协议？ CPU 原语是什么？什么是可见性？ JMM 说说是什么？为什么要有 JMM ？ Happened-before 是什么？它和 synchronized 的区别是什么？锁的升级与降级说下是什么？自旋锁是什么？偏向锁是什么？ Mark-Word 说下？锁的粒度是什么？锁消除了解吗？锁会被合并吗？什么时候会发生？你刚才说了 CAS ，你能说下它是什么东西吗？为什么要引入 CAS ？ ABA 问题是如何解决的？ AQS 了解吗？它是如何实现的？ CLH 又是什么？ ReentrantLock 和 synchronized 区别是什么？为什么 ReetrantLock 能实现公平锁？默认构造器是公平锁吗？为什么不是？ Copy-on-Write 了解吗？ Fork&#x2F;Join 又是什么？什么是线程，什么是协程？你刚才说了管程？你能说下这几个到底是做什么的吗？线程池说下参数，四种内置的拒绝策略，以及它的执行流程。你用过吗？为什么要这么设置参数？ I&#x2F;O 密集型应用和计算密集型应用如何设置其参数？你具体的业务线程池的参数是怎么设计的？为什么？测过吗？你定制化开发过吗？线程池预留了 3 个供子类扩展的方法你知道是哪三个吗？能做什么你知道吗？ ThreadLocal 是什么？它为什么会造成内存泄漏？你实际开发中用到过吗？ Spring 事务用这个干什么的？什么是 Spring 事务的 SavePoint ？你知道死锁吗？如何解决死锁？ sleep 和 wait 的区别是什么？ BIO 、NIO 、AIO 是什么？说下区别，以及如何使用？了解 Netty 吗？如何解决粘包问题？ ChannelPipeline 又是什么？ ByteBuf 知道吗？读写指针又是什么？为什么要用它，解决了 NIO 类库的 ByteBuffer 什么问题？它和 mina 的区别是什么？它的 Zero-Copy ？了解过 FastThreadLocal 吗？它为什么比 ThreadLocal 快？有看过其中源码吗？ Netty 解决了 NIO 类库的什么问题？空轮询又是什么？ RPC 又是什么？序列化和反序列化又是什么？几个核心抽象说下。是干什么的？讲讲 Netty 的线程模型。</p>
-<p>Q: </p>
-<p>你说你了解虚拟机，你知道虚拟机的运行时数据区吗？哪些是线程共享的，哪些是线程独有的？你了解 JVM 调优吗？调优过吗？为什么要这么设置？垃圾回收算法有几种？为什么要分代收集？ Young 区说说它的分布结构，为什么 Eden 区 80%？为什么大对象直接进入老年代？控制的参数是什么？一个对象如果不是大对象，怎样才能进入老年代？控制的参数是什么？什么时候会发生 OOM ？你遇到过吗？怎么解决的？为什么低版本的 JDK 要把永久代内存调大点？默认大小是多少你知道吗？什么是 Major GC ，什么是 Minor GC ？什么情况下会频繁 GC ？你查看过 GC 日志吗？什么时候回收对象？引用计数和可达性分析是什么？为什么 Java 使用后者？ Python 使用前者？什么是 GCRoot ？什么类型的对象可以作为 GCRoot ？什么时候对象不可达？ Java 的四种引用说下，分别用在什么场景？你知道 JDK 源码哪里有用到 WeakReference 吗？什么是 STW ？什么是 Safepoint ？类加载的过程说下，什么时候优化，以及不同的阶段的主要优化是什么？解语法糖是什么时候？为什么在编译的时候解语法糖？什么是双亲委派模型？可以破坏吗？各个 ClassLoader 加载哪部分类的？你自定义过 ClassLoader 吗？你说你用过 Jstack 诊断 CPU 使用率飙升的情况，说下具体步骤？ Arthas 用过吗？ Class 文件格式说下，什么是魔数，Class 文件的魔数是什么？ JMX 了解吗？生产上有碰到过虚拟机的问题吗？怎么解决的？</p>
-<p>ACID 说下是什么，如何实现的？你说你优化过 SQL ，怎么优化的说下。like ‘%xx%’，like ‘%xx’，like ‘xx%’ 哪种情况会用到索引，为什么？说下 MySQL 执行流程。WAL(Write-Ahead Logging) 知道吗？ redo log 和 undo log 是什么，它们作用说下。你说你改过 buffer_pool_size 等参数，为什么要改它？它里面的数据结构说下是什么？为什么冷热 3:7 ？ join_buffer 你说你也改了，为什么？什么是驱动表和被驱动表？如何优化？你说你建了索引，什么是蔟集索引，什么是非蔟集索引？什么是回表？什么时候会索引失效？你的二级索引什么用得多？为什么优先使用普通索引，而不是唯一索引？ MySQL 会死锁吗？什么是间隙锁？它会导致什么问题？ MVCC 说下是什么？ 4 种事务说下是什么？哪种或者哪几种事务隔离级别能避免幻读？能避免脏读？你说你还开启了 binlog ，能说说是什么吗？ binlog 有几种格式？你选的是哪个？为什么？ canal 用过吗？说说它的原理。MySQL 主从模式如何开启？你是如何优化 SQL 的？上亿级别的数据你是如何优化分页的？为什么不建议在 MySQL 中使用分区机制？几个主要的线程说下它们是什么？做什么的？ MySQL 读写了解吗？如何实现的？能做到强一致性吗？为什么？为什么删了数据还是磁盘空间不变？自增主键用完了会怎么样？如何解决这个问题？自增主键什么时候是不连续的？这样做的好处是什么？为什么推荐用自增主键？ B+ Tree 又是什么？如何迁移数据库？为什么不建议使用外键？在高版本的 MySQL 中 count(1) 和 count(*) 区别是什么？ order by 是如何工作的？分页机制又是什么？ ACL 和 RBAC 是什么？ PBAC 和 ABAC 知道吗说下？ grant 之后一定要刷新吗？视图用过吗？它的作用说下。视图和表的区别说下。存储过程写过吗？存储函数和存储过程的区别说下。为什么要分库分表？分库分表如何做到动态缩容&#x2F;扩容？ NoSQL 用过吗？ OceanBase 了解吗？ HBase 了解吗？ HBase 有哪些坑，你碰到过吗？什么是 RegionServer ？什么时候用 NoSQL ，它能取代 RDBMS 吗？你说你用过 Elasticsearch ，能说下它的请求执行过程吗？它的总体架构说下，画一下。它的插件你用过吗？你们的分词策略是什么？倒排索引说下是什么。</p>
-<p>线程和进程说下区别？线程的几种状态说下。Java 中的线程和操作系统的线程关系？动态内存分配和回收策略是什么？什么是空闲列表和指针碰撞？具体用什么数据结构存的？什么时候用它们？空闲列表四种策略说下。Page Cache 知道吗，说说它的作用。Redis 和 Kafka 中间件如何通过 Page Cache 来优化？哪些类型会导致内存泄漏？ TCP 和 HTTP 是什么？它们之间的关系说下。OSI 七层是哪七层？分别是干什么的？ TCP 和 UDP 区别是什么？什么时候会导致 TCP 抖动？ TCP 是如何保证稳定的？我就要用 UDP ，如何使它和 TCP 一样能保证数据到达？ CPU 是如何执行任务的？你知道 numa 架构吗？哪些中间件可以通过这个来怎么优化？为什么绑核能优化？什么是 Zero-Copy ？你用的中间件中有哪些用到了这个特性？内核态和用户态是什么？硬件你了解过吗？什么是 x86 ？什么是 ARM ？你说精简指令集？它精简了什么？ ARM 架构的 CPU 是什么样的？画一下。M1 芯片为什么这么快，有了解吗？ 5G 有了解吗？有点题外话了，最后问你个问题，你说你是软件通信工程，通信学的什么？选修了什么？通信是学硬件吗？光纤为什么这么快？ 8 根线和 4 根线区别？傅立叶变换说下是什么？数字信号模拟信号？你大学在班级定位？前几？</p>
-<p>Redis 它的 5 种基础类型和 6 个数据结构说下。HyperLogLog 、BitMap 、GEO 、Stream 有接触过吗？什么时候用这些特殊数据结构？跳表又是什么，画一下？为什么使用跳表？为什么不用红黑树？全局 Hash 表又是什么？如何扩容的？什么是渐进式 rehash ？ Redis 怎么做到的？ IO 多路复用是什么？多路是什么？复用了什么？ AOF 和 RDB 又是什么？为什么 Redis 没有实现 WAL 机制？ AOF 持久化策略有哪三种？你们是怎么选的？ AOF 什么时候重写？为什么重写？主从复制用到了哪种日志？主从复制过程说下。主从复制什么时候增量，什么时候全量？第一次连接时，网络中断了怎么办？ Redis 主从是什么？主从从又是什么？为什么主从从可以减少主库压力？从库可以设置可写吗？从库可写会带来什么问题？主从什么时候会导致数据丢失？ Redis 十万并发能支撑住吗？如何支撑十万以上并发？为什么操作大对象支持不了十万并发？ Redis Cluster 是什么？ 你说到了 CRC16 ，你知道一致性哈希算法吗，能说下是什么吗？你说虚拟节点，说下如何实现？ Codis 了解吗？你们的 Redis 集群方案是什么？ Redis 是如何保证高可用的？哨兵机制了解吗？什么是主观下线什么是客观下线？选主的四个筛选条件优先级的条件依次递减分别是什么？打分又是什么？如何打分？缓存击穿、缓存雪崩、缓存穿透说下？如何解决？布隆过滤器又是什么？能手写个布隆过滤器吗？数据倾斜知道吗，如何解决？分布式锁了解过吗？讲讲分布式锁实现原理？ Redisson 源码看过吗？它是如何实现的分布式锁？ Lua 脚本保证原子性吗？分布式锁需要注意哪四个问题？ Redis 事务说下。缓存污染知道是什么吗？如何淘汰数据的？分别是哪八种策略？ Redis 对 lru 做了什么改变吗？ lfu 又是什么？ Redis 做了什么优化？ Redis 多线程是什么多线程？默认开启吗？你们生产中用了吗？ Redis 6 还有什么新特性？自定义过 Redis 数据类型吗？自定义过 Redis 命令吗？如何解决数据库和缓存数据不一致问题？ Pika 知道吗？ Tendis 和它的区别？如何实现一个 Key 千万并发？（这个有个群的群友的 Zoom 面试题）</p>
-<p>消息中间件解决了哪几个问题？简单介绍下你用的 Kafka 。从 Topic -&gt; Record&lt;Key,Value&gt; -&gt; Producer -&gt; acks -&gt; Interceptor -&gt; Broker -&gt; Page Cache -&gt; Controller -&gt; Coordinator -&gt; Partition -&gt; Replica -&gt; Leader Replica -&gt; Follower Replica -&gt; ISR -&gt; Unclean Leader Election -&gt; Consumer -&gt; Consumer Group -&gt; Consumer Offset -&gt; Consumer Group Offset -&gt; Idempotence -&gt; Transaction -&gt; Rebalance -&gt; High Watermark -&gt; Log Deletion -&gt; Leader Epoch -&gt; LEO -&gt; Zero Copy -&gt; Consumer Heartbeat -&gt; Zookeeper 到这结束。它和 RocketMQ 、RabbitMQ 有什么区别？什么时候消息会丢失？ Producer 网络抖动后，它的消息在哪存着，内存还是磁盘还是哪里？ Producer 和 Consumer 什么时候建立的 TCP 连接？为什么这么做？ Consumer 为什么要采取 pull 的方式？ Producer 为什么采用 push 的方式？为什么用 TCP 不用 HTTP ？高水位、LEO 是什么？ Lead Epoch 知道吗？幂等性是如何实现的？说下 Kafka 事务，Kafka 事务实现的事务隔离级别？什么时候触发 Rebalance ？如何避免？如何指定发送消息到指定 Partition ？消息交付可靠性保障承诺三个说下，以及 Kafka 是如何实现它们的？哦，你说精准一次，怎么实现的？根据消息数以及消息大小，计算需要多少磁盘容量和带宽。Kafka 的 JVM 参数调优说下。JMS 了解吗？</p>
-<p>Spring Bean Scope 说下。Spring 的注入方式有几种，为什么推荐用构造器注入？@Resource 和 @<a href="https://www.v2ex.com/member/Autowired">Autowired</a> 区别说下。什么是 IoC 和 AOP ？ Spring 解决了什么？@Bean 和 @<a href="https://www.v2ex.com/member/Component">Component</a> 区别说下。Spring Bean 的生命周期说下。Spring AOP 原理，各种 Advice 和 Advisor 说下。AOP 的两种代理方式是什么？ AOP 一般作用说下。三级缓存解决循环依赖的过程说下。Spring 的事务传播行为说下。Spring 事务隔离级别说下。Spring 事务实现原理。Spring 用到了哪些设计模式，能分别讲讲它是如何实现的吗，具体是哪些类？ BeanFactory 和 ApplicationContext 说下区别。说下 BeanFactory 和 FactoryBean 区别？ BeanPostProcessor 和 BeanFactoryPostProcessor 区别是什么？ Spring 事件知道吗？ Spring 如何自定义 XML 解析？各种 Smart 开头的 Bean 的前置处理器，什么时候被调用，你知道吗？ Spring Cache 是如何实现的？ Spring Data JPA 呢？ 注解扫描如何实现的，你能手写个吗？写过 Spring 的插件吗？如何实现的？代码开源了吗？</p>
-<p>Q: </p>
-<p>Spring MVC 执行流程说下。 @<a href="https://www.v2ex.com/member/RestController">RestController</a> 和 @<a href="https://www.v2ex.com/member/Controller">Controller</a> 区别说下。怎么取得 URL 中的 { } 里面的变量？ Spring MVC 和 Struts2 比有什么优点？ Spring MVC 怎么样设定重定向和转发的？说下 Spring MVC 的常用注解。如何解决 POST 请求中文乱码问题，GET 的又如何处理呢？ Interceptor 和 Filter 区别？ Spring MVC 的异常处理 ？怎样在方法里面得到 Request ，或者 Session ？ Spring MVC 中函数的返回值是什么？怎么样把 ModelMap 里面的数据放入 Session 里面？ Spring MVC 的控制器是不是单例模式,如果是,有什么问题,怎么解决？ Spring MVC 的 RequestMapping 的方法是线程安全的吗？为什么？介绍下 WebApplicationContext 。跨域问题如何解决？如何解决全局异常？ validation 有了解吗？用过吗？ Json 处理如何实现的？哦，你刚才说了父子容器，能讲讲什么是父子容器吗？ Spring MVC 国际化有了解过吗？怎么实现的</p>
-<p>A: </p>
-<p>Q: </p>
-<p>Spring Boot 是如何实现自动装配的？运行 Spring Boot 有几种方式？ Spring Boot Starter 工作原理。Spring Boot 核心注解说下。 @<a href="https://www.v2ex.com/member/Enable">Enable</a> 类型注解是如何实现的？@Conditional 类型注解呢？自定义过吗？说下异步调用 @<a href="https://www.v2ex.com/member/Async">Async</a> 。什么是 YAML ？ Spring Boot Profiles 如何实现的？ bootstrap.properties 和 application.properties 说下区别。Spring Boot 事件和 Spring 事件有什么关系？ Spring Boot Actuator 了解过吗？说一下。Spring Batcher 用过吗，说下。Spring Boot 是如何实现内嵌 Servlet 容器的，在哪行代码启动的？ Spring Boot 完美实现了模块化编程，你认同吗？</p>
-<p>A: </p>
-<p>Q: </p>
-<p>Spring Cloud Netflix 听说你了解。画一下 Spring Cloud Netflix 架构图。说说 Eureka 默认多少秒发送心跳？增量还是全量？ CP 还是 AP ？如何防止脑裂的？二级缓存知道吗？ Eureaka 的自我保护模式说下。ServiceInstance 和 DiscoryClient 知道吗？是干嘛的？分布式事务除了两段提交，还有什么实现方式？哦，你说 Saga ，Saga 你说下是什么？ Ribbon 是什么说一下，它解决了什么问题？ Feign 又是什么？它和 Ribbon 什么关系？ Dubbo 和 Feign 区别？ Dubbo 的 SPI 知道吗？ Zuul 是什么？它和 Nginx 有什么区别？除了 Zuul 还有什么网关可选？ Hystrix 是什么？它是如何实现的？熔断、降级和限流他们的区别说一下。Hystrix 信号量机制，隔离策略细粒度控制如何做的？了解过他们的源码实现吗？看过源码吗？你优化过吗？微服务十一点说一下分别是什么？分布式配置中心有哪些？你们用的 Apollo 还是 Spring Config 还是其他的？为什么？服务监控有了解吗？什么是幂等？如何实现接口幂等？如何实现分布式 Session ？有更好的方法吗？哦，你说了 JWT ，能详细说下吗？不同系统的间授权的 OAuth2 了解吗？</p>
-<p>A: </p>
-<p>Q:</p>
-<p>MyBatis 了解吗？一级缓存，二级缓存？# 和 $ 说下。如何实现的动态 SQL ？ ORM 是什么？和 Hibernate 区别？ MyBatis 工作原理？ MyBatis 都有哪些 Executor 执行器？它们之间的区别是什么？ MyBatis 中如何指定使用哪一种 Executor 执行器？模糊查询 like 语句该怎么写？ MyBatis 是否支持延迟加载？如果支持，它的实现原理是什么？ MyBatis 如何执行批量操作？ SqlSessionFactoryBean 是什么？如何实现和 Spring 的整合的？ Mapper 方法可以重载吗？为什么不可以？ MyBatis 是如何将 SQL 执行结果封装为目标对象并返回的？都有哪些映射形式？哦，你说简单封装了 JDBC ，说下 JDBC 几个重要的类。为什么要预编译？有什么好处吗？</p>
-<p>A:</p>
-<p>Q: </p>
-<p>Nginx 了解吗，说下其优缺点？怎么实现 Nginx 集群？什么是反向代理？和正向代理区别是什么？ Tomcat 和 Nginx 区别？限流怎么做的，有哪三种？令牌桶和漏斗算法是什么，区别是什么？如何在其之上使用 Lua 脚本？有几种负载均衡策略？你们生产上用的哪个？为什么？为什么 Nginx 性能这么高？有没有更高的？ F5 又是什么？ Nginx 是怎么处理请求的？ Nginx 目录有哪些？ nginx.conf 配置过吗？有哪些属性模块？静态资源放哪？虚拟主机配置？ location 说下。location 语法说下。</p>
-<p>A: </p>
-<p><strong>Nginx 了解吗，说下其优缺点？</strong></p>
-<p><strong>优点：</strong></p>
-<ol>
-<li><strong>高性能</strong>：Nginx 采用事件驱动架构，能够处理大量并发连接，适合高并发场景。</li>
-<li><strong>轻量级</strong>：资源占用少，适合在资源有限的服务器上运行。</li>
-<li><strong>反向代理</strong>：支持反向代理，负载均衡，缓存等功能。</li>
-<li><strong>高扩展性</strong>：支持模块化设计，可以通过第三方模块扩展功能。</li>
-<li><strong>热部署</strong>：支持不停止服务的情况下更新配置和升级。</li>
-</ol>
-<p><strong>缺点：</strong></p>
-<ol>
-<li><strong>动态内容处理能力较弱</strong>：Nginx 本身不擅长处理动态内容，通常需要与后端应用服务器（如 Tomcat）配合使用。</li>
-<li><strong>配置复杂</strong>：对于初学者来说，Nginx 的配置文件可能比较复杂，学习曲线较陡。</li>
-</ol>
-<p><strong>怎么实现 Nginx 集群？</strong></p>
-<p>Nginx 集群通常通过以下方式实现：</p>
-<ol>
-<li><strong>负载均衡</strong>：使用 Nginx 作为负载均衡器，将请求分发到多个后端服务器。</li>
-<li><strong>高可用</strong>：通过 Keepalived 或 HAProxy 实现 Nginx 的高可用，避免单点故障。</li>
-<li><strong>DNS 轮询</strong>：通过 DNS 轮询将请求分发到多个 Nginx 服务器。</li>
-<li><strong>分布式部署</strong>：在不同地理位置的服务器上部署 Nginx，通过 CDN 或全局负载均衡器进行请求分发。</li>
-</ol>
-<p><strong>什么是反向代理？和正向代理区别是什么？</strong></p>
-<ul>
-<li><strong>反向代理</strong>：客户端请求发送到反向代理服务器，反向代理服务器将请求转发到后端服务器，并将后端服务器的响应返回给客户端。客户端不知道后端服务器的存在。</li>
-<li><strong>正向代理</strong>：客户端通过正向代理服务器访问外部资源，外部资源不知道客户端的真实 IP，只知道代理服务器的 IP。</li>
-</ul>
-<p><strong>Tomcat 和 Nginx 区别？</strong></p>
-<ul>
-<li><strong>Nginx</strong>：主要用于处理静态内容、反向代理、负载均衡等，适合高并发场景。</li>
-<li><strong>Tomcat</strong>：是一个 Java 应用服务器，主要用于处理动态内容，如 JSP、Servlet 等。</li>
-</ul>
-<p><strong>限流怎么做的，有哪三种？</strong></p>
-<ol>
-<li><strong>计数器算法</strong>：在固定时间窗口内限制请求数量。</li>
-<li><strong>令牌桶算法</strong>：以固定速率生成令牌，请求需要消耗令牌才能被处理。</li>
-<li><strong>漏桶算法</strong>：请求以固定速率被处理，超出速率的请求会被丢弃或排队。</li>
-</ol>
-<p><strong>令牌桶和漏斗算法是什么，区别是什么？</strong></p>
-<ul>
-<li><strong>令牌桶算法</strong>：以固定速率生成令牌，令牌被放入桶中，请求需要消耗令牌才能被处理。允许突发流量。</li>
-<li><strong>漏桶算法</strong>：请求以固定速率被处理，超出速率的请求会被丢弃或排队。不允许突发流量。</li>
-</ul>
-<p><strong>如何在其之上使用 Lua 脚本？</strong></p>
-<p>Nginx 通过 <code>ngx_lua</code> 模块支持 Lua 脚本，可以在配置文件中嵌入 Lua 代码，实现复杂的逻辑处理。</p>
-<p><strong>有几种负载均衡策略？你们生产上用的哪个？为什么？</strong></p>
-<p>常见的负载均衡策略：</p>
-<ol>
-<li><strong>轮询（Round Robin）</strong>：依次将请求分发到每个服务器。</li>
-<li><strong>加权轮询（Weighted Round Robin）</strong>：根据服务器权重分配请求。</li>
-<li><strong>IP Hash</strong>：根据客户端 IP 分配请求，确保同一客户端始终访问同一服务器。</li>
-<li><strong>最少连接（Least Connections）</strong>：将请求分发到当前连接数最少的服务器。</li>
-</ol>
-<p>生产环境通常使用<strong>加权轮询</strong>或<strong>最少连接</strong>，因为它们能更好地平衡服务器负载。</p>
-<p><strong>为什么 Nginx 性能这么高？有没有更高的？</strong></p>
-<p>Nginx 性能高的原因：</p>
-<ol>
-<li><strong>事件驱动架构</strong>：非阻塞 I&#x2F;O 模型，能够高效处理大量并发连接。</li>
-<li><strong>多进程模型</strong>：利用多核 CPU，每个工作进程独立处理请求。</li>
-<li><strong>内存管理优化</strong>：减少内存分配和释放的开销。</li>
-</ol>
-<p>更高的性能可以选择 <strong>Caddy</strong> 或 <strong>Envoy</strong>，它们在特定场景下可能表现更好。</p>
-<p><strong>F5 又是什么？</strong></p>
-<p>F5 是一家提供应用交付控制器（ADC）和负载均衡解决方案的公司，其产品（如 BIG-IP）常用于企业级负载均衡和应用加速。</p>
-<p><strong>Nginx 是怎么处理请求的？</strong></p>
-<ol>
-<li><strong>接收请求</strong>：Nginx 监听端口，接收客户端请求。</li>
-<li><strong>解析请求</strong>：解析 HTTP 请求头，确定请求的虚拟主机和 location。</li>
-<li><strong>处理请求</strong>：根据配置文件的规则处理请求，如静态文件直接返回，动态请求转发到后端服务器。</li>
-<li><strong>返回响应</strong>：将处理结果返回给客户端。</li>
-</ol>
-<p><strong>Nginx 目录有哪些？</strong></p>
-<ul>
-<li><strong>&#x2F;usr&#x2F;local&#x2F;nginx</strong>：Nginx 安装目录。</li>
-<li><strong>&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf</strong>：配置文件目录，包含 <code>nginx.conf</code>。</li>
-<li><strong>&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs</strong>：日志文件目录。</li>
-<li><strong>&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;html</strong>：默认的静态文件存放目录。</li>
-</ul>
-<p><strong>nginx.conf 配置过吗？有哪些属性模块？</strong></p>
-<p><code>nginx.conf</code> 是 Nginx 的主配置文件，常见的配置模块包括：</p>
-<ul>
-<li><strong>http</strong>：HTTP 相关配置。</li>
-<li><strong>server</strong>：虚拟主机配置。</li>
-<li><strong>location</strong>：URL 路径匹配和处理规则。</li>
-<li><strong>events</strong>：事件处理模型配置。</li>
-<li><strong>upstream</strong>：负载均衡后端服务器配置。</li>
-</ul>
-<p>实例：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 全局配置</span></span><br><span class="line"><span class="attribute">user</span>  nginx;</span><br><span class="line"><span class="attribute">worker_processes</span>  auto;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line">    <span class="attribute">worker_connections</span>  <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="comment"># 网站 A 的虚拟主机配置</span></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span>       <span class="number">80</span>;</span><br><span class="line">        <span class="attribute">server_name</span>  www.example.com;</span><br><span class="line"></span><br><span class="line">        <span class="section">location</span> / &#123;</span><br><span class="line">            <span class="attribute">root</span>   /var/www/example;</span><br><span class="line">            <span class="attribute">index</span>  index.html;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 网站 B 的虚拟主机配置</span></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span>       <span class="number">80</span>;</span><br><span class="line">        <span class="attribute">server_name</span>  www.test.com;</span><br><span class="line"></span><br><span class="line">        <span class="section">location</span> / &#123;</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://127.0.0.1:8080;  <span class="comment"># 将请求转发到本地的 8080 端口</span></span><br><span class="line">            <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">            <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>静态资源放哪？</strong></p>
-<p>静态资源通常放在 Nginx 的 <code>html</code> 目录下，或者通过 <code>location</code> 配置指定其他目录。</p>
-<p><strong>虚拟主机配置？</strong></p>
-<p>虚拟主机配置在 <code>nginx.conf</code> 中的 <code>server</code> 块中，通过 <code>server_name</code> 指定域名，<code>listen</code> 指定端口。</p>
-<p><strong>location 说下。</strong></p>
-<p><code>location</code> 用于匹配 URL 路径，并指定如何处理请求。例如：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">location</span> /static/ &#123;</span><br><span class="line">    <span class="attribute">root</span> /var/www/html;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>location 语法说下。</strong></p>
-<p><code>location</code> 语法：</p>
-<ul>
-<li>**&#x3D;**：精确匹配。</li>
-<li>**~**：区分大小写的正则匹配。</li>
-<li>**~***：不区分大小写的正则匹配。</li>
-<li>**^~**：前缀匹配，不进行正则匹配。</li>
-</ul>
-<p>例如：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">location</span> = /exact &#123;</span><br><span class="line">    <span class="comment"># 精确匹配 /exact</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">location</span> <span class="regexp">~* \.php$</span> &#123;</span><br><span class="line">    <span class="comment"># 不区分大小写匹配 .php 结尾的 URL</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>Q: </p>
-<p>Tomcat 你也了解？什么是 Tomcat 的 Connector ？ Service 、Connector 、Container 介绍下它们。详细说下它们是如何处理请求的，能画下它们的架构图吗？如何部署的？一定要放到 webapps 目录下吗？在哪配置？为什么不用 Jetty ？区别是什么？ Servlet 是线程安全的吗？为什么？怎样让它线程安全？ Servlet 初始化过程？ init 方法什么时候调用？ Servlet 什么时候第一次初始化？ JSP 知道吗？有几个内置对象？你说 JSP 是特殊的 Servlet ，你看过源码吗？ JSP 如何热部署的？ EL 表达式知道吗？如何实现的？（大四神州集团校招的时候被问到的）。</p>
-<p>A:</p>
-<p>云原生了解吗？云原生十二要素说下。Cloud Foundry 平台你知道吗？ HeroKu ？ Kong ？</p>
-<p>Q: </p>
-<p>哦？你说是六边形架构？你说下什么是六边形架构？整洁架构呢？它们之间的区别？分层架构了解吗？ MVP 、MVC 架构说下。负载均衡算法七种说下。如何实现一个秒杀系统。一定不会超卖吗？如何解决？什么是 SOA ？什么是微服务？以及两者的区别。什么是事件驱动架构？ CAP 和 BASE 说下是什么？最终一致性和人弱一致性什么关系？画一下你们系统的整体架构图。QPS 和 TPS ？你们的 QPS 是多少知道吗？压测过吗？说下点击网页的请求过程。哦，你说你是蓝绿部署，什么是蓝绿部署？什么是金丝雀发布？如何实现？</p>
-<p>A:</p>
-<p>Q: </p>
-<p>Docker 你也用？怎么构建 Docker 镜像？ Docker 和虚拟机的区别？ Docker 好处说下？ Kubernetes 你也知道，说下它的组成结构？ etcd 是什么？为什么不用 Zookeeper ？ pod 又是什么？你们生产上怎么用的？如何控制滚动更新过程？</p>
-<p>A:</p>
-<p>Q:</p>
-<p>你说你知道 DDD ？能简单说下吗？你们代码落地了吗？是如何拆分服务的？事件风暴又是什么？你们有 Code Review 吗？具体规矩？领域事件是什么？子域、通用域、核心域、支撑域、限界上下文、聚合、聚合根、实体、值对象又是什么？你们有 EventBus 吗？如何使用的？</p>
-<p>A:</p>
-<h2 id="刷题"><a href="#刷题" class="headerlink" title="刷题"></a>刷题</h2><p>剑指 offer <a href="https://www.nowcoder.com/exam/oj/ta?page=1&tpId=13&type=13">https://www.nowcoder.com/exam/oj/ta?page=1&amp;tpId=13&amp;type=13</a></p>
-<p>leetcode hot 100 <a href="https://leetcode.cn/studyplan/top-100-liked/">https://leetcode.cn/studyplan/top-100-liked/</a></p>
-<p>给二叉树后序和中序遍历，写前序遍历。手写个快排。翻转一下链表。O(1) 空间复杂度找出链表有环。DFS 找出二叉树搜索树第 k 大节点（这些都真的碰过了）。</p>
-<p>实现一个多线程类，并用该线程类实例化 3 个线程 A,B,C ； A 线程打印字符 A,B 线程打印字符 B ，C 线程打印字符 C ；启动这 3 个线程，要求启动线程的顺序为 C 线程-&gt;B 线程-&gt;A 线程，并且最后输出内容为：A B C 。禁止使用 sleep 函数。阿里应该还有各种多线程打印的问题，这个得准备。这些只是最最最基础的内容。</p>
-<p>接下来应该是更高级的算法题目，至少是 LeetCode Menium 难度的，翻转链表确实有点初级，练个半个小时就搞定了。暂时还没碰到，碰到我也挂了。应该是动态规划，滑动窗口，字符串的问题，手写 O(1) 时间复杂度的 LRU ，回溯，贪心。</p>
-]]></content>
-      <categories>
-        <category>algorithm</category>
-      </categories>
-      <tags>
-        <tag>algorithm, Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pic_test</title>
-    <url>/2024/04/12/pic-test/</url>
-    <content><![CDATA[<p>图片插入测试：</p>
-<img src="/2024/04/12/pic-test/img.png" class="">]]></content>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2024/04/11/first_post/</url>
-    <content><![CDATA[<p>写一个测试试一下</p>
-<p>数学公式测试：$r_n&#x3D;W_n\log_2\left(1+\frac{P_nd_n^{-\beta}h_n^2}{N_0+I_n}\right)$</p>
-<p>$$t_n^{loc}&#x3D;\frac{(1-\rho_n)C_n}{f_n}$$</p>
-]]></content>
   </entry>
   <entry>
     <title>pytorch_learning_record</title>

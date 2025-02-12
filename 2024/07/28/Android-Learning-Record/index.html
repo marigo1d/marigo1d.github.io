@@ -27,6 +27,7 @@
 <meta property="og:site_name" content="Marigold">
 <meta property="og:description" content="Android学习记录">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/activity_lifecycle.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240813144056439.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240813145303945.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240813145313326.png">
@@ -63,11 +64,11 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193338222.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240805193638556.png">
 <meta property="article:published_time" content="2024-07-28T02:16:25.000Z">
-<meta property="article:modified_time" content="2025-02-11T12:47:38.404Z">
+<meta property="article:modified_time" content="2025-02-12T12:22:21.910Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Android, Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/image-20240813144056439.png">
+<meta name="twitter:image" content="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/activity_lifecycle.png">
 
 <link rel="canonical" href="https://marigo1d.github.io/2024/07/28/Android-Learning-Record/">
 
@@ -256,7 +257,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-11 20:47:38" itemprop="dateModified" datetime="2025-02-11T20:47:38+08:00">2025-02-11</time>
+                <time title="Modified: 2025-02-12 20:22:21" itemprop="dateModified" datetime="2025-02-12T20:22:21+08:00">2025-02-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -274,14 +275,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>58k</span>
+              <span>60k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1:46</span>
+              <span>1:49</span>
             </span>
 
         </div>
@@ -459,7 +460,137 @@
 <h3 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h3><p><strong>文件存储</strong></p>
 <p><strong>SharedPreference</strong></p>
 <p><strong>SQLite</strong></p>
-<h3 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a>Adapter</h3><p>实现 数据 - View 绑定</p>
+<h3 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a>Adapter</h3><p><code>Adapter</code> 负责：</p>
+<ul>
+<li>从数据源获取数据</li>
+<li>创建 <code>View</code> 并将数据绑定到 <code>View</code> 上</li>
+<li>通过 <code>notifyDataSetChanged()</code> 动态更新 UI</li>
+</ul>
+<p>View → adapter → data</p>
+<h3 id="Activity与Fragment生命周期"><a href="#Activity与Fragment生命周期" class="headerlink" title="Activity与Fragment生命周期"></a>Activity与Fragment生命周期</h3><img src="/2024/07/28/Android-Learning-Record/activity_lifecycle.png" class="" title="image1.png">
+
+<p>单个Activity:</p>
+<p>应用开启时：onCreate() -&gt; onStart() -&gt; onResume();</p>
+<p>按下返回键：onPause() -&gt; onStop() -&gt; onDestory();</p>
+<p>多个Activity之间交互时：</p>
+<p>从第一个Activity启动第二个Activity时：</p>
+<table>
+<thead>
+<tr>
+<th>FirstActivity</th>
+<th>SecondActivity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>onPause()</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onCreate()</td>
+</tr>
+<tr>
+<td></td>
+<td>onStart()</td>
+</tr>
+<tr>
+<td></td>
+<td>onResume()</td>
+</tr>
+<tr>
+<td>onStop()</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>按下锁屏键时</p>
+<table>
+<thead>
+<tr>
+<th>SecondActivity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>onPause()</td>
+</tr>
+<tr>
+<td>onStop()</td>
+</tr>
+</tbody></table>
+<p>屏幕解锁</p>
+<table>
+<thead>
+<tr>
+<th>SecondActivity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>onRestart()</td>
+</tr>
+<tr>
+<td>OnStart()</td>
+</tr>
+<tr>
+<td>OnResume()</td>
+</tr>
+</tbody></table>
+<p>按下返回键 &#x2F; SecondActivity调用 <code>finish()</code></p>
+<table>
+<thead>
+<tr>
+<th>FirstActivity</th>
+<th>SecondActivity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>onPause()</td>
+</tr>
+<tr>
+<td>onRestart()</td>
+<td></td>
+</tr>
+<tr>
+<td>onStart()</td>
+<td></td>
+</tr>
+<tr>
+<td>onResume()</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>onStop()</td>
+</tr>
+<tr>
+<td></td>
+<td>onDestory()</td>
+</tr>
+</tbody></table>
+<p>Fragment</p>
+<p>在创建的过程中，是Activity带领Fragment执行生命周期中的方法，所以生命周期方法的执行顺序是这样的：</p>
+<p>1.Activity–onCreate();</p>
+<p>2.Fragment–onAttach();</p>
+<p>3.Fragment–onCreate();</p>
+<p>4.Fragment–onCreateView();</p>
+<p>5.Fragment–onActivityCreated();</p>
+<p>接着是这样的：</p>
+<p>6.Activity–onStart();</p>
+<p>7.Fragment–onStart();</p>
+<p>8.Activity–onResume();</p>
+<p>9.Fragment–onResume();</p>
+<p>我们知道，无论对于Activity还是对于Fragment，onResume这个生命周期都是他们执行时间最长的，当我们的Activity或者Fragment打开之后，它就一直处于这个生命周期中。</p>
+<p>当销毁的时候，春江水暖鸭先知，当然是Fragment先感知到，于是销毁的时候就是Fragment带领Activity：</p>
+<p>10.Fragment–onPause();</p>
+<p>11.Activity–onPause();</p>
+<p>12.Fragment–onStop();</p>
+<p>13.Activity–onStop();</p>
+<p>14.Fragment–onDestroyView();</p>
+<p>15.Fragment–onDestroy();</p>
+<p>16.Fragment–onDetach();</p>
+<p>17.Activity–onDestroy();</p>
+<p>上面这个顺序有一个前提，就是我们所有的日志打印代码都是紧挨着super方法写。因为如果我们如果把Fragment写在了布局文件中，同时又在Activity的onCreate()方法中的setContentView之后打印日志，那么我们看到的生命周期的执行顺序就会有所不同，不过只是细微的差别，这点大家自己研究，道理也很好明白。</p>
+<p>总之一句话，在创建的过程中，是Activity带领着Fragment，在销毁的过程中，是Fragment带领着Activity。</p>
+<p>文章来源: <a target="_blank" rel="noopener" href="http://wangsong.blog.csdn.net/">wangsong.blog.csdn.net</a>，作者：_江南一点雨，版权归原作者所有，如需转载，请联系作者。</p>
 <h3 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h3><p>为了解决手动内存管理带来的问题而设计的。它们通过引用计数来跟踪有多少个指针指向同一个对象。</p>
 <ul>
 <li>当你创建一个指向对象的智能指针时，对象的引用计数加 1。</li>
@@ -1562,7 +1693,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Learning-Record"><span class="nav-text">Android Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%A8%8B%E5%BA%8F"><span class="nav-text">Android程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Context"><span class="nav-text">Context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6"><span class="nav-text">四大组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapter"><span class="nav-text">Adapter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%B1%82%E4%B8%8ENative%E5%B1%82"><span class="nav-text">Java层与Native层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E6%83%85%E5%86%B5"><span class="nav-text">常见内存泄露情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Message"><span class="nav-text">Message</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Handler%EF%BC%8CLooper%E4%B8%8EMessageQueue"><span class="nav-text">Handler，Looper与MessageQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%B1%8F%E9%9A%9C"><span class="nav-text">同步屏障</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E4%BA%A4%E4%BA%92"><span class="nav-text">进程间交互</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AIDL%E4%B8%8EBinder"><span class="nav-text">AIDL与Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder%E5%AE%9E%E7%8E%B0"><span class="nav-text">Binder实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Message%E8%B7%A8%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-text">Message跨进程通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6"><span class="nav-text">View与事件分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-text">事件分发流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E5%86%B2%E7%AA%81%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="nav-text">滑动冲突与解决</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RecyclerView%E4%B8%8EListView%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-text">RecyclerView与ListView缓存机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%8F%E5%B9%95%E5%88%B7%E6%96%B0"><span class="nav-text">屏幕刷新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="nav-text">View绘制流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle"><span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E5%90%AF%E5%8A%A8"><span class="nav-text">Android启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Init%E8%BF%9B%E7%A8%8B"><span class="nav-text">Init进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zygote%E8%BF%9B%E7%A8%8B"><span class="nav-text">Zygote进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SystemServer%E8%BF%9B%E7%A8%8B"><span class="nav-text">SystemServer进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP%E8%BF%9B%E7%A8%8B"><span class="nav-text">APP进程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A1%86%E6%9E%B6"><span class="nav-text">常用框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Glide"><span class="nav-text">Glide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#okHttp"><span class="nav-text">okHttp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrofit"><span class="nav-text">Retrofit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RxJava"><span class="nav-text">RxJava</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Learning-Record"><span class="nav-text">Android Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android%E7%A8%8B%E5%BA%8F"><span class="nav-text">Android程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Context"><span class="nav-text">Context</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-text">Android</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6"><span class="nav-text">四大组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapter"><span class="nav-text">Adapter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity%E4%B8%8EFragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">Activity与Fragment生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-text">智能指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%B1%82%E4%B8%8ENative%E5%B1%82"><span class="nav-text">Java层与Native层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E6%83%85%E5%86%B5"><span class="nav-text">常见内存泄露情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Message"><span class="nav-text">Message</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Handler%EF%BC%8CLooper%E4%B8%8EMessageQueue"><span class="nav-text">Handler，Looper与MessageQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%B1%8F%E9%9A%9C"><span class="nav-text">同步屏障</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E4%BA%A4%E4%BA%92"><span class="nav-text">进程间交互</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AIDL%E4%B8%8EBinder"><span class="nav-text">AIDL与Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder%E5%AE%9E%E7%8E%B0"><span class="nav-text">Binder实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Message%E8%B7%A8%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-text">Message跨进程通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6"><span class="nav-text">View与事件分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-text">事件分发流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E5%86%B2%E7%AA%81%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="nav-text">滑动冲突与解决</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RecyclerView%E4%B8%8EListView%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-text">RecyclerView与ListView缓存机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%8F%E5%B9%95%E5%88%B7%E6%96%B0"><span class="nav-text">屏幕刷新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="nav-text">View绘制流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle"><span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E5%90%AF%E5%8A%A8"><span class="nav-text">Android启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Init%E8%BF%9B%E7%A8%8B"><span class="nav-text">Init进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zygote%E8%BF%9B%E7%A8%8B"><span class="nav-text">Zygote进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SystemServer%E8%BF%9B%E7%A8%8B"><span class="nav-text">SystemServer进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP%E8%BF%9B%E7%A8%8B"><span class="nav-text">APP进程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A1%86%E6%9E%B6"><span class="nav-text">常用框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Glide"><span class="nav-text">Glide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#okHttp"><span class="nav-text">okHttp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrofit"><span class="nav-text">Retrofit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RxJava"><span class="nav-text">RxJava</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1630,12 +1761,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">289k</span>
+    <span title="Symbols count total">288k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">8:46</span>
+    <span title="Reading time total">8:44</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
