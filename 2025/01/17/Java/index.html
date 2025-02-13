@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/image-20240814162137394.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/image-20240814162220131.png">
 <meta property="article:published_time" content="2025-01-17T02:43:18.000Z">
-<meta property="article:modified_time" content="2025-02-09T12:57:58.885Z">
+<meta property="article:modified_time" content="2025-02-13T11:27:44.066Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-09 20:57:58" itemprop="dateModified" datetime="2025-02-09T20:57:58+08:00">2025-02-09</time>
+                <time title="Modified: 2025-02-13 19:27:44" itemprop="dateModified" datetime="2025-02-13T19:27:44+08:00">2025-02-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,14 +248,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>54k</span>
+              <span>55k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1:39</span>
+              <span>1:40</span>
             </span>
 
         </div>
@@ -1273,6 +1273,66 @@
 <li>消费者线程被唤醒，尝试获取锁，并成功获取。</li>
 <li>消费者线程消费数据，并最终在 finally 块中释放锁。</li>
 </ol>
+<h3 id="Concurrent-HashMap"><a href="#Concurrent-HashMap" class="headerlink" title="Concurrent HashMap"></a>Concurrent HashMap</h3><p><code>ConcurrentHashMap</code> 是 Java 提供的线程安全 <code>Map</code> 实现，其在 <strong>JDK 1.7</strong> 和 <strong>JDK 1.8</strong> 采用了不同的机制来提高并发性能：</p>
+<hr>
+<p><strong>JDK 1.7：分段锁（Segment Locking）</strong></p>
+<p><strong>设计结构</strong></p>
+<p>在 JDK 1.7 版本中，<code>ConcurrentHashMap</code> 采用了 <strong>分段锁（Segment Locking）</strong> 机制，即 <strong>将整个 HashMap 拆分成多个小的 Segment（段）</strong>，每个 Segment 维护一个独立的 <code>HashMap</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ConcurrentHashMap</span><br><span class="line"> ├── Segment 0 （锁 0）</span><br><span class="line"> ├── Segment 1 （锁 1）</span><br><span class="line"> ├── Segment 2 （锁 2）</span><br><span class="line"> ├── ...</span><br><span class="line"> ├── Segment N-1 （锁 N-1）</span><br></pre></td></tr></table></figure>
+
+<p><strong>每个 <code>Segment</code> 维护自己的 HashMap 和锁，所以不同的 <code>Segment</code> 之间可以并行访问，减少锁竞争。</strong></p>
+<hr>
+<p><strong>主要操作</strong></p>
+<ol>
+<li><strong>put 操作</strong><ul>
+<li>计算 key 的 hash 值，定位到对应的 <code>Segment</code>。</li>
+<li>获取 <code>Segment</code> 的锁，执行 <code>put</code> 操作。</li>
+<li>释放锁。</li>
+</ul>
+</li>
+<li><strong>get 操作</strong><ul>
+<li>计算 key 的 hash 值，找到 <code>Segment</code>。</li>
+<li><strong>不需要加锁</strong>，直接访问数据，提高性能。</li>
+</ul>
+</li>
+<li><strong>扩容（rehash）</strong><ul>
+<li>只有一个 <code>Segment</code> 扩容，不影响其他 <code>Segment</code>，降低 <code>rehash</code> 的性能损耗。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>JDK 1.8：CAS + Synchronized</strong></p>
+<p>从 JDK 1.8 开始，<code>ConcurrentHashMap</code> <strong>移除了 <code>Segment</code>，改用 <code>Node[]</code> 作为底层数据结构，并结合 CAS（无锁操作）+ <code>synchronized</code>（锁竞争）</strong> 机制。</p>
+<p><strong>设计结构</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ConcurrentHashMap</span><br><span class="line"> ├── Node 0 （CAS 操作）</span><br><span class="line"> ├── Node 1 （无锁）</span><br><span class="line"> ├── Node 2 （synchronized）</span><br><span class="line"> ├── ...</span><br><span class="line"> ├── Node N-1 （CAS 操作）</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>采用 <strong>数组 + 链表 + 红黑树</strong> 结构，类似 <code>HashMap</code>。</li>
+<li>**数据分布在 <code>Node[]</code> 中，不再使用 <code>Segment[]</code>**，简化结构。</li>
+<li>采用 <strong>CAS + synchronized</strong> 控制并发，提升性能。</li>
+</ul>
+<hr>
+<p><strong>主要优化</strong></p>
+<ol>
+<li><strong>put 操作</strong><ul>
+<li>如果目标桶（<code>Node[]</code>）为空，使用 <strong>CAS 操作</strong> 直接插入，避免加锁。</li>
+<li>如果目标桶有数据：<ul>
+<li>若无并发冲突，采用 <strong>无锁操作</strong> 修改数据。</li>
+<li>若有并发冲突，使用 <strong>synchronized</strong> 锁定该桶，避免数据竞争。</li>
+</ul>
+</li>
+<li><strong>链表长度超过 8 时，自动转为红黑树，提高查询效率。</strong></li>
+</ul>
+</li>
+<li><strong>get 操作</strong><ul>
+<li>直接读取 <code>Node[]</code>，无锁操作，提高性能。</li>
+</ul>
+</li>
+<li><strong>扩容（rehash）</strong><ul>
+<li><code>ConcurrentHashMap</code> 采用 <strong>多线程并发扩容</strong>，不同线程可以同时帮助迁移数据，提升扩容效率。</li>
+</ul>
+</li>
+</ol>
 <h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><p><a target="_blank" rel="noopener" href="https://tangxman.github.io/2015/07/27/the-difference-of-java-string-pool/">https://tangxman.github.io/2015/07/27/the-difference-of-java-string-pool/</a></p>
 -1722133033018.JPG)
 
@@ -1827,7 +1887,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java"><span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-text">String</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE"><span class="nav-text">枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%8C%E5%AE%B9%E5%99%A8diff"><span class="nav-text">数组，字符串，容器diff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">常用容器与初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this-static-class%E4%B8%8E%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-text">this, static class与内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85"><span class="nav-text">包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">泛型与通配符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">类加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-text">反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E4%B8%8EAPT"><span class="nav-text">注解与APT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E4%B8%8ELambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">匿名内部类与Lambda表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-text">引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JUC"><span class="nav-text">JUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JMM"><span class="nav-text">JMM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-text">ThreadLocal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="nav-text">线程与同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-join"><span class="nav-text">Thread.join()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wait-%E5%92%8C-notify"><span class="nav-text">wait() 和 notify()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LockSupport"><span class="nav-text">LockSupport</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E7%8A%B6%E6%80%81"><span class="nav-text">锁状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E5%88%86%E7%B1%BB"><span class="nav-text">锁分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CAS"><span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AQS"><span class="nav-text">AQS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized"><span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ReentrantLock"><span class="nav-text">ReentrantLock</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%86%85%E5%AD%98"><span class="nav-text">JVM内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nonheap%EF%BC%88%E9%9D%9E%E5%A0%86%EF%BC%89"><span class="nav-text">Nonheap（非堆）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heap-%E5%A0%86"><span class="nav-text">Heap (堆)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-text">Thread (线程)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC"><span class="nav-text">GC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A0%86%E5%86%85%E5%AD%98%E5%88%92%E5%88%86"><span class="nav-text">堆内存划分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">垃圾收集类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E8%BD%AC%E7%A7%BB"><span class="nav-text">对象转移</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">垃圾回收算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-text">常见垃圾收集器</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java"><span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-text">String</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE"><span class="nav-text">枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%8C%E5%AE%B9%E5%99%A8diff"><span class="nav-text">数组，字符串，容器diff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">常用容器与初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this-static-class%E4%B8%8E%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-text">this, static class与内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85"><span class="nav-text">包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">泛型与通配符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">类加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-text">反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E4%B8%8EAPT"><span class="nav-text">注解与APT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E4%B8%8ELambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">匿名内部类与Lambda表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-text">引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JUC"><span class="nav-text">JUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JMM"><span class="nav-text">JMM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-text">ThreadLocal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="nav-text">线程与同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-join"><span class="nav-text">Thread.join()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wait-%E5%92%8C-notify"><span class="nav-text">wait() 和 notify()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LockSupport"><span class="nav-text">LockSupport</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E7%8A%B6%E6%80%81"><span class="nav-text">锁状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E5%88%86%E7%B1%BB"><span class="nav-text">锁分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CAS"><span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AQS"><span class="nav-text">AQS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized"><span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ReentrantLock"><span class="nav-text">ReentrantLock</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Concurrent-HashMap"><span class="nav-text">Concurrent HashMap</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%86%85%E5%AD%98"><span class="nav-text">JVM内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nonheap%EF%BC%88%E9%9D%9E%E5%A0%86%EF%BC%89"><span class="nav-text">Nonheap（非堆）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heap-%E5%A0%86"><span class="nav-text">Heap (堆)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-text">Thread (线程)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC"><span class="nav-text">GC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A0%86%E5%86%85%E5%AD%98%E5%88%92%E5%88%86"><span class="nav-text">堆内存划分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">垃圾收集类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E8%BD%AC%E7%A7%BB"><span class="nav-text">对象转移</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">垃圾回收算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-text">常见垃圾收集器</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1895,12 +1955,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">288k</span>
+    <span title="Symbols count total">289k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">8:44</span>
+    <span title="Reading time total">8:46</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
