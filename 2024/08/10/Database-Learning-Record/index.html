@@ -27,13 +27,16 @@
 <meta property="og:site_name" content="Marigold">
 <meta property="og:description" content="MySQL和Redis数据库相关学习记录">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-mysql-sql-8.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-mysql-sql-14.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20250109161016217.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/20210924000726.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/20210924205057.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919111718667.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919155834155.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919160103358.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/master-slave.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-mysql-index-1.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/492e0e5857459a335db7c7aea5377791.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-redis-object-2-3.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/19063731-d7bc5026051ea412.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/redis-x-rdb-4.jpg">
@@ -46,11 +49,11 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-redis-sen-2.jpg">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-redis-sen-4.png">
 <meta property="article:published_time" content="2024-08-10T01:52:46.000Z">
-<meta property="article:modified_time" content="2025-02-19T02:59:02.791Z">
+<meta property="article:modified_time" content="2025-02-20T10:24:46.632Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="database">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-mysql-sql-14.png">
+<meta name="twitter:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-mysql-sql-8.png">
 
 <link rel="canonical" href="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/">
 
@@ -239,7 +242,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-19 10:59:02" itemprop="dateModified" datetime="2025-02-19T10:59:02+08:00">2025-02-19</time>
+                <time title="Modified: 2025-02-20 18:24:46" itemprop="dateModified" datetime="2025-02-20T18:24:46+08:00">2025-02-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,14 +260,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>29k</span>
+              <span>27k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>52 mins.</span>
+              <span>50 mins.</span>
             </span>
 
         </div>
@@ -461,7 +464,9 @@
 <p><strong>对应列的数据类型必须兼容</strong>： 每个 SELECT 语句中对应位置的列的数据类型必须兼容（可以隐式转换），以便可以合并到一个列中。</p>
 <p><strong>列名可以不同，但结果集会采用第一个 SELECT 语句的列名</strong>： 合并后的结果集会使用第一个 SELECT 语句中的列名作为最终的列名。 如果需要指定不同的列名，可以在第一个 SELECT 语句中使用 AS 别名。</p>
 </blockquote>
-<h2 id="SQL执行流程"><a href="#SQL执行流程" class="headerlink" title="SQL执行流程"></a>SQL执行流程</h2><img src="/2024/08/10/Database-Learning-Record/db-mysql-sql-14.png" class="" title="sqlworkflow">
+<h2 id="SQL执行流程"><a href="#SQL执行流程" class="headerlink" title="SQL执行流程"></a>SQL执行流程</h2><img src="/2024/08/10/Database-Learning-Record/db-mysql-sql-8.png" class="" title="img">
+
+<img src="/2024/08/10/Database-Learning-Record/db-mysql-sql-14.png" class="" title="sqlworkflow">
 
 
 
@@ -551,12 +556,12 @@
 </ul>
 <p>例如：</p>
 <ol>
-<li><strong>对于 CREATE 操作:</strong><ul>
-<li>Undo Log 会记录下如何撤销 CREATE 操作的信息。 通常，这会包括删除刚刚创建的行的必要信息（例如：表名、行的唯一标识符）。</li>
+<li><strong>对于 insert 操作:</strong><ul>
+<li>Undo Log 会记录下如何撤销 insert 操作的信息。 通常，这会包括删除刚刚创建的行的必要信息（例如：表名、行的唯一标识符）。</li>
 <li>Undo Log 实际上存储的是删除该行的操作。</li>
 </ul>
 </li>
-<li><strong>对于 CHANGE (UPDATE) 操作:</strong><ul>
+<li><strong>对于 update 操作:</strong><ul>
 <li>Undo Log 会记录被修改行的原始值（修改前的完整数据）。</li>
 <li>Undo Log 会记录修改发生所在的表、行标识符以及被修改的字段。</li>
 <li>Undo Log 中会包含指向前一个版本 Undo Log 的指针，形成一个链。</li>
@@ -568,22 +573,40 @@
 </ul>
 </li>
 </ol>
-<p>列名</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/cswiki/p/15338928.html">https://www.cnblogs.com/cswiki/p/15338928.html</a></p>
+<p>字段</p>
 <ul>
 <li>DB_TRX_ID: 存储  事务id</li>
 <li>DB_ROLL_PTR: 新数据存储指向旧数据列的指针（update）</li>
 <li>ROW_ID: 无主键id时启用</li>
 </ul>
-<img src="/2024/08/10/Database-Learning-Record/image-20250109161016217.png" class="" title="image-20250109161016217">
+<img src="/2024/08/10/Database-Learning-Record/20210924000726.png" class="" title="img">
 
-<p>读已提交：每次查询创建ReadView</p>
-<p>可重复读：相同查询仅第一次创建ReadView</p>
+
+
+
+
+<p><strong>ReadView：判断当前事务能够看见哪些版本的</strong></p>
+<ul>
+<li><code>m_ids</code>：生成 ReadView 时有哪些事务在执行但是还没提交的（称为 ”<strong>活跃事务</strong>“），这些活跃事务的 id 就存在这个字段里</li>
+<li><code>min_trx_id</code>：m_ids 里最小的值，<strong>当前事务启动时最大trx_id的已提交事务</strong></li>
+<li><code>max_trx_id</code>：生成 ReadView 时下一个会启动事务的 ID 的值（事务 ID 是递增分配的，越后面申请的事务 ID 越大）</li>
+<li><code>creator_trx_id</code>：当前创建 ReadView 事务的 ID</li>
+</ul>
+<p>事务A(trx_id &#x3D; 100)，小于min_trx_id，事务B可以看见事务A的修改</p>
+<p>事务C(trx_id &#x3D; 300)，位于(min_trx_id, max_trx_id)之中，事务B不能看见事务C的修改（insert，update），通过undo log查到小于min_trx_id版本的值</p>
+<p>事务D(trx_id &#x3D; 500)，大于max_trx_id，事务B不能看见事务D的修改</p>
+<img src="/2024/08/10/Database-Learning-Record/20210924205057.png" class="" title="img">
+
+
+
+
+
 <h2 id="MySQL-Struc"><a href="#MySQL-Struc" class="headerlink" title="MySQL Struc"></a>MySQL Struc</h2><img src="/2024/08/10/Database-Learning-Record/image-20240919111718667.png" class="" title="image-20240919111718667">
 
 
 
-<p><strong>基本信息</strong></p>
-<p>页 作为 B树的节点</p>
+<h3 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h3><p>页 作为 B树的节点</p>
 <p>B树的节点，每个节点均包含数条数据</p>
 <p>页中 行的主键作为B树节点的key</p>
 <img src="/2024/08/10/Database-Learning-Record/image-20240919155834155.png" class="" title="image-20240919155834155">
@@ -598,6 +621,23 @@
 
 <p><strong>Buffer Pool</strong></p>
 <p>存储页</p>
+<h3 id="redo-log-和-binlog"><a href="#redo-log-和-binlog" class="headerlink" title="redo log 和 binlog"></a>redo log 和 binlog</h3><p>redo log 和 binlog 均需要持久化到磁盘</p>
+<p>事务提交时，写 binlog 到磁盘</p>
+<p>适用对象</p>
+<ul>
+<li>binlog 是 MySQL 的 Server 层实现的日志，所有存储引擎均可使用</li>
+<li>redo log 是 MySQL 存储引擎实现的日志</li>
+</ul>
+<p>文件格式</p>
+<ul>
+<li>binlog 存在 3 种格式：STATEMENT(修改操作), ROW(修改结果), MIXED</li>
+<li>redolog 存储修改</li>
+</ul>
+<p>写入方式</p>
+<ul>
+<li>binlog 追加写，写满了创建新文件</li>
+<li>redo log循环写，写满从头开始循环</li>
+</ul>
 <h3 id="主索引与辅助索引"><a href="#主索引与辅助索引" class="headerlink" title="主索引与辅助索引"></a><strong>主索引与辅助索引</strong></h3><p><strong>是否需要建立索引以及在哪些列上建立索引通常由程序员手动指定</strong>。虽然一些数据库系统（如 MySQL）可能自动为主键和唯一键创建索引，但其他索引需要开发人员根据实际查询需求来手动设计和创建。</p>
 <p>当为其他列创建索引时，<strong>数据库会额外创建一棵新的 B+ 树</strong>，用于存储该列的索引结构。</p>
 <p><strong>创建表时，主索引和辅助索引的结构：</strong></p>
@@ -720,7 +760,25 @@
 <p>当事务修改数据时，先将修改记录写入 Redo Log Buffer, 在事务提交时，将 Redo Log Buffer 中的内容刷新到 Redo Log Files, 数据库崩溃恢复&#x2F;内存掉电数据清空时，会读取 Redo Log Files，重新执行其中的修改操作，将数据库恢复到崩溃前的最新状态。</p>
 <p><strong>Redo Log 的作用是保证已提交事务的持久性，而不是未提交事务的恢复。</strong></p>
 <p>Redo Log 存储在 Redo Log Files 中，通常是两个或多个循环使用的文件。</p>
-<h2 id="MySQL主从复制"><a href="#MySQL主从复制" class="headerlink" title="MySQL主从复制"></a>MySQL主从复制</h2><img src="/2024/08/10/Database-Learning-Record/master-slave.png" class="" title="mysqlms">
+<h2 id="MySQL存储引擎"><a href="#MySQL存储引擎" class="headerlink" title="MySQL存储引擎"></a>MySQL存储引擎</h2><p>MyISAM 存储引擎 和 InnoDB 存储引擎</p>
+<p>InnoDB 存储引擎：</p>
+<ul>
+<li>B+树索引的叶子节点保存数据本身；</li>
+<li>支持事务，外键约束</li>
+<li>更新密集，</li>
+</ul>
+<blockquote>
+<p>外键约束：在表B中指定某字段为外键后（表A的主键），插入数据时必须是表A中存在的值；外键不一定非要引用其他表的<strong>主键</strong>。虽然通常情况下，外键是用来引用其他表的主键或唯一约束（<code>UNIQUE</code>）字段，但外键实际上可以引用表中的任何列，只要该列具有<strong>唯一性约束</strong>，比如<code>UNIQUE</code>或<code>PRIMARY KEY</code>。</p>
+<p>如果在外键约束中设置了级联删除，当你在表A中删除某行时，表B中所有引用该行的记录也会被自动删除。如果在外键约束中设置了“置空”操作，当你删除表A中的记录时，表B中所有引用该记录的外键字段会被置为<code>NULL</code>。这意味着表B中不再关联任何表A中的行，但表B中的其他数据仍然存在。</p>
+</blockquote>
+<p>MyISAM 存储引擎：</p>
+<ul>
+<li>B+树索引的叶子节点保存数据的物理地址；</li>
+<li>MyISAM表无法处理事务</li>
+<li>MyISAM存储引擎在筛选大量数据时非常迅速，并发插入特性允许同时选择和插入数据。</li>
+</ul>
+<h2 id="MySQL主从复制"><a href="#MySQL主从复制" class="headerlink" title="MySQL主从复制"></a>MySQL主从复制</h2><p>MySQL的主从复制为BinLog</p>
+<img src="/2024/08/10/Database-Learning-Record/master-slave.png" class="" title="mysqlms">
 
 <p>主要涉及三个线程: binlog 线程、I&#x2F;O 线程和 SQL 线程。</p>
 <ul>
@@ -728,26 +786,46 @@
 <li><strong>I&#x2F;O 线程</strong> : 负责从主服务器上读取二进制日志，并写入从服务器的中继日志中。</li>
 <li><strong>SQL 线程</strong> : 负责读取中继日志并重放其中的 SQL 语句。</li>
 </ul>
-<hr>
-<p>著作权归@pdai所有 原文链接：<a target="_blank" rel="noopener" href="https://pdai.tech/md/interview/x-interview.html">https://pdai.tech/md/interview/x-interview.html</a></p>
-<h2 id="Java-JDBC"><a href="#Java-JDBC" class="headerlink" title="Java JDBC"></a>Java JDBC</h2><p>常见用法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConnectionExample</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SQLException &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// JDBC连接的URL, 不同数据库有不同的格式:</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_URL</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>;</span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_USER</span> <span class="operator">=</span> <span class="string">&quot;root&quot;</span>;</span><br><span class="line">		<span class="type">String</span> <span class="variable">JDBC_PASSWORD</span> <span class="operator">=</span> <span class="string">&quot;password&quot;</span>;</span><br><span class="line">		<span class="comment">// 获取连接:</span></span><br><span class="line">		<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 1. createStatement(): 创建一个Statement对象，用于向数据库发送SQL语句。</span></span><br><span class="line">            <span class="type">Statement</span> <span class="variable">stmt</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line">            <span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> stmt.executeQuery(<span class="string">&quot;SELECT * FROM my_table&quot;</span>);</span><br><span class="line">            <span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">                <span class="comment">// Process results</span></span><br><span class="line">            &#125;</span><br><span class="line">            rs.close();</span><br><span class="line">            stmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 2. prepareStatement(): 创建一个PreparedStatement对象，用于发送参数化的SQL语句。这有助于防止SQL注入漏洞。</span></span><br><span class="line">            <span class="type">PreparedStatement</span> <span class="variable">pstmt</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;INSERT INTO my_table (column1, column2) VALUES (?, ?)&quot;</span>);</span><br><span class="line">            pstmt.setString(<span class="number">1</span>, <span class="string">&quot;value1&quot;</span>);</span><br><span class="line">            pstmt.setInt(<span class="number">2</span>, <span class="number">123</span>);</span><br><span class="line">            <span class="type">int</span> <span class="variable">rowsAffected</span> <span class="operator">=</span> pstmt.executeUpdate();</span><br><span class="line">            pstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 3. prepareCall(): 创建一个CallableStatement对象，用于调用存储过程。</span></span><br><span class="line">            <span class="type">CallableStatement</span> <span class="variable">cstmt</span> <span class="operator">=</span> conn.prepareCall(<span class="string">&quot;&#123;call my_procedure(?, ?)&#125;&quot;</span>);</span><br><span class="line">            cstmt.setInt(<span class="number">1</span>, <span class="number">456</span>);</span><br><span class="line">            cstmt.registerOutParameter(<span class="number">2</span>, Types.VARCHAR); <span class="comment">// Register output parameter</span></span><br><span class="line">            cstmt.execute();</span><br><span class="line">            <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> cstmt.getString(<span class="number">2</span>); <span class="comment">// Retrieve output parameter value</span></span><br><span class="line">            cstmt.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 4. setAutoCommit(boolean): 控制连接是否处于自动提交模式。</span></span><br><span class="line">            conn.setAutoCommit(<span class="literal">false</span>); <span class="comment">// 禁用自动提交以启动事务</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 5. commit(): 提交当前事务。</span></span><br><span class="line">            conn.commit();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 6. rollback(): 回滚当前事务。</span></span><br><span class="line">            <span class="comment">//  conn.rollback();  // In case of an error</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 7. close(): Closes the connection.  VERY IMPORTANT!</span></span><br><span class="line">            conn.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 8. isClosed(): Checks if the connection is closed.</span></span><br><span class="line">            <span class="type">boolean</span> <span class="variable">isClosed</span> <span class="operator">=</span> conn.isClosed();</span><br><span class="line">            System.out.println(<span class="string">&quot;Connection closed: &quot;</span> + isClosed);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 9. getMetaData(): 返回一个DatabaseMetaData对象，其中包含有关数据库的信息。</span></span><br><span class="line">            <span class="type">DatabaseMetaData</span> <span class="variable">metaData</span> <span class="operator">=</span> conn.getMetaData();</span><br><span class="line">            <span class="type">String</span> <span class="variable">databaseProductName</span> <span class="operator">=</span> metaData.getDatabaseProductName();</span><br><span class="line">            System.out.println(<span class="string">&quot;Database Product: &quot;</span> + databaseProductName);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 10. setTransactionIsolation(int level) : 设置事务隔离级别</span></span><br><span class="line">            <span class="comment">// Example: conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">            System.err.println(<span class="string">&quot;SQL Exception: &quot;</span> + e.getMessage());</span><br><span class="line">            <span class="keyword">if</span> (conn != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    conn.rollback(); <span class="comment">// Rollback on error if auto-commit is off</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (SQLException ex) &#123;</span><br><span class="line">                    System.err.println(<span class="string">&quot;Rollback failed: &quot;</span> + ex.getMessage());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="JDBC事务"><a href="#JDBC事务" class="headerlink" title="JDBC事务"></a>JDBC事务</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> openConnection();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 关闭自动提交:</span></span><br><span class="line">    conn.setAutoCommit(<span class="literal">false</span>);</span><br><span class="line">    <span class="comment">// 执行多条SQL语句:</span></span><br><span class="line">    insert(); update(); delete();</span><br><span class="line">    <span class="comment">// 提交事务:</span></span><br><span class="line">    conn.commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">    <span class="comment">// 回滚事务:</span></span><br><span class="line">    conn.rollback();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    conn.setAutoCommit(<span class="literal">true</span>);</span><br><span class="line">    conn.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中，开启事务的关键代码是<code>conn.setAutoCommit(false)</code>，表示关闭自动提交。提交事务的代码在执行完指定的若干条SQL语句后，调用<code>conn.commit()</code>。要注意事务不是总能成功，如果事务提交失败，会抛出SQL异常（也可能在执行SQL语句的时候就抛出了），此时我们必须捕获并调用<code>conn.rollback()</code>回滚事务。最后，在<code>finally</code>中通过<code>conn.setAutoCommit(true)</code>把<code>Connection</code>对象的状态恢复到初始值。</p>
-<p>实际上，默认情况下，我们获取到<code>Connection</code>连接后，总是处于“自动提交”模式，也就是每执行一条SQL都是作为事务自动执行的，这也是为什么前面几节我们的更新操作总能成功的原因：因为默认有这种“隐式事务”。只要关闭了<code>Connection</code>的<code>autoCommit</code>，那么就可以在一个事务中执行多条语句，事务以<code>commit()</code>方法结束。</p>
-<h3 id="JDBC批处理"><a href="#JDBC批处理" class="headerlink" title="JDBC批处理"></a>JDBC批处理</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> (<span class="type">PreparedStatement</span> <span class="variable">ps</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;INSERT INTO students (name, gender, grade, score) VALUES (?, ?, ?, ?)&quot;</span>)) &#123;</span><br><span class="line">    <span class="comment">// 对同一个PreparedStatement反复设置参数并调用addBatch():</span></span><br><span class="line">    <span class="keyword">for</span> (Student s : students) &#123;</span><br><span class="line">        ps.setString(<span class="number">1</span>, s.name);</span><br><span class="line">        ps.setBoolean(<span class="number">2</span>, s.gender);</span><br><span class="line">        ps.setInt(<span class="number">3</span>, s.grade);</span><br><span class="line">        ps.setInt(<span class="number">4</span>, s.score);</span><br><span class="line">        ps.addBatch(); <span class="comment">// 添加到batch</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 执行batch:</span></span><br><span class="line">    <span class="type">int</span>[] ns = ps.executeBatch();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n : ns) &#123;</span><br><span class="line">        System.out.println(n + <span class="string">&quot; inserted.&quot;</span>); <span class="comment">// batch中每个SQL执行的结果数量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="JDBC连接池"><a href="#JDBC连接池" class="headerlink" title="JDBC连接池"></a>JDBC连接池</h3><p>创建 <code>DataSource</code> 连接池：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">HikariConfig</span> <span class="variable">config</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HikariConfig</span>();</span><br><span class="line">config.setJdbcUrl(<span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>);</span><br><span class="line">config.setUsername(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">config.setPassword(<span class="string">&quot;password&quot;</span>);</span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;connectionTimeout&quot;</span>, <span class="string">&quot;1000&quot;</span>); <span class="comment">// 连接超时：1秒</span></span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;idleTimeout&quot;</span>, <span class="string">&quot;60000&quot;</span>); <span class="comment">// 空闲超时：60秒</span></span><br><span class="line">config.addDataSourceProperty(<span class="string">&quot;maximumPoolSize&quot;</span>, <span class="string">&quot;10&quot;</span>); <span class="comment">// 最大连接数：10</span></span><br><span class="line"><span class="type">DataSource</span> <span class="variable">ds</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HikariDataSource</span>(config);</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> ds.getConnection()) &#123; <span class="comment">// 在此获取连接</span></span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="comment">// 在此“关闭”连接</span></span><br></pre></td></tr></table></figure>
-
-
-
+<p><strong>流程</strong></p>
+<ol>
+<li><strong>主数据库</strong>接收到一个写操作（如 INSERT、UPDATE、DELETE）时，会将这个操作记录到二进制日志（Binary Log）中，将数据修改的操作按顺序记录下来。</li>
+<li><strong>从数据库</strong> IO 线程会自动连接<strong>主数据库</strong>，从二进制日志中读取操作信息，记录到中继日志（Relay Log）中。</li>
+<li>从数据库的 SQL 线程会定期从中继日志中获取同步数据，写入到从数据库中。</li>
+</ol>
+<p><strong>Bin Log 日志格式</strong></p>
+<p>Binary Log 二级制日志，它总共有以下三种格式（不同的日志格式决定了不同的主从同步效果）：</p>
+<ol>
+<li>STATEMENT 格式（语句模式，出现在 MySQL 5.1 之前）：在这种格式下，binlog 记录的是执行的 SQL 语句的文本。<ol>
+<li>优点：日志文件通常较小，复制效率较高。</li>
+<li>缺点：在某些情况下，由于数据库环境的差异（如表结构、字符集等），在从服务器上重放这些 SQL 语句可能会导致不一致的结果。例如，获取当前时间的函数或存储过程等，可能会导致数据不一致。</li>
+</ol>
+</li>
+<li>ROW 格式（行模式，诞生于 MySQL 5.1）：在这种格式下，binlog 记录的是每一行数据更改的具体内容。<ol>
+<li>优点：能够精确地记录数据的变化，避免了 STATEMENT 格式中的环境依赖问题，提供了更强的一致性保证。</li>
+<li>缺点：日志文件可能会比 STATEMENT 格式大，因为记录了每一行的详细变化。此外，ROW 格式的日志在进行大量数据更新时可能会导致更高的 I&#x2F;O 开销。</li>
+</ol>
+</li>
+<li>MIXED 格式（混合模式）：在这种格式下，binlog 可以根据具体的 SQL 语句和操作自动选择使用 STATEMENT 或 ROW 格式。<ol>
+<li>优点：结合了 STATEMENT 和 ROW 格式的优点，能够在保证一致性的同时尽可能地优化日志大小和复制性能。</li>
+<li>缺点：由于混合使用了两种格式，可能需要更复杂的管理和监控。在某些特定情况下，MIXED 格式可能无法达到最优的性能或一致性。</li>
+</ol>
+</li>
+</ol>
+<p><strong>主从复制模式</strong></p>
+<p>MySQL 中主要有以下两种主从复制的模式，分别是异步复制和半同步复制。</p>
+<ol>
+<li>异步复制：MySQL 主从复制中最常见和默认的模式。在异步复制模式中，主服务器将数据修改操作记录到二进制日志（Binary Log）中，并由<strong>从服务器</strong>的IO线程读取<strong>主服务器</strong>日志。从服务器接收到二进制日志后，会异步地应用这些日志进行数据复制。<ol>
+<li>优点：它的优点是及时响应给使用者，主服务器不会受到从服务器的影响而等待确认，可以提高主服务器的性能。</li>
+<li>缺点：由于是异步复制，可能存在数据传输的延迟，且从服务器上的复制过程是不可靠的。如果主服务器故障，尚未应用到从服务器的数据可能会丢失。</li>
+</ol>
+</li>
+<li>半同步复制：半同步复制是 MySQL 主从复制中的一种增强模式。在半同步复制模式中，主服务器将数据修改操作记录到二进制日志，并等待至少一个从服务器确认已接收到并应用了这些日志后才继续执行后续操作。<ol>
+<li>优点：可以提供更高的数据一致性和可靠性，确保至少一个从服务器与主服务器保持同步。如果主服务器故障，已经确认接收并应用到从服务器的数据不会丢失。</li>
+<li>缺点：由于半同步复制需要等待从服务器的确认，因此相对于异步复制，会增加一定的延迟，可能会影响主服务器的性能。</li>
+</ol>
+</li>
+</ol>
+<p>如果对数据一致性和可靠性要求较高，可以考虑使用半同步复制；如果对延迟和主服务器性能要求较高，可以继续使用异步复制，根据实际需求调整复制模式。</p>
 <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>主索引，即聚簇索引（也称聚集索引，clustered index）</p>
 <p>辅助索引（有时也称非聚簇索引或二级索引，secondary index，non-clustered index）。</p>
 <img src="/2024/08/10/Database-Learning-Record/db-mysql-index-1.png" class="" title="index">
@@ -756,12 +834,37 @@
 <p>假如要查询name &#x3D; C 的数据，其搜索过程如下：a) 先在辅助索引中通过C查询最后找到主键id &#x3D; 9; b) 在主键索引中搜索id为9的数据，最终在主键索引的叶子节点中获取到真正的数据。所以通过辅助索引进行检索，需要检索两次索引。</p>
 <p>之所以这样设计，一个原因就是：如果和MyISAM一样在主键索引和辅助索引的叶子节点中都存放数据行指针，一旦数据发生迁移，则需要去重新组织维护所有的索引。</p>
 <p>ref: <a target="_blank" rel="noopener" href="https://pdai.tech/md/interview/x-interview.html#_8-2-mysql">https://pdai.tech/md/interview/x-interview.html#_8-2-mysql</a></p>
+<p><strong>索引失效场景</strong></p>
+<ul>
+<li><p>使用左或者左右模糊搜素，例如，<code>like %xx</code>, <code>like %xx%</code></p>
+</li>
+<li><p>对索引列使用函数&#x2F;表达式计算</p>
+</li>
+<li><p>对索引隐式类型转化（例如，String转int，发生了函数计算）</p>
+</li>
+<li><p>联合索引非最左匹配</p>
+</li>
+<li><p>WHERE 子句使用 OR，存在 OR 的字段不是索引列</p>
+</li>
+</ul>
 <p><strong>索引构建原则</strong></p>
 <p>最左前缀匹配原则</p>
+<blockquote>
+<p>注意，假如说联合索引为 (a,b,c)，执行查询 <code>where b = 1 and a = 2</code>，将使用索引！SQL优化器会重排序where语句中约束的位置</p>
+<p>执行查询 <code>where a = 1 and c = 3</code> ，会发生索引截断：</p>
+<p>对于 MySQL 5.5 ，将通过 a 在联合索引查找到主键值，回表，获取数据行，对数据行进行 c 的筛选；</p>
+<p>对于 MySQL 5.6 ~，将进行索引下推；引擎层直接筛选出满足 a 和 c 条件的数据行</p>
+</blockquote>
 <p>选择区分度高的列作为索引</p>
 <p>索引列不能参与计算</p>
 <blockquote>
 <p>索引的B+树中保存的是字段值，如果对字段使用函数，则需要将该字段的值计算为新值，无法使用索引</p>
+</blockquote>
+<p><strong>组合索引</strong></p>
+<img src="/2024/08/10/Database-Learning-Record/492e0e5857459a335db7c7aea5377791.png" class="" title="combine_index">
+
+<blockquote>
+<p>感觉可用理解为，每一个filed均进行hashcode计算，然后加和，然后按照和的大小建立B+树</p>
 </blockquote>
 <h2 id="SQL优化"><a href="#SQL优化" class="headerlink" title="SQL优化"></a>SQL优化</h2><p>使用 <code>EXPLAIN</code> 优化</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> name, age <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department <span class="operator">=</span> <span class="string">&#x27;HR&#x27;</span> <span class="keyword">AND</span> salary <span class="operator">&gt;</span> <span class="number">50000</span>;</span><br></pre></td></tr></table></figure>
@@ -1043,6 +1146,7 @@
 
 
 <h4 id="集群哨兵"><a href="#集群哨兵" class="headerlink" title="集群哨兵"></a>集群哨兵</h4><p>主从复制</p>
+<p>Redis的主从复制为RDB文件+命令</p>
 <img src="/2024/08/10/Database-Learning-Record/db-redis-copy-1.png" class="" title="redisss">
 
 <p>主从库之间采用的是<strong>读写分离</strong>的方式。</p>
@@ -1270,6 +1374,11 @@
 <h2 id="缓存可用性"><a href="#缓存可用性" class="headerlink" title="缓存可用性"></a>缓存可用性</h2><p>提高Redis可用性：Redis集群架构 + 主从哨兵</p>
 <p>减少对Redis依赖：加入本地缓存 Guava</p>
 <p>业务降级：限流</p>
+<h2 id="count-与-count-1"><a href="#count-与-count-1" class="headerlink" title="count(*) 与 count(1)"></a>count(*) 与 count(1)</h2><p><code>count()</code> 用于统计复合条件的记录中，函数指定参数不为null的记录的数量</p>
+<p><strong>性能排序</strong></p>
+<p>count(*) &#x3D; count(1) &gt; count(主键字段) &gt; count(字段)</p>
+<p>count(1) 表示 在表中，使 <code>1</code> 这个表达式不为NULL的记录的数量</p>
+<p>count(*) &#x3D; count(0)</p>
 
     </div>
 
@@ -1353,7 +1462,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">SQL执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%88%97%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">多列索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">MySQL主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-JDBC"><span class="nav-text">Java JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%BA%8B%E5%8A%A1"><span class="nav-text">JDBC事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E6%89%B9%E5%A4%84%E7%90%86"><span class="nav-text">JDBC批处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="nav-text">JDBC连接池</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-%E5%93%A8%E5%85%B5%E7%9A%84%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-text">Redis 哨兵的选举机制是什么样的？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-1%E4%B8%BB4%E4%BB%8E%EF%BC%8C5%E4%B8%AA%E5%93%A8%E5%85%B5%EF%BC%8C%E5%93%A8%E5%85%B5%E9%85%8D%E7%BD%AEquorum%E4%B8%BA2%EF%BC%8C%E5%A6%82%E6%9E%9C3%E4%B8%AA%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C%EF%BC%8C%E5%BD%93%E4%B8%BB%E5%BA%93%E5%AE%95%E6%9C%BA%E6%97%B6%EF%BC%8C%E5%93%A8%E5%85%B5%E8%83%BD%E5%90%A6%E5%88%A4%E6%96%AD%E4%B8%BB%E5%BA%93%E2%80%9C%E5%AE%A2%E8%A7%82%E4%B8%8B%E7%BA%BF%E2%80%9D%EF%BC%9F%E8%83%BD%E5%90%A6%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%EF%BC%9F"><span class="nav-text">Redis 1主4从，5个哨兵，哨兵配置quorum为2，如果3个哨兵故障，当主库宕机时，哨兵能否判断主库“客观下线”？能否自动切换？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-1"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9B%B8%E5%85%B3"><span class="nav-text">分库分表相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存穿透，缓存雪崩，缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">缓存可用性</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">SQL执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log-%E5%92%8C-binlog"><span class="nav-text">redo log 和 binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%88%97%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">多列索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-text">MySQL存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">MySQL主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-%E5%93%A8%E5%85%B5%E7%9A%84%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-text">Redis 哨兵的选举机制是什么样的？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-1%E4%B8%BB4%E4%BB%8E%EF%BC%8C5%E4%B8%AA%E5%93%A8%E5%85%B5%EF%BC%8C%E5%93%A8%E5%85%B5%E9%85%8D%E7%BD%AEquorum%E4%B8%BA2%EF%BC%8C%E5%A6%82%E6%9E%9C3%E4%B8%AA%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C%EF%BC%8C%E5%BD%93%E4%B8%BB%E5%BA%93%E5%AE%95%E6%9C%BA%E6%97%B6%EF%BC%8C%E5%93%A8%E5%85%B5%E8%83%BD%E5%90%A6%E5%88%A4%E6%96%AD%E4%B8%BB%E5%BA%93%E2%80%9C%E5%AE%A2%E8%A7%82%E4%B8%8B%E7%BA%BF%E2%80%9D%EF%BC%9F%E8%83%BD%E5%90%A6%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%EF%BC%9F"><span class="nav-text">Redis 1主4从，5个哨兵，哨兵配置quorum为2，如果3个哨兵故障，当主库宕机时，哨兵能否判断主库“客观下线”？能否自动切换？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-1"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9B%B8%E5%85%B3"><span class="nav-text">分库分表相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存穿透，缓存雪崩，缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">缓存可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#count-%E4%B8%8E-count-1"><span class="nav-text">count(*) 与 count(1)</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1421,12 +1530,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">315k</span>
+    <span title="Symbols count total">319k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">9:32</span>
+    <span title="Reading time total">9:41</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
