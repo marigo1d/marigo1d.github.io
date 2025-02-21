@@ -27,14 +27,21 @@
 <meta property="og:site_name" content="Marigold">
 <meta property="og:description" content="computer network">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/19.jpg">
+<meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/20.jpg">
+<meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/%E6%8B%A5%E5%A1%9E%E5%8F%91%E7%94%9F-%E5%BF%AB%E9%80%9F%E9%87%8D%E4%BC%A0.drawio.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/25-HTTP2.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/http2%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.jpeg">
+<meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/fh5fm7pgm2.png">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc8e97afd2124bddb52ee4f1911fa2da~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp">
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/wangluo-45917c49-bb08-4f88-84d2-5e8ae53acc7c.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/wangluo-c1db0431-0eee-4c80-bb60-b7508a306864.png">
 <meta property="article:published_time" content="2025-02-19T07:13:54.000Z">
-<meta property="article:modified_time" content="2025-02-20T07:17:02.795Z">
+<meta property="article:modified_time" content="2025-02-21T07:38:25.537Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="computer network">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/wangluo-45917c49-bb08-4f88-84d2-5e8ae53acc7c.png">
+<meta name="twitter:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/19.jpg">
 
 <link rel="canonical" href="https://marigo1d.github.io/2025/02/19/Computer-Network/">
 
@@ -223,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-20 15:17:02" itemprop="dateModified" datetime="2025-02-20T15:17:02+08:00">2025-02-20</time>
+                <time title="Modified: 2025-02-21 15:38:25" itemprop="dateModified" datetime="2025-02-21T15:38:25+08:00">2025-02-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -241,14 +248,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>6k</span>
+              <span>5.7k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>11 mins.</span>
+              <span>10 mins.</span>
             </span>
 
         </div>
@@ -266,9 +273,36 @@
 
 
 <h1 id="Computer-Network"><a href="#Computer-Network" class="headerlink" title="Computer Network"></a>Computer Network</h1><h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p>TCP 重传、滑动窗口、流量控制、拥塞控制</p>
-<h3 id="重传"><a href="#重传" class="headerlink" title="重传"></a>重传</h3><h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3><p>处于窗口内的数据直接发送，等待ACK；</p>
+<h3 id="重传"><a href="#重传" class="headerlink" title="重传"></a>重传</h3><p>服务端返回ACK &#x3D; x，x为服务端希望收到的最新包</p>
+<blockquote>
+<p>例如，客户端一次发送id范围为(100, 500)的数据包，服务端返回ACK &#x3D; 501</p>
+</blockquote>
+<p><strong>超时重传</strong></p>
+<p><code>RTO(ReTransmission Timeout)</code>  &gt; <code>RTT(Round-Trip Time)</code></p>
+<ul>
+<li>数据包丢失，客户端发送丢失</li>
+<li>确认应答丢失，服务端发送丢失</li>
+</ul>
+<p><strong>快速重传</strong></p>
+<p>连续收到3个相同id的ACK，立刻重传该id对应数据包</p>
+<p><strong>SACK(Selective Acknowledge)重传</strong></p>
+<p>额外为TCP头部附加SACK字段</p>
+<p>SACK字段指出大于ACK的，已经收到的包的范围</p>
+<h3 id="滑动窗口与流量控制"><a href="#滑动窗口与流量控制" class="headerlink" title="滑动窗口与流量控制"></a>滑动窗口与流量控制</h3><p><strong>发送方窗口</strong></p>
+<p>处于窗口内的数据直接发送，等待ACK；</p>
 <p>接收到最大ACK后，移动窗口左端到最大ACK值处</p>
-<h3 id="TCP沾包"><a href="#TCP沾包" class="headerlink" title="TCP沾包"></a>TCP沾包</h3><p>沾包：多个数据包处于一个滑动窗口内，被一同发送，导致无法区分包的开始&#x2F;结束；</p>
+<img src="/2025/02/19/Computer-Network/19.jpg" class="" title="SND.WND、SND.UN、SND.NXT">
+
+<p><strong>接收方窗口</strong></p>
+<img src="/2025/02/19/Computer-Network/20.jpg" class="" title="接收窗口">
+
+<p>通过接收端&#x2F;发送端窗口大小变化实现流量控制</p>
+<h3 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h3><img src="/2025/02/19/Computer-Network/%E6%8B%A5%E5%A1%9E%E5%8F%91%E7%94%9F-%E5%BF%AB%E9%80%9F%E9%87%8D%E4%BC%A0.drawio.png" class="" title="快速重传和快速恢复">
+
+<p><strong>慢启动</strong></p>
+<p><strong>拥塞避免</strong></p>
+<p><strong>快速恢复</strong></p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="TCP沾包"><a href="#TCP沾包" class="headerlink" title="TCP沾包"></a>TCP沾包</h4><p>沾包：多个数据包处于一个滑动窗口内，被一同发送，导致无法区分包的开始&#x2F;结束；</p>
 <p>拆包：单个数据包大于一个滑动窗口的大小，被拆成多个发送；</p>
 <blockquote>
 <p>UDP包的消息头包含了UDP长度</p>
@@ -286,36 +320,34 @@
 <p>1）请求行：以\r\n结束；<br>2）请求头：以\r\n结束；<br>3）\r\n；<br>3）数据；</p>
 <p>http响应报文格式<br>1）响应行：以\r\n结束；<br>2）响应头：以\r\n结束；<br>3）\r\n；<br>4）数据；</p>
 <h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><h3 id="HTTP1-1"><a href="#HTTP1-1" class="headerlink" title="HTTP1.1"></a>HTTP1.1</h3><p><strong>长连接</strong></p>
-<p>HTTP 1.1支持长连接</p>
-<p>HTTP 1.0规定浏览器与服务器只保持短暂的连接，浏览器的每次请求都需要与服务器建立一个TCP连接，服务器完成请求处理后立即断开TCP连接，服务器不跟踪每个客户也不记录过去的请求。</p>
-<p>HTTP 1.1则支持持久连接Persistent Connection，并且默认使用，在同一个TCP的连接中可以传送多个HTTP请求和响应，多个请求和响应可以重叠，多个请求和响应可以同时进行，更加多的请求头和响应头</p>
-<p>HTTP 1.1的持续连接，也需要增加新的请求头来帮助实现，例如，Connection请求头的值为Keep-Alive时，客户端通知服务器返回本次请求结果后保持连接；Connection请求头的值为Close时，客户端通知服务器返回本次请求结果后关闭连接。</p>
+<p>建立TCP连接后保持</p>
 <p><strong>管道网络传输</strong></p>
-<p>HTTP&#x2F;1.1 采用了长连接的方式，这使得管道网络传输成为了可能。</p>
-<p>即可在同一个 TCP 连接里面，客户端可以发起多个请求，只要第一个请求发出去了，不必等其回来，就可以发第二个请求出去，可以<strong>减少整体的响应时间。</strong></p>
-<p>举例来说，客户端需要请求两个资源。以前的做法是，在同一个TCP连接里面，先发送 A 请求，然后等待服务器做出回应，收到后再发出 B 请求，管道机制则是允许浏览器同时发出 A 请求和 B 请求。</p>
-<p>但是服务器还是按照<strong>顺序</strong>，先回应 A 请求，完成后再回应 B 请求，要是 前面的回应特别慢，后面就会有许多请求排队等着。</p>
+<p>在同一个TCP连接下，连续发送多个HTTP请求；要求对每一个请求进行回应；</p>
+<p>如果服务端在处理 A 请求时耗时比较长，那么后续的请求的处理都会被阻塞住，这称为「队头堵塞」。</p>
+<blockquote>
+<p>HTTP&#x2F;1.1 管道解决了请求的队头阻塞，但是没有解决响应的队头阻塞；请求的队头阻塞是指，请求后必须等待收到响应才能发送新请求；</p>
+<p>实际上，HTTP 管道化技术不是默认开启，后续对HTTP 1.1 的讨论基于管道化技术没有开启</p>
+</blockquote>
 <p><strong>Host字段</strong></p>
 <p>在HTTP1.0中认为每台服务器都绑定一个唯一的IP地址，因此，请求消息中的URL并没有传递主机名，但随着虚拟主机技术的发展，在一台物理服务器上可以存在多个虚拟主机，并且它们共享一个IP地址。</p>
 <p>HTTP1.1的请求消息和响应消息都应支持Host头域，且请求消息中如果没有Host头域会报告一个错误（400 Bad Request）。</p>
 <p>此外，服务器应该接受以绝对路径标记的资源请求。</p>
-<p><strong>100Status</strong></p>
-<p>HTTP&#x2F;1.1加入了一个新的状态码100。</p>
-<p>客户端事先发送一个只带头域的请求，如果服务器因为权限拒绝了请求，就回送响应码401（Unauthorized）；</p>
-<p>如果服务器接收此请求就回送响应码100，客户端就可以继续发送带实体的完整请求了。</p>
-<p>100状态代码的使用，允许客户端在发request消息body之前先用request header试探一下server，看server要不要接收request body，再决定要不要发request body。</p>
 <p><strong>Chunked Transfer Coding</strong></p>
 <p>HTTP&#x2F;1.1将发送方将消息分割成若干个任意大小的数据块，每个数据块在发送时都会附上块的长度，最后用一个零长度的块作为消息结束的标志。</p>
 <p>这种方法允许发送方只缓冲消息的一个片段，避免缓冲整个消息带来的过载。</p>
 <p><strong>Cache</strong></p>
 <p>HTTP&#x2F;1.1在1.0的基础上加入了一些Cache的新特性，当缓存对象的Age超过Expire时变为Stable对象，Cache不需要直接抛弃Stable对象，而是与源服务器进行重新激活。</p>
-<h3 id="HTTP2-0"><a href="#HTTP2-0" class="headerlink" title="HTTP2.0"></a>HTTP2.0</h3><p><strong>HTTP2.0和HTTP1.X相比的新特性</strong></p>
+<h3 id="HTTP2-0"><a href="#HTTP2-0" class="headerlink" title="HTTP2.0"></a>HTTP2.0</h3><img src="/2025/02/19/Computer-Network/25-HTTP2.png" class="" title="HTT&#x2F;1 ~ HTTP&#x2F;2">
+
+<p><strong>HTTP2.0和HTTP1.X相比的新特性</strong></p>
 <ul>
 <li><strong>二进制帧</strong>，<code>HTTP1.x</code>的解析是基于文本格式</li>
 <li><strong>并发传输</strong>，一个 TCP 连接包含 多个 stream，每个 stream 包含多个 Message，每个 Message 包含多个 Frame</li>
 <li><strong>头部压缩</strong>，HPACK 算法压缩头部</li>
 <li><strong>服务端主动推送</strong></li>
 </ul>
+<img src="/2025/02/19/Computer-Network/http2%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.jpeg" class="" title="img">
+
 <p><strong>数据流</strong></p>
 <p>HTTP&#x2F;2 的数据包不是按顺序发送的，同一个连接里面连续的数据包，可能属于不同的回应。</p>
 <p>因此，必须要对数据包做标记，指出它属于哪个回应。</p>
@@ -327,7 +359,9 @@
 <li>HTTP&#x2F;1.1的Pipeling为若干个请求排队串行化单线程处理，后面的请求等待前面请求的返回才能获得执行机会，一旦有某请求超时等，后续请求只能被阻塞，毫无办法；</li>
 <li>HTTP2.0多个请求可同时在一个连接上并行执行，某个请求任务耗时严重，不会影响到其它连接的正常执行</li>
 </ul>
-<h3 id="HTTP3-0"><a href="#HTTP3-0" class="headerlink" title="HTTP3.0"></a>HTTP3.0</h3><p><strong>使用UDP协议</strong></p>
+<h3 id="HTTP3-0"><a href="#HTTP3-0" class="headerlink" title="HTTP3.0"></a>HTTP3.0</h3><img src="/2025/02/19/Computer-Network/fh5fm7pgm2.png" class="" title="img">
+
+<p><strong>使用UDP协议</strong></p>
 <p>HTTP&#x2F;2 主要的问题在于：多个 HTTP 请求在复用一个 TCP 连接，下层的 TCP 协议是不知道有多少个 HTTP 请求的。</p>
 <p>所以一旦发生了丢包现象，就会触发 TCP 的重传机制，这样在一个 TCP 连接中的<strong>所有的 HTTP 请求都必须等待这个丢了的包被重传回来</strong>。</p>
 <ul>
@@ -341,6 +375,7 @@
 <li>更快的连接建立；</li>
 <li>连接迁移；</li>
 </ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc8e97afd2124bddb52ee4f1911fa2da~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="image.png"></p>
 <h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h2><p>服务端返回客户端的认证内容为 </p>
 <p>服务器公钥 + 签名（CA使用CA的私钥对服务器公钥进行的计算的结果）</p>
 <p>客户端使用预先保存的CA的公钥对签名进行解密，对比解密结果与公钥是否一致</p>
@@ -504,7 +539,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Computer-Network"><span class="nav-text">Computer Network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E4%BC%A0"><span class="nav-text">重传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3"><span class="nav-text">滑动窗口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E6%B2%BE%E5%8C%85"><span class="nav-text">TCP沾包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP1-1"><span class="nav-text">HTTP1.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP2-0"><span class="nav-text">HTTP2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP3-0"><span class="nav-text">HTTP3.0</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS"><span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-text">DNS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO"><span class="nav-text">IO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5IO"><span class="nav-text">同步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5IO"><span class="nav-text">异步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-poll-epoll"><span class="nav-text">select, poll &amp; epoll</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Computer-Network"><span class="nav-text">Computer Network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E4%BC%A0"><span class="nav-text">重传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%8E%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="nav-text">滑动窗口与流量控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-text">拥塞控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP%E6%B2%BE%E5%8C%85"><span class="nav-text">TCP沾包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP1-1"><span class="nav-text">HTTP1.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP2-0"><span class="nav-text">HTTP2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP3-0"><span class="nav-text">HTTP3.0</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS"><span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-text">DNS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO"><span class="nav-text">IO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5IO"><span class="nav-text">同步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5IO"><span class="nav-text">异步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-poll-epoll"><span class="nav-text">select, poll &amp; epoll</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -572,12 +607,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">319k</span>
+    <span title="Symbols count total">326k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">9:41</span>
+    <span title="Reading time total">9:53</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
