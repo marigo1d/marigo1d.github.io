@@ -49,7 +49,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-redis-sen-2.jpg">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-redis-sen-4.png">
 <meta property="article:published_time" content="2024-08-10T01:52:46.000Z">
-<meta property="article:modified_time" content="2025-02-20T10:30:35.283Z">
+<meta property="article:modified_time" content="2025-02-22T09:37:28.596Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="database">
 <meta name="twitter:card" content="summary">
@@ -242,7 +242,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-20 18:30:35" itemprop="dateModified" datetime="2025-02-20T18:30:35+08:00">2025-02-20</time>
+                <time title="Modified: 2025-02-22 17:37:28" itemprop="dateModified" datetime="2025-02-22T17:37:28+08:00">2025-02-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -621,7 +621,8 @@
 
 <p><strong>Buffer Pool</strong></p>
 <p>存储页</p>
-<h3 id="redo-log-和-binlog"><a href="#redo-log-和-binlog" class="headerlink" title="redo log 和 binlog"></a>redo log 和 binlog</h3><p>redo log 和 binlog 均需要持久化到磁盘</p>
+<h3 id="redo-log-和-binlog"><a href="#redo-log-和-binlog" class="headerlink" title="redo log 和 binlog"></a>redo log 和 binlog</h3><p>redo log 可通过重放恢复到崩溃前状态</p>
+<p>redo log 和 binlog 均需要持久化到磁盘</p>
 <p>事务提交时，写 binlog 到磁盘</p>
 <p>适用对象</p>
 <ul>
@@ -630,13 +631,13 @@
 </ul>
 <p>文件格式</p>
 <ul>
-<li>binlog 存在 3 种格式：STATEMENT(修改操作), ROW(修改结果), MIXED</li>
-<li>redolog 存储修改</li>
+<li>binlog 存在 3 种格式：STATEMENT(修改操作), ROW(修改结果), MIXED，为二进制文件形式</li>
+<li>redolog 存储执行过的 DML 语句</li>
 </ul>
 <p>写入方式</p>
 <ul>
 <li>binlog 追加写，写满了创建新文件</li>
-<li>redo log循环写，写满从头开始循环</li>
+<li>redo log 循环写，写满从头开始循环</li>
 </ul>
 <h3 id="主索引与辅助索引"><a href="#主索引与辅助索引" class="headerlink" title="主索引与辅助索引"></a><strong>主索引与辅助索引</strong></h3><p><strong>是否需要建立索引以及在哪些列上建立索引通常由程序员手动指定</strong>。虽然一些数据库系统（如 MySQL）可能自动为主键和唯一键创建索引，但其他索引需要开发人员根据实际查询需求来手动设计和创建。</p>
 <p>当为其他列创建索引时，<strong>数据库会额外创建一棵新的 B+ 树</strong>，用于存储该列的索引结构。</p>
@@ -1530,12 +1531,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">326k</span>
+    <span title="Symbols count total">335k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">9:53</span>
+    <span title="Reading time total">10:09</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
