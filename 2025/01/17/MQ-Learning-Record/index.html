@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/MQ-Learning-Record/rabbitmq_1.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/MQ-Learning-Record/1460000038173889">
 <meta property="article:published_time" content="2025-01-17T09:14:31.000Z">
-<meta property="article:modified_time" content="2025-02-04T08:16:00.566Z">
+<meta property="article:modified_time" content="2025-02-22T13:08:08.031Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Message Queue, Java">
 <meta name="twitter:card" content="summary">
@@ -223,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-04 16:16:00" itemprop="dateModified" datetime="2025-02-04T16:16:00+08:00">2025-02-04</time>
+                <time title="Modified: 2025-02-22 21:08:08" itemprop="dateModified" datetime="2025-02-22T21:08:08+08:00">2025-02-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -241,14 +241,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>5k</span>
+              <span>6.5k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>9 mins.</span>
+              <span>12 mins.</span>
             </span>
 
         </div>
@@ -265,8 +265,8 @@
 
 <h1 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h1><h2 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h2><p><strong>使用MQ原因</strong></p>
 <p>解耦：将后续工作与前序工作解耦</p>
-<p>异步：将需要完成的工作压入消息队列</p>
 <p>削峰：使大量涌入的事件得到稳定的处理</p>
+<p>异步：将需要完成的工作压入消息队列</p>
 <p><strong>消息队列差异</strong></p>
 <p>Rabbit MQ*</p>
 <ul>
@@ -372,6 +372,9 @@
 <p>Topic-Partition：物理上把 topic 分成一个或多个 patition（对应 server.properties 中的 num.partitions&#x3D;3 配置），每个 patition 物理上对应一个文件夹（该文件夹存储该 patition 的所有消息和索引文件）</p>
 <p>controller：kafka 集群中的其中一个服务器，用来进行 leader election 以及 各种 failover。</p>
 <p>zookeeper：kafka 通过 zookeeper 来存储集群的 meta 信息。</p>
+<p>案例配置如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">kafka:</span></span><br><span class="line">    <span class="comment"># Kafka连接配置</span></span><br><span class="line">    <span class="attr">bootstrap-servers:</span> <span class="string">localhost:9092</span>  <span class="comment"># Kafka集群地址，可以是单个地址或者多个地址的逗号分隔列表</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 生产者配置</span></span><br><span class="line">    <span class="attr">producer:</span></span><br><span class="line">      <span class="attr">acks:</span> <span class="string">all</span>  <span class="comment"># 生产者等待所有副本确认，保证消息可靠送达</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">3</span>  <span class="comment"># 最大重试次数</span></span><br><span class="line">      <span class="attr">batch-size:</span> <span class="number">16384</span>  <span class="comment"># 生产者批量发送的大小，单位为字节</span></span><br><span class="line">      <span class="attr">linger-ms:</span> <span class="number">1</span>  <span class="comment"># 生产者等待时间（ms），用于批量发送控制</span></span><br><span class="line">      <span class="attr">buffer-memory:</span> <span class="number">33554432</span>  <span class="comment"># 生产者缓冲区内存大小</span></span><br><span class="line">      <span class="attr">key-serializer:</span> <span class="string">org.apache.kafka.common.serialization.StringSerializer</span>  <span class="comment"># 消息Key的序列化方式</span></span><br><span class="line">      <span class="attr">value-serializer:</span> <span class="string">org.apache.kafka.common.serialization.StringSerializer</span>  <span class="comment"># 消息Value的序列化方式</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 消费者配置</span></span><br><span class="line">    <span class="attr">consumer:</span></span><br><span class="line">      <span class="attr">group-id:</span> <span class="string">test-group</span>  <span class="comment"># 消费者组ID，多个消费者共享同一组ID</span></span><br><span class="line">      <span class="attr">enable-auto-commit:</span> <span class="literal">false</span>  <span class="comment"># 禁止自动提交消费位移，确保手动确认</span></span><br><span class="line">      <span class="attr">auto-offset-reset:</span> <span class="string">earliest</span>  <span class="comment"># 如果没有消费的位移，默认从最早的消息开始消费</span></span><br><span class="line">      <span class="attr">key-deserializer:</span> <span class="string">org.apache.kafka.common.serialization.StringDeserializer</span>  <span class="comment"># 消息Key的反序列化方式</span></span><br><span class="line">      <span class="attr">value-deserializer:</span> <span class="string">org.apache.kafka.common.serialization.StringDeserializer</span>  <span class="comment"># 消息Value的反序列化方式</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 消费者端的ack模式配置</span></span><br><span class="line">    <span class="attr">listener:</span></span><br><span class="line">      <span class="attr">ack-mode:</span> <span class="string">manual</span>  <span class="comment"># 手动确认消息消费，推荐使用手动确认以保证消息可靠消费</span></span><br><span class="line">      <span class="attr">concurrency:</span> <span class="number">3</span>  <span class="comment"># 消费者并发线程数，可以提高消费吞吐量</span></span><br><span class="line">      <span class="attr">missing-topics-fatal:</span> <span class="literal">false</span>  <span class="comment"># 如果某个topic不存在，是否抛出异常</span></span><br><span class="line">      <span class="attr">auto-startup:</span> <span class="literal">true</span>  <span class="comment"># 是否自动启动消费者</span></span><br><span class="line">      <span class="attr">poll-timeout:</span> <span class="number">3000</span>  <span class="comment"># 拉取消息的超时时间，单位毫秒</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Kafka集群的配置</span></span><br><span class="line">    <span class="attr">admin:</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">3</span>  <span class="comment"># Kafka集群的重试次数</span></span><br><span class="line">      <span class="attr">retry-backoff:</span> <span class="number">1000</span>  <span class="comment"># 重试时间间隔，单位毫秒</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Kafka的生产者和消费者的监控配置</span></span><br><span class="line">    <span class="attr">metrics:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span>  <span class="comment"># 是否启用Kafka的监控功能</span></span><br><span class="line">      <span class="attr">jmx-enabled:</span> <span class="literal">true</span>  <span class="comment"># 是否启用JMX来监控Kafka</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Kafka序列化与反序列化器的配置（可以根据需要配置其他类型的序列化器）</span></span><br><span class="line">    <span class="attr">properties:</span></span><br><span class="line">      <span class="comment"># 生产者配置中的属性</span></span><br><span class="line">      <span class="attr">producer:</span></span><br><span class="line">        <span class="attr">buffer.memory:</span> <span class="number">33554432</span>  <span class="comment"># 生产者的内存缓冲区大小</span></span><br><span class="line">        <span class="attr">batch.size:</span> <span class="number">16384</span>  <span class="comment"># 每个批次的消息大小</span></span><br><span class="line">        <span class="attr">linger.ms:</span> <span class="number">1</span>  <span class="comment"># 批次发送的延迟时间</span></span><br><span class="line">      <span class="comment"># 消费者配置中的属性</span></span><br><span class="line">      <span class="attr">consumer:</span></span><br><span class="line">        <span class="attr">fetch.max.wait.ms:</span> <span class="number">500</span>  <span class="comment"># 消费者拉取消息时的最大等待时间</span></span><br><span class="line">        <span class="attr">fetch.min.bytes:</span> <span class="number">1</span>  <span class="comment"># 每次拉取消息的最小字节数</span></span><br><span class="line">        <span class="attr">max.poll.records:</span> <span class="number">500</span>  <span class="comment"># 每次poll操作最多拉取的消息数量</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -523,12 +526,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">335k</span>
+    <span title="Symbols count total">336k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">10:09</span>
+    <span title="Reading time total">10:12</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
