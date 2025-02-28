@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/MQ-Learning-Record/1460000038173889">
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/MQ-Learning-Record/71007988-b9c6-406e-9e4b-26165e6427e7">
 <meta property="article:published_time" content="2025-01-17T09:14:31.000Z">
-<meta property="article:modified_time" content="2025-02-23T05:50:20.377Z">
+<meta property="article:modified_time" content="2025-02-28T12:25:06.627Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Message Queue, Java">
 <meta name="twitter:card" content="summary">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-23 13:50:20" itemprop="dateModified" datetime="2025-02-23T13:50:20+08:00">2025-02-23</time>
+                <time title="Modified: 2025-02-28 20:25:06" itemprop="dateModified" datetime="2025-02-28T20:25:06+08:00">2025-02-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -356,6 +356,7 @@
 <p>消息消费幂等性保证</p>
 <ul>
 <li>消息携带唯一id，消费者接受到消息后<strong>查询记录：id是否被处理过</strong></li>
+<li>去重表</li>
 </ul>
 <h2 id="消息消费顺序保证"><a href="#消息消费顺序保证" class="headerlink" title="消息消费顺序保证"></a>消息消费顺序保证</h2><p>局部消息顺序性</p>
 <ul>
@@ -364,7 +365,7 @@
 <li><p>为单独消息队列加锁</p>
 </li>
 </ul>
-<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><h3 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h3><p>ref: <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000038173886">https://segmentfault.com/a/1190000038173886</a></p>
+<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>ref: <a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000038173886">https://segmentfault.com/a/1190000038173886</a></p>
 <img src="/2025/01/17/MQ-Learning-Record/1460000038173889" class="" title="kafka">
 
 <p>黑色直角边矩形：一个Broker</p>
@@ -470,7 +471,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Message-Queue"><span class="nav-text">Message Queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">基础概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97"><span class="nav-text">死信队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97"><span class="nav-text">延迟队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MQ%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">MQ高可用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rabbit-MQ"><span class="nav-text">Rabbit MQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rabbit-MQ-%E6%B6%88%E6%81%AF%E9%80%81%E8%BE%BE%E4%BF%9D%E8%AF%81"><span class="nav-text">Rabbit MQ 消息送达保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E5%A4%8D%E6%B6%88%E6%81%AF%E4%BA%A7%E7%94%9F-%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E5%B9%82%E7%AD%89%E6%80%A7%E4%BF%9D%E8%AF%81"><span class="nav-text">重复消息产生&amp;消息消费幂等性保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F%E4%BF%9D%E8%AF%81"><span class="nav-text">消息消费顺序保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka"><span class="nav-text">Kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka-%E7%A1%AE%E4%BF%9D%E6%B6%88%E6%81%AF%E7%9A%84%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="nav-text">kafka 确保消息的有序性</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Message-Queue"><span class="nav-text">Message Queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">基础概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97"><span class="nav-text">死信队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97"><span class="nav-text">延迟队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MQ%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">MQ高可用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rabbit-MQ"><span class="nav-text">Rabbit MQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rabbit-MQ-%E6%B6%88%E6%81%AF%E9%80%81%E8%BE%BE%E4%BF%9D%E8%AF%81"><span class="nav-text">Rabbit MQ 消息送达保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E5%A4%8D%E6%B6%88%E6%81%AF%E4%BA%A7%E7%94%9F-%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E5%B9%82%E7%AD%89%E6%80%A7%E4%BF%9D%E8%AF%81"><span class="nav-text">重复消息产生&amp;消息消费幂等性保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F%E4%BF%9D%E8%AF%81"><span class="nav-text">消息消费顺序保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka"><span class="nav-text">Kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka-%E7%A1%AE%E4%BF%9D%E6%B6%88%E6%81%AF%E7%9A%84%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="nav-text">kafka 确保消息的有序性</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -543,7 +544,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">10:17</span>
+    <span title="Reading time total">10:18</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
