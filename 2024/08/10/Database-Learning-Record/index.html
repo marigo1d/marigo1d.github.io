@@ -38,6 +38,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-mysql-index-1.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/492e0e5857459a335db7c7aea5377791.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-redis-object-2-3.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/raw.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/19063731-d7bc5026051ea412.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/redis-x-rdb-4.jpg">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/redis-x-aof-42.jpg">
@@ -55,7 +56,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/885e438e-cf54-41f6-880e-faf36e72cd57">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/f2993d30-3803-4543-97db-f98cdca3a493">
 <meta property="article:published_time" content="2024-08-10T01:52:46.000Z">
-<meta property="article:modified_time" content="2025-02-23T10:05:14.411Z">
+<meta property="article:modified_time" content="2025-03-03T14:38:20.242Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="database">
 <meta name="twitter:card" content="summary">
@@ -248,7 +249,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-23 18:05:14" itemprop="dateModified" datetime="2025-02-23T18:05:14+08:00">2025-02-23</time>
+                <time title="Modified: 2025-03-03 22:38:20" itemprop="dateModified" datetime="2025-03-03T22:38:20+08:00">2025-03-03</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -266,14 +267,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>27k</span>
+              <span>28k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>49 mins.</span>
+              <span>50 mins.</span>
             </span>
 
         </div>
@@ -554,7 +555,7 @@
 <li><strong>问题:</strong> 并发性能极低，因为所有事务都需要排队执行。</li>
 <li><strong>应用场景:</strong> 对数据一致性要求极高的场景，例如金融交易。</li>
 </ul>
-<h2 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h2><p>事务隔离级别实现：通过向<strong>普通行</strong>引入隐藏列的方式实现</p>
+<h2 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>事务隔离级别实现：通过向<strong>普通行</strong>引入隐藏列的方式实现</p>
 <p>UNDO Log</p>
 <ul>
 <li><strong>针对单个行的undo log：</strong> 对于数据库的每一行数据，UNDO日志会记录对该行数据的每一次修改之前的值，比如针对某行数据的UPDATE操作，会记录修改之前该行数据的完整内容。这些UNDO日志条目会通过类似链表的方式连接起来。 新的修改产生新的UNDO日志条目，指向之前的UNDO日志条目，形成一个历史链。</li>
@@ -606,8 +607,8 @@
 
 
 
-
-
+<h3 id="MVCC与幻读"><a href="#MVCC与幻读" class="headerlink" title="MVCC与幻读"></a>MVCC与幻读</h3><p>通过MVCC实现快照读（select  * from table where …）</p>
+<p>通过间隙锁实现当前读（select … for update）</p>
 <h2 id="MySQL-Struc"><a href="#MySQL-Struc" class="headerlink" title="MySQL Struc"></a>MySQL Struc</h2><img src="/2024/08/10/Database-Learning-Record/image-20240919111718667.png" class="" title="image-20240919111718667">
 
 
@@ -833,6 +834,45 @@
 </li>
 </ol>
 <p>如果对数据一致性和可靠性要求较高，可以考虑使用半同步复制；如果对延迟和主服务器性能要求较高，可以继续使用异步复制，根据实际需求调整复制模式。</p>
+<h2 id="MySQL锁"><a href="#MySQL锁" class="headerlink" title="MySQL锁"></a>MySQL锁</h2><h3 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h3><p>意向锁</p>
+<table>
+<thead>
+<tr>
+<th>锁类型</th>
+<th>作用对象</th>
+<th>主要用途</th>
+<th>是否冲突</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>IS 锁</strong></td>
+<td>表级</td>
+<td>表示事务要在某些行加 <strong>S 锁</strong></td>
+<td><strong>不与 IS 或 IX 冲突</strong>，但与 <strong>表级 X 锁</strong> 冲突</td>
+</tr>
+<tr>
+<td><strong>IX 锁</strong></td>
+<td>表级</td>
+<td>表示事务要在某些行加 <strong>X 锁</strong></td>
+<td><strong>不与 IS 或 IX 冲突</strong>，但与 <strong>表级 S&#x2F;X 锁</strong> 冲突</td>
+</tr>
+<tr>
+<td><strong>S 锁</strong></td>
+<td>行级</td>
+<td>允许读取但不允许修改该行</td>
+<td><strong>与 X 锁冲突</strong></td>
+</tr>
+<tr>
+<td><strong>X 锁</strong></td>
+<td>行级</td>
+<td>允许读写该行，其他事务不能访问</td>
+<td><strong>与 S&#x2F;X 锁冲突</strong></td>
+</tr>
+</tbody></table>
+<h3 id="行级锁"><a href="#行级锁" class="headerlink" title="行级锁"></a>行级锁</h3><p>next-key lock（记录锁+间隙锁）</p>
+<blockquote>
+<p>update不使用索引会导致锁全表</p>
+</blockquote>
 <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>主索引，即聚簇索引（也称聚集索引，clustered index）</p>
 <p>辅助索引（有时也称非聚簇索引或二级索引，secondary index，non-clustered index）。</p>
 <img src="/2024/08/10/Database-Learning-Record/db-mysql-index-1.png" class="" title="index">
@@ -1001,10 +1041,15 @@
 <p>redis所有数据结构均为 key - value结构</p>
 <p><strong>value为以下结构</strong></p>
 <p>String(~)</p>
+<img src="/2024/08/10/Database-Learning-Record/raw.png" class="" title="img">
+
 <ul>
-<li>SDS， 由长度（<code>len</code>）、内存空间大小（<code>alloc</code>）、字符串类型（<code>flags</code>）和存储的字节数组（<code>buf</code>）四个部分组成。</li>
+<li>int 或者 SDS， SDS由长度（<code>len</code>）、内存空间大小（<code>alloc</code>）、字符串类型（<code>flags</code>）和存储的字节数组（<code>buf</code>）四个部分组成。</li>
 </ul>
+<p>可用场景：分布式锁，分布式session，原子计数</p>
 <p>List(L~)</p>
+<p>在Redis 3.2版本后，List数据结构底层实现为 quicklist</p>
+<p>3.2版本前</p>
 <ul>
 <li>压缩列表（列表中单个数据小于64字节，列表中数据个数小于512个）<ul>
 <li>每个元素使用（数据长+数据值）存储，每个元素size不等</li>
@@ -1014,28 +1059,35 @@
 <li>双向循环列表</li>
 </ul>
 <p>Hash(H~)</p>
+<p>在Reids 7.0后，替换压缩列表为 listpack 结构</p>
 <ul>
 <li>压缩列表（字典中单个K-V小于64字节，字典中中K-V个数小于512个）</li>
-<li>散列表<ul>
+<li>哈希表<ul>
 <li>自动扩容 + 链表</li>
 </ul>
 </li>
 </ul>
+<p>可用场景：购物车，对象缓存 (key, [(Field, Value), (Field, Value), …]</p>
 <p>Set(S~)</p>
 <ul>
-<li>有序数组（元素均为整数，元素个数小于512个）</li>
-<li>散列表</li>
+<li>整数集合（元素均为整数，元素个数小于512个）</li>
+<li>哈希表</li>
 </ul>
+<p>可用场景：抽奖活动，点赞，共同关注</p>
 <p>Sorted Set(Z~)</p>
+<p>Redis 7.0后，压缩列表数据结构被废弃，改为 listpack 实现</p>
 <ul>
 <li>压缩列表（元素size小于64字节，元素个数小于512个）</li>
 <li>跳表 + 字典</li>
 </ul>
 <img src="/2024/08/10/Database-Learning-Record/19063731-d7bc5026051ea412.png" class="" title="skip-pic">
 
-
-
+<p>可用场景：排行榜，电话&#x2F;姓名排序，延迟队列</p>
 <p>Bitmap(~BIT)</p>
+<ul>
+<li>String&#x2F;bit数组</li>
+</ul>
+<p>可用场景：签到统计，判断用户登录状态，连续签到用户总数</p>
 <p>Geo(GEO)</p>
 <h3 id="Redis持久化"><a href="#Redis持久化" class="headerlink" title="Redis持久化"></a>Redis持久化</h3><p>Redis 的数据持久化机制允许将内存中的数据保存到磁盘文件，以便在服务重启或宕机后可以恢复数据。主要有以下两种机制：</p>
 <p><strong>RDB（Redis DataBase）持久化</strong></p>
@@ -1193,12 +1245,13 @@
 
 
 <blockquote>
-<h4 id="Redis-哨兵的选举机制是什么样的？"><a href="#Redis-哨兵的选举机制是什么样的？" class="headerlink" title="Redis 哨兵的选举机制是什么样的？"></a>Redis 哨兵的选举机制是什么样的？</h4><p>Redis 哨兵（Sentinel）是 Redis 集群中负责监控、通知、自动故障转移和服务发现的组件。它的选举机制是确保在主节点（Master）故障时，能够自动选举一个新的主节点，并促使系统恢复正常运行。</p>
+<p><strong>Redis 哨兵的选举机制是什么样的？</strong></p>
+<p>Redis 哨兵（Sentinel）是 Redis 集群中负责监控、通知、自动故障转移和服务发现的组件。它的选举机制是确保在主节点（Master）故障时，能够自动选举一个新的主节点，并促使系统恢复正常运行。</p>
 <ul>
 <li><strong>哨兵的选举机制是什么样的</strong>？</li>
 </ul>
 <p>哨兵的选举机制其实很简单，就是一个Raft选举算法： <strong>选举的票数大于等于num(sentinels)&#x2F;2+1时，将成为领导者，如果没有超过，继续选举</strong></p>
-<p>Raft算法你可以参看这篇文章<a href="">分布式算法 - Raft算法</a></p>
+<p>Raft算法可以参看这篇文章<a href="">分布式算法 - Raft算法</a></p>
 <ul>
 <li>任何一个想成为 主节点 的节点，要满足两个条件： <ul>
 <li>第一，拿到半数以上的赞成票；</li>
@@ -1207,7 +1260,8 @@
 </li>
 </ul>
 <p>以 3 个哨兵为例，假设此时的 quorum 设置为 2，那么，任何一个想成为主节点 只要拿到 2 张赞成票，就可以了。</p>
-<h4 id="Redis-1主4从，5个哨兵，哨兵配置quorum为2，如果3个哨兵故障，当主库宕机时，哨兵能否判断主库“客观下线”？能否自动切换？"><a href="#Redis-1主4从，5个哨兵，哨兵配置quorum为2，如果3个哨兵故障，当主库宕机时，哨兵能否判断主库“客观下线”？能否自动切换？" class="headerlink" title="#Redis 1主4从，5个哨兵，哨兵配置quorum为2，如果3个哨兵故障，当主库宕机时，哨兵能否判断主库“客观下线”？能否自动切换？"></a><a href="#redis-1%E4%B8%BB4%E4%BB%8E-5%E4%B8%AA%E5%93%A8%E5%85%B5-%E5%93%A8%E5%85%B5%E9%85%8D%E7%BD%AEquorum%E4%B8%BA2-%E5%A6%82%E6%9E%9C3%E4%B8%AA%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C-%E5%BD%93%E4%B8%BB%E5%BA%93%E5%AE%95%E6%9C%BA%E6%97%B6-%E5%93%A8%E5%85%B5%E8%83%BD%E5%90%A6%E5%88%A4%E6%96%AD%E4%B8%BB%E5%BA%93-%E5%AE%A2%E8%A7%82%E4%B8%8B%E7%BA%BF-%E8%83%BD%E5%90%A6%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2">#</a>Redis 1主4从，5个哨兵，哨兵配置quorum为2，如果3个哨兵故障，当主库宕机时，哨兵能否判断主库“客观下线”？能否自动切换？</h4><p>经过实际测试：</p>
+<p><a href="#redis-1%E4%B8%BB4%E4%BB%8E-5%E4%B8%AA%E5%93%A8%E5%85%B5-%E5%93%A8%E5%85%B5%E9%85%8D%E7%BD%AEquorum%E4%B8%BA2-%E5%A6%82%E6%9E%9C3%E4%B8%AA%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C-%E5%BD%93%E4%B8%BB%E5%BA%93%E5%AE%95%E6%9C%BA%E6%97%B6-%E5%93%A8%E5%85%B5%E8%83%BD%E5%90%A6%E5%88%A4%E6%96%AD%E4%B8%BB%E5%BA%93-%E5%AE%A2%E8%A7%82%E4%B8%8B%E7%BA%BF-%E8%83%BD%E5%90%A6%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2">#</a>Redis 1主4从，5个哨兵，哨兵配置quorum为2，如果3个哨兵故障，当主库宕机时，哨兵能否判断主库“客观下线”？能否自动切换？</p>
+<p>经过实际测试：</p>
 <p>1、哨兵集群可以判定主库“客观下线”。由于quorum&#x3D;2，所以当一个哨兵判断主库“主观下线”后，询问另外一个哨兵后也会得到同样的结果，2个哨兵都判定“主观下线”，达到了quorum的值，因此，<strong>哨兵集群可以判定主库为“客观下线”</strong>。</p>
 <p>2、<strong>但哨兵不能完成主从切换</strong>。哨兵标记主库“客观下线后”，在选举“主节点”时，一个节点必须拿到超过多数的选票(5&#x2F;2+1&#x3D;3票)。但目前只有2个哨兵活着，无论怎么投票，一个节点最多只能拿到2票，永远无法达到<code>N/2+1</code>选票的结果。</p>
 </blockquote>
@@ -1494,7 +1548,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">SQL执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log-%E5%92%8C-binlog"><span class="nav-text">redo log 和 binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%88%97%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">多列索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-text">MySQL存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">MySQL主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-%E5%93%A8%E5%85%B5%E7%9A%84%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-text">Redis 哨兵的选举机制是什么样的？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-1%E4%B8%BB4%E4%BB%8E%EF%BC%8C5%E4%B8%AA%E5%93%A8%E5%85%B5%EF%BC%8C%E5%93%A8%E5%85%B5%E9%85%8D%E7%BD%AEquorum%E4%B8%BA2%EF%BC%8C%E5%A6%82%E6%9E%9C3%E4%B8%AA%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C%EF%BC%8C%E5%BD%93%E4%B8%BB%E5%BA%93%E5%AE%95%E6%9C%BA%E6%97%B6%EF%BC%8C%E5%93%A8%E5%85%B5%E8%83%BD%E5%90%A6%E5%88%A4%E6%96%AD%E4%B8%BB%E5%BA%93%E2%80%9C%E5%AE%A2%E8%A7%82%E4%B8%8B%E7%BA%BF%E2%80%9D%EF%BC%9F%E8%83%BD%E5%90%A6%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%EF%BC%9F"><span class="nav-text">Redis 1主4从，5个哨兵，哨兵配置quorum为2，如果3个哨兵故障，当主库宕机时，哨兵能否判断主库“客观下线”？能否自动切换？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-1"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9B%B8%E5%85%B3"><span class="nav-text">分库分表相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存穿透，缓存雪崩，缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">缓存可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#count-%E4%B8%8E-count-1"><span class="nav-text">count(*) 与 count(1)</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">SQL执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVCC%E4%B8%8E%E5%B9%BB%E8%AF%BB"><span class="nav-text">MVCC与幻读</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log-%E5%92%8C-binlog"><span class="nav-text">redo log 和 binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%88%97%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">多列索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-text">MySQL存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">MySQL主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E9%94%81"><span class="nav-text">MySQL锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81"><span class="nav-text">表级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E7%BA%A7%E9%94%81"><span class="nav-text">行级锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-1"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9B%B8%E5%85%B3"><span class="nav-text">分库分表相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存穿透，缓存雪崩，缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">缓存可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#count-%E4%B8%8E-count-1"><span class="nav-text">count(*) 与 count(1)</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1562,12 +1616,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">343k</span>
+    <span title="Symbols count total">347k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">10:24</span>
+    <span title="Reading time total">10:30</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
