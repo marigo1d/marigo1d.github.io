@@ -30,6 +30,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/gailan-01.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/image-20240729104740287.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/20201206223144780.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/java-thread-x-juc-aqs-1.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/2a3c22e2ac6d0a8990f04e4920760b57.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/java-thread-x-executors-2.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/02ede02b26c85d797a995abf520e08b5.png">
@@ -41,7 +42,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/image-20240814162137394.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/01/17/Java/image-20240814162220131.png">
 <meta property="article:published_time" content="2025-01-17T02:43:18.000Z">
-<meta property="article:modified_time" content="2025-03-04T08:12:41.538Z">
+<meta property="article:modified_time" content="2025-03-11T00:22:22.460Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -234,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-04 16:12:41" itemprop="dateModified" datetime="2025-03-04T16:12:41+08:00">2025-03-04</time>
+                <time title="Modified: 2025-03-11 08:22:22" itemprop="dateModified" datetime="2025-03-11T08:22:22+08:00">2025-03-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -252,14 +253,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>62k</span>
+              <span>60k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1:53</span>
+              <span>1:49</span>
             </span>
 
         </div>
@@ -1234,10 +1235,20 @@
 <li><p>如果当前值 !&#x3D; current，说明AtomicInteger的值被其他线程修改了，<code>compareAndSet()</code>返回False，循环继续，无法返回current；</p>
 </li>
 </ol>
-<h3 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h3><p>ref: <a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/779674?spm=a2c6h.13262185.profile.72.4c5f3bc8ppEWYX">https://developer.aliyun.com/article/779674?spm=a2c6h.13262185.profile.72.4c5f3bc8ppEWYX</a></p>
+<h3 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h3><p><strong>CLH队列</strong></p>
+<p>双向链表，通过head和tail记录头节点和尾节点，元素类型为Node</p>
+<p>线程获取？失败时，AQS将线程和相关信息封装为Node加入CLH队列，同时阻塞该线程</p>
+<p>ref: <a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/779674?spm=a2c6h.13262185.profile.72.4c5f3bc8ppEWYX">https://developer.aliyun.com/article/779674?spm=a2c6h.13262185.profile.72.4c5f3bc8ppEWYX</a></p>
 <img src="/2025/01/17/Java/20201206223144780.png" class="" title="aqs">
 
-<p><strong>state</strong></p>
+<img src="/2025/01/17/Java/java-thread-x-juc-aqs-1.png" class="" title="image">
+
+
+
+
+
+<ul>
+<li><p>state</p>
 <p>volatile，方法 <code>compareAndSetState()</code> 使用CAS</p>
 <p>相关方法： <code>getState()</code>, <code>setState()</code>, <code>compareAndSetState()</code> </p>
 <blockquote>
@@ -1245,29 +1256,45 @@
 <p>state值为1说明资源正在被使用，值为0说明资源未被使用；</p>
 <p>发生重入则 setState(getState() + 1);</p>
 </blockquote>
-<p><strong>exclusiveOwnerThread</strong></p>
+</li>
+<li><p>exclusiveOwnerThread</p>
 <p>当前独占资源的线程</p>
-<p><strong>Node</strong></p>
-<p><strong>等待标记 SHARED, EXCLUSIVE</strong></p>
-<p><strong>静态常量 CANCELLED, SIGNAL, CONDITION, PROPAGATE:</strong></p>
+</li>
+<li><p>内部类Node</p>
+<ul>
+<li><p>等待标记 SHARED, EXCLUSIVE</p>
+</li>
+<li><p>静态常量 CANCELLED, SIGNAL, CONDITION, PROPAGATE</p>
 <p>这些常量定义了 Node 的 waitStatus 状态，它们控制着等待队列的行为：</p>
+<blockquote>
 <ul>
-<li><strong>CANCELLED &#x3D; 1</strong>: 表示节点对应的线程因为超时、中断等原因被取消了等待。 被取消的节点需要从队列中移除。</li>
-<li><strong>SIGNAL &#x3D; -1</strong>: 表示当前节点的后继节点（next）需要被唤醒（unpark）。 当一个线程释放锁或发出信号时，它会将前一个节点的 waitStatus 设置为 SIGNAL，通知后继节点尝试获取锁。</li>
-<li><strong>CONDITION &#x3D; -2</strong>: 表示节点当前在 condition 队列中等待 condition 满足。 与主同步队列（AQS 队列）是分开的，等待 Condition.signal() 唤醒后，节点会被转移到主同步队列中，重新竞争锁。</li>
-<li><strong>PROPAGATE &#x3D; -3</strong>: 只用于共享模式。表示当前节点的共享锁释放操作，不仅需要唤醒后继节点，而且要将释放操作传播（propagate）到后续节点，因为后续节点可能也可以获取到共享锁。</li>
+<li>CANCELLED &#x3D; 1: 表示节点对应的线程因为超时、中断等原因被取消了等待。 被取消的节点需要从队列中移除。</li>
+<li>SIGNAL &#x3D; -1: 表示当前节点的后继节点（next）需要被唤醒（unpark）。 当一个线程释放锁或发出信号时，它会将前一个节点的 waitStatus 设置为 SIGNAL，通知后继节点尝试获取锁。</li>
+<li>CONDITION &#x3D; -2: 表示节点当前在 condition 队列中等待 condition 满足。 与主同步队列（AQS 队列）是分开的，等待 Condition.signal() 唤醒后，节点会被转移到主同步队列中，重新竞争锁。</li>
+<li>PROPAGATE &#x3D; -3: 只用于共享模式。表示当前节点的共享锁释放操作，不仅需要唤醒后继节点，而且要将释放操作传播（propagate）到后续节点，因为后续节点可能也可以获取到共享锁。</li>
 </ul>
-<p><strong>成员变量:</strong></p>
-<ul>
-<li><strong>volatile int waitStatus</strong>: 节点的等待状态，包括上面的四种常量所描述的，使用 volatile 保证可见性。</li>
-<li><strong>volatile Node prev</strong>: 指向前驱节点的指针。</li>
-<li><strong>volatile Node next</strong>: 指向后继节点的指针。</li>
-<li><strong>volatile Thread thread</strong>: 节点关联的线程。</li>
-<li><strong>Node nextWaiter</strong>: <strong>仅在 Condition 中使用</strong>。 它指向下一个等待 condition 的节点。 在 AQS 的主同步队列中，它用作共享&#x2F;独占模式的标识。 如果 nextWaiter &#x3D;&#x3D; SHARED，则表示该节点是在共享模式下等待的线程。</li>
+</blockquote>
+</li>
+<li><p><strong>volatile int waitStatus</strong>: 节点的等待状态，包括上面的四种常量所描述的，使用 volatile 保证可见性。</p>
+</li>
+<li><p><strong>volatile Node prev</strong>: 指向前驱节点的指针。</p>
+</li>
+<li><p><strong>volatile Node next</strong>: 指向后继节点的指针。</p>
+</li>
+<li><p><strong>volatile Thread thread</strong>: 节点关联的线程。</p>
+</li>
+<li><p>**Node nextWaiter: <strong>仅在 Condition 中使用</strong>。 它指向下一个等待 condition 的节点。 在 AQS 的主同步队列中，它用作共享&#x2F;独占模式的标识。 如果 nextWaiter &#x3D;&#x3D; SHARED，则表示该节点是在共享模式下等待的线程。</p>
+</li>
 </ul>
-<p><strong>CLH队列</strong></p>
-<p>双向链表，通过head和tail记录头节点和尾节点，元素类型为Node</p>
-<p>线程获取？失败时，AQS将线程和相关信息封装为Node加入CLH队列，同时阻塞该线程</p>
+</li>
+<li><p>内部类ConditionObject</p>
+<p>该类维护了一个条件等待队列，实现了Condition接口</p>
+</li>
+<li><p>方法</p>
+<p>tryAcquire方法，调用此方法的线程会试图在独占模式下获取对象状态。此方法应该查询是否允许它在独占模式下获取对象状态，如果允许，则获取它。</p>
+<p>addWaiter方法完成的功能是将调用此方法的线程封装成为一个结点并放入Sync queue</p>
+</li>
+</ul>
 <p><strong>流程</strong></p>
 <img src="/2025/01/17/Java/2a3c22e2ac6d0a8990f04e4920760b57.png" class="" title="aqs_process">
 
@@ -1304,64 +1331,28 @@
 <blockquote>
 <p>比synchronized更高级，依赖于API</p>
 </blockquote>
-<p>ReentrantLock 为锁本体，在拿到锁之后，可用将线程阻塞在锁的 Condition 上</p>
-<p>无参构造方法为非公平锁</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="type">boolean</span> <span class="title function_">tryAcquire</span><span class="params">(<span class="type">int</span> acquires)</span> &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">Thread</span> <span class="variable">current</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">    <span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> getState();</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!hasQueuedPredecessors() &amp;&amp;  <span class="comment">// 公平锁限定</span></span><br><span class="line">            compareAndSetState(<span class="number">0</span>, acquires)) &#123;</span><br><span class="line">            setExclusiveOwnerThread(current);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">nextc</span> <span class="operator">=</span> c + acquires;</span><br><span class="line">        <span class="keyword">if</span> (nextc &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Maximum lock count exceeded&quot;</span>);</span><br><span class="line">        setState(nextc);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p><strong>获取锁</strong></p>
-<ul>
-<li><p>**lock(): ** 获取锁。如果锁已被其他线程持有，则当前线程会阻塞，直到获取到锁。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">lock.lock(); <span class="comment">// 获取锁</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// ... 执行需要同步的代码 ...</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    lock.unlock(); <span class="comment">// 释放锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p>**tryLock(): ** 尝试获取锁，如果成功获取则返回 true，否则立即返回 false。该方法不会阻塞线程。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (lock.tryLock()) &#123; <span class="comment">// 尝试获取锁</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// ... 执行需要同步的代码 ...</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock(); <span class="comment">// 释放锁</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 获取锁失败，执行其他逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p><strong>tryLock(long time, TimeUnit unit):</strong> 尝试在指定时间内获取锁，如果成功获取则返回 true，否则超时返回 false。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (lock.tryLock(<span class="number">1</span>, TimeUnit.SECONDS)) &#123; <span class="comment">// 尝试在 1 秒内获取锁</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// ... 执行需要同步的代码 ...</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock(); <span class="comment">// 释放锁</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 获取锁超时，执行其他逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><strong>释放锁</strong></p>
-<ul>
-<li>**unlock(): ** 释放锁。必须与 lock() 或 tryLock() 方法成对出现，确保锁的正确释放。</li>
-</ul>
-<p><strong>条件变量</strong></p>
-<p>一个 ReentrantLock 可以关联多个 Condition 对象，可以实现更复杂的线程协作逻辑，例如 “消费者-多生产者” 模型。</p>
-<ul>
-<li><p>**newCondition(): ** 创建一个与该锁关联的条件变量。条件变量允许线程在满足特定条件时等待，并在条件满足时被唤醒。</p>
-</li>
-<li><p>**await(): ** 使当前线程进入等待状态，并释放锁，直到被其他线程唤醒或中断。</p>
-</li>
-<li><p>**signal(): ** 唤醒一个正在等待该 Condition 的线程。</p>
-</li>
-<li><p>**signalAll(): ** 唤醒所有正在等待该 Condition 的线程。</p>
-</li>
-<li><p><strong>await(long time, TimeUnit unit):</strong> 使当前线程在指定时间内进入等待状态，如果超时则自动返回。</p>
-</li>
-<li><p><strong>awaitNanos(long nanosTimeout):</strong> 使当前线程在指定的纳秒数内进入等待状态，如果超时则自动返回。</p>
-</li>
-<li><p>**awaitUninterruptibly(): ** 使当前线程进入不可中断的等待状态，直到被其他线程唤醒。</p>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConditionExample</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">notFull</span> <span class="operator">=</span> lock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">notEmpty</span> <span class="operator">=</span> lock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">BUFFER_SIZE</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">producer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">                lock.lock();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">while</span> (count == BUFFER_SIZE) &#123; <span class="comment">// 缓冲区满，等待</span></span><br><span class="line">                        notFull.await();</span><br><span class="line">                    &#125;</span><br><span class="line">                    count++;</span><br><span class="line">                    System.out.println(<span class="string">&quot;生产者生产了数据，当前数量：&quot;</span> + count);</span><br><span class="line">                    notEmpty.signal(); <span class="comment">// 唤醒消费者</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    lock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">consumer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">                lock.lock();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">while</span> (count == <span class="number">0</span>) &#123; <span class="comment">// 缓冲区空，等待</span></span><br><span class="line">                        notEmpty.await();</span><br><span class="line">                    &#125;</span><br><span class="line">                    count--;</span><br><span class="line">                    System.out.println(<span class="string">&quot;消费者消费了数据，当前数量：&quot;</span> + count);</span><br><span class="line">                    notFull.signal(); <span class="comment">// 唤醒生产者</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    lock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        producer.start();</span><br><span class="line">        consumer.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>流程</strong>:</p>
+<p>reentrant lock 内部类 Sync 继承 AQS</p>
+<p>内部类 NonfairSync FairSync 继承 内部类 Sync</p>
+<p>Condition 常用方法 await() 方法  signal() 方法   signalAll() 方法</p>
+<p>await() 方法由线程调用，将自己加入condition的等待队列</p>
+<p>signal() 方法？</p>
+<p>主要功能和作用：</p>
 <ol>
-<li>生产者线程获取锁，执行 count++ 。</li>
-<li>生产者线程发现队列已满，调用 notFull.await() 进入等待，<strong>并在finally中释放锁</strong>。</li>
-<li>消费者线程获取锁，执行 count– 。</li>
-<li>消费者线程发现队列为空，调用 notEmpty.await() 进入等待，<strong>并finally中释放锁</strong>。</li>
-<li>生产者线程被其他线程唤醒，重新获取锁，生产数据，并调用 notEmpty.signal() 唤醒消费者线程，<strong>但生产者线程此时并没有释放锁</strong>。</li>
-<li>生产者线程执行 finally 块中的 lock.unlock()，<strong>释放锁</strong>。</li>
-<li>消费者线程被唤醒，尝试获取锁，并成功获取。</li>
-<li>消费者线程消费数据，并最终在 finally 块中释放锁。</li>
+<li><strong>管理等待线程的队列</strong>： <code>ConditionObject</code> 使用 <code>Node</code> 来表示 <strong>等待队列</strong> 中的每一个线程。每个线程在调用 <code>await()</code> 时会被封装成一个 <code>Node</code> 对象，加入到 <code>ConditionObject</code> 的等待队列中。该队列是一个单向链表，<code>ConditionObject</code> 通过这个队列管理线程的等待与唤醒。</li>
+<li>线程的挂起和唤醒：<ul>
+<li><code>await()</code>：当线程调用 <code>await()</code> 方法时，它会进入 <strong>条件等待队列</strong>，并且该线程会被挂起，直到满足某些条件后被唤醒。</li>
+<li><code>signal()</code> 和 <code>signalAll()</code>：这些方法用于唤醒等待在 <code>ConditionObject</code> 上的线程。当调用 <code>signal()</code> 或 <code>signalAll()</code> 时，<code>ConditionObject</code> 会检查队列中的线程，并将这些线程移回到 <strong>同步队列</strong>（AQS 的 CLH 队列），使它们有机会重新竞争锁。</li>
+</ul>
+</li>
+<li><strong>节点转移</strong>： 当线程被唤醒时，<code>ConditionObject</code> 会将节点从等待队列中移除，并通过 <code>AQS</code> 中的 <strong>CLH 同步队列</strong> 继续参与锁竞争。<code>Node</code> 节点在这里充当了 <strong>“等待”状态和“竞争锁”状态”</strong> 之间的桥梁。</li>
 </ol>
+<p><code>ReentrantLock</code> 的 <code>ConditionObject</code> ，当调用 <code>ConditionObject</code> 的 <code>signal()</code> 方法时，唤醒的线程会被送回到 <code>ReentrantLock</code> 的 <strong>CLH 队列</strong> 中，以继续竞争锁。</p>
+<h3 id="Atomic"><a href="#Atomic" class="headerlink" title="Atomic"></a>Atomic</h3><p>Atomic类 底层 <code>unsafe.getAndAddInt</code> volatile的变量和CAS</p>
+<p><code>ReentrantLock</code>  底层 unsafe 的 park&#x2F;unpark</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// unsafe 类 getAndAddInt 方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="type">int</span> <span class="title function_">getAndAddInt</span><span class="params">(Object paramObject, <span class="type">long</span> paramLong, <span class="type">int</span> paramInt)</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">do</span></span><br><span class="line">      <span class="variable">i</span> <span class="operator">=</span> getIntVolatile(paramObject, paramLong);</span><br><span class="line">    <span class="keyword">while</span> (!compareAndSwapInt(paramObject, paramLong, i, i + paramInt));</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="Concurrent-HashMap"><a href="#Concurrent-HashMap" class="headerlink" title="Concurrent HashMap"></a>Concurrent HashMap</h3><p><code>ConcurrentHashMap</code> 是 Java 提供的线程安全 <code>Map</code> 实现，其在 <strong>JDK 1.7</strong> 和 <strong>JDK 1.8</strong> 采用了不同的机制来提高并发性能：</p>
 <hr>
 <p><strong>JDK 1.7：分段锁（Segment Locking）</strong></p>
@@ -2047,7 +2038,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java"><span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-text">String</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE"><span class="nav-text">枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%8C%E5%AE%B9%E5%99%A8diff"><span class="nav-text">数组，字符串，容器diff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">常用容器与初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this-static-class%E4%B8%8E%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-text">this, static class与内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85"><span class="nav-text">包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">泛型与通配符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">类加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6"><span class="nav-text">JVM类加载机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6%E8%BF%87%E7%A8%8B"><span class="nav-text">双亲委派机制过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-text">反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E4%B8%8EAPT"><span class="nav-text">注解与APT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E4%B8%8ELambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">匿名内部类与Lambda表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-text">引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JUC"><span class="nav-text">JUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JMM"><span class="nav-text">JMM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-text">ThreadLocal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81"><span class="nav-text">锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E5%88%86%E7%B1%BB"><span class="nav-text">锁分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E7%8A%B6%E6%80%81"><span class="nav-text">锁状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="nav-text">线程与同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-join"><span class="nav-text">Thread.join()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wait-%E5%92%8C-notify"><span class="nav-text">wait() 和 notify()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LockSupport"><span class="nav-text">LockSupport</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS"><span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS"><span class="nav-text">AQS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock"><span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Concurrent-HashMap"><span class="nav-text">Concurrent HashMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="nav-text">线程池</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%86%85%E5%AD%98"><span class="nav-text">JVM内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nonheap%EF%BC%88%E9%9D%9E%E5%A0%86%EF%BC%89"><span class="nav-text">Nonheap（非堆）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heap-%E5%A0%86"><span class="nav-text">Heap (堆)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-text">Thread (线程)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC"><span class="nav-text">GC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A0%86%E5%86%85%E5%AD%98%E5%88%92%E5%88%86"><span class="nav-text">堆内存划分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">垃圾收集类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E8%BD%AC%E7%A7%BB"><span class="nav-text">对象转移</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">垃圾回收算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-text">常见垃圾收集器</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java"><span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-text">String</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE"><span class="nav-text">枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%8C%E5%AE%B9%E5%99%A8diff"><span class="nav-text">数组，字符串，容器diff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">常用容器与初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this-static-class%E4%B8%8E%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-text">this, static class与内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85"><span class="nav-text">包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">泛型与通配符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">类加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6"><span class="nav-text">JVM类加载机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6%E8%BF%87%E7%A8%8B"><span class="nav-text">双亲委派机制过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-text">反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E4%B8%8EAPT"><span class="nav-text">注解与APT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E4%B8%8ELambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">匿名内部类与Lambda表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-text">引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JUC"><span class="nav-text">JUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JMM"><span class="nav-text">JMM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-text">ThreadLocal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81"><span class="nav-text">锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E5%88%86%E7%B1%BB"><span class="nav-text">锁分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E7%8A%B6%E6%80%81"><span class="nav-text">锁状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="nav-text">线程与同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-join"><span class="nav-text">Thread.join()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wait-%E5%92%8C-notify"><span class="nav-text">wait() 和 notify()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LockSupport"><span class="nav-text">LockSupport</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS"><span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS"><span class="nav-text">AQS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock"><span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Atomic"><span class="nav-text">Atomic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Concurrent-HashMap"><span class="nav-text">Concurrent HashMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="nav-text">线程池</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%86%85%E5%AD%98"><span class="nav-text">JVM内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nonheap%EF%BC%88%E9%9D%9E%E5%A0%86%EF%BC%89"><span class="nav-text">Nonheap（非堆）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heap-%E5%A0%86"><span class="nav-text">Heap (堆)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-text">Thread (线程)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC"><span class="nav-text">GC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A0%86%E5%86%85%E5%AD%98%E5%88%92%E5%88%86"><span class="nav-text">堆内存划分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">垃圾收集类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E8%BD%AC%E7%A7%BB"><span class="nav-text">对象转移</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">垃圾回收算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-text">常见垃圾收集器</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -2115,12 +2106,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">349k</span>
+    <span title="Symbols count total">351k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">10:35</span>
+    <span title="Reading time total">10:39</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
