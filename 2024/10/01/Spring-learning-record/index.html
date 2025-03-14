@@ -28,7 +28,7 @@
 <meta property="og:description" content="Spring相关学习记录">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-10-01T10:30:43.000Z">
-<meta property="article:modified_time" content="2025-03-11T11:31:51.257Z">
+<meta property="article:modified_time" content="2025-03-14T02:06:32.187Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="java, Spring">
 <meta name="twitter:card" content="summary">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-11 19:31:51" itemprop="dateModified" datetime="2025-03-11T19:31:51+08:00">2025-03-11</time>
+                <time title="Modified: 2025-03-14 10:06:32" itemprop="dateModified" datetime="2025-03-14T10:06:32+08:00">2025-03-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,14 +238,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>59k</span>
+              <span>61k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1:48</span>
+              <span>1:51</span>
             </span>
 
         </div>
@@ -419,6 +419,7 @@
 <li>两种代理方式：JDK动态代理和CGLIB</li>
 <li>通过织入切面来实现功能的统一维护</li>
 </ul>
+<h3 id="JDK动态代理和CGLIB"><a href="#JDK动态代理和CGLIB" class="headerlink" title="JDK动态代理和CGLIB"></a>JDK动态代理和CGLIB</h3><p><a target="_blank" rel="noopener" href="https://open8gu.com/framework/spring/tc8yg7e1e6aa7khd/">https://open8gu.com/framework/spring/tc8yg7e1e6aa7khd/</a></p>
 <p><strong>无法AOP&#x2F;bean的情况</strong></p>
 <p>1.类为final类且没有实现接口</p>
 <p>注意：final类可以通过反射创建</p>
@@ -636,6 +637,35 @@
 <li><code>@Autowired</code> 可以用于<strong>字段注入</strong>、<strong>setter 方法注入</strong>和<strong>构造方法注入</strong>。</li>
 <li>对于构造方法注入，<code>@Autowired</code> 会通过 Spring 的依赖注入机制，选择合适的构造方法并注入依赖。</li>
 </ul>
+<h2 id="BeanFactory-FactoryBean"><a href="#BeanFactory-FactoryBean" class="headerlink" title="BeanFactory &amp; FactoryBean"></a>BeanFactory &amp; FactoryBean</h2><p>ref: <a target="_blank" rel="noopener" href="https://open8gu.com/framework/spring/dhzlrik2ylop354g/">https://open8gu.com/framework/spring/dhzlrik2ylop354g/</a></p>
+<p><strong>BeanFactory</strong> </p>
+<p><code>BeanFactory</code> 是 Spring 中用于管理 Bean 生命周期的核心组件，Spring 官方文档将其称为 IOC 容器，它即是我们一般俗称的 “Spring 容器”。</p>
+<p><code>BeanFactory</code> 是最顶级的接口，里面定义了获取和创建 Bean 的最基本方法，它下面又根据功能和抽象级别细分五个接口：</p>
+<ul>
+<li><strong>ListableBeanFactory</strong>：扩展了对 Bean 的批量操作，比如获取所有 Bean 的名称，或者按照类型获取 Bean 等（我们常用的 <code>getBeansOfType</code> 方法就是它提供的）。</li>
+<li><strong>HierarchicalBeanFactory</strong>：用于支持层次性的 <code>BeanFactory</code> 结构，从而实现 <code>BeanFactory</code> 的嵌套，形成父子关系。</li>
+<li><strong>AutowireCapableBeanFactory</strong>：用于提供提供对 Bean 自动装配的支持。</li>
+<li><strong>ConfigurableBeanFactory</strong>：它继承了 <code>AutowireCapableBeanFactory</code> 和 <code>SingletonBeanRegistry</code> ，用于提供包括 <code>Scope</code> 管理、类加载器、上级工厂、表达式解析器……等等各种配置项。</li>
+<li><strong>ConfigurableListableBeanFactory</strong>：继承了 <code>ConfigurableBeanFactory</code> 和 <code>ListableBeanFactory</code>，是集全部 <code>BeanFactory</code> 接口之大成者。</li>
+</ul>
+<p>它的最底层实现类是 <code>DefaultListableBeanFactory</code>，它直接或间接实现了所有 <code>BeanFactory</code> 接口，是在项目中最常用的实现类。</p>
+<p>在比较早期的版本中，Spring 基于 <code>DefaultListableBeanFactory</code> 提供了 <code>XmlBeanFactory</code> 它相当于一个具备根据 XML 文件加载 Bean 定义功能的 <code>DefaultListableBeanFactory</code>。</p>
+<p>而在更高的版本，Spring 则提供了 <code>ApplicationContext</code> 接口，它继承了 <code>BeanFactory</code>，并且额外通过其他接口获得了加载资源、国际化、时间等扩展功能。</p>
+<p><strong>FactoryBean</strong></p>
+<p>Spring 中的 <code>FactoryBean</code> 是一个特殊的接口，实现了该接口的 Bean 变为专门用来创建某种特定类型对象的工厂。</p>
+<p>它被广泛用于创建一些：</p>
+<ul>
+<li><strong>无法通过正常的构造函数创建的对象</strong>：比较典型的是各种代理，比如 Dubbo 使用 <code>ReferenceBean</code> 创建 RPC 接口的代理对象，Mybatis 使用 <code>MapperFactoryBean</code> 来创建 Mapper 接口代理。</li>
+<li><strong>创建过程比较复杂的对象</strong>：比较典型的是 <code>SqlSession</code>， 比如 JPA 和 Myabtis 都选择通过一个 <code>SqlSessionFactoryBean</code> 来创建它。</li>
+</ul>
+<p>该接口中定义了<strong>三个方法</strong>，分别是：</p>
+<ul>
+<li><code>getObject</code> ：用于从工厂中获取一个 Bean 实例。</li>
+<li><code>getObjectType</code>：获取实例的类型。</li>
+<li><code>isSingleton</code>：判断这个 Bean 是否是单例的。</li>
+</ul>
+<p>通常情况下，如果 <code>FactoryBean</code> 的 <code>isSingleton</code> 方法返回 <code>true</code>，则其生产的对象就会是单例的，反之则为多例的。不过，如果 <code>FactoryBean</code> 本身是多例的，那么无论<code>isSingleton</code> 方法是否返回 <code>true</code>， 其产物也将变为多例的。</p>
+<p>我们可以通过 <code>FactoryBean</code> 的 beanName 从 Spring 容器获得<strong>其生产的对象</strong>，而当需要从 Spring 容器中获取 <code>FactoryBean</code> 本身时，需要在 beanName 前加 <code>&amp;</code> 符号。</p>
 <h2 id="Bean的创建"><a href="#Bean的创建" class="headerlink" title="Bean的创建"></a>Bean的创建</h2><h3 id="使用构造函数注入-使用-Setter-方法注入"><a href="#使用构造函数注入-使用-Setter-方法注入" class="headerlink" title="使用构造函数注入 &amp;&amp; 使用 Setter 方法注入"></a>使用构造函数注入 &amp;&amp; 使用 Setter 方法注入</h3><p>构造方法注入</p>
 <ul>
 <li>不可变性：依赖通过构造方法注入后，通常会被声明为 <code>final</code>，确保依赖不可变。</li>
@@ -766,7 +796,8 @@
 </ul>
 </li>
 </ol>
-<h2 id="Spring-Bean-的生命周期"><a href="#Spring-Bean-的生命周期" class="headerlink" title="Spring Bean 的生命周期"></a>Spring Bean 的生命周期</h2><ol>
+<h2 id="Spring-Bean-的生命周期"><a href="#Spring-Bean-的生命周期" class="headerlink" title="Spring Bean 的生命周期"></a>Spring Bean 的生命周期</h2><p>ref: <a target="_blank" rel="noopener" href="https://open8gu.com/framework/spring/cssibafmgio4g44c/">https://open8gu.com/framework/spring/cssibafmgio4g44c/</a></p>
+<ol>
 <li><strong>实例化 Bean：</strong><ul>
 <li><strong>组件扫描（Component Scanning）：</strong> Spring 根据配置的包路径，扫描所有带有构造型注解的类（例如 <code>@Component</code>、<code>@Service</code>、<code>@Repository</code> 等），并将这些类注册为 Spring 容器中的 Bean。</li>
 <li><strong>推断构造方法：</strong> Spring 会根据 Bean 的类定义，选择合适的构造方法进行实例化。如果没有显式指定构造方法，Spring 会使用默认的无参构造方法。</li>
@@ -1375,7 +1406,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3"><span class="nav-text">网络相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#servlet"><span class="nav-text">servlet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redirect-%E4%B8%8E-Forward"><span class="nav-text">Redirect 与 Forward</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session-%E4%B8%8E-Cookie"><span class="nav-text">Session 与 Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP"><span class="nav-text">JSP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filter"><span class="nav-text">Filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Listener"><span class="nav-text">Listener</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring"><span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IoC"><span class="nav-text">IoC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AoP"><span class="nav-text">AoP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IoC%E5%AE%B9%E5%99%A8%E4%B8%8EIoC%E5%AF%B9%E8%B1%A1"><span class="nav-text">IoC容器与IoC对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Resource-%E4%B8%8E-Autowired"><span class="nav-text">@Resource 与 @Autowired</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-text">Bean的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%B3%A8%E5%85%A5-%E4%BD%BF%E7%94%A8-Setter-%E6%96%B9%E6%B3%95%E6%B3%A8%E5%85%A5"><span class="nav-text">使用构造函数注入 &amp;&amp; 使用 Setter 方法注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FactoryBean"><span class="nav-text">FactoryBean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E9%94%80%E6%AF%81"><span class="nav-text">初始化与销毁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="nav-text">循环依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">Spring Bean 的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3"><span class="nav-text">Spring数据库相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC"><span class="nav-text">JDBC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD"><span class="nav-text">JDBC事务传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E5%90%88Hibernate"><span class="nav-text">结合Hibernate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E5%90%88MyBatis"><span class="nav-text">结合MyBatis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%B8%8EHibernate-JPA-MyBatis"><span class="nav-text">JDBC与Hibernate, JPA, MyBatis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Transaction"><span class="nav-text">Spring Transaction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyBatis"><span class="nav-text">MyBatis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-MVC"><span class="nav-text">Spring MVC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8"><span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HandlerMapping"><span class="nav-text">HandlerMapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#REST-%E6%9E%B6%E6%9E%84%E9%A3%8E%E6%A0%BC"><span class="nav-text">REST 架构风格</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot"><span class="nav-text">Spring Boot</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3-1"><span class="nav-text">注解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%BA%93"><span class="nav-text">常用库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#retrofit"><span class="nav-text">retrofit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guava"><span class="nav-text">Guava</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Security-jwt"><span class="nav-text">Spring Security &amp; jwt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jwt%E7%94%9F%E6%88%90%E6%B5%81%E7%A8%8B"><span class="nav-text">jwt生成流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B"><span class="nav-text">请求过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B"><span class="nav-text">身份认证流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="nav-text">项目结构</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3"><span class="nav-text">网络相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#servlet"><span class="nav-text">servlet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redirect-%E4%B8%8E-Forward"><span class="nav-text">Redirect 与 Forward</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session-%E4%B8%8E-Cookie"><span class="nav-text">Session 与 Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP"><span class="nav-text">JSP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filter"><span class="nav-text">Filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Listener"><span class="nav-text">Listener</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring"><span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IoC"><span class="nav-text">IoC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AoP"><span class="nav-text">AoP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%92%8CCGLIB"><span class="nav-text">JDK动态代理和CGLIB</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IoC%E5%AE%B9%E5%99%A8%E4%B8%8EIoC%E5%AF%B9%E8%B1%A1"><span class="nav-text">IoC容器与IoC对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Resource-%E4%B8%8E-Autowired"><span class="nav-text">@Resource 与 @Autowired</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BeanFactory-FactoryBean"><span class="nav-text">BeanFactory &amp; FactoryBean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-text">Bean的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%B3%A8%E5%85%A5-%E4%BD%BF%E7%94%A8-Setter-%E6%96%B9%E6%B3%95%E6%B3%A8%E5%85%A5"><span class="nav-text">使用构造函数注入 &amp;&amp; 使用 Setter 方法注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FactoryBean"><span class="nav-text">FactoryBean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E9%94%80%E6%AF%81"><span class="nav-text">初始化与销毁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="nav-text">循环依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">Spring Bean 的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3"><span class="nav-text">Spring数据库相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC"><span class="nav-text">JDBC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD"><span class="nav-text">JDBC事务传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E5%90%88Hibernate"><span class="nav-text">结合Hibernate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E5%90%88MyBatis"><span class="nav-text">结合MyBatis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC%E4%B8%8EHibernate-JPA-MyBatis"><span class="nav-text">JDBC与Hibernate, JPA, MyBatis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Transaction"><span class="nav-text">Spring Transaction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyBatis"><span class="nav-text">MyBatis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-MVC"><span class="nav-text">Spring MVC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8"><span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HandlerMapping"><span class="nav-text">HandlerMapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#REST-%E6%9E%B6%E6%9E%84%E9%A3%8E%E6%A0%BC"><span class="nav-text">REST 架构风格</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot"><span class="nav-text">Spring Boot</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3-1"><span class="nav-text">注解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%BA%93"><span class="nav-text">常用库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#retrofit"><span class="nav-text">retrofit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guava"><span class="nav-text">Guava</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Security-jwt"><span class="nav-text">Spring Security &amp; jwt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jwt%E7%94%9F%E6%88%90%E6%B5%81%E7%A8%8B"><span class="nav-text">jwt生成流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B"><span class="nav-text">请求过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B"><span class="nav-text">身份认证流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="nav-text">项目结构</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1443,12 +1474,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">354k</span>
+    <span title="Symbols count total">359k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">10:43</span>
+    <span title="Reading time total">10:53</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

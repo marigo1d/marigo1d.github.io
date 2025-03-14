@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/wangluo-45917c49-bb08-4f88-84d2-5e8ae53acc7c.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/23-HTTPS%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png">
 <meta property="article:published_time" content="2025-02-19T07:13:54.000Z">
-<meta property="article:modified_time" content="2025-02-23T10:19:54.212Z">
+<meta property="article:modified_time" content="2025-03-14T02:35:27.497Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="computer network">
 <meta name="twitter:card" content="summary">
@@ -236,7 +236,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-23 18:19:54" itemprop="dateModified" datetime="2025-02-23T18:19:54+08:00">2025-02-23</time>
+                <time title="Modified: 2025-03-14 10:35:27" itemprop="dateModified" datetime="2025-03-14T10:35:27+08:00">2025-03-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,14 +254,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>6.4k</span>
+              <span>8.5k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>12 mins.</span>
+              <span>15 mins.</span>
             </span>
 
         </div>
@@ -452,14 +452,90 @@
 </ul>
 <h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><p>流程</p>
 <ol>
-<li><strong>本地主机查询 (Local Host File Check):</strong> 你的电脑首先会检查本地的 hosts 文件 (位于不同操作系统上的不同位置，例如 Windows 的 C:\Windows\System32\drivers\etc\hosts 或 Linux&#x2F;macOS 的 &#x2F;etc&#x2F;hosts) 是否包含 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 如果找到，则跳过后面的步骤，直接使用该 IP 地址。 这是一个优先于 DNS 查询的优化机制。</li>
-<li><strong>递归查询本地 DNS 服务器 (Recursive Query to Local DNS Resolver):</strong> 如果 hosts 文件中没有找到，你的电脑会向配置好的 <strong>本地 DNS 服务器 (Local DNS Resolver)</strong> 发送一个 **递归查询 (Recursive Query)**。 本地 DNS 服务器通常由你的 ISP (互联网服务提供商) 提供，也可能是你手动配置的 (例如，Google Public DNS 或 Cloudflare DNS)。 “递归”意味着本地 DNS 服务器将负责完成整个解析过程，并最终返回 IP 地址。</li>
-<li><strong>递归查询根 DNS 服务器 (Recursive Query to Root DNS Servers):</strong> 如果本地 DNS 服务器不知道 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址，它会联系其中一个 <strong>根 DNS 服务器 (Root DNS Servers)<strong>。 根 DNS 服务器知道所有顶级域名 (TLD) 服务器的地址。 全球共有 13 组根 DNS 服务器，它们具有不同的物理位置，并使用任播 (Anycast) 技术以提高可用性和效率。 本地 DNS 服务器会询问根服务器 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 根服务器</strong>不会直接返回 IP 地址</strong>，而是返回负责 .com 域的 <strong>TLD DNS 服务器</strong>的地址。</li>
-<li><strong>递归查询 TLD DNS 服务器 (Recursive Query to TLD DNS Servers):</strong> 本地 DNS 服务器收到 .com TLD 服务器的地址后，会联系该 TLD 服务器，询问 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 .com TLD 服务器<strong>也不会直接返回 IP 地址</strong>，而是返回负责 example.com 域的 <strong>权威 DNS 服务器 (Authoritative DNS Servers)</strong> 的地址。</li>
-<li><strong>递归查询权威 DNS 服务器 (Recursive Query to Authoritative DNS Servers):</strong> 本地 DNS 服务器收到 example.com 域的权威 DNS 服务器地址后，会联系这些权威 DNS 服务器，询问 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 <strong>权威 DNS 服务器拥有 example.com 域的 DNS 记录</strong>，并知道 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 它会将这个 IP 地址返回给本地 DNS 服务器。</li>
-<li><strong>缓存与返回 (Caching and Return):</strong> 本地 DNS 服务器将收到的 IP 地址缓存起来，以便下次有人请求 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 时，它可以直接返回该 IP 地址，而无需再次执行上述步骤。 缓存时间由 DNS 记录的 <strong>TTL (Time To Live)</strong> 值决定。 最后，本地 DNS 服务器将 IP 地址返回给你的电脑。</li>
-<li><strong>连接服务器 (Connect to Server):</strong> 你的电脑现在有了 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址，可以使用该 IP 地址连接到网站服务器，并获取网页内容。</li>
+<li><p><strong>本地主机查询 (Local Host File Check):</strong> 首先会检查本地的 hosts 文件 (位于不同操作系统上的不同位置，例如 Windows 的 C:\Windows\System32\drivers\etc\hosts 或 Linux&#x2F;macOS 的 &#x2F;etc&#x2F;hosts) 是否包含 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 如果找到，则跳过后面的步骤，直接使用该 IP 地址。 这是一个优先于 DNS 查询的优化机制。</p>
+</li>
+<li><p><strong>递归查询本地 DNS 服务器 (Recursive Query to Local DNS Resolver):</strong> 如果 hosts 文件中没有找到，会向配置好的 <strong>本地 DNS 服务器 (Local DNS Resolver)</strong> 发送一个 **递归查询 (Recursive Query)**。 本地 DNS 服务器通常由 ISP (互联网服务提供商) 提供，也可能是手动配置的 (例如，Google Public DNS 或 Cloudflare DNS)。 “递归”意味着本地 DNS 服务器将负责完成整个解析过程，并最终返回 IP 地址。</p>
+</li>
+<li><p><strong>递归查询根 DNS 服务器 (Recursive Query to Root DNS Servers):</strong> 如果本地 DNS 服务器不知道 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址，它会联系其中一个 <strong>根 DNS 服务器 (Root DNS Servers)<strong>。 根 DNS 服务器知道所有顶级域名 (TLD) 服务器的地址。 全球共有 13 组根 DNS 服务器，它们具有不同的物理位置，并使用任播 (Anycast) 技术以提高可用性和效率。 本地 DNS 服务器会询问根服务器 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 根服务器</strong>不会直接返回 IP 地址</strong>，而是返回负责 .com 域的 <strong>TLD DNS 服务器</strong>的地址。</p>
+</li>
+<li><p><strong>递归查询 TLD DNS 服务器 (Recursive Query to TLD DNS Servers):</strong> 本地 DNS 服务器收到 .com TLD 服务器的地址后，会联系该 TLD 服务器，询问 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 .com TLD 服务器<strong>也不会直接返回 IP 地址</strong>，而是返回负责 example.com 域的 <strong>权威 DNS 服务器 (Authoritative DNS Servers)</strong> 的地址。</p>
+</li>
+<li><p><strong>递归查询权威 DNS 服务器 (Recursive Query to Authoritative DNS Servers):</strong> 本地 DNS 服务器收到 example.com 域的权威 DNS 服务器地址后，会联系这些权威 DNS 服务器，询问 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 <strong>权威 DNS 服务器拥有 example.com 域的 DNS 记录</strong>，并知道 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 它会将这个 IP 地址返回给本地 DNS 服务器。</p>
+<blockquote>
+<p>例如，假设 example.com 的权威 DNS 服务器有以下 DNS 记录：</p>
+<ul>
+<li><strong>example.com</strong> -&gt; 192.0.2.1</li>
+<li><strong>bbb.example.com</strong> -&gt; 192.0.2.2</li>
+<li><strong>aaa.example.com</strong> -&gt; 192.0.2.3</li>
+</ul>
+<p>当本地 DNS 服务器查询 bbb.example.com 时，权威 DNS 服务器会返回 192.0.2.2。同样，当查询 aaa.example.com 时，权威 DNS 服务器会返回 192.0.2.3。</p>
+</blockquote>
+</li>
+<li><p><strong>缓存与返回 (Caching and Return):</strong> 本地 DNS 服务器将收到的 IP 地址缓存起来，以便下次有人请求 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 时，它可以直接返回该 IP 地址，而无需再次执行上述步骤。 缓存时间由 DNS 记录的 <strong>TTL (Time To Live)</strong> 值决定。 最后，本地 DNS 服务器将 IP 地址返回给你的电脑。</p>
+</li>
+<li><p><strong>连接服务器 (Connect to Server):</strong> 你的电脑现在有了 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址，可以使用该 IP 地址连接到网站服务器，并获取网页内容。</p>
+</li>
 </ol>
+<h2 id="Cookie-Session-Token"><a href="#Cookie-Session-Token" class="headerlink" title="Cookie &amp; Session &amp; Token"></a>Cookie &amp; Session &amp; Token</h2><p><strong>Cookie</strong></p>
+<p>HTTP 1.1 出现</p>
+<p>Cookie是服务器发送到用户浏览器并保存在用户浏览器的数据(服务端生成后不保存)</p>
+<p>后续用户在访问同一服务器时，会在请求头中添加Cookie</p>
+<p><strong>服务器返回报文</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.0 200 OK</span><br><span class="line">Content-type: text/html</span><br><span class="line">Set-Cookie: yummy_cookie=choco</span><br><span class="line">Set-Cookie: tasty_cookie=strawberry</span><br><span class="line"></span><br><span class="line">[page content]</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端请求报文</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /sample_page.html HTTP/1.1</span><br><span class="line">Host: www.example.org</span><br><span class="line">Cookie: yummy_cookie=choco; tasty_cookie=strawberry</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>实际上，客户端可以修改保存在本地的 Cookie，因此服务器需要采取一些措施来确保 Cookie 的有效性和安全性。</p>
+</blockquote>
+<p><strong>Session</strong></p>
+<p>Session存储于服务端，可以使用文件，数据库，内存保存；</p>
+<p>流程</p>
+<ul>
+<li>用户登录后，服务器为每个用户生成一个Session ID，保存在服务器；</li>
+<li>服务器发送返回报文，Set-Cookie: Session ID; </li>
+<li>用户在后续请求中携带Cookie（值为Session ID）发生至服务器</li>
+<li>服务器取出报文中的Cookie字段，并检查保存Session ID的数据库进行对比，确定用户身份</li>
+</ul>
+<p><strong>Token</strong></p>
+<p>Token为服务器在验证用户身份后，生成并通过<strong>报文体</strong>携带返回给用户的数据；</p>
+<p>客户端在后续的访问中，通过在请求头添加 <strong>Authorization</strong> 字段携带 Token 信息;</p>
+<p><strong>！！！服务器不需要存储 Session 数据！！！</strong></p>
+<p><strong>所有信息都包含在 Token 中，Token 中包含所有必要信息，减少数据库查询。因此，JWT 一旦签发，无法直接撤销，除非使用黑名单机制或设置较短的过期时间。</strong></p>
+<p><strong>服务器返回报文</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端请求报文</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /protected-resource HTTP/1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>JWT</p>
+<p>JWT<strong>（JSON Web Token）</strong> 是一种开放标准（RFC 7519），用于在网络应用间安全地传递信息。JWT 是一个自包含的 Token，包含用户信息、签名和可选的其他元数据。</p>
+<p>JWT 由三部分组成，用 <code>.</code> 分隔：</p>
+<ul>
+<li><p>Header：包含 Token 的类型（JWT）和签名算法（如 HMAC SHA256 或 RSA）。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Payload：包含用户信息（如用户 ID、角色）和其他数据（如过期时间）。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;sub&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1234567890&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;John Doe&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;iat&quot;</span><span class="punctuation">:</span> <span class="number">1516239022</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;exp&quot;</span><span class="punctuation">:</span> <span class="number">1516242622</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Signature</strong>：对 Header 和 Payload 的签名，用于验证 Token 的完整性和真实性。</p>
+</li>
+</ul>
+<p>最终的 JWT 是一个 Base64Url 编码的字符串，格式如下：</p>
+<p><code>Header.Payload.Signature</code></p>
+<p>注意，JWT 由三部分组成：<strong>Header</strong>、<strong>Payload</strong> 和 <strong>Signature</strong>。其中：</p>
+<ul>
+<li><strong>Header</strong> 和 <strong>Payload</strong> 是 <strong>Base64Url 编码的明文</strong>，可以被任何人解码查看。</li>
+<li><strong>Signature</strong> 是对 Header 和 Payload 的签名，用于验证数据的完整性和真实性。</li>
+</ul>
+<p>由于签名所使用的密钥仅服务器持有，因此可以通过该密钥确定签名的真实性</p>
+</blockquote>
 <h2 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h2><h3 id="同步IO"><a href="#同步IO" class="headerlink" title="同步IO"></a>同步IO</h3><p><strong>同步阻塞IO</strong></p>
 <p>应用进程被阻塞，直到数据复制到应用进程缓冲区中才返回。</p>
 <p><strong>同步非阻塞IO</strong></p>
@@ -593,7 +669,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Computer-Network"><span class="nav-text">Computer Network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-text">UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QUIC"><span class="nav-text">QUIC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B-%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="nav-text">三次握手&amp;四次挥手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93"><span class="nav-text">可靠传输</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E4%BC%A0"><span class="nav-text">重传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%8E%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="nav-text">滑动窗口与流量控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-text">拥塞控制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP%E6%B2%BE%E5%8C%85"><span class="nav-text">TCP沾包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP1-1"><span class="nav-text">HTTP1.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP2-0"><span class="nav-text">HTTP2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP3-0"><span class="nav-text">HTTP3.0</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS"><span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-text">DNS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO"><span class="nav-text">IO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5IO"><span class="nav-text">同步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5IO"><span class="nav-text">异步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-poll-epoll"><span class="nav-text">select, poll &amp; epoll</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Computer-Network"><span class="nav-text">Computer Network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-text">UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QUIC"><span class="nav-text">QUIC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B-%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="nav-text">三次握手&amp;四次挥手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93"><span class="nav-text">可靠传输</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E4%BC%A0"><span class="nav-text">重传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%8E%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="nav-text">滑动窗口与流量控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-text">拥塞控制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP%E6%B2%BE%E5%8C%85"><span class="nav-text">TCP沾包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP1-1"><span class="nav-text">HTTP1.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP2-0"><span class="nav-text">HTTP2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP3-0"><span class="nav-text">HTTP3.0</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS"><span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-text">DNS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie-Session-Token"><span class="nav-text">Cookie &amp; Session &amp; Token</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO"><span class="nav-text">IO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5IO"><span class="nav-text">同步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5IO"><span class="nav-text">异步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-poll-epoll"><span class="nav-text">select, poll &amp; epoll</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -661,12 +737,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">354k</span>
+    <span title="Symbols count total">359k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">10:43</span>
+    <span title="Reading time total">10:53</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
