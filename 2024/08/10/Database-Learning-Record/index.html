@@ -34,6 +34,8 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919111718667.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919155834155.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/image-20240919160103358.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/wal.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/checkpoint.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/master-slave.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/db-mysql-index-1.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/492e0e5857459a335db7c7aea5377791.png">
@@ -57,7 +59,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/885e438e-cf54-41f6-880e-faf36e72cd57">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/f2993d30-3803-4543-97db-f98cdca3a493">
 <meta property="article:published_time" content="2024-08-10T01:52:46.000Z">
-<meta property="article:modified_time" content="2025-03-11T00:23:13.188Z">
+<meta property="article:modified_time" content="2025-03-19T02:45:51.501Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="database">
 <meta name="twitter:card" content="summary">
@@ -250,7 +252,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-11 08:23:13" itemprop="dateModified" datetime="2025-03-11T08:23:13+08:00">2025-03-11</time>
+                <time title="Modified: 2025-03-19 10:45:51" itemprop="dateModified" datetime="2025-03-19T10:45:51+08:00">2025-03-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,14 +270,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>28k</span>
+              <span>29k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>51 mins.</span>
+              <span>53 mins.</span>
             </span>
 
         </div>
@@ -629,9 +631,41 @@
 
 <p><strong>Buffer Pool</strong></p>
 <p>存储页</p>
-<h3 id="redo-log-和-binlog"><a href="#redo-log-和-binlog" class="headerlink" title="redo log 和 binlog"></a>redo log 和 binlog</h3><p>redo log 可通过重放恢复到崩溃前状态</p>
+<h3 id="Undo-Log"><a href="#Undo-Log" class="headerlink" title="Undo Log"></a>Undo Log</h3><p><strong>Undo Log 刷盘</strong></p>
+<p>在 MySQL 中，<code>UNDO LOG</code> 默认是存储在 <code>InnoDB</code> 的表空间中的，具体来说，它存储在 <strong>Undo Tablespace</strong> 中。<code>UNDO LOG</code> 并不是直接存储在内存中，而是会定期刷盘到磁盘上，以确保事务的持久性和一致性。</p>
+<p>在 MySQL 5.7 及更高版本中，<code>UNDO LOG</code> 默认存储在独立的 Undo Tablespace 中（而不是在系统表空间中），并且这些 Undo Tablespace 文件会定期刷盘到磁盘上。</p>
+<p><strong>内存中的 UNDO LOG 如何清理？</strong></p>
+<p>内存中的 <code>UNDO LOG</code> 主要通过以下机制进行清理：</p>
+<ol>
+<li><strong>事务提交或回滚</strong>：当一个事务提交或回滚时，相关的 <code>UNDO LOG</code> 会被标记为可清理状态。事务提交后，<code>UNDO LOG</code> 不再需要用于回滚，因此可以被清理。</li>
+<li><strong>Purge 线程</strong>：MySQL 有一个后台的 <strong>Purge 线程</strong>，负责清理不再需要的 <code>UNDO LOG</code>。Purge 线程会定期扫描 <code>UNDO LOG</code>，并清理那些已经不再被任何活动事务引用的 <code>UNDO LOG</code> 记录。</li>
+<li><strong>Undo Tablespace 回收</strong>：当 <code>UNDO LOG</code> 被清理后，相关的空间会被回收，以便后续的事务可以复用这些空间。MySQL 会自动管理 Undo Tablespace 的大小，确保不会无限增长。</li>
+<li><strong>Undo Log 的轮转</strong>：MySQL 会定期轮转 <code>UNDO LOG</code>，即当某个 Undo Tablespace 中的 <code>UNDO LOG</code> 记录不再需要时，MySQL 会将其标记为可重用，并在需要时覆盖这些空间。</li>
+</ol>
+<h3 id="redo-log-和-binlog"><a href="#redo-log-和-binlog" class="headerlink" title="redo log 和 binlog"></a>redo log 和 binlog</h3><img src="/2024/08/10/Database-Learning-Record/wal.png" class="" title="img">
+
+<p>事务开始时，记录对数据库的修改，同时写入redo log和Undo log，如果发生崩溃，可通过redo log重放恢复到崩溃前状态</p>
 <p>redo log 和 binlog 均需要持久化到磁盘</p>
-<p>事务提交时，写 binlog 到磁盘</p>
+<blockquote>
+<p>redo log在磁盘上是顺序写，效率高于修改数据后直接写磁盘时的随机写；</p>
+<p>因此，修改数据直接修改位于Buffer Pool中的脏页，通过追加写redo log刷盘</p>
+</blockquote>
+<p>redo log非直接写入磁盘，相似的，redolog先写入redo log buffer，在以下时机刷入磁盘：</p>
+<ul>
+<li>MySQL正常关闭时刷入磁盘</li>
+<li>当redo log buffer中记录量大于redo log buffer总容量的一半时刷入磁盘</li>
+<li>Innodb后台线程每1秒执行刷入磁盘</li>
+<li>事务提交时刷入磁盘（参数innodb_flush_log_at_trx_commit控制）</li>
+</ul>
+<p>文件系统中存在两个redo log file，redo log buffer刷盘时，环形写入redo log file0和redo log file1；</p>
+<p>check point表示buffer pool中脏页已刷盘，不需要重放的数据。如果write pos追上check point，则MySQL会强制暂停开始将buffer pool脏页刷盘；</p>
+<img src="/2024/08/10/Database-Learning-Record/checkpoint.png" class="" title="img">
+
+
+
+<p>事务每条语句会产生一条 binlog 记录到 binlog buffer；当事务提交时，写 binlog buffer 到磁盘；</p>
+<p>binlog 只记录对数据库的更新操作</p>
+<p><strong>对比</strong></p>
 <p>适用对象</p>
 <ul>
 <li>binlog 是 MySQL 的 Server 层实现的日志，所有存储引擎均可使用</li>
@@ -1577,7 +1611,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">SQL执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVCC%E4%B8%8E%E5%B9%BB%E8%AF%BB"><span class="nav-text">MVCC与幻读</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log-%E5%92%8C-binlog"><span class="nav-text">redo log 和 binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">联合索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-text">MySQL存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">MySQL主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E9%94%81"><span class="nav-text">MySQL锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81"><span class="nav-text">表级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E7%BA%A7%E9%94%81"><span class="nav-text">行级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E5%AF%B9%E8%B1%A1"><span class="nav-text">锁对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-1"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9B%B8%E5%85%B3"><span class="nav-text">分库分表相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存穿透，缓存雪崩，缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">缓存可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#count-%E4%B8%8E-count-1"><span class="nav-text">count(*) 与 count(1)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C"><span class="nav-text">一致性哈希</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">SQL执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVCC%E4%B8%8E%E5%B9%BB%E8%AF%BB"><span class="nav-text">MVCC与幻读</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Undo-Log"><span class="nav-text">Undo Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log-%E5%92%8C-binlog"><span class="nav-text">redo log 和 binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">联合索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-text">MySQL存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">MySQL主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E9%94%81"><span class="nav-text">MySQL锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81"><span class="nav-text">表级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E7%BA%A7%E9%94%81"><span class="nav-text">行级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E5%AF%B9%E8%B1%A1"><span class="nav-text">锁对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-1"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9B%B8%E5%85%B3"><span class="nav-text">分库分表相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存穿透，缓存雪崩，缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">缓存可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#count-%E4%B8%8E-count-1"><span class="nav-text">count(*) 与 count(1)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C"><span class="nav-text">一致性哈希</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1593,14 +1627,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -1645,12 +1679,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">359k</span>
+    <span title="Symbols count total">367k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">10:53</span>
+    <span title="Reading time total">11:08</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
