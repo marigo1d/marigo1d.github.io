@@ -44,7 +44,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Project/v2-41835bffd6cf315cffaf8c4e52a94496_1440w.jpg">
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Project/cas-1741240463041.png">
 <meta property="article:published_time" content="2025-02-19T04:21:16.000Z">
-<meta property="article:modified_time" content="2025-03-20T02:21:11.634Z">
+<meta property="article:modified_time" content="2025-03-25T03:19:55.544Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -237,7 +237,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-20 10:21:11" itemprop="dateModified" datetime="2025-03-20T10:21:11+08:00">2025-03-20</time>
+                <time title="Modified: 2025-03-25 11:19:55" itemprop="dateModified" datetime="2025-03-25T11:19:55+08:00">2025-03-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,14 +255,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>32k</span>
+              <span>33k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>59 mins.</span>
+              <span>1:01</span>
             </span>
 
         </div>
@@ -286,6 +286,11 @@
 <li>（如果使用本地缓存）每个service考虑预先从本地Redis中取出一定量的库存，进行本地原子扣除；若本地缓存不够，原子的从本地Redis中取出一定量的库存；</li>
 <li>秒杀流量下降后（考虑使用延迟队列方式实现延时任务），多地的Redis返还数据库库存，<strong>修改数据库值</strong></li>
 </ul>
+<p>lua脚本</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 参数说明：</span></span><br><span class="line"><span class="comment">-- KEYS[1]: 库存 Key (seckill:stock:&#123;商品ID&#125;)</span></span><br><span class="line"><span class="comment">-- KEYS[2]: 用户购买记录 Key (seckill:user:&#123;用户ID&#125;:&#123;商品ID&#125;)</span></span><br><span class="line"><span class="comment">-- ARGV[1]: 用户 ID</span></span><br><span class="line"><span class="comment">-- ARGV[2]: 商品 ID</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 获取库存</span></span><br><span class="line"><span class="keyword">local</span> stock = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;GET&#x27;</span>, KEYS[<span class="number">1</span>])) <span class="keyword">or</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 检查库存是否大于 0</span></span><br><span class="line"><span class="keyword">if</span> stock &lt;= <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span> <span class="comment">-- 库存不足</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 检查用户是否已购买</span></span><br><span class="line"><span class="keyword">local</span> purchased = redis.call(<span class="string">&#x27;GET&#x27;</span>, KEYS[<span class="number">2</span>])</span><br><span class="line"><span class="keyword">if</span> purchased <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span> <span class="comment">-- 用户已购买</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 扣减库存</span></span><br><span class="line">redis.call(<span class="string">&#x27;DECR&#x27;</span>, KEYS[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 标记用户已购买</span></span><br><span class="line">redis.call(<span class="string">&#x27;SET&#x27;</span>, KEYS[<span class="number">2</span>], <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 返回成功</span></span><br><span class="line"><span class="keyword">return</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="ShortLink"><a href="#ShortLink" class="headerlink" title="ShortLink"></a>ShortLink</h2><p>创新点</p>
 <ol>
 <li>使用布隆过滤器来判断短链接是否已存在，提高了判断效率，远胜于使用分布式锁搭配查询数据库的方案。</li>
@@ -799,12 +804,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">377k</span>
+    <span title="Symbols count total">378k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">11:25</span>
+    <span title="Reading time total">11:27</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
