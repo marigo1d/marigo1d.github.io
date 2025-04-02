@@ -232,7 +232,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>9.6k</span>
+              <span>9.5k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -253,37 +253,19 @@
       
         <p>常用指令</p>
 <span id="more"></span>
-
-
-
 <h1 id="Common-Commands"><a href="#Common-Commands" class="headerlink" title="Common Commands"></a>Common Commands</h1><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/69746955">https://zhuanlan.zhihu.com/p/69746955</a></p>
 <p>python变量，函数均为对象</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>() : </span><br><span class="line">    <span class="comment">#函数在创建时同时生成变量对象hello和函数对象（函数对象名为hello）</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    x=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(test())<span class="comment">#函数默认返回值为None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">say = hello</span><br><span class="line"> </span><br><span class="line"><span class="keyword">del</span> hello <span class="comment">#del删除了hello变量对象</span></span><br><span class="line">say()</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(say))<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say)<span class="comment">##对象属性</span></span><br><span class="line"><span class="built_in">print</span>(say.__name__) <span class="comment">##对象属性,查看对象名</span></span><br></pre></td></tr></table></figure>
-
-
-
 <p>python类</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class MyClass:</span><br><span class="line">    def my_method(self, arg1, arg2):</span><br><span class="line">    #类的方法第一个参数为self</span><br><span class="line">        # 方法体</span><br><span class="line"></span><br><span class="line">#Bound Method</span><br><span class="line">obj = MyClass()#类 实例化</span><br><span class="line">obj.my_method(arg1, arg2)#实例对象调用方法</span><br><span class="line"></span><br><span class="line">#Unbound Method</span><br><span class="line">MyClass.my_method(obj, arg1, arg2)</span><br><span class="line">	#原因：可以直接通过类访问方法，但是必须指定类的实例</span><br></pre></td></tr></table></figure>
-
-
-
 <p>函数内部函数</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">        x = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> test</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hello()())</span><br><span class="line"><span class="comment">#首先hello()返回函数对象test，然后调用 test()</span></span><br></pre></td></tr></table></figure>
-
-
-
 <p>函数装饰器</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">f</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">f</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inn</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;inner&quot;</span>)</span><br><span class="line">        f()</span><br><span class="line">    <span class="keyword">return</span> inn</span><br><span class="line"></span><br><span class="line"><span class="meta">@hello</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#等价于</span></span><br><span class="line">test=hello(test)<span class="comment">#原函数对象test仍存在，变量对象test指向新函数hello(test)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#test &lt;function test at 0x000001821AE551C0&gt;</span></span><br><span class="line"><span class="comment">#test() None</span></span><br><span class="line"><span class="comment">#test为函数对象，test()为（执行函数对象后的）返回值</span></span><br><span class="line">test()</span><br><span class="line"><span class="built_in">print</span>(test.__name__)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <p>with语句 上下文对象管理</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">with open(&#x27;myfile.txt&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">    contents = f.read()</span><br><span class="line">    print(contents)</span><br></pre></td></tr></table></figure>
-
 <ul>
-<li>**open(‘myfile.txt’, ‘r’)**：这是一个上下文管理器，它打开文件并返回一个文件对象。</li>
+<li><strong>open(‘myfile.txt’, ‘r’)</strong>：这是一个上下文管理器，它打开文件并返回一个文件对象。</li>
 <li><strong>as f</strong>：将文件对象赋值给变量 f，以便在 with 代码块中使用。</li>
 <li>在 with 代码块中，我们可以使用 f 读取文件内容。</li>
 <li>当 with 代码块执行完毕后，文件会自动关闭，即使在读取过程中发生异常。</li>
@@ -291,88 +273,81 @@
 <p>Python类型注解</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/419955374">https://zhuanlan.zhihu.com/p/419955374</a></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment">#规定函数传入参数为str类型，返回值为str类型</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Hello <span class="subst">&#123;name&#125;</span>!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mix</span>(<span class="params">scores: <span class="built_in">list</span>[<span class="built_in">int</span>], ages: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]</span>) -&gt; <span class="built_in">tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>]:</span><br><span class="line">    <span class="comment">#容器注解</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">seq: Seq1[<span class="built_in">str</span>]</span>):</span><br><span class="line">    <span class="comment">#传入参数为（列表+元组）的泛化：序列Seq</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> seq:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="type">Optional</span>[<span class="built_in">str</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为None或为str</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Yeah&#x27;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>() -&gt; <span class="type">Union</span>[<span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为str，int，float 三选一</span></span><br><span class="line">    <span class="comment">#Optional[int] 和 Union[int, None] 是等价的。</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#T为泛型，T必须为str或int</span></span><br><span class="line">T = TypeVar(<span class="string">&#x27;T&#x27;</span>, <span class="built_in">str</span>, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">a: T, b: T</span>) -&gt; <span class="type">List</span>[T]:</span><br><span class="line">    <span class="keyword">return</span> [a, b]</span><br><span class="line"></span><br><span class="line"><span class="comment"># K的具体类型没有限制</span></span><br><span class="line">K = TypeVar(<span class="string">&quot;K&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <h2 id="python-环境"><a href="#python-环境" class="headerlink" title="python 环境"></a>python 环境</h2><p>sudo apt-get update  # 更新包管理器</p>
 <p>sudo apt-get install python3-venv  # 安装Python虚拟环境工具</p>
-<p>cd &#x2F;path&#x2F;to&#x2F;your&#x2F;project</p>
+<p>cd /path/to/your/project</p>
 <p>python3 -m venv venv</p>
-<p>source venv&#x2F;bin&#x2F;activate</p>
+<p>source venv/bin/activate</p>
 <p>pip install -r requirements.txt</p>
 <p>deactivate</p>
 <p>conda指令</p>
 <p>conda env list</p>
-<p>conda create –name your_env_name python&#x3D;3.5 numpy scipy</p>
-<p>conda remove –<em>name</em> <em>your_env_name</em> –all</p>
+<p>conda create —name your_env_name python=3.5 numpy scipy</p>
+<p>conda remove —<em>name</em> <em>your_env_name</em> —all</p>
 <p>conda install</p>
-<p>​	conda install numpy&#x3D;1.9.3</p>
+<p>​    conda install numpy=1.9.3</p>
 <p>activate your_env_name</p>
 <p>deactivate</p>
-<p>conda clean –all</p>
+<p>conda clean —all</p>
 <p>当前conda虚拟环境中存在pip时，使用pip指令将优先使用环境中pip而非全局pip，可通过pip list（当前环境必须已安装pip）和 conda list 查看当前环境包列表</p>
 <p>出现报错</p>
 <p>PackagesNotFoundError: The following packages are not available from current channels</p>
-<p>尝试在<a target="_blank" rel="noopener" href="https://anaconda.org直接搜索该包并使用网站所提供的指令安装/">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
+<p>尝试在<a target="_blank" rel="noopener" href="https://anaconda.org直接搜索该包并使用网站所提供的指令安装">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
 <h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ol>
-<li><p>**<code>docker pull</code>**：用于从 Docker 镜像仓库下载镜像到本地主机。</p>
+<li><p><strong><code>docker pull</code></strong>：用于从 Docker 镜像仓库下载镜像到本地主机。</p>
 <ul>
 <li>语法：<code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></li>
 <li>示例：<code>docker pull ubuntu:20.04</code></li>
 </ul>
 <p>这个命令用于获取 Docker 镜像，其中 <code>NAME</code> 表示镜像的名称，<code>TAG</code> 表示镜像的标签，或者可以使用 <code>@DIGEST</code> 来指定镜像的摘要。如果不指定标签，将默认获取 <code>latest</code> 标签的镜像。</p>
 </li>
-<li><p>**<code>docker load</code>**：用于从文件加载镜像，通常是以 tar 归档文件的形式。</p>
+<li><p><strong><code>docker load</code></strong>：用于从文件加载镜像，通常是以 tar 归档文件的形式。</p>
 <ul>
 <li>语法：<code>docker load [OPTIONS]</code></li>
 <li>示例：<code>docker load -i myimage.tar</code></li>
 </ul>
 <p>这个命令用于加载以 tar 归档文件格式存储的 Docker 镜像。通常用于将镜像从一个环境传输到另一个环境。</p>
 </li>
-<li><p>**<code>docker save</code>**：用于将 Docker 镜像保存为 tar 归档文件。</p>
+<li><p><strong><code>docker save</code></strong>：用于将 Docker 镜像保存为 tar 归档文件。</p>
 <ul>
 <li>语法：<code>docker save [OPTIONS] IMAGE [IMAGE...]</code></li>
 <li>示例：<code>docker save -o myimage.tar myimage:tag</code></li>
 </ul>
 <p>这个命令允许你将一个或多个 Docker 镜像保存为 tar 归档文件，通常用于导出镜像以便在不同环境中使用。</p>
 </li>
-<li><p>**<code>docker run</code>**：用于创建和启动 Docker 容器。</p>
+<li><p><strong><code>docker run</code></strong>：用于创建和启动 Docker 容器。</p>
 <ul>
 <li>语法：<code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></li>
 <li>示例：<code>docker run -d -p 8080:80 my-web-app</code></li>
 </ul>
 <p>这个命令用于在 Docker 容器中运行一个镜像，你需要指定镜像的名称、容器选项（如端口映射、环境变量、容器名称等），以及容器内要执行的命令。</p>
 </li>
-<li><p>**<code>docker build</code>**：用于构建自定义 Docker 镜像，通常通过 Dockerfile 文件定义构建步骤。</p>
+<li><p><strong><code>docker build</code></strong>：用于构建自定义 Docker 镜像，通常通过 Dockerfile 文件定义构建步骤。</p>
 <ul>
 <li>语法：<code>docker build [OPTIONS] PATH | URL | -</code></li>
 <li>示例：<code>docker build -t my-custom-image .</code></li>
 </ul>
 <p><code>docker build</code> 命令用于基于 Dockerfile 构建自定义镜像。你需要提供包含 Dockerfile 的路径，以及可选的选项和标签。</p>
-<p>Dockerfile</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 使用官方 Python 3 镜像作为基础镜像</span><br><span class="line">FROM python:3.8</span><br><span class="line"></span><br><span class="line"># 设置工作目录</span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"># 复制本地项目到容器中</span><br><span class="line">COPY ./myproject /app</span><br><span class="line"></span><br><span class="line"># 安装项目依赖</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 指定容器启动命令</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
 </li>
-<li><p>**<code>docker rm</code>**：用于删除已停止的容器。</p>
+</ol>
+<p>   Dockerfile</p>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 使用官方 Python 3 镜像作为基础镜像</span><br><span class="line">FROM python:3.8</span><br><span class="line"></span><br><span class="line"># 设置工作目录</span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line"># 复制本地项目到容器中</span><br><span class="line">COPY ./myproject /app</span><br><span class="line"></span><br><span class="line"># 安装项目依赖</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 指定容器启动命令</span><br><span class="line">CMD [&quot;python&quot;, &quot;app.py&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol>
+<li><p><strong><code>docker rm</code></strong>：用于删除已停止的容器。</p>
 <ul>
 <li>语法：<code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></li>
 <li>示例：<code>docker rm my-container</code></li>
 </ul>
 <p>这个命令用于删除一个或多个已经停止的容器，释放资源并清理系统。</p>
 </li>
-<li><p>**<code>docker stop</code>**：用于停止运行中的容器。</p>
+<li><p><strong><code>docker stop</code></strong>：用于停止运行中的容器。</p>
 <ul>
 <li>语法：<code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></li>
 <li>示例：<code>docker stop my-container</code></li>
 </ul>
 <p>这个命令用于停止一个或多个正在运行的容器，使它们从运行状态转换为停止状态。</p>
 </li>
-<li><p>**<code>docker ps</code>**：用于列出正在运行的容器。</p>
+<li><p><strong><code>docker ps</code></strong>：用于列出正在运行的容器。</p>
 <ul>
 <li>语法：<code>docker ps [OPTIONS]</code></li>
 <li>示例：<code>docker ps -a</code></li>
@@ -385,9 +360,6 @@
 <p><strong>暂存区</strong>：<code>git add</code> 会将文件的当前状态（即 <strong>修改后的内容</strong>）从 <strong>工作区</strong> 拷贝到 <strong>暂存区</strong>。如果此时再次修改 <strong>工作区</strong> 内容， <strong>暂存区</strong> 内容不受影响。</p>
 <p><a target="_blank" rel="noopener" href="https://learngitbranching.js.org/">https://learngitbranching.js.org/</a></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在桌面创建test目录</span></span><br><span class="line"><span class="built_in">mkdir</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到test目录</span></span><br><span class="line"><span class="built_in">cd</span> /Users/wangsaichao/Desktop/test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并初始化git库</span></span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接到远程git仓库 </span></span><br><span class="line"><span class="comment"># -t 默认使用远程仓库的 main 分支，origin为远程仓库别名（替换链接）</span></span><br><span class="line"><span class="comment"># 为本地分支 main 设置了上游跟踪分支为 origin/main。这意味着当执行 git pull 或 git push 不带分支参数 时，Git 会默认使用 main 分支与 origin/main 同步</span></span><br><span class="line">git remote add origin -t main https://github.com/xx/xxx.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将远程git库下载到本地</span></span><br><span class="line">git pull origin/main</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将目录下所有文件都增加到本地库中。</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更改到本地仓库</span></span><br><span class="line">git commit -m <span class="string">&#x27;提交注释&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地的master分支改为main分支, github为避免联想奴隶制。在持续的外界影响之下,默认分支由master改为main。 </span></span><br><span class="line"><span class="comment"># 但是git工具默认init还是创建的master分支 所以要改成main分支。</span></span><br><span class="line">git branch -M main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将本地修改推到github上</span></span><br><span class="line">git push -u origin main  <span class="comment"># 首次</span></span><br><span class="line">git push origin main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件夹</span></span><br><span class="line">git <span class="built_in">rm</span> -r --cached <span class="built_in">dir</span>/</span><br><span class="line"><span class="comment"># 移除文件跟踪 适用于文件</span></span><br><span class="line">git <span class="built_in">rm</span> --cached file</span><br></pre></td></tr></table></figure>
-
-
-
 <p>branch</p>
 <p> <strong>创建一个新的分支指针</strong>，并将它指向当前的 <code>HEAD</code> 所在的检查点（即当前的 commit）。这个新的分支指针会指向当前分支的最新提交，或者如果你在一个 <strong>detached HEAD</strong> 状态下，它会指向 <code>HEAD</code> 当前指向的 commit。</p>
 <ul>
@@ -419,19 +391,18 @@
 <p>移动当前branch指针到指定检查点</p>
 <p>假设有以下历史：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A---B---C---D  (main)</span><br><span class="line">            ^</span><br><span class="line">           HEAD</span><br></pre></td></tr></table></figure>
-
 <ol>
-<li>**<code>git reset --soft B</code>**：<ul>
+<li><strong><code>git reset --soft B</code></strong>：<ul>
 <li>HEAD 指向 <code>B</code>。</li>
 <li><code>C</code> 和 <code>D</code> 被“取消”，但它们的更改仍然在暂存区中（即提交<code>C</code>和<code>D</code>的修改内容全部保存在暂存区</li>
 </ul>
 </li>
-<li>**<code>git reset --mixed B</code>**：<ul>
+<li><strong><code>git reset --mixed B</code></strong>：<ul>
 <li>HEAD 指向 <code>B</code>。</li>
 <li><code>C</code> 和 <code>D</code> 的更改从暂存区移到工作区。</li>
 </ul>
 </li>
-<li>**<code>git reset --hard B</code>**：<ul>
+<li><strong><code>git reset --hard B</code></strong>：<ul>
 <li>HEAD 指向 <code>B</code>。</li>
 <li><code>C</code> 和 <code>D</code> 被丢弃，暂存区和工作区都回到 <code>B</code> 的状态。</li>
 </ul>
@@ -440,10 +411,8 @@
 <p>rebase [target branch] [source branch(可选)]</p>
 <p>假设有以下分支结构：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A---B---C  (current-branch)</span><br><span class="line"> \</span><br><span class="line">  D---E---F  (target-branch)</span><br></pre></td></tr></table></figure>
-
 <p>在 <code>current-branch</code> 上运行以下命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase target-branch</span><br></pre></td></tr></table></figure>
-
 <p>Rebase 会执行以下步骤：</p>
 <ol>
 <li><strong>找到共同祖先</strong>：<ul>
@@ -466,34 +435,24 @@
 </ol>
 <p>最终的结构变成：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D---E---F---B&#x27;---C&#x27;  (current-branch)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <p>merge [target branch]</p>
 <p>创建新的检查点，该检查点的父节点为<strong>当前branch指针所指向节点</strong>和<strong>目标branch指针所指向节点</strong>，<strong>移动当前branch指针指向新创建节点</strong>。</p>
 <p>fetch</p>
 <ul>
-<li>fetch将下载远程仓库的内容，并移动 远程指针 &lt;远程仓库名&gt;&#x2F;&lt;分支&gt; 指向与远程仓库同步的位置</li>
+<li>fetch将下载远程仓库的内容，并移动 远程指针 \&lt;远程仓库名>/\&lt;分支> 指向与远程仓库同步的位置</li>
 <li>不更新本地指针！！！这意味着，如果本地main分支指针现在指向C2，远程指针指向C1，远程仓库已更新至C3，执行fetch后会存在以下情况</li>
 </ul>
 <img src="/2024/06/22/common-commands/image-20240823160319940.png" class="" title="image-20240823160319940">
-
 <img src="/2024/06/22/common-commands/image-20240823160406360.png" class="" title="image-20240823160406360">
-
-
-
 <p>pull</p>
 <ul>
 <li>pull指令为fetch和merge指令的和，因此会使当前branch指针移动</li>
-<li><code>git pull</code> 拉取时，默认是针对当前分支关联的单个远程分支进行操作</li>
-</ul>
-<p> <code>git pull</code> 的一些常见行为：</p>
-<ul>
+<li><p><code>git pull</code> 拉取时，默认是针对当前分支关联的单个远程分支进行操作</p>
+<p><code>git pull</code> 的一些常见行为：</p>
+</li>
 <li><p><strong><code>git pull</code> (不带参数):</strong> 这是最常用的方式。它会从当前分支追踪的远程分支获取最新提交，并尝试将其合并到当前分支。如果你的当前分支已经设置了上游分支 (upstream branch)，那么 <code>git pull</code> 将会使用这个上游分支。你可以使用 <code>git branch -vv</code> 查看当前分支追踪的远程分支。</p>
 </li>
-<li><p>**<code>git pull &lt;remote&gt; &lt;branch&gt;</code>: ** 这会从指定的远程仓库 <code>&lt;remote&gt;</code> 的 <code>&lt;branch&gt;</code> 分支获取最新提交，并尝试将其合并到当前分支。 例如，<code>git pull origin develop</code> 会从远程仓库 <code>origin</code> 的 <code>develop</code> 分支获取更新，并合并到当前分支。</p>
+<li><p><strong><code>git pull &lt;remote&gt; &lt;branch&gt;</code>: </strong> 这会从指定的远程仓库 <code>&lt;remote&gt;</code> 的 <code>&lt;branch&gt;</code> 分支获取最新提交，并尝试将其合并到当前分支。 例如，<code>git pull origin develop</code> 会从远程仓库 <code>origin</code> 的 <code>develop</code> 分支获取更新，并合并到当前分支。</p>
 </li>
 <li><p><strong><code>git pull --rebase</code>:</strong> 这会使用 <code>git rebase</code> 而不是 <code>git merge</code> 来整合远程分支的更改。<code>rebase</code> 会将你的本地提交放在远程分支的最新提交之后，从而创建一个更线性的提交历史。  可以通过 <code>git config --global pull.rebase true</code> 设置全局使用 rebase 模式。</p>
 </li>
@@ -519,23 +478,14 @@
 </ul>
 <h2 id="bash通配符"><a href="#bash通配符" class="headerlink" title="bash通配符"></a>bash通配符</h2><p>?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意一个字符，{a,b,c}表示匹配a或b或c</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ls [ab].txt</span><br><span class="line">a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ ls *[ab].txt</span><br><span class="line">ab.txt a.txt b.txt</span><br><span class="line"></span><br><span class="line">$ echo d&#123;a,e,i,u,o&#125;g</span><br><span class="line">dag deg dig dug dog</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h2><p>hello.c -预处理 -E-&gt; hello.i -编译 -S-&gt; hello.s -汇编 -c-&gt; hello.o -链接 -&gt; hello</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc  main.cpp hello.cpp factorial.cpp -o hello</span><br></pre></td></tr></table></figure>
-
 <p>使用gcc 将多个文件 <strong>生成</strong> 为 hello可执行文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">	gcc test.c</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件。这里未指定输出文件，默认输出为 a.out。</span><br><span class="line"></span><br><span class="line">-o：指定生成的输出文件；</span><br><span class="line">	gcc test.c -o test</span><br><span class="line">	将 test.c 预处理、编译、汇编并链接形成可执行文件 test。-o 选项用来指定输出文件的文件名。</span><br><span class="line">	</span><br><span class="line">-E：仅执行编译预处理；</span><br><span class="line">	gcc -E test.c -o test.i</span><br><span class="line">	将 test.c 预处理输出 test.i 文件。</span><br><span class="line"></span><br><span class="line">-S：将C代码转换为汇编代码；</span><br><span class="line">	gcc -S test.i</span><br><span class="line">	将预处理输出文件 test.i 汇编成 test.s 文件。</span><br><span class="line"></span><br><span class="line">-wall：显示警告信息；</span><br><span class="line"></span><br><span class="line">-c：仅执行编译操作，不进行连接操作。</span><br><span class="line">	gcc -c test.s</span><br><span class="line">	将汇编输出文件 test.s 编译输出 test.o 文件。</span><br><span class="line"></span><br><span class="line">-l：用来指定程序要链接的库，-l参数紧接着就是库名</span><br><span class="line"></span><br><span class="line">-I：寻找头文件的目录</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">make main</span><br><span class="line">make -f config.txt //指定makefile文件</span><br><span class="line">make --file=config.txt</span><br></pre></td></tr></table></figure>
-
 <p>使用Make指令执行Makefile文件(make指令自动寻找当前文件夹下的Makefile文件)</p>
 <p>Makefile文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;target&gt; : &lt;prerequisites&gt;	//目标，前置条件</span><br><span class="line">[tab] &lt;commands&gt;	//命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.PHONY: clean	//声明目标clean为伪目标</span><br><span class="line">clean:</span><br><span class="line">    rm -rf *.o</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个简单的实例</span><br><span class="line">main:main.o fun0.o fun1.o fun2.0	</span><br><span class="line">	gcc -o main main.o fun0.o fun1.o fun2.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//一个复杂的实例</span><br><span class="line"># Define required macros here</span><br><span class="line">SHELL = /bin/sh		//宏定义</span><br><span class="line">OBJS =  main.o factorial.o hello.o</span><br><span class="line">CFLAG = -Wall -g</span><br><span class="line">CC = gcc</span><br><span class="line">INCLUDE =</span><br><span class="line">LIBS = -lm</span><br><span class="line">hello:$&#123;OBJ&#125;	//$&#123;&#125;表示变量</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -o $@ $&#123;OBJS&#125; $&#123;LIBS&#125;</span><br><span class="line">clean:</span><br><span class="line">   -rm -f *.o core *.core	//类似于bash,?表示单个字符，*表示任意个字符，[abc]表示匹配abc中任意个字符，&#123;a,b,c&#125;表示匹配a或b或c</span><br><span class="line">.cpp.o:</span><br><span class="line">   $&#123;CC&#125; $&#123;CFLAGS&#125; $&#123;INCLUDES&#125; -c</span><br></pre></td></tr></table></figure>
-
 <p>冒号左侧：目标文件</p>
 <p>冒号右侧：被依赖文件，前置条件</p>
 <p>前置条件决定 “目标” 是否需要重新构建。只要前置条件中列出的文件中，有任何一个文件被更新（即前置条件列出的文件的最后修改时间比目标的最后修改时间新），或者 “目标” 不存在，那 “目标” 就需要重新构建。</p>
@@ -543,7 +493,6 @@
 <p><code>$@</code>，<code>$^</code>，<code>$&lt;</code> 这种符号，这种符号称为自动变量。自动变量是局部变量，作用域范围在当前的规则内（即自动化变量只应该出现在 Makefile 目标规则中）</p>
 <p><code>$@</code> 指代当前目标， Make 命令意图构建的目标</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hello: hello.o</span><br><span class="line">    gcc hello.o -o $@	//$@为hello</span><br></pre></td></tr></table></figure>
-
 <p><code>$&lt;</code> 指代第一个前置条件。比如规则为 hello: a b，那么 <code>$&lt;</code> 就指代 a。</p>
 <p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 hello: a b，那么 <code>$^</code> 就指代 a 和 b。</p>
 
@@ -697,12 +646,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">396k</span>
+    <span title="Symbols count total">395k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">12:01</span>
+    <span title="Reading time total">11:58</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
@@ -757,6 +706,8 @@
 
 
 
+
+  
 
   
 

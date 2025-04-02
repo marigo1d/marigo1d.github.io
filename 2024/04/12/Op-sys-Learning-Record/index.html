@@ -344,7 +344,7 @@
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1:08</span>
+              <span>1:07</span>
             </span>
 
         </div>
@@ -358,9 +358,6 @@
       
         <p>操作系统相关学习记录</p>
 <span id="more"></span>
-
-
-
 <h1 id="Op-sys-learning-record"><a href="#Op-sys-learning-record" class="headerlink" title="Op_sys_learning_record"></a>Op_sys_learning_record</h1><h3 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h3><p>QEMU：近似模拟硬件SiFiveFU540-C000主板(RISC-V,64 bit register, 56 bit physical memory)</p>
 <p>intel 8086：20根地址线，16位寄存器</p>
 <h3 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h3><p>XV6：操作系统</p>
@@ -370,53 +367,32 @@
 <p>0xF0000-0xFFFFF: ROM，BIOS代码位置</p>
 <p>通过段寄存器左移4位+偏移地址</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240413150024273.png" class="" title="image-20240413150024273">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240417110651232.png" class="" title="image-20240417110651232">
-
-
-
-
-
 <h4 id="SiFive-FU540物理地址空间"><a href="#SiFive-FU540物理地址空间" class="headerlink" title="SiFive FU540物理地址空间"></a>SiFive FU540物理地址空间</h4><p>物理地址0x80000000以前的部分由主板上非DRAM组成（例如：boot ROM，PLIC等）</p>
 <p>物理地址对应的硬件（图例为SiFive主板，仅截取部分，物理地址0x80000000以前的部分非DRAM）</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240413150852809.png" class="" title="image-20240413150852809">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240412184947166.png" class="" title="image-20240412184947166">
-
-
-
 <h4 id="显存地址空间"><a href="#显存地址空间" class="headerlink" title="显存地址空间"></a>显存地址空间</h4><p>0xB8000-0xBFFFF为显存中字符显示部分，默认模式为80个字符*25行，一个字符2字节表示</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240420184138573.png" class="" title="image-20240420184138573">
-
-
-
-
-
 <h4 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h4><p>不可见寄存器</p>
-<p>GDTR	全局描述符表寄存器</p>
-<p>IDTR	中断描述符表寄存器</p>
-<p>LDTR	局部描述符表寄存器</p>
-<p>TR	任务寄存器</p>
-<p>CR0~3	控制寄存器</p>
-<p>IP	指令指针寄存器</p>
-<p>flags	标志寄存器</p>
-<p>DR0~3	调试寄存器</p>
+<p>GDTR    全局描述符表寄存器</p>
+<p>IDTR    中断描述符表寄存器</p>
+<p>LDTR    局部描述符表寄存器</p>
+<p>TR    任务寄存器</p>
+<p>CR0~3    控制寄存器</p>
+<p>IP    指令指针寄存器</p>
+<p>flags    标志寄存器</p>
+<p>DR0~3    调试寄存器</p>
 <p>可见寄存器</p>
 <p>通用寄存器，可直接访问</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240420144227413.png" class="" title="image-20240420144227413">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240420144655049.png" class="" title="image-20240420144655049">
-
 <p>段寄存器，段基址*16+偏移</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240420144356905.png" class="" title="image-20240420144356905">
-
-
-
 <p>32位与16位</p>
 <p>32位地址总线，32位寄存器</p>
 <p>寄存器组</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416185859023.png" class="" title="image-20240416185859023">
-
 <p>通用寄存器组，Eflag和EIP变为32位</p>
 <p>段寄存器仍为16位宽！！内容为段选择子</p>
 <h4 id="Intel语法风格"><a href="#Intel语法风格" class="headerlink" title="Intel语法风格"></a>Intel语法风格</h4><p>右 -&gt; 左</p>
@@ -425,49 +401,31 @@
 <p>基址寄存器：bx寄存器默认基于DS进行偏移，bp寄存器默认基于SS进行偏移</p>
 <p>变址寄存器：si寄存器和di寄存器默认基于ds进行偏移</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">mov ax, [0x1234]	;取DS*16+0x1234处的值赋给ax</span><br><span class="line"></span><br><span class="line">add [bx], 0x1234	;将0x1234赋给内存中DS*16+bx处</span><br><span class="line"></span><br><span class="line">mov ax, [fs:0x5678]	;显式指定使用gs寄存器作为段基址，将gs*16+0x5678的值赋给ax</span><br><span class="line"></span><br><span class="line">mov byte [gs:0x01], &#x27;M&#x27;	;显式指定使用gs段寄存器作为段基址，指定操作数为1字节，向gs*16+0x01的位置写入1字节的数据&#x27;M&#x27;</span><br><span class="line"></span><br><span class="line">mov ax, [sp]	;将sp指向的值赋给ax</span><br><span class="line"></span><br><span class="line">mov ax, [bp+4]	;将SS*16+bp+4处的值赋给ax</span><br><span class="line"></span><br><span class="line">mov [di], ax	;将ax的值写入DS*16+di处</span><br><span class="line"></span><br><span class="line">mov [si+0x1234], ax	;将ax的值写入DS*16+si+0x1234处</span><br><span class="line"></span><br><span class="line">mov [bx+di], ax	;将ax的值写入DS*16+bx+di</span><br><span class="line"></span><br><span class="line">jump $	; $符号表示当前行，该语句为跳转至当前行；$$为当前section</span><br><span class="line"></span><br><span class="line">;-----------------------stdcall调用约定------------------------</span><br><span class="line">push 2</span><br><span class="line">push 3	;从右往左将传入参数压栈</span><br><span class="line">call subtract	;将当前eip压栈，跳转至被调函数地址开始执行</span><br><span class="line"></span><br><span class="line">push ebp	;压栈保存原ebp，</span><br><span class="line">mov ebp, esp	;更新栈帧基址，进入新栈帧</span><br><span class="line"></span><br><span class="line">mov eax, [ebp+0x8]</span><br><span class="line">mov eax, [ebp+0xc]</span><br><span class="line"></span><br><span class="line">mov esp, ebp</span><br><span class="line"></span><br><span class="line">pop ebp	;弹出栈顶保存的原ebp值到ebp</span><br><span class="line">ret 8	;弹出栈顶地址到eip(弹栈使得esp自加4)，esp+8(移除压栈的传入参数)</span><br><span class="line">;-------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">;-----------------------cdecl调用约定--------------------------</span><br><span class="line">push 2</span><br><span class="line">push 3	;从右往左将传入参数压栈</span><br><span class="line">call subtract	;将当前eip压栈，跳转至被调函数地址开始执行</span><br><span class="line">add esp, 8	;清栈，移除传入参数</span><br><span class="line"></span><br><span class="line">push ebp	;压栈保存原ebp，进入新栈帧</span><br><span class="line">mov ebp, esp</span><br><span class="line"></span><br><span class="line">mov eax, [ebp+0x8]</span><br><span class="line">mov eax, [ebp+0xc]</span><br><span class="line"></span><br><span class="line">mov esp, ebp</span><br><span class="line"></span><br><span class="line">pop ebp	;弹出栈顶保存的原ebp值到ebp</span><br><span class="line">ret	;弹出栈顶地址到eip(弹栈使得esp自加4)，esp+8(移除压栈的传入参数)</span><br><span class="line">;-------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">section .data	;section为伪指令，面向程序员的跳转记号</span><br><span class="line">	var dd 0</span><br><span class="line">	str: dd &quot;hello&quot;, 0xa, 0</span><br><span class="line"></span><br><span class="line">section .text</span><br><span class="line">extern c_print	;导入外部函数 c_print</span><br><span class="line">global _start	;将函数_start导出为全局符号，供外部文件调用</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">	push str</span><br><span class="line">	jmp $$</span><br></pre></td></tr></table></figure>
-
 <p>SS为栈底，bp为当前帧底</p>
 <p>保护模式</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240420193121630.png" class="" title="image-20240420193121630">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240420195137241.png" class="" title="image-20240420195137241">
-
-
-
 <p>segment与section</p>
 <p>section称为节，是指在汇编源码中经由关键字section或segment修饰、逻辑划分的指令或数据区域，汇编器会将这两个关键字修饰的区域在目标文件中编译成节，也就是说“节”最初诞生于目标文件中。</p>
 <p>segment称为段，是链接器根据目标文件中属性相同的多个section合并后的section集合，这个集合称为segment，也就是段，链接器把目标文件链接成可执行文件，因此段最终诞生于可执行文件中。我们平时所说的可执行程序内存空间中的代码段和数据段就是指的segment。</p>
-<h4 id="AT-T语法风格"><a href="#AT-T语法风格" class="headerlink" title="AT&amp;T语法风格"></a>AT&amp;T语法风格</h4><p>左 -&gt; 右</p>
+<h4 id="AT-amp-T语法风格"><a href="#AT-amp-T语法风格" class="headerlink" title="AT&amp;T语法风格"></a>AT&amp;T语法风格</h4><p>左 -&gt; 右</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">movl %eax, immed32(%ebx, %esi,2)	</span><br><span class="line">	#将eax的值写入内存immed32+ebx+esi*2处</span><br><span class="line">	#()括号表示取内的值作为内存地址</span><br><span class="line">	#寄存器前必须有%</span><br><span class="line"></span><br><span class="line">movl $123, %eax	#将立即数123写入寄存器eax</span><br><span class="line"></span><br><span class="line">andl %ebx, %ecx #对寄存器 %ebx 和 %ecx 的内容执行按位与操作，并将结果存储到 %ecx 寄存器中。</span><br><span class="line"></span><br><span class="line">xchgl %eax, (%esp) #交换寄存器eax和栈顶位置的值</span><br><span class="line"></span><br><span class="line">popl %eax #指从栈顶弹出数据，并将弹出的数据写入 %eax 寄存器。</span><br><span class="line"></span><br><span class="line">ret #弹出栈顶值写入PC</span><br><span class="line">iret #弹出eip并写入，弹出cs并写入，弹出eflags并写入</span><br></pre></td></tr></table></figure>
-
-
-
 <p>内联汇编</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">asm</span> [<span class="keyword">volatile</span>] (<span class="string">&quot;&quot;</span>)	<span class="comment">//volatile为可选项，表示此处代码不得修改</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;movl $9, %eax;&quot;</span> <span class="string">&quot;pushl %eax&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">asm</span> [<span class="keyword">volatile</span>] (<span class="string">&quot;&quot;</span>:<span class="string">&quot;&quot;</span>(output) :<span class="string">&quot;&quot;</span>(input) :clobber/modify)</span><br><span class="line">	<span class="comment">//&quot;&quot; 内部为汇编代码</span></span><br><span class="line">    <span class="comment">//output, input为c变量，它们前面的&quot;&quot;为约束</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;addl %%ebx, %%eax;&quot;</span>:<span class="string">&quot;=a&quot;</span>(out_sum):<span class="string">&quot;a&quot;</span>(in_a),<span class="string">&quot;b&quot;</span>(in_b))</span><br><span class="line">	<span class="comment">//&quot;a&quot;为约束名，约束c语言变量in_a使用寄存器eax</span></span><br><span class="line">	<span class="comment">//&quot;b&quot;为约束名，约束c语言变量in_b使用寄存器ebx</span></span><br><span class="line">	<span class="comment">//&quot;=a&quot;为约束名，将寄存器eax的值写入c语言变量out_sum</span></span><br><span class="line">	<span class="comment">//=为只写，+为读写，&amp;为独占所约束的寄存器</span></span><br><span class="line">	<span class="comment">//由于扩展内联汇编中，%0为占位符符号，故修改寄存器表示为%%eax</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;movb %0 %1;&quot;</span>::<span class="string">&quot;a&quot;</span>(in_a),<span class="string">&quot;m&quot;</span>(in_b))</span><br><span class="line">	<span class="comment">//&quot;a&quot;为约束名，约束c语言变量in_a使用寄存器eax</span></span><br><span class="line">	<span class="comment">//&quot;m&quot;为约束名，使用c语言变量in_b的内存地址</span></span><br><span class="line">	<span class="comment">//%0,%1为序号占位符，所有input和output从左至右被标序号，这里对应in_a, in_b</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">asm</span> (<span class="string">&quot;divb %[divisor]; movb %%al, %[result]&quot;</span>\</span><br><span class="line">		:[result]<span class="string">&quot;=m&quot;</span>(out)\</span><br><span class="line">		:<span class="string">&quot;a&quot;</span>(in_a),[divisor]<span class="string">&quot;m&quot;</span>(in_b)\</span><br><span class="line">		);</span><br><span class="line">	<span class="comment">//[divisor]为in_b的内存地址，通过%[divisor]获取内存的值</span></span><br><span class="line">	<span class="comment">//[result]为out的内存地址，</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="C-C-相关"><a href="#C-C-相关" class="headerlink" title="C&#x2F;C++ 相关"></a>C&#x2F;C++ 相关</h4><p><strong>宏函数</strong></p>
+<h4 id="C-C-相关"><a href="#C-C-相关" class="headerlink" title="C/C++ 相关"></a>C/C++ 相关</h4><p><strong>宏函数</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> SQUARE(x) ((x) * (x))</span></span><br><span class="line"><span class="comment">//  (x) * (x)外的一层括号是为了展开时不改变运输优先级</span></span><br><span class="line"><span class="comment">// 对比 </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ADD(x) (x) + (x)</span></span><br><span class="line"><span class="comment">// 在使用 4 / ADD(2) 时，展开式</span></span><br><span class="line"><span class="comment">// 4 / (2) * (2) 导致运算优先级错误</span></span><br><span class="line"><span class="comment">// 对比 </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SQUARE(x) x * x</span></span><br><span class="line"><span class="comment">// 在使用 SQUARE(2 + 3) 时，展开式</span></span><br><span class="line"><span class="comment">// 2 + 3 * 2 + 3 导致运算优先级错误</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MY_FUNC(x) &#123; \</span></span><br><span class="line"><span class="meta">    int result = (x) * 2; \</span></span><br><span class="line"><span class="meta">    printf(<span class="string">&quot;result: %d\n&quot;</span>, result); \</span></span><br><span class="line"><span class="meta">&#125;</span></span><br><span class="line"><span class="comment">// 使用 &#123;&#125; 可以为宏函数创建一个独立的作用域，避免宏函数内部定义的变量与外部代码中的变量发生冲突。</span></span><br><span class="line"><span class="comment">// 故在使用宏函数的时候使用括号 #define func() (&#123;函数体&#125;)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 宏函数</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a, b) ((a) &gt; (b) ? (a) : (b))</span></span><br><span class="line"><span class="comment">//预处理器会将代码中所有出现宏函数名的地方，替换成宏函数定义的代码段。文本替换</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>内联函数</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 宏函数</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a, b) ((a) &gt; (b) ? (a) : (b))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 内联函数</span></span><br><span class="line"><span class="keyword">inline</span> <span class="type">int</span> <span class="title function_">max</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> a &gt; b ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//内联函数在编译阶段由编译器决定是否进行内联展开。如果编译器认为函数体积较小，且调用频率较高，就会将函数代码直接插入到调用点，不使用函数调用的方式。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//MAX 是一个宏函数，而 max 是一个内联函数。两者都可以用来计算两个数的最大值，但 max 函数更安全，因为它有类型检查，并且不会造成变量名污染。</span></span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>const与const_cast&lt;&gt;()</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">()</span> <span class="type">const</span></span>;	<span class="comment">//该const声明此函数不会修改调用该函数的对象</span></span><br><span class="line"><span class="comment">//例如</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Complex</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  	<span class="built_in">Complex</span>(<span class="type">double</span> real, <span class="type">double</span> imag) : <span class="built_in">real_</span>(real), <span class="built_in">imag_</span>(imag) &#123;&#125; <span class="comment">// 构造函数初始化列表，冒号标志着初始化列表的开始，将构造函数参数 real 的值赋给成员变量 real_</span></span><br><span class="line">    </span><br><span class="line">    Complex <span class="keyword">operator</span>+(<span class="type">const</span> Complex&amp; other) <span class="type">const</span> &#123;  <span class="comment">// 版本1: const 成员函数</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Complex</span>(real_ + other.real_, imag_ + other.imag_);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Complex <span class="keyword">operator</span>+(<span class="type">const</span> Complex&amp; other) &#123;       <span class="comment">// 版本2: 非 const 成员函数</span></span><br><span class="line">        real_ += other.real_; <span class="comment">// 修改了调用该函数的对象</span></span><br><span class="line">        imag_ += other.imag_;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">  		<span class="type">double</span> real_;</span><br><span class="line">  		<span class="type">double</span> imag_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">Complex <span class="title">c1</span><span class="params">(<span class="number">1.0</span>, <span class="number">2.0</span>)</span></span>;</span><br><span class="line">    <span class="function">Complex <span class="title">c2</span><span class="params">(<span class="number">3.0</span>, <span class="number">4.0</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    c1 = c1 + c2;  <span class="comment">// 调用版本1或版本2都可以</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">const</span> Complex <span class="title">c3</span><span class="params">(<span class="number">5.0</span>, <span class="number">6.0</span>)</span></span>;</span><br><span class="line">    c3 = c3 + c2;  <span class="comment">// 只能调用版本1 (const 成员函数)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">const</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span></span>;	<span class="comment">//该函数返回值为const</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>  </span><br><span class="line">&#123;  </span><br><span class="line"><span class="keyword">public</span>:  </span><br><span class="line">   <span class="built_in">A</span>()  </span><br><span class="line">   &#123;  </span><br><span class="line">      m_iNum = <span class="number">1</span>;  </span><br><span class="line">   &#125;  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">public</span>:  </span><br><span class="line">   <span class="type">int</span> m_iNum;  </span><br><span class="line">&#125;; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">()</span>    </span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line">   <span class="comment">//1. 指针指向类    </span></span><br><span class="line">   <span class="type">const</span> A *pca1 = <span class="keyword">new</span> A;    </span><br><span class="line">   A *pa2 = <span class="built_in">const_cast</span>&lt;A*&gt;(pca1);  <span class="comment">//常量指针转换为非常量指针    </span></span><br><span class="line">   pa2-&gt;m_iNum = <span class="number">200</span>;    <span class="comment">//fine    </span></span><br><span class="line">       </span><br><span class="line">   <span class="comment">//转换后指针指向原来的对象    </span></span><br><span class="line">   cout&lt;&lt; pca1-&gt;m_iNum &lt;&lt;pa2-&gt;m_iNum&lt;&lt;endl; <span class="comment">//200 200    </span></span><br><span class="line">        </span><br><span class="line">   <span class="comment">//2. 指针指向基本类型    </span></span><br><span class="line">   <span class="type">const</span> <span class="type">int</span> ica = <span class="number">100</span>;    </span><br><span class="line">   <span class="type">int</span> * ia = <span class="built_in">const_cast</span>&lt;<span class="type">int</span> *&gt;(&amp;ica);    </span><br><span class="line">   *ia = <span class="number">200</span>;    </span><br><span class="line">   cout&lt;&lt; *ia &lt;&lt;ica&lt;&lt;endl;   <span class="comment">//200 100  </span></span><br><span class="line">    </span><br><span class="line">   A a0;  </span><br><span class="line">   <span class="type">const</span> A &amp;a1 = a0;  </span><br><span class="line">   A a2 = <span class="built_in">const_cast</span>&lt;A&amp;&gt;(a1);　<span class="comment">//常量引用转为非常量引用</span></span><br><span class="line">  </span><br><span class="line">   a2.m_iNum = <span class="number">200</span>;    <span class="comment">//fine    </span></span><br><span class="line">  </span><br><span class="line">   cout&lt;&lt; a0.m_iNum &lt;&lt; a1.m_iNum &lt;&lt; a2.m_iNum &lt;&lt; endl; <span class="comment">//1 1 200    </span></span><br><span class="line">    </span><br><span class="line">   <span class="comment">//常量对象被转换成非常量对象时出错  </span></span><br><span class="line">   <span class="type">const</span> A ca;  </span><br><span class="line">   A a = <span class="built_in">const_cast</span>&lt;A&gt;(ca);  <span class="comment">//不允许</span></span><br><span class="line">   </span><br><span class="line">   <span class="type">const</span> <span class="type">int</span> i = <span class="number">100</span>;  </span><br><span class="line">   <span class="type">int</span> j = <span class="built_in">const_cast</span>&lt;<span class="type">int</span>&gt;(i);  <span class="comment">//不允许 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <ul>
-<li><strong>static_cast&lt;??&gt;(obj)</strong>:<ul>
+<li><strong>static_cast\&lt;??>(obj)</strong>:<ul>
 <li>用于<strong>相关类型</strong>之间的转换，例如：<ul>
 <li>基本类型转换 (int 到 float，double 到 int 等)</li>
 <li>void 指针和其他指针类型之间的转换</li>
-<li>向上转型 (派生类指针&#x2F;引用到基类指针&#x2F;引用)</li>
-<li>向下转型 (基类指针&#x2F;引用到派生类指针&#x2F;引用，<strong>需要程序员保证安全性</strong>)</li>
+<li>向上转型 (派生类指针/引用到基类指针/引用)</li>
+<li>向下转型 (基类指针/引用到派生类指针/引用，<strong>需要程序员保证安全性</strong>)</li>
 </ul>
 </li>
 <li>编译时检查类型，不安全的操作可能导致未定义行为。</li>
@@ -475,7 +433,7 @@
 </ul>
 </li>
 <li><strong>dynamic_cast</strong>:<ul>
-<li>用于<strong>多态类型</strong>之间的<strong>安全向下转型</strong> (基类指针&#x2F;引用到派生类指针&#x2F;引用)。</li>
+<li>用于<strong>多态类型</strong>之间的<strong>安全向下转型</strong> (基类指针/引用到派生类指针/引用)。</li>
 <li>运行时检查类型，失败时返回 nullptr (指针) 或抛出 std::bad_cast 异常 (引用)。</li>
 <li>要求基类至少有一个虚函数。</li>
 </ul>
@@ -500,119 +458,67 @@
 </blockquote>
 <p><strong>函数指针</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">greet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Hello from greet function!\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// returnType (*pointerName)(parameter1Type, parameter2Type, ...);</span></span><br><span class="line"><span class="built_in">void</span> (*ptr)() = greet; <span class="comment">// 定义函数指针并初始化</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 两种调用方式是等效的</span></span><br><span class="line"><span class="built_in">ptr</span>();         <span class="comment">// 简洁写法，ptr实际为地址</span></span><br><span class="line">(*ptr)();     <span class="comment">// 更明确的写法，强调解引用</span></span><br><span class="line">(<span class="type">void</span> *)<span class="number">1234</span>	<span class="comment">//表示一个未知类型的地址</span></span><br><span class="line">(<span class="built_in">void</span> (*)())<span class="number">1234</span>  <span class="comment">//将1234强制类型转换为函数指针（函数的地址</span></span><br><span class="line">(*((<span class="built_in">void</span> (*)())<span class="number">1234</span>))()  <span class="comment">//调用位于地址1234处的函数</span></span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>虚函数与纯虚函数</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> </span>&#123;  <span class="comment">// 普通虚函数，有默认实现；必须声明为虚才可以在子类中重写</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Animal making sound\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123; <span class="comment">// 重写基类的虚函数,可以不重写</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Woof!\n&quot;</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Shape</span> &#123;  <span class="comment">// 一个类中可同时存在虚和非虚函数</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">draw</span><span class="params">()</span> </span>= <span class="number">0</span>;  <span class="comment">// 纯虚函数，没有函数体</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">printDescription</span><span class="params">()</span> </span>&#123;  <span class="comment">// 非虚函数</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;This is a shape.&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Circle</span> : <span class="keyword">public</span> Shape &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">draw</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;  <span class="comment">// 派生类必须实现 draw() 函数</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Drawing a circle.\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">VShape</span> &#123; <span class="comment">// 含纯虚函数即不可实例化</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">display</span><span class="params">()</span> </span>&#123; </span><br><span class="line">        <span class="comment">// ... </span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">draw</span><span class="params">()</span> </span>= <span class="number">0</span>; <span class="comment">// 纯虚函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Rectangle</span> &#123; <span class="comment">// 非抽象类，包含虚函数</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">display</span><span class="params">()</span> </span>&#123; </span><br><span class="line">        <span class="comment">// ... </span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Shape* s = new Shape();  // 错误：无法实例化抽象类</span></span><br><span class="line">    Shape* c = <span class="keyword">new</span> <span class="built_in">Circle</span>();    <span class="comment">// 正确</span></span><br><span class="line"></span><br><span class="line">    Rectangle r;               <span class="comment">// 正确：非抽象类可以实例化</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">delete</span> c;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>继承与初始化列表</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// :: 双冒号 作用域解析运算符</span></span><br><span class="line"><span class="comment">// : 单冒号 继承/初始化列表/标签/三目运算符</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 在 C++ 中，当子类继承父类时，子类对象创建过程中会自动调用父类的构造函数。在 C++ 多继承情况下，子类对象创建时会调用所有直接父类的构造函数。</span></span><br><span class="line"><span class="comment">// 如果父类有默认构造函数(即没有参数的构造函数)： 子类可以不显式调用父类构造函数，编译器会自动调用默认构造函数。如果父类没有默认构造函数： 子类必须在初始化列表中显式调用父类构造函数并传递参数。</span></span><br><span class="line"><span class="comment">// 在 Java 中，子类构造函数不会自动调用父类的构造函数，需要程序员显式地使用 super() 方法来调用父类的构造函数，并通过传参的不同，调用不同的构造函数。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>: <span class="keyword">public</span> ClassA, <span class="keyword">public</span> ClassB  &#123;  <span class="comment">// 公有继承于ClassA和ClassB</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">Person</span>(<span class="type">const</span> std::string&amp; name, <span class="type">int</span> age) : <span class="built_in">a</span>(age),  <span class="built_in">n</span>(name) &#123;&#125;  <span class="comment">// 初始化列表，成员变量的初始化顺序与其在类定义中声明的顺序一致。编译器会按照成员变量在类定义中出现的顺序依次进行初始化，即使你在初始化列表中以不同的顺序列出它们。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:  <span class="comment">// 按照这里的顺序初始化成员变量，即先初始化n，后初始化a</span></span><br><span class="line">  std::string n;</span><br><span class="line">  <span class="type">int</span> a;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量名(值)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base1</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">Base1</span>() &#123; std::cout &lt;&lt; <span class="string">&quot;Base1 default constructor called.\n&quot;</span>; &#125;  <span class="comment">// 默认构造函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base2</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">Base2</span>(<span class="type">int</span> value) : <span class="built_in">m_value</span>(value) &#123;&#125; <span class="comment">// 没有默认构造函数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="type">int</span> m_value;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base1, <span class="keyword">public</span> Base2 &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">Derived</span>() &#123;  &#125; <span class="comment">// 没有显式调用父类构造函数，报错</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived2</span> : <span class="keyword">public</span> Base1, <span class="keyword">public</span> Base2 &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">Derived</span>(<span class="type">int</span> value) : <span class="built_in">Base2</span>(value) &#123;&#125; <span class="comment">// 显式调用 Base2 的构造函数</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>static与内部类</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// c++没有静态类的概念，直接使用static声明类的成员函数/变量即可。相似的，可以在没有实例化类的情况下直接调用方法/访问变量</span></span><br><span class="line"><span class="comment">// c++的内部类和普通类无区别</span></span><br><span class="line"><span class="comment">// java只有内部类可以是静态的；静态内部类可以有（非静态的变量和方法）和（静态的变量和方法）</span></span><br><span class="line"><span class="comment">// java普通内部类不能有静态变量/方法！！！</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> staticVar; <span class="comment">// 静态数据成员声明</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">staticMethod</span><span class="params">()</span> </span>&#123; <span class="comment">// 静态成员函数</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;This is a static method.&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> MyClass::staticVar = <span class="number">10</span>; <span class="comment">// 静态数据成员定义和初始化</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    MyClass::<span class="built_in">staticMethod</span>(); <span class="comment">// 直接调用静态成员函数</span></span><br><span class="line">    std::cout &lt;&lt; MyClass::staticVar &lt;&lt; std::endl; <span class="comment">// 直接访问静态数据成员</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">OuterClass</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> outerVar = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 内部类</span></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">InnerClass</span> &#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="comment">// 静态成员</span></span><br><span class="line">        <span class="type">static</span> <span class="type">int</span> staticVar;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 非静态成员</span></span><br><span class="line">        <span class="type">int</span> instanceVar;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 静态方法</span></span><br><span class="line">        <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">staticMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Static method in inner class&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 非静态方法</span></span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">instanceMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Instance method in inner class&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">accessOuterClass</span><span class="params">(OuterClass&amp; outer)</span> </span>&#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Accessing outer class variable: &quot;</span> &lt;&lt; outer.outerVar &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态成员初始化</span></span><br><span class="line"><span class="type">int</span> OuterClass::InnerClass::staticVar = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    OuterClass outer;</span><br><span class="line">    OuterClass::InnerClass inner;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 调用静态方法</span></span><br><span class="line">    OuterClass::InnerClass::<span class="built_in">staticMethod</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 调用非静态方法</span></span><br><span class="line">    inner.<span class="built_in">instanceMethod</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 访问外部类成员</span></span><br><span class="line">    inner.<span class="built_in">accessOuterClass</span>(outer);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>默认构造函数</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 显然，我们并没有显式的定义构造函数，但是即使没有显式地定义构造函数，C++ 也会提供一个默认构造函数。默认构造函数会将类的成员变量初始化为默认值 (例如，数字类型初始化为 0，指针类型初始化为 nullptr)。</span></span><br><span class="line">    <span class="type">int</span> value;  <span class="comment">// value被默认构造函数初始化为0</span></span><br><span class="line"></span><br><span class="line">    <span class="function">MyClass* <span class="title">createInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">MyClass</span>(); <span class="comment">// 使用指针创建实例</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    MyClass obj1;  <span class="comment">// obj1通过调用了默认构造函数对其进行了初始化，不为null</span></span><br><span class="line">    </span><br><span class="line">    MyClass* obj2 = obj1.<span class="built_in">createInstance</span>(); <span class="comment">// 通过obj1指针创建实例</span></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Address of obj1: &quot;</span> &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">void</span>*&gt;(&amp;obj1) &lt;&lt; std::endl;</span><br><span class="line">    <span class="comment">// 本机测试 Address of obj1: 0x61fe14</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;obj2 value: &quot;</span> &lt;&lt; obj2-&gt;value &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">delete</span> obj2;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>菱形继承与虚继承</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">A</span>(<span class="type">int</span> x) : <span class="built_in">data</span>(x) &#123; </span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;A constructor called with &quot;</span> &lt;&lt; data &lt;&lt; std::endl; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> data;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 虚继承不会改变成员继承规则，派生类仍然会继承虚基类的所有成员。</span></span><br><span class="line"><span class="comment">// 虚继承A类时，A类相当于成为了一个共享类，其他所有再进行虚继承A类时，均只会继承该共享类，不会出现二义性继承（即D类继承了两个A类）。</span></span><br><span class="line"><span class="comment">// 个人理解：类B普通继承类A时，B中相当于加了个A；如果类C普通继承类A，类D普通继承类B，C时，D中相当于有了两个实A，出现二义性</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 同理，当B类虚继承A，C类继承A，D类继承B，C时，类D相当于有了一个虚A一个实A，ダメです。</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> <span class="keyword">virtual</span> A &#123; <span class="comment">// 虚继承</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">B</span>(<span class="type">int</span> x) : <span class="built_in">A</span>(x) &#123; </span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;B constructor called&quot;</span> &lt;&lt; std::endl; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span> : <span class="keyword">public</span> <span class="keyword">virtual</span> A &#123; <span class="comment">// 虚继承</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">C</span>(<span class="type">int</span> x) : <span class="built_in">A</span>(x) &#123; </span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;C constructor called&quot;</span> &lt;&lt; std::endl; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下方式继承会让D继承到两个A，编译通过，但是A的构造函数触发两次</span></span><br><span class="line"><span class="comment">// 尝试打印A中的data变量，报错：&quot;D::data&quot; is ambiguous</span></span><br><span class="line"><span class="comment">//class C : public A &#123;</span></span><br><span class="line"><span class="comment">//public:</span></span><br><span class="line"><span class="comment">//    C(int x) : A(x) &#123; </span></span><br><span class="line"><span class="comment">//        std::cout &lt;&lt; &quot;C constructor called&quot; &lt;&lt; std::endl; </span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"><span class="comment">//&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">D</span> : <span class="keyword">public</span> B, <span class="keyword">public</span> C &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">D</span>(<span class="type">int</span> x) : <span class="built_in">A</span>(x), <span class="built_in">B</span>(x), <span class="built_in">C</span>(x) &#123;  <span class="comment">// 直接初始化虚基类 A</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;D constructor called&quot;</span> &lt;&lt; std::endl; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">D <span class="title">d</span><span class="params">(<span class="number">10</span>)</span></span>; </span><br><span class="line">    std::cout &lt;&lt; d.data &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>模板</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 头文件: my_template_class.h</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyTemplateClass</span> &#123;  <span class="comment">// 类模板</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">const</span> T&amp; value)</span></span>;</span><br><span class="line">  <span class="function">T <span class="title">getValue</span><span class="params">()</span> <span class="type">const</span></span>; </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 源文件: my_template_class.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;my_template_class.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// template &lt;typename T&gt; 作用域极小，只有紧接着的函数/类中</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="comment">// 为 print 函数声明模板参数，即 print 函数为模板函数</span></span><br><span class="line"><span class="type">void</span> MyTemplateClass&lt;T&gt;::<span class="built_in">print</span>(<span class="type">const</span> T&amp; value) &#123; <span class="comment">// 为模板类 MyTemplateClass&lt;T&gt; 定义 print</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 如果写成 MyTemplateClass::print，编译器会认为正在为非模板类 MyTemplateClass 的某个模板成员函数进行定义。</span></span><br><span class="line"><span class="comment">//1.由于不存在该非模板类，报错。2.非模板类不能包含模板函数: 非模板类只能包含非模板函数，不能包含模板函数。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="comment">// 为 getValue 函数声明模板参数，即 getValue 函数为模板函数</span></span><br><span class="line">T MyTemplateClass&lt;T&gt;::<span class="built_in">getValue</span>() <span class="type">const</span> &#123; <span class="comment">// 为 MyTemplateClass&lt;T&gt; 定义 getValue</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>栈上创建与堆上创建</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 栈上创建</span></span><br><span class="line"><span class="function">MyTemplateClass&lt;<span class="type">int</span>&gt; <span class="title">intObject1</span><span class="params">(<span class="number">10</span>)</span></span>;  <span class="comment">// 变量名intObject1，值10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 变量名(值)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 堆上创建</span></span><br><span class="line">MyTemplateClass&lt;<span class="type">int</span>&gt;* intObject2 = <span class="keyword">new</span> <span class="built_in">MyTemplateClass</span>&lt;<span class="type">int</span>&gt;(<span class="number">20</span>);</span><br></pre></td></tr></table></figure>
-
-
-
 <h4 id="GDT-LDT与TSS"><a href="#GDT-LDT与TSS" class="headerlink" title="GDT, LDT与TSS"></a>GDT, LDT与TSS</h4><img src="/2024/04/12/Op-sys-Learning-Record/image-20240609174716552.png" class="" title="image-20240609174716552">
-
 <p>硬件厂商推荐通过每个任务拥有一个LDT和一个TSS的方式实现多任务</p>
 <p>eg: call 0x0018:0x1234 使用在GDT中索引0x0018的选择子获得段基址，偏移0x1234</p>
 <blockquote>
-<p>在使用中，段寄存器中的值将确定使用GDT&#x2F;LDT中的第x项</p>
+<p>在使用中，段寄存器中的值将确定使用GDT/LDT中的第x项</p>
 </blockquote>
 <h4 id="段描述符与门描述符区别"><a href="#段描述符与门描述符区别" class="headerlink" title="段描述符与门描述符区别"></a>段描述符与门描述符区别</h4><img src="/2024/04/12/Op-sys-Learning-Record/image-20240416192952163.png" class="" title="image-20240416192952163">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240417104649804.png" class="" title="image-20240417104649804">
-
-<p>门 &#x3D; 选择子 + 偏移</p>
-<p>选择子 &#x3D; 基址 + 偏移</p>
+<p>门 = 选择子 + 偏移</p>
+<p>选择子 = 基址 + 偏移</p>
 <p>IDT 保存 中断门</p>
-<p>GDT&#x2F;LDT 保存 任务门&#x2F;描述符</p>
+<p>GDT/LDT 保存 任务门/描述符</p>
 <h4 id="物理地址空间使用情况"><a href="#物理地址空间使用情况" class="headerlink" title="物理地址空间使用情况"></a>物理地址空间使用情况</h4><p>tiny-os kernel地址空间</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240421151156773.png" class="" title="image-20240421151156773">
-
 <p>地址空间：</p>
 <p>0x0009a000为位图起始地址，占4页</p>
 <p>0x0009e000为内核PCB起始，占1页</p>
-<p>​	0x0009f000为PCB中内核栈顶(低1M地址中所使用到的最高地址)</p>
+<p>​    0x0009f000为PCB中内核栈顶(低1M地址中所使用到的最高地址)</p>
 <p>0x0009f000~0x00100000为空</p>
 <p>0x00100000为内核堆起始，</p>
-<p>​	0x00100000~0x00101fff为页目录表和页表</p>
+<p>​    0x00100000~0x00101fff为页目录表和页表</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240427095137775.png" class="" title="image-20240427095137775">
-
-
-
 <p>SiFive FU540</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240412184838896.png" class="" title="image-20240412184838896.png">
-
-
-
 <p>用户程序地址空间</p>
 <p>虚拟地址：</p>
-<p>KERNBASE &#x3D; 0x8000 0000</p>
-<p>KERNLINK &#x3D; 0x8010 0000</p>
-<p>KERNBASE+PHYSTOP &#x3D; 0x8E00 0000</p>
-<p>DEVSPACE &#x3D; 0xFE00 0000</p>
+<p>KERNBASE = 0x8000 0000</p>
+<p>KERNLINK = 0x8010 0000</p>
+<p>KERNBASE+PHYSTOP = 0x8E00 0000</p>
+<p>DEVSPACE = 0xFE00 0000</p>
 <p>物理地址：</p>
 <p>低1M部分：0 - 0x10 0000</p>
 <p>部分内核数据+空闲空间（用户程序所分配的页表）：0x10 0000 - 0xE00 0000(PHYSTOP)</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240412200020614.png" class="" title="image-20240412200020614">
-
 <p>用户程序虚拟内存内容</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240413095215393.png" class="" title="image-20240413095215393">
-
-
-
 <p>Linux 0.11</p>
 <p>虚拟地址空间使用情况</p>
 <p>每个进程最大虚拟空间为64MB（巨大差异</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240706102456745.png" class="" title="image-20240706102456745">
-
-
-
-
-
 <h4 id="会话session"><a href="#会话session" class="headerlink" title="会话session"></a>会话session</h4><p>进程通过fork创建新的子进程，进程与创建出的子进程同属一个进程组</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> main.c | grep <span class="keyword">for</span> | more</span><br></pre></td></tr></table></figure>
-
 <p>以上三个命令对应三个进程，同属于一个进程组，CTRL+C将中止该进程组的所有进程</p>
 <p>Session为进程组的集合，用户通过tty登录后所有的命令(执行的程序)属于同一个session</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240609190505627.png" class="" title="image-20240609190505627">
-
-
-
-
-
 <h3 id="引导启动程序"><a href="#引导启动程序" class="headerlink" title="引导启动程序"></a>引导启动程序</h3><h4 id="启动流程图"><a href="#启动流程图" class="headerlink" title="启动流程图"></a>启动流程图</h4><p>Linux</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240608151929426.png" class="" title="image-20240608151929426">
-
-
-
 <h4 id="BIOS"><a href="#BIOS" class="headerlink" title="BIOS"></a>BIOS</h4><p>计算机启动时为实模式运行，20位地址线，仅能访问1MB空间</p>
 <p>机器上电，cs:ip 初始化为 0xf000:0x1110；</p>
 <p>CPU从0xffff0开始执行，执行至0xfffff处指令jump后跳转至 f000:e05b，BIOS主体代码所在处；</p>
@@ -621,60 +527,49 @@
 <p>进行启动盘检测(0盘0道1扇区最后2个字节:55AA)，从硬盘0盘0道1扇区加载MBR至0x7c00后，跳转执行MBR。</p>
 <h4 id="MBR"><a href="#MBR" class="headerlink" title="MBR"></a>MBR</h4><p>MBR占512字节（一个扇区），结尾内容为55AA。</p>
 <p>MBR程序位于0x7c00</p>
-<p>Linux: boot&#x2F;bootsect.s</p>
+<p>Linux: boot/bootsect.s</p>
 <p>bootsect程序(MBR)位于0x7c00，然后bootsect将自身复制到0x90000处，执行跳转至0x90000，使用0x9ff00为栈顶</p>
 <p>bootsect将setup程序写入0x90200处，将system加载至0x10000处</p>
-<p>​	ps:未直接加载内核至0x00000的原因是0x00000有中断向量表</p>
+<p>​    ps:未直接加载内核至0x00000的原因是0x00000有中断向量表</p>
 <p>tiny_os</p>
 <p>MBR程序将loader程序写入0x90000处</p>
-<h4 id="setup-loader"><a href="#setup-loader" class="headerlink" title="setup&amp;loader"></a>setup&amp;loader</h4><p>Linux: boot&#x2F;setup.s</p>
+<h4 id="setup-amp-loader"><a href="#setup-amp-loader" class="headerlink" title="setup&amp;loader"></a>setup&amp;loader</h4><p>Linux: boot/setup.s</p>
 <p>使用实模式下的中断向量表读取机器数据（读取屏幕光标位置，读取扩展内存大小，读取显卡显示模式，检查显示方式并取参数，取硬盘0信息，取硬盘1信息，检查硬盘2信息），写入0x90000及以后处（覆盖bootsect）</p>
-<p>将内核从0x10000<del>0x8ffff移动至0x00000</del>0x7ffff处，</p>
+<p>将内核从0x10000~0x8ffff移动至0x00000~0x7ffff处，</p>
 <p>开启A20地址线</p>
 <p>修改控制寄存器CR0，进入保护模式</p>
 <p>跳转至地址0x00000（通过段选择子2，偏移0转移）</p>
 <p>临时gdt已通过data段形式实现在setup.s程序尾部</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240706144702481.png" class="" title="image-20240706144702481">
-
-
-
 <p>tiny_os</p>
 <p>loader程序位于0x90000，使用0x90000以下部分作为程序栈</p>
 <p>loader设置gdt，进入保护模式，并在保护模式加载内核</p>
 <h5 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h5><p>保护模式使机器从16位进入到32位，寻址方式变更为 基址+偏移</p>
-<h6 id="段描述符与全局描述符表GDT"><a href="#段描述符与全局描述符表GDT" class="headerlink" title="段描述符与全局描述符表GDT"></a>段描述符与全局描述符表GDT</h6><p>段寄存器: cs, ds, …(16位寄存器)，保存选择子，即gdt&#x2F;ldt的index对于的值</p>
+<h6 id="段描述符与全局描述符表GDT"><a href="#段描述符与全局描述符表GDT" class="headerlink" title="段描述符与全局描述符表GDT"></a>段描述符与全局描述符表GDT</h6><p>段寄存器: cs, ds, …(16位寄存器)，保存选择子，即gdt/ldt的index对于的值</p>
 <p>选择子</p>
-<p>RPL：特权等级；TI：选择GDT&#x2F;LDT；索引值：GDT&#x2F;LDT表中的第x个段描述符</p>
+<p>RPL：特权等级；TI：选择GDT/LDT；索引值：GDT/LDT表中的第x个段描述符</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416193845119.png" class="" title="image-20240416193845119">
-
 <p>GDTR</p>
 <p>保存GDT的物理地址，GDT的段描述符记录了各内存段的相关信息</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416193617238.png" class="" title="image-20240416193617238">
-
 <p>LDTR</p>
 <p>保存LDT的内存地址，<strong>LDT必须在GDT中声明</strong>，通过GDT获得LDT内存地址后写入LDTR后使用LDT</p>
 <p>GDT</p>
 <p>item: 段描述符</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416192952163.png" class="" title="image-20240416192952163">
-
 <p>段基址：32位段基址；</p>
 <p>段界限：对于数据段和代码段，段界限向高地址延申；对于栈，段界限向低地址延申；若偏移量超界错；段大小由 段界限*G 确定，</p>
 <p>DPL：段特权级</p>
 <p>S：是否系统段</p>
 <p>TYPE：段类型</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240427102403905.png" class="" title="image-20240427102403905">
-
-
-
 <p>段描述符缓冲寄存器</p>
 <p>保存处理后的段描述符</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240420192623948.png" class="" title="image-20240420192623948">
-
 <p>段描述符与内存段</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240427102456078.png" class="" title="image-20240427102456078">
-
-<p>地址计算方式&#x3D;32位段基址+32段偏移</p>
-<h5 id="保护模式的启动"><a href="#保护模式的启动" class="headerlink" title="保护模式的启动"></a>保护模式的启动</h5><p>Linux: boot&#x2F;setup.s</p>
+<p>地址计算方式=32位段基址+32段偏移</p>
+<h5 id="保护模式的启动"><a href="#保护模式的启动" class="headerlink" title="保护模式的启动"></a>保护模式的启动</h5><p>Linux: boot/setup.s</p>
 <p>使用实模式下的中断向量表读取机器数据，写入0x90000处（覆盖bootsect）</p>
 <p>整体下移内核至0x00000处，</p>
 <p>设置临时ldt和gdt，加载ldtr和gdtr，开启A20地址线；</p>
@@ -684,19 +579,17 @@
 <p>loader程序位于0x90000，使用0x90000以下部分作为程序栈</p>
 <p>1.构建GDT，<strong>GDT内容直接定义在loader内</strong></p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240427102121106.png" class="" title="image-20240427102121106">
-
 <p>2.开启A20地址线</p>
 <p>A20地址线：20位地址线的CPU自动发生地址回绕（20位段基址+16位段偏移所产生的超出1MB的部分）</p>
 <p>32位地址线为了兼容20位地址线产生的地址回绕，在关闭A20地址线时，CPU将进行地址回绕；在开启A20地址线时，正确访问；</p>
 <p>3.加载GDT地址到GDTR</p>
 <p>4.置位CR0寄存器的PE位</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416195112069.png" class="" title="image-20240416195112069">
-
 <p>5.将段寄存器内容更新为段选择子内容</p>
 <p>Linux:[类似]</p>
 <p>临时gdt包含了两个段描述符，数据段描述符和代码段描述符，段基址均为0x00000</p>
 <p>跳转0x00000处</p>
-<h4 id="head-loader"><a href="#head-loader" class="headerlink" title="head&amp;loader"></a>head&amp;loader</h4><h5 id="页表组成与构建"><a href="#页表组成与构建" class="headerlink" title="页表组成与构建"></a>页表组成与构建</h5><p>虚拟地址与物理地址映射关系</p>
+<h4 id="head-amp-loader"><a href="#head-amp-loader" class="headerlink" title="head&amp;loader"></a>head&amp;loader</h4><h5 id="页表组成与构建"><a href="#页表组成与构建" class="headerlink" title="页表组成与构建"></a>页表组成与构建</h5><p>虚拟地址与物理地址映射关系</p>
 <p>虚实转换由MMU(Memory Management Unit)硬件实现，</p>
 <p>CPU中的SATP寄存器保存Page Table Entry，指向最高一级的页目录page directory的物理内存地址</p>
 <p>CPU中的TLB(Translation Lookside Buffer)保存近期访问的PTE内容</p>
@@ -705,34 +598,24 @@
 <p>通过SATP寄存器获得最高级页表的物理地址PPN，使用L2查最高级页表获得中间级页表的物理地址；使用L1查中间级页表获得最低级页表的物理地址；使用L0查最低级页表，获得物理地址；</p>
 <p>通过TLB获取物理地址PPN；</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240412190738605.png" class="" title="image-20240412190738605">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240412192043741.png" class="" title="image-20240412192043741">
-
-
-
 <p>Linux 2.6</p>
 <p>虚拟地址高10位，在页目录表中查找对应索引，获得页表的物理地址（20位，余下12位补0）；</p>
 <p>虚拟地址中10位，在页表中查找对应索引，获得页的物理地址（20位，余下12位补0）；</p>
 <p>虚拟地址后12位，页内偏移；</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240420140907729.png" class="" title="image-20240420140907729">
-
-
-
-
-
 <p>tiny-os</p>
 <p>用户使用低3GB，内核使用高1GB，每页4KB</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240427102727532.png" class="" title="image-20240427102727532">
-
-<p>建立页目录表–页目录表的项即指向一个页表</p>
+<p>建立页目录表—页目录表的项即指向一个页表</p>
 <p>在物理地址0x100000建立页目录表，一个页目录表含1024个页表项PDE，每个页目录表项4B，占4KB，</p>
 <p>第0项（保证loader程序在启动页表后能够正常运行）指向第一个页表，物理地址0x101000</p>
 <p>第768项（虚拟地址3GB，用户程序访问内核）指向第一个页表，物理地址0x101000</p>
 <p>第1023项指向页目录表，物理地址0x100000</p>
 <p>建立页表</p>
-<p>在物理地址0x101000建立，一个页表含1024个页表项，每个页表项4B，占4KB，可表示4KB*1024&#x3D;4MB的地址空间</p>
+<p>在物理地址0x101000建立，一个页表含1024个页表项，每个页表项4B，占4KB，可表示4KB*1024=4MB的地址空间</p>
 <p>该页表指向的物理地址为0-0x3fffff</p>
-<h5 id="head-s-页表构建与进入分页模式"><a href="#head-s-页表构建与进入分页模式" class="headerlink" title="head.s &#x2F; 页表构建与进入分页模式"></a>head.s &#x2F; 页表构建与进入分页模式</h5><p>Linux: boot&#x2F;head.s</p>
+<h5 id="head-s-页表构建与进入分页模式"><a href="#head-s-页表构建与进入分页模式" class="headerlink" title="head.s / 页表构建与进入分页模式"></a>head.s / 页表构建与进入分页模式</h5><p>Linux: boot/head.s</p>
 <p><img src="file://D:/github/blog/source/_posts/Op-sys-Learning-Record/image-20240609161606117.png?lastModify=1717920885" alt="image-20240609161606117"></p>
 <p>位于物理地址0x00000处</p>
 <p>加载数据段寄存器，</p>
@@ -741,17 +624,13 @@
 <p>检查A20地址线是否开启</p>
 <p>检查机器是否含有数学协处理器，修改CR0寄存器标志位</p>
 <p>将main代码的地址压入位于(ss: 内核数据段选择符, esp: 内核sched模块user_stack处 )的栈，</p>
-<p>设置页目录表（为全体进程使用）与页表，4个页表（内核专用页表，新的进程的页表会在主内存区申请）位于页目录表之后，寻址16Mb空间（4KB&#x2F;页表大小，4B&#x2F;页表项，1024*4KB&#x3D;4MB每项寻址空间）</p>
+<p>设置页目录表（为全体进程使用）与页表，4个页表（内核专用页表，新的进程的页表会在主内存区申请）位于页目录表之后，寻址16Mb空间（4KB/页表大小，4B/页表项，1024*4KB=4MB每项寻址空间）</p>
 <p>iret弹出入栈的main函数地址，跳转前往执行main函数</p>
 <blockquote>
 <p>这段汇编先从0x0000开始运行，然后运行到设置内存页表的时候使用.org向后跳，空出内存页表的空间0x1000~0x5000，一直跳到0x6000处继续，将main参数和地址压栈，然后跳过哑中断处理程序，开始创建页内存目录表和写入刚才空出来的内存页表（页内存目录表创建在0x0000，这意味着原本位于这里的head.s的代码将被覆盖</p>
 <p>idt是循环创建的，gdt是预先手写好的</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240706163733389.png" class="" title="image-20240706163733389">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240706163716837.png" class="" title="image-20240706163716837">
-
-
-
 <p>Linux 0.1x 内核和所有进程共用0x0000的页目录表（这意味着CR3寄存器中的值始终为0x0000，即全部进程共享的页目录表，</p>
 <p>其他的4页页表为内核专用，用户进程的页表存放在随机的主内存区</p>
 </blockquote>
@@ -769,17 +648,15 @@
 <p>程序<strong>此时</strong>已进入虚拟地址运行，</p>
 <p>当前虚拟地址0x0000xxxx，仍处于低1M地址空间中(页目录表第一项指向第一个页表的原因)；</p>
 <p>从gdt中获得的段描述符的值为虚拟地址；</p>
-<h4 id="内存分段机制"><a href="#内存分段机制" class="headerlink" title="内存分段机制"></a>内存分段机制</h4><p>​	<img src="/2024/04/12/Op-sys-Learning-Record/image-20240706103147318.png" class="" title="image-20240706103147318"></p>
-<p>从该图可以看出，偏移值(IP)和段选择子(CS&#x2F;DS&#x2F;…)中的地址为虚拟地址，</p>
+<h4 id="内存分段机制"><a href="#内存分段机制" class="headerlink" title="内存分段机制"></a>内存分段机制</h4><p>​    <img src="/2024/04/12/Op-sys-Learning-Record/image-20240706103147318.png" class="" title="image-20240706103147318"></p>
+<p>从该图可以看出，偏移值(IP)和段选择子(CS/DS/…)中的地址为虚拟地址，</p>
 <p>通过段选择子读取段描述符表中的段描述符获取完整虚拟地址基址，得到线性地址；</p>
 <p>使用线性地址根据页目录表和页表得到物理地址</p>
-<h4 id="main-c-loader"><a href="#main-c-loader" class="headerlink" title="main.c&amp;loader"></a>main.c&amp;loader</h4><img src="/2024/04/12/Op-sys-Learning-Record/image-20240609163346462.png" class="" title="image-20240609163346462">
-
+<h4 id="main-c-amp-loader"><a href="#main-c-amp-loader" class="headerlink" title="main.c&amp;loader"></a>main.c&amp;loader</h4><img src="/2024/04/12/Op-sys-Learning-Record/image-20240609163346462.png" class="" title="image-20240609163346462">
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240609180508264.png" class="" title="image-20240609180508264">
-
 <p>Linux: main.c &amp; 任务0（idle进程）</p>
 <p>初始化设备与内存信息：</p>
-<p>​	根设备号，高速缓存末端地址，机器内存量，主内存开始地址；</p>
+<p>​    根设备号，高速缓存末端地址，机器内存量，主内存开始地址；</p>
 <p>调用内核中初始化函数初始化各功能部分；</p>
 <ul>
 <li>主内存区初始化</li>
@@ -796,21 +673,19 @@
 <p>移动到用户模式下执行</p>
 <blockquote>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240706162745211.png" class="" title="image-20240706162745211">
-
 <p>此处的宏函数move_to_user_mode展开后，实际上是原地跳转，但是在执行过程中修改了 </p>
-<p>cs段选择符-&gt;(ldtr寄存器)LDT表的RPL&#x3D;3的第一个段选择子，任务0代码段</p>
+<p>cs段选择符-&gt;(ldtr寄存器)LDT表的RPL=3的第一个段选择子，任务0代码段</p>
 <p>eip-&gt;下一条指令的地址(原地跳转)</p>
-<p>ds, es, fs, gs -&gt; (ldtr寄存器)LDT表的RPL&#x3D;3的第二个段选择子，任务0数据段</p>
+<p>ds, es, fs, gs -&gt; (ldtr寄存器)LDT表的RPL=3的第二个段选择子，任务0数据段</p>
 <p>ss未变更？</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240706163156118.png" class="" title="image-20240706163156118">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240706163204640.png" class="" title="image-20240706163204640">
 </blockquote>
 <p>fork创建出任务1(init())</p>
-<p>循环pause状态—</p>
-<p>​	ps: 程序进入interruptible状态（闲置进程），无任务可调度时调度任务0</p>
-<p>​	ps:任务0为所有进程的父进程，故不使用堆栈</p>
-<p>Linux: main.c&#x2F;init() 任务1</p>
+<p>循环pause状态—-</p>
+<p>​    ps: 程序进入interruptible状态（闲置进程），无任务可调度时调度任务0</p>
+<p>​    ps:任务0为所有进程的父进程，故不使用堆栈</p>
+<p>Linux: main.c/init() 任务1</p>
 <p>读取硬盘参数（包含分区表信息），加载虚拟盘（若存在），安装根文件系统设备</p>
 <p>以读写方式打开tty0，得到文件句柄0stdin，复制两次得到stdout和stderr</p>
 <p>fork产生任务2，等待任务2退出</p>
@@ -822,7 +697,7 @@
 <p>任务1会在主内存区申请1页存放PCB+内核栈</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240713185606091.png" class="" title="image-20240713185606091">
 </blockquote>
-<p>Linux: main.c&#x2F;init() 任务2</p>
+<p>Linux: main.c/init() 任务2</p>
 <p>关闭从任务1所继承的stdin，stdout和stderr；创建新的会话期</p>
 <p>tiny_os</p>
 <p>loader中实现kernel写入内核</p>
@@ -831,10 +706,9 @@
 <p>14.初始化kernel，将kernel.bin中的segment复制到被编译的虚拟地址处，第一个segment起始于0xc0001500</p>
 <p>15.修改栈指针，跳转至kernel，虚拟地址0xc0001500</p>
 <h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><h3 id="外部中断与内部中断"><a href="#外部中断与内部中断" class="headerlink" title="外部中断与内部中断"></a>外部中断与内部中断</h3><img src="/2024/04/12/Op-sys-Learning-Record/image-20240421152049031.png" class="" title="image-20240421152049031">
-
 <p>中断引脚：</p>
 <p>INTR: Interupter</p>
-<p>NMI: Non Maskable Interupter	向CPU传入中断向量号 2</p>
+<p>NMI: Non Maskable Interupter    向CPU传入中断向量号 2</p>
 <p>外部设备中断由中断代理芯片8259A接收后发送中断向量号到CPU中断引脚INTR</p>
 <p>Linux： int32 ~ int47 -&gt; IRQ0 ~ IRQ15</p>
 <p>软中断：系统调用</p>
@@ -842,14 +716,12 @@
 <p>异常：指针越界，栈溢出</p>
 <p>Linux：int0 ~ int31</p>
 <h3 id="实模式下的中断向量表"><a href="#实模式下的中断向量表" class="headerlink" title="实模式下的中断向量表"></a>实模式下的中断向量表</h3><p>仅在实模式使用，由BIOS进行创建，位于0x00000~0x003ff</p>
-<h3 id="中断门与保护模式下的中断描述符表IDT"><a href="#中断门与保护模式下的中断描述符表IDT" class="headerlink" title="中断门与保护模式下的中断描述符表IDT"></a>中断门与保护模式下的中断描述符表IDT</h3><p>中断向量号为 中断向量表&#x2F;中断描述符表 的索引下标</p>
+<h3 id="中断门与保护模式下的中断描述符表IDT"><a href="#中断门与保护模式下的中断描述符表IDT" class="headerlink" title="中断门与保护模式下的中断描述符表IDT"></a>中断门与保护模式下的中断描述符表IDT</h3><p>中断向量号为 中断向量表/中断描述符表 的索引下标</p>
 <p>IDTR(Interrupt Descriptor Table Register) 中保存 IDT 位置信息</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240417105214817.png" class="" title="image-20240417105214817">
-
 <p>IDT(Interrupt Descriptor Table)</p>
 <p>item: 门</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240417104649804.png" class="" title="image-20240417104649804">
-
 <h3 id="中断过程"><a href="#中断过程" class="headerlink" title="中断过程"></a>中断过程</h3><h4 id="中断初始化"><a href="#中断初始化" class="headerlink" title="中断初始化"></a>中断初始化</h4><p>tiny_os</p>
 <p>实模式由BIOS创建中断向量表和中断处理程序；</p>
 <p>保护模式由kernel创建中断描述符表和中断处理程序；</p>
@@ -869,10 +741,9 @@
 <p>CPU收到INTR信号后便知道有新的中断了，在执行完当前指令后，向8259A发送一个中断回复信号。</p>
 <p>8259A收到回复信号后，将选出来的优先级最大的中断在ISR寄存器中相应的位 置1，表示该中断正在处理，同时将此中断在IRR寄存器中相应的位 置0，相当于将此中断从中断请求队列中去掉。</p>
 <p>CPU再向8259A发送INTR信号，表示想要获取中断向量号。</p>
-<p>8259A通过数据总线向CPU发送中断向量号，<strong>中断向量号 &#x3D; 起始向量号 + IRQ接口号</strong>，一般起始向量号为32，从中断向量表可看出0—31已经被占用，后面的32—127是分配给可屏蔽中断的，所以此处外设的中断设置的起始向量号便为32。</p>
+<p>8259A通过数据总线向CPU发送中断向量号，<strong>中断向量号 = 起始向量号 + IRQ接口号</strong>，一般起始向量号为32，从中断向量表可看出0—31已经被占用，后面的32—127是分配给可屏蔽中断的，所以此处外设的中断设置的起始向量号便为32。</p>
 <p>3.保护现场__压栈</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714201118464.png" class="" title="image-20240714201118464">
-
 <p>CPU据中断向量号去IDT中获取中断描述符，</p>
 <blockquote>
 <p>此时将取出选择子中的DPL与当前特权级CPL进行比较，若特权级发生变化，则需要切换栈（不同特权级有着不同的栈，如Linux使用了0， 3特权级，则有两个栈，一个内核栈，一个用户栈）。</p>
@@ -885,7 +756,6 @@
 <p>图示为发生了特权级改变时的压栈情况</p>
 <p><strong>以上过程不由一阶中断程序实现，硬件自动实现</strong></p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240421154614894.png" class="" title="image-20240421154614894">
-
 <p>4.定位中断服务程序</p>
 <p>访问中断处理程序的流程</p>
 <p>1.通过idtr获得idt的地址，将中断向量号作为索引，访问到中断描述符</p>
@@ -893,7 +763,6 @@
 <p>3.通过gdtr获得gdt的地址，将段选择子作为索引，访问到段描述符</p>
 <p>4.段描述符给出<strong>一阶中断处理程序</strong>的段<strong>虚拟地址</strong>，</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240417110140482.png" class="" title="image-20240417110140482">
-
 <p>5.通过段<strong>虚拟地址</strong>和偏移访问到<strong>一阶中断处理程序</strong>，</p>
 <p><strong>一阶中断处理程序</strong>将C函数地址(二阶中断处理程序)压栈，后将地址交换写入eax, 原eax值入栈</p>
 <p>其余上下文(ebx,ecx,edx,edi,esi,ebp,ds,es,fs)压栈，</p>
@@ -901,11 +770,6 @@
 <p>并在<strong>二阶中断处理程序</strong>执行完成后，</p>
 <p>弹出错误码和esp0，弹出上下文</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240702102514943.png" class="" title="image-20240702102514943">
-
-
-
-
-
 <p>6.中断处理过程</p>
 <p><strong>二阶中断处理程序</strong>，打印出错程序信息</p>
 <p>中断的实际处理过程就是执行中断处理程序，Linux将中断处理程序分为上下两部分，需要紧急处理立即执行的归为上半部，不那么紧急的归为下半部。</p>
@@ -921,7 +785,6 @@
 <h3 id="中断处理程序"><a href="#中断处理程序" class="headerlink" title="中断处理程序"></a>中断处理程序</h3><p>Linux: asm.s, traps.c</p>
 <p>asm.s</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240702102514943.png" class="" title="image-20240702102514943">
-
 <p><strong>一阶中断处理程序</strong>将C函数地址(二阶中断处理程序)压栈，后将该值交换进入eax, 原eax值入栈</p>
 <p>其余上下文(ebx,ecx,edx,edi,esi,ebp,ds,es,fs)压栈，</p>
 <p>压入错误码(或0)，压入执行一阶中断程序前的栈指针(esp0)，作为<strong>二阶中断处理程序参数</strong></p>
@@ -934,46 +797,42 @@
 <h3 id="系统调用处理程序与信号"><a href="#系统调用处理程序与信号" class="headerlink" title="系统调用处理程序与信号"></a>系统调用处理程序与信号</h3><p>Linux: system.c</p>
 <p><strong>含时钟中断!!!</strong></p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240704153835415.png" class="" title="image-20240704153835415">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240704190208804.png" class="" title="image-20240704190208804">
-
 <p>对于系统调用处理程序(一阶中断处理程序)：</p>
 <p>判断调用号范围</p>
 <p>压栈ds, es, fs, edx, ecx, ebx, </p>
 <p>修改ds, es, fs,</p>
 <p>call 对应的C处理函数(二阶中断处理程序)</p>
 <p>压栈eax(二阶中断处理程序返回值)</p>
-<p>if(任务非就绪&#x2F;时间片耗尽):</p>
-<p>​	执行调度程序</p>
-<p>​	执行ret_from_sys_call</p>
+<p>if(任务非就绪/时间片耗尽):</p>
+<p>​    执行调度程序</p>
+<p>​    执行ret_from_sys_call</p>
 <p>else:</p>
-<p>​	执行ret_from_sys_call</p>
+<p>​    执行ret_from_sys_call</p>
 <p>对于函数ret_from_sys_call：</p>
-<p>if(非初始任务&#x2F;非超级用户程序&#x2F;?):</p>
-<p>​	取当前任务结构的信号位图，取信号屏蔽码，得到可行信号图，复位信号图并写回</p>
-<p>​	将可行信号图中最小的信号压栈，call do_signal，</p>
+<p>if(非初始任务/非超级用户程序/?):</p>
+<p>​    取当前任务结构的信号位图，取信号屏蔽码，得到可行信号图，复位信号图并写回</p>
+<p>​    将可行信号图中最小的信号压栈，call do_signal，</p>
 <p>弹出信号值signr, eax, ebx, ecx, edx, fs, es, ds</p>
 <blockquote>
 <p>此时cs为用户代码段选择子，eip为信号处理程序；内核栈中的ss和esp将在cpu检查段选择子的rpl部分时发现进入低特权级，弹出并写入；</p>
 <p>后续执行信号处理程序，ret时将用户栈顶的restorer写入eip，执行restorer；</p>
 <p>restorer丢弃用户栈顶的信号值signr, 设置信号屏蔽码, 丢弃block, 弹出eax, ecx, edx, eflags, ret将用户栈顶的原eip写入eip，恢复系统调用前状态</p>
 </blockquote>
-<p>​	</p>
+<p>​    </p>
 <p>函数do_signal：</p>
 <blockquote>
 <p>sys_signal和sys_sigaction修改进程task_struct的sigaction[32]，用于修改在接收信号时的处理函数，返回原对应信号的处理函数指针</p>
 <p>sigaction[32]的项：</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240704193952350.png" class="" title="image-20240704193952350">
-
 <p>sys_sigaction是sys_signal的超集</p>
 </blockquote>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240704190208804.png" class="" title="image-20240704190208804">
-
 <p>从task_struct-&gt;sigaction[32]中获取信号signr对应的sigaction</p>
-<p>if(非忽略句柄&#x2F;非默认句柄):</p>
-<p>​	若sigaction-&gt;sa_flag为oneshot, 将句柄置空</p>
-<p>​	修改内核堆栈中eip的值为信号处理程序句柄</p>
-<p>​	下移用户堆栈对应esp，并向用户堆栈写入图示值</p>
+<p>if(非忽略句柄/非默认句柄):</p>
+<p>​    若sigaction-&gt;sa_flag为oneshot, 将句柄置空</p>
+<p>​    修改内核堆栈中eip的值为信号处理程序句柄</p>
+<p>​    下移用户堆栈对应esp，并向用户堆栈写入图示值</p>
 <blockquote>
 <p>sa_restorer</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240704195323779.png" class="" title="image-20240704195323779">
@@ -982,46 +841,24 @@
 <p>有上可知，信号将在系统调用结束时检查，并使用该程序task_struct中sigaction[32]中设置的处理函数进行处理</p>
 <p>向某程序发信息 -&gt; 修改该程序task_struct的signal</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240705101522972.png" class="" title="image-20240705101522972">
-
-
-
-<h3 id="中断处理程序-系统调用处理程序的注册"><a href="#中断处理程序-系统调用处理程序的注册" class="headerlink" title="中断处理程序&#x2F;系统调用处理程序的注册"></a>中断处理程序&#x2F;系统调用处理程序的注册</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">register_handler</span><span class="params">(<span class="type">uint8_t</span> vec_no, intr_handler handler)</span> &#123;</span><br><span class="line">    sys_call_table[vec_no] = handler;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>修改<strong>中断处理程序表&#x2F;系统调用处理程序表</strong>指向的二阶中断处理程序</p>
+<h3 id="中断处理程序-系统调用处理程序的注册"><a href="#中断处理程序-系统调用处理程序的注册" class="headerlink" title="中断处理程序/系统调用处理程序的注册"></a>中断处理程序/系统调用处理程序的注册</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">register_handler</span><span class="params">(<span class="type">uint8_t</span> vec_no, intr_handler handler)</span> &#123;</span><br><span class="line">    sys_call_table[vec_no] = handler;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改<strong>中断处理程序表/系统调用处理程序表</strong>指向的二阶中断处理程序</p>
 <p>仅在内核态可修改此类表</p>
 <h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><h3 id="TSS与任务链"><a href="#TSS与任务链" class="headerlink" title="TSS与任务链"></a>TSS与任务链</h3><p>TR(Task Register)</p>
 <p>保存TSS地址</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714093840136.png" class="" title="image-20240714093840136">
-
-
-
-<p>Task State Segment	</p>
+<p>Task State Segment    </p>
 <p>TSS描述符保存于GDT</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240506191146645.png" class="" title="image-20240506191146645">
-
-
-
 <p>TSS内容</p>
-<p>保存任务快照（任务被换上&#x2F;换下CPU时）</p>
+<p>保存任务快照（任务被换上/换下CPU时）</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240506191245406.png" class="" title="image-20240506191245406">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240428111029824.png" class="" title="image-20240428111029824">
-
-
-
 <p>TSS段</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240713192515176.png" class="" title="image-20240713192515176">
-
-
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240713192710613.png" class="" title="image-20240713192710613">
-
-
-
 <h3 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h3><img src="/2024/04/12/Op-sys-Learning-Record/image-20240705104639547.png" class="" title="image-20240705104639547">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240705104656011.png" class="" title="image-20240705104656011">
-
 <blockquote>
 <p>进程的页目录表基址保存在PCB，linux 0.1x的所有进程的这个值均为0x0000</p>
 <p>进程的tss位于PCB</p>
@@ -1030,28 +867,19 @@
 <h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>Linux</p>
 <h4 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h4><p>通过fork从task0创建</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714144402746.png" class="" title="image-20240714144402746">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714144419322.png" class="" title="image-20240714144419322">
-
 <blockquote>
 <p>被fork出来的子进程将复制父进程的页目录表和页表，fork()后，子进程将获得自己的PCB，其中PCB的页目录表基址和父进程不一致，指向自己的页目录表。该页目录表对应页表中的页表项指向的物理地址与父进程的一致，直至子进程发生写行为时分配新内存页（写时复制技术）</p>
 <p>创建新进程需要在fork后在子进程内执行execve切换执行内容</p>
 <p>fork的核心工作是复制出新的PCB，并修改PCB中的各值(包括对TSS的修改)</p>
 </blockquote>
 <h4 id="execve"><a href="#execve" class="headerlink" title="execve"></a>execve</h4><img src="/2024/04/12/Op-sys-Learning-Record/image-20240715111107866.png" class="" title="image-20240715111107866">
-
-
-
-
-
-
-
 <p>tiny_os</p>
 <p>进程创建过程</p>
 <p>kernel启动进程，传入进程参数（进程文件名和进程名），启动进程。</p>
 <p>1.初始化线程</p>
-<p>从内核空间申请页面，清洗页面，初始化线程名为线程&#x2F;进程名；</p>
-<p>根据线程&#x2F;进程名初始化线程状态；</p>
+<p>从内核空间申请页面，清洗页面，初始化线程名为线程/进程名；</p>
+<p>根据线程/进程名初始化线程状态；</p>
 <p>初始化优先级，时间片上限，已使用时间片，页目录表地址，内核栈指针，魔数等；</p>
 <p>加入线程队列，线程指针thread指向该页面底部；</p>
 <p>2.创建用户进程的虚拟地址池</p>
@@ -1062,16 +890,12 @@
 <p>线程内核栈位置为PCB页面顶部（高地址），thread-&gt;self_kstack为线程内核栈指针；</p>
 <p>下移thread-&gt;self_kstack，留出中断栈空间sizeof(intr_stack)</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240425101059850.png" class="" title="image-20240425101059850">
-
 <p>下移thread-&gt;self_kstack，留出线程栈空间sizeof(thread_stack)</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240425101121206.png" class="" title="image-20240425101121206">
-
-
-
 <p>创建线程栈指针kthread_stack，指向当前thread-&gt;self_kstack指针位置，</p>
 <p>初始化线程栈，依次写入eip，函数名，函数参数和寄存器初始值ebp,ebx,esi,edi；</p>
 <p>thread-&gt;self_kstack此时位于线程栈栈顶，栈顶内容为edi，esi，ebx，ebp，函数参数，函数名，eip；</p>
-<p>&#x2F;&#x2F;不执行ret指令，将压栈的函数参数，函数名和返回地址弹出，并前往执行对应函数；</p>
+<p>//不执行ret指令，将压栈的函数参数，函数名和返回地址弹出，并前往执行对应函数；</p>
 <p>4.创建用户进程的页目录表</p>
 <p>从内核分配一页作为进程页目录表</p>
 <p>将内核页目录表的高半部分（对应内核空间部分）项复制到进程页目录表中</p>
@@ -1090,18 +914,14 @@
 <p>thread-&gt;self_kstack此时位于中断栈栈顶，栈顶内容为：</p>
 <p>vec_no, edi, esi, ebp, esp_dummy……</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240507185615764.png" class="" title="image-20240507185615764">
-
-
-
 <p>将esp设置为中断栈栈顶指针thread-&gt;self_kstack，</p>
 <p>jmp intr_exit，跳过压入的中断向量号vec_no，popad弹出所有通用寄存器值，pop gs，fs，es，ds，跳过错误码；此时栈顶为：eip值为filename（指向用户进程入口地址），cs值为SELECTOR_U_CODE，eflag为(EFLAGS_IOPL_0 | EFLAGS_MBS | EFLAGS_IF_1);</p>
 <p>前往执行对应函数，进入特权级3；</p>
 <h3 id="调度"><a href="#调度" class="headerlink" title="调度"></a>调度</h3><p>调度发生在：</p>
 <p>Flag <code>need_sched</code>为1</p>
-<p>1.系统调用&#x2F;中断(包括时间中断)-执行处理函数后，若当前进程时间片为0或任务未就绪，调用<code>schedule()</code></p>
+<p>1.系统调用/中断(包括时间中断)-执行处理函数后，若当前进程时间片为0或任务未就绪，调用<code>schedule()</code></p>
 <p>2.切换当前running态进程为其他态后，调用<code>schedule()</code></p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240608144715684.png" class="" title="image-20240608144715684">
-
 <p>TASK_INTERRUPTIBLE与TASK_UNINTERRUPTIBLE</p>
 <p>TASK_INTERRUPTIBLE可接收信号，会被提前唤醒并响应信号</p>
 <p>TASK_UNINTERRUPTIBLE屏蔽信号，即使是 SIGKILL 信号也无法将其杀死。 只有当它自己 wake up 之后，才会查看信号，然后进行处理。</p>
@@ -1113,25 +933,23 @@
 <p>多种情况下会设置 <code>need_resched</code> 标志，主要包括：</p>
 <ul>
 <li><strong>时间片耗尽：</strong> 当一个进程运行的时间超过了分配给它的时间片时，内核调度器会设置该进程的 <code>need_resched</code> 标志，以便在下一次调度时选择其他进程运行。</li>
-<li><strong>更高优先级进程就绪：</strong> 当一个更高优先级的进程进入就绪状态时，内核调度器会设置当前运行进程（如果其优先级低于新就绪进程）的 <code>need_resched </code>标志，以便尽快调度更高优先级的进程运行。</li>
-<li><strong>进程主动放弃 CPU：</strong> 当一个进程主动调用 sched_yield() 或类似的系统调用时，表示它愿意放弃 CPU 使用权，此时内核会设置该进程的 <code>need_resched </code>标志。</li>
-<li><strong>从内核态返回用户态：</strong> 当一个进程从内核态返回用户态时，内核会检查 <code>need_resched </code>标志，如果设置了该标志，则会进行进程调度，切换到新的进程运行。</li>
+<li><strong>更高优先级进程就绪：</strong> 当一个更高优先级的进程进入就绪状态时，内核调度器会设置当前运行进程（如果其优先级低于新就绪进程）的 <code>need_resched</code>标志，以便尽快调度更高优先级的进程运行。</li>
+<li><strong>进程主动放弃 CPU：</strong> 当一个进程主动调用 sched_yield() 或类似的系统调用时，表示它愿意放弃 CPU 使用权，此时内核会设置该进程的 <code>need_resched</code>标志。</li>
+<li><strong>从内核态返回用户态：</strong> 当一个进程从内核态返回用户态时，内核会检查 <code>need_resched</code>标志，如果设置了该标志，则会进行进程调度，切换到新的进程运行。</li>
 </ul>
 <p><strong><code>need_resched</code> 标志检查时机</strong></p>
-<p>内核态返回用户态时：系统调用返回&#x2F;中断返回（含时钟中断）</p>
+<p>内核态返回用户态时：系统调用返回/中断返回（含时钟中断）</p>
 <p>若<code>need_resched</code>标志为<code>1</code>，则调用<code>schedule()</code></p>
 <p><strong>等待队列与唤醒</strong></p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240801110805754.png" class="" title="image-20240801110805754">
-
 <p><strong>一个文件表项 -&gt; 一个等待队列！！！</strong></p>
 <p><strong>过程</strong></p>
 <ol>
 <li><p><strong>进程睡眠：</strong></p>
 <ul>
-<li><p>进程调用 read() 等系统调用读取驱动设备数据，由于数据尚未准备好，驱动程序会将进程加入到自身维护的一个等待队列中 &#x2F; 进程将自己添加进等待队列</p>
+<li><p>进程调用 read() 等系统调用读取驱动设备数据，由于数据尚未准备好，驱动程序会将进程加入到自身维护的一个等待队列中 / 进程将自己添加进等待队列</p>
 <p>进程通过以下步骤将自己加入等待队列</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240801110303316.png" class="" title="image-20240801110303316">
-
 <blockquote>
 <p>进程在执行到<code>schedule()</code>时，将自己当前状态的上下文保存至TSS，包括EIP和CS，由于EIP指向<code>while(!condition)</code>判断，即下次程序执行时会进行condition的判断，若满足则结束等待</p>
 </blockquote>
@@ -1140,13 +958,13 @@
 </li>
 </ul>
 </li>
-<li><p><strong>中断&#x2F;事件发生：</strong></p>
+<li><p><strong>中断/事件发生：</strong></p>
 <ul>
-<li>驱动设备完成数据输入后，会向 CPU 发出一个中断请求 &#x2F; 被占用的资源被释放 &#x2F; 进程主动等待的条件满足。</li>
-<li>CPU 收到中断请求后，会保存当前上下文，并跳转到该中断对应的中断处理函数执行 &#x2F; 执行与该事件关联的代码（例如，资源管理代码）</li>
+<li>驱动设备完成数据输入后，会向 CPU 发出一个中断请求 / 被占用的资源被释放 / 进程主动等待的条件满足。</li>
+<li>CPU 收到中断请求后，会保存当前上下文，并跳转到该中断对应的中断处理函数执行 / 执行与该事件关联的代码（例如，资源管理代码）</li>
 </ul>
 </li>
-<li><p><strong>处理程序&#x2F;唤醒程序：</strong></p>
+<li><p><strong>处理程序/唤醒程序：</strong></p>
 <ul>
 <li>处理程序执行设备相关的处理逻辑，例如从设备读取数据到缓冲区。</li>
 <li><strong>关键步骤：</strong> 中断处理程序会调用 wake_up_interruptible() 或类似的 API。该函数会:<ul>
@@ -1166,7 +984,6 @@
 <p>使用远跳转实现任务切换</p>
 <p>call指令可以实现向高特权级跳转，jmp平级跳转</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">; 近跳转</span><br><span class="line">jmp short next_instruction</span><br><span class="line"></span><br><span class="line">; 远跳转，使用段地址和偏移量 (实模式)</span><br><span class="line">jmp far 1000h:1234h</span><br><span class="line"></span><br><span class="line">; 远跳转，使用选择子和偏移量 (保护模式)</span><br><span class="line">jmp far [selector:offset]</span><br><span class="line">call 0x0008:0x1234 ; 向GDT中索引为1的调用门跳转，忽略偏移0x1234</span><br></pre></td></tr></table></figure>
-
 <p>在linux 0.x 中，所有任务的TSS均保存在GDT中；</p>
 <p>在发生上述两种需要调度的情况时，调度程序(内核)将获取下一个可执行任务，并获取该任务对应的TSS；</p>
 <p>jmp far [TSS 选择子]</p>
@@ -1189,40 +1006,32 @@
 <p>在CPU识别出跳转目标为TSS选择子时（通过硬件机制识别），不会直接将 选择子:偏移 写入 CS:EIP，会进入任务切换流程，通过硬件自动将当前任务的 CS:EIP 以及其他相关寄存器（包括 EFLAGS、SS、ESP、段寄存器等）的值保存在当前任务的 TSS 中，然后从目标任务的 TSS 中加载新的 CS:EIP 以及其他寄存器的值。</p>
 </blockquote>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240715103745870.png" class="" title="image-20240715103745870">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240715103802105.png" class="" title="image-20240715103802105">
-
 <p>进程切换时，修改以下：</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714095015752.png" class="" title="image-20240714095015752">
-
-
-
 <p>Linux: system_call.s</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">.align 2</span><br><span class="line">_timer_interrupt:</span><br><span class="line">	push %ds		# save ds,es and put kernel data space</span><br><span class="line">	push %es		# into them. %fs is used by _system_call</span><br><span class="line">	push %fs</span><br><span class="line">	pushl %edx		# we save %eax,%ecx,%edx as gcc doesn&#x27;t</span><br><span class="line">	pushl %ecx		# save those across function calls. %ebx</span><br><span class="line">	pushl %ebx		# is saved as we use that in ret_sys_call</span><br><span class="line">	pushl %eax</span><br><span class="line">	movl $0x10,%eax</span><br><span class="line">	mov %ax,%ds</span><br><span class="line">	mov %ax,%es</span><br><span class="line">	movl $0x17,%eax</span><br><span class="line">	mov %ax,%fs</span><br><span class="line">	incl _jiffies  #发生时间中断时将jiffies自增</span><br><span class="line">	movb $0x20,%al		# EOI to interrupt controller #1</span><br><span class="line">	outb %al,$0x20</span><br><span class="line">	movl CS(%esp),%eax</span><br><span class="line">	andl $3,%eax		# %eax is CPL (0 or 3, 0=supervisor)</span><br><span class="line">	pushl %eax</span><br><span class="line">	call _do_timer		# &#x27;do_timer(long CPL)&#x27; does everything from PS: 其实就是修改计时器和调度</span><br><span class="line">	addl $4,%esp		# task switching to accounting ...</span><br><span class="line">	jmp ret_from_sys_call</span><br></pre></td></tr></table></figure>
-
-
-
 <p>Linux: sched.c（核心代码</p>
 <p>jiffies</p>
 <blockquote>
-<p>include&#x2F;sched.h 定义为变量</p>
+<p>include/sched.h 定义为变量</p>
 </blockquote>
 <p>schedule()</p>
 <blockquote>
 <p>调度代码</p>
 </blockquote>
 <p>从任务数组中最后一个任务开始向前扫描直到第一个任务前(跳过空)：</p>
-<p>​	若task_struct-&gt;alarm &lt; jiffies, 修改signal并置alarm为0</p>
-<p>​	若任务除去屏蔽信号外存在信号且为interruptible, 修改task_struct-&gt;state为就绪</p>
+<p>​    若task_struct-&gt;alarm &lt; jiffies, 修改signal并置alarm为0</p>
+<p>​    若任务除去屏蔽信号外存在信号且为interruptible, 修改task_struct-&gt;state为就绪</p>
 <blockquote>
 <p>alarm判断+有信号存在</p>
 </blockquote>
-<p>next &#x3D; 0 </p>
+<p>next = 0 </p>
 <p>while(1)</p>
-<p>​	从任务数组中最后一个任务开始向前扫描直到第一个任务前(跳过空)：</p>
-<p>​		next &#x3D; 当前task_struct-&gt;counter最大的任务；</p>
-<p>​		if(counter最大的任务的counter&gt;0):break;</p>
-<p>​		else:使用任务优先级更新所有任务的counter</p>
+<p>​    从任务数组中最后一个任务开始向前扫描直到第一个任务前(跳过空)：</p>
+<p>​        next = 当前task_struct-&gt;counter最大的任务；</p>
+<p>​        if(counter最大的任务的counter&gt;0):break;</p>
+<p>​        else:使用任务优先级更新所有任务的counter</p>
 <p>switch_to(next)</p>
 <blockquote>
 <p>next默认为0，即在没有可执行任务时系统切换至任务0(idle任务)执行</p>
@@ -1236,7 +1045,7 @@
 <blockquote>
 <p>时钟中断二阶处理程序</p>
 </blockquote>
-<p>增加内核&#x2F;用户代码运行时间</p>
+<p>增加内核/用户代码运行时间</p>
 <p>定时器链中定时器的值减少，若为0调用处理函数并移除该定时器</p>
 <p>减少当前程序的<code>counter</code>值，若为0则置当前进程<code>need_sched</code>为<code>1</code></p>
 <p>switch_to()</p>
@@ -1244,45 +1053,30 @@
 <p>switch_to修改current指针指向传入的task任务，切换进程</p>
 </blockquote>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240705161507324.png" class="" title="image-20240705161507324">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240705155902092.png" class="" title="image-20240705155902092">
-
-
-
-
-
 <h2 id="特权级"><a href="#特权级" class="headerlink" title="特权级"></a>特权级</h2><p>CPL(Current Privilege Level)  当前代码特权级</p>
 <p>为当前运行代码段的特权级，保存于CS寄存器中段选择子的RPL(2位)处</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416193845119.png" class="" title="image-20240416193845119">
-
-<p>eg: 运行用户程序代码，CPL &#x3D; 3</p>
-<p>​	  运行内核程序代码，CPL &#x3D; 0</p>
+<p>eg: 运行用户程序代码，CPL = 3</p>
+<p>​      运行内核程序代码，CPL = 0</p>
 <p>RPL(Request Privilege Level) 访问者特权级</p>
 <p>访问者代码所在段的描述符的DPL为RPL值</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416192952163.png" class="" title="image-20240416192952163">
-
 <p>DPL(Descriptor Privilege Level) 受访者特权级</p>
 <p>受访者代码所在段的描述符的DPL</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240416192952163.png" class="" title="image-20240416192952163">
-
 <h3 id="门描述符"><a href="#门描述符" class="headerlink" title="门描述符"></a>门描述符</h3><img src="/2024/04/12/Op-sys-Learning-Record/image-20240417104649804.png" class="" title="image-20240417104649804">
-
 <p>门描述符含有DPL，访问者的权限需大于等于门描述符的权限</p>
-<p>eg: 访问者RPL&#x3D;3, 门描述符DPL&#x3D;3</p>
+<p>eg: 访问者RPL=3, 门描述符DPL=3</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240417104649804.png" class="" title="image-20240417104649804">
-
 <p>门描述符给出目标中断程序的段描述符选择子，</p>
 <p>段描述符选择子含有DPL，门描述符的特权小于被访问者(中断程序)的权限</p>
-<p>eg: 门描述符DPL&#x3D;3，中断程序段描述符DPL&#x3D;0</p>
+<p>eg: 门描述符DPL=3，中断程序段描述符DPL=0</p>
 <h3 id="访问过程"><a href="#访问过程" class="headerlink" title="访问过程"></a>访问过程</h3><img src="/2024/04/12/Op-sys-Learning-Record/image-20240506164402606.png" class="" title="image-20240506164402606">
-
-
-
 <h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p>tiny_os</p>
 <p>物理内存被划分为内核内存池和用户内存池</p>
 <p>所有程序（用户程序和内核）均存在虚拟地址池，记录虚拟内存使用情况</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240425160621730.png" class="" title="image-20240425160621730">
-
 <h3 id="内存管理-1"><a href="#内存管理-1" class="headerlink" title="内存管理"></a>内存管理</h3><p>Linux</p>
 <blockquote>
 <p>Linux不对主内存(物理内存)进行内核使用和用户使用的划分；</p>
@@ -1304,9 +1098,6 @@
 <p><strong>VMA 数据结构</strong></p>
 <p>VMA 列表中的每个元素都是一个 <code>vm_area_struct</code> 结构体，该结构体定义在 <code>include/linux/mm_types.h</code> 头文件中。  以下是 <code>vm_area_struct</code> 结构体中一些重要的成员变量：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> &#123;</span></span><br><span class="line">    <span class="comment">/* VMA 的起始和结束虚拟地址 */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> vm_start;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> vm_end;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* VMA 的访问权限 */</span></span><br><span class="line">    <span class="type">pgprot_t</span> vm_page_prot;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* VMA 的标志位，例如 VM_READ、VM_WRITE、VM_EXEC 等 */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> vm_flags;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 指向 VMA 所属进程的 mm_struct 结构体指针 */</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> * <span class="title">vm_mm</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 指向下一个 VMA 的指针 */</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> *<span class="title">vm_next</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 指向映射文件的 file 结构体指针 */</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> * <span class="title">vm_file</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 文件映射的起始偏移量 */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> vm_pgoff;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* ... 其他成员变量 ... */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>虚拟内存区域</strong></p>
 <p>常见的虚拟内存区域，每个区域通常对应一个或多个 VMA：</p>
 <ul>
@@ -1376,17 +1167,9 @@
 <li><strong>更新文件偏移量：</strong> 内核更新文件表项中的文件偏移量，以便下次读写操作从正确的位置开始。</li>
 </ul>
 <h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><h3 id="i节点"><a href="#i节点" class="headerlink" title="i节点"></a>i节点</h3><img src="/2024/04/12/Op-sys-Learning-Record/image-20240714155420209.png" class="" title="image-20240714155420209">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714155445517.png" class="" title="image-20240714155445517">
-
-
-
 <h3 id="文件打开"><a href="#文件打开" class="headerlink" title="文件打开"></a>文件打开</h3><img src="/2024/04/12/Op-sys-Learning-Record/image-20240714155625208.png" class="" title="image-20240714155625208">
-
-
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714155718673.png" class="" title="image-20240714155718673">
-
 <p> <code>open()</code> 函数返回的指针是进程数据结构中文件指针数组的一个索引。具体来说，当一个文件被打开时，<code>open()</code> 函数会在进程的数据结构中分配一个文件指针数组的索引（在图的最左边），并将其指向文件表（<code>file_table</code>）中的一个条目。在文件表条目中包含了文件的状态标志、引用计数、inode指针和文件位置等信息。</p>
 <p>在实际使用中，<code>open()</code> 函数返回的值是文件描述符（file descriptor），它是一个非负整数，通常从0开始递增。这个文件描述符对应于进程数据结构中文件指针数组的一个索引。</p>
 <blockquote>
@@ -1401,7 +1184,6 @@
 </ul>
 <p>其他文件描述符值将分配给用户打开的文件。例如，<code>open()</code> 函数第一次被调用时，可能返回 <code>3</code>，表示第一个用户打开的文件。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">进程</span><br><span class="line">+--------------------+</span><br><span class="line">| FD Table (进程)    |</span><br><span class="line">| +-----+------------|</span><br><span class="line">| | 0   | stdin      |</span><br><span class="line">| | 1   | stdout     |</span><br><span class="line">| | 2   | stderr     |</span><br><span class="line">| | ... | ...        |</span><br><span class="line">| | 3   | device_fd  | --&gt; 文件表项 --&gt; inode (device)</span><br><span class="line">| | 4   | property_fd| --&gt; 文件表项 --&gt; inode (property)</span><br><span class="line">| | 5   | socket_fd  | --&gt; 文件表项 --&gt; 套接字结构</span><br><span class="line">| | 6   | pipe_read_fd | --&gt; 文件表项 --&gt; 管道缓冲区</span><br><span class="line">| | 7   | pipe_write_fd| --&gt; 文件表项 --&gt; 管道缓冲区</span><br><span class="line">+-----+--------------+</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>关于pipe</p>
 <p>在一个进程中创建一个管道时，使用 <code>pipe</code> 系统调用会返回两个文件描述符，一个用于读端 (<code>pipe_read_fd</code>)，一个用于写端 (<code>pipe_write_fd</code>)。这两个文件描述符指向不同的文件表项，但文件表项指向相同的管道缓冲区。</p>
@@ -1428,13 +1210,10 @@
 <p> e,调用exec()启动运行的程序。</p>
 <p>4，父进程关闭管道的两端close(pipefd[0]),close(pipefd[1])。</p>
 <p>5，最后，在父进程中使用wait等待两个子进程的结束。</p>
-</blockquote>
-<blockquote>
 <p>关于socket</p>
 <p>内核会执行以下操作：</p>
 <ol>
-<li><p><strong>分配资源：</strong> 在内核空间中分配一个新的 socket 数据结构，用于存储 socket 的相关信息，例如：协议族、套接字类型、本地地址、远程地址、连接状态等。</p>
-</li>
+<li><strong>分配资源：</strong> 在内核空间中分配一个新的 socket 数据结构，用于存储 socket 的相关信息，例如：协议族、套接字类型、本地地址、远程地址、连接状态等。</li>
 <li><p><strong>创建文件表项：</strong> 为 socket 创建一个文件表项，并将其添加到系统打开文件表中。文件表项中包含指向 socket 数据结构的指针以及其他文件操作相关的信息。</p>
 </li>
 <li><p><strong>分配文件描述符：</strong> 在进程的文件描述符表中找到一个最小的未使用的文件描述符，并将其指向新创建的文件表项。</p>
@@ -1460,18 +1239,13 @@
 <p>示例</p>
 <p>假设有两个进程A和B，同时打开了同一个文件。文件表和文件指针数组可能如下所示：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">进程A的文件指针数组:</span><br><span class="line">[0] -&gt; stdin</span><br><span class="line">[1] -&gt; stdout</span><br><span class="line">[2] -&gt; stderr</span><br><span class="line">[3] -&gt; file_table[5]</span><br><span class="line"></span><br><span class="line">进程B的文件指针数组:</span><br><span class="line">[0] -&gt; stdin</span><br><span class="line">[1] -&gt; stdout</span><br><span class="line">[2] -&gt; stderr</span><br><span class="line">[3] -&gt; file_table[5]</span><br><span class="line"></span><br><span class="line">全局文件表(file_table):</span><br><span class="line">[0] - 空闲</span><br><span class="line">[1] - 空闲</span><br><span class="line">...</span><br><span class="line">[5] -&gt; &#123;</span><br><span class="line">    f_flags: O_RDWR,  // 读写标志</span><br><span class="line">    f_count: 2,      // 引用计数为2，因为两个进程都打开了这个文件</span><br><span class="line">    f_inode: 指向i节点,</span><br><span class="line">    f_pos: 0         // 文件位置</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">[63] - 空闲</span><br></pre></td></tr></table></figure>
-
 <p>在这个例子中，<code>open()</code> 函数在进程A和B中分别返回了 <code>3</code>，指向了文件表中的同一个条目（<code>file_table[5]</code>），并且引用计数为 <code>2</code>。</p>
 <h2 id="字符设备与块设备"><a href="#字符设备与块设备" class="headerlink" title="字符设备与块设备"></a>字符设备与块设备</h2><p>控制设备的<strong>内核模块</strong>被成为<strong>设备驱动程序</strong>，一个设备驱动程序控制一类设备</p>
 <p>e.g.: 一个磁盘驱动程序控制所有的磁盘设备</p>
 <p>部分驱动程序控制的是<strong>软设备</strong>，软设备不存在对应的物理设备</p>
-<p>在 Linux 系统中，硬件设备被抽象为文件，称为设备文件。这些文件通常位于 &#x2F;dev 目录下，用户可以通过文件操作函数来访问硬件设备</p>
+<p>在 Linux 系统中，硬件设备被抽象为文件，称为设备文件。这些文件通常位于 /dev 目录下，用户可以通过文件操作函数来访问硬件设备</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714193850691.png" class="" title="image-20240714193850691">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714194037398.png" class="" title="image-20240714194037398">
-
-
-
 <h3 id="字符设备"><a href="#字符设备" class="headerlink" title="字符设备"></a>字符设备</h3><p>字符设备是一种以字节流的方式进行数据传输的设备，它每次只传输一个字节的数据，并且数据传输没有缓存</p>
 <ul>
 <li>键盘、鼠标：每次按键或移动鼠标都会产生一个字符流。</li>
@@ -1479,11 +1253,8 @@
 <li>终端设备 (tty, Teletypewriter)：用于与用户交互，每次输入或输出一个字符。</li>
 </ul>
 <h4 id="TTY"><a href="#TTY" class="headerlink" title="TTY"></a>TTY</h4><img src="/2024/04/12/Op-sys-Learning-Record/image-20240714194408562.png" class="" title="image-20240714194408562">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714194437093.png" class="" title="image-20240714194437093">
-
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240714194601289.png" class="" title="image-20240714194601289">
-
 <blockquote>
 <p>键盘按键如何到达进程的</p>
 <p><strong>1. 硬件中断：</strong></p>
@@ -1497,12 +1268,11 @@
 </li>
 <li><p>如果 CPU 接受了中断请求，它会暂停当前正在执行的任务，转而执行键盘中断处理程序（Interrupt Handler）。当键盘中断发生时，终端驱动的中断处理程序会被调用，它会将扫描码转换为 ASCII 码或 Unicode 码等字符编码。</p>
 </li>
-<li><p>中断处理程序会读取键盘控制器中的数据，获取按键的扫描码（Scan Code），它代表了按下或释放的具体键位。终端驱动程序会将转换后的字符存储在一个缓冲区（Buffer）中，等待用户程序读取。</p>
-</li>
+<li>中断处理程序会读取键盘控制器中的数据，获取按键的扫描码（Scan Code），它代表了按下或释放的具体键位。终端驱动程序会将转换后的字符存储在一个缓冲区（Buffer）中，等待用户程序读取。</li>
 </ul>
 <p><strong>3. 用户程序：</strong></p>
 <ul>
-<li>当用户程序（例如 shell 或文本编辑器）需要获取键盘输入时，它会调用系统调用（System Call）读取终端设备文件（例如 &#x2F;dev&#x2F;tty）。</li>
+<li>当用户程序（例如 shell 或文本编辑器）需要获取键盘输入时，它会调用系统调用（System Call）读取终端设备文件（例如 /dev/tty）。</li>
 <li>终端驱动程序会将缓冲区中的字符返回给用户程序，用户程序就可以根据这些字符执行相应的操作了。</li>
 </ul>
 </blockquote>
@@ -1510,22 +1280,15 @@
 <ul>
 <li>硬盘、SSD：数据以块的形式存储和读取。</li>
 <li>USB 存储设备：例如 U 盘、移动硬盘等。</li>
-<li>CD&#x2F;DVD 光驱：数据以扇区 (sector) 为单位存储，每个扇区通常为 512 字节。</li>
+<li>CD/DVD 光驱：数据以扇区 (sector) 为单位存储，每个扇区通常为 512 字节。</li>
 </ul>
 <h2 id="kernel程序"><a href="#kernel程序" class="headerlink" title="kernel程序"></a>kernel程序</h2><h3 id="VX6-kernel程序内容"><a href="#VX6-kernel程序内容" class="headerlink" title="VX6 kernel程序内容"></a>VX6 kernel程序内容</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">kinit：设置好页表分配器（page allocator）</span><br><span class="line"></span><br><span class="line">kvminit：为kernel分配页表，将低地址设备映射到kernel地址空间（即在kernel页表中写入PTE指向设备）</span><br><span class="line"></span><br><span class="line">kvminithart：页表开始生效，程序计数器将会通过MMU翻译为物理地址</span><br><span class="line"></span><br><span class="line">processinit：设置好初始进程或者说设置好进程表单</span><br><span class="line"></span><br><span class="line">trapinit/trapinithart：设置好user/kernel mode转换代码</span><br><span class="line"></span><br><span class="line">plicinit/plicinithart：设置好中断控制器PLIC（Platform Level Interrupt Controller），我们后面在介绍中断的时候会详细的介绍这部分，这是我们用来与磁盘和console交互方式</span><br><span class="line"></span><br><span class="line">binit：分配buffer cache</span><br><span class="line"></span><br><span class="line">iinit：初始化inode缓存</span><br><span class="line"></span><br><span class="line">fileinit：初始化文件系统</span><br><span class="line"></span><br><span class="line">virtio_disk_init：初始化磁盘</span><br><span class="line"></span><br><span class="line">userinit：最后当所有的设置都完成了，操作系统也运行起来了，会通过userinit运行第一个进程</span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="tiny-os-kernel程序内容"><a href="#tiny-os-kernel程序内容" class="headerlink" title="tiny-os kernel程序内容"></a>tiny-os kernel程序内容</h3><p>loader程序与kernel程序对比</p>
 <p>loader为纯二进制程序 ，仅包含机器码，根据机器码内容装载至内存后直接开始运行；</p>
 <p>kernel为elf文件，存在文件头，节等内容，在进行segment展开后成为可运行的机器码</p>
 <img src="/2024/04/12/Op-sys-Learning-Record/image-20240421144651548.png" class="" title="image-20240421144651548">
-
-
-
 <p>kernel代码</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//interrupt.c</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">idt_init</span><span class="params">()</span> &#123;</span><br><span class="line">    idt_desc_init(); <span class="comment">//创建门描述符，写入属性和一阶中断程序入口地址，填入idt</span></span><br><span class="line">    exception_handler_init();</span><br><span class="line">    <span class="comment">//异常处理函数初始化，创建中断处理函数，使一阶中断程序有可用调用的函数</span></span><br><span class="line">    pic_init(); <span class="comment">//初始化主片8259A</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将idt地址写入idtr</span></span><br><span class="line">    <span class="type">uint64_t</span> idt_operand = ((<span class="keyword">sizeof</span>(idt) - <span class="number">1</span>) | ((<span class="type">uint64_t</span>) ((<span class="type">uint32_t</span>) idt &lt;&lt; <span class="number">16</span>)));</span><br><span class="line">    <span class="keyword">asm</span> <span class="title function_">volatile</span> <span class="params">(<span class="string">&quot;lidt %0&quot;</span> : : <span class="string">&quot;m&quot;</span> (idt_operand))</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//timer.c</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer_init</span><span class="params">()</span> &#123;</span><br><span class="line">    frequency_set(COUNTER0_PORT, COUNTER0_NO, READ_WRITE_LATCH, COUNTER_MODE, COUNTER0_VALUE);<span class="comment">//设置8253发中断的周期</span></span><br><span class="line">    register_handler(<span class="number">0x20</span>, intr_timer_handler);</span><br><span class="line">    <span class="comment">//触发0x20中断时调用intr_timer_handler函数，用于进行调度</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//memory.c</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">mem_init</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="type">uint32_t</span> total_memory = (*(<span class="type">uint32_t</span>*) (<span class="number">0xb00</span>));</span><br><span class="line">    mem_pool_init(total_memory);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//init.c</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_all</span><span class="params">()</span> &#123;</span><br><span class="line">    idt_init();</span><br><span class="line">    timer_init</span><br><span class="line">    <span class="title function_">mem_init</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//thread.h</span></span><br><span class="line"><span class="keyword">struct</span> task_struct* <span class="title function_">thread_start</span><span class="params">(<span class="type">char</span>* name, <span class="type">int</span> prio, thread_func function, <span class="type">void</span>* func_args)</span> &#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span>* <span class="title">thread</span> =</span> get_kernel_pages(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">//此为内核拉起的内核线程，故申请内核页作为PCB</span></span><br><span class="line"></span><br><span class="line">    init_thread(thread, name, prio);</span><br><span class="line">    <span class="comment">//将申请到的内核页清空并写入PCB中的属性</span></span><br><span class="line">    </span><br><span class="line">    thread_create(thread, function, func_args);</span><br><span class="line">    <span class="comment">//初始化PCB中的栈，创建中断栈和线程栈，压入线程需要执行的函数的相关数据和寄存器初始值</span></span><br><span class="line"></span><br><span class="line">    ASSERT(!list_find(&amp;thread_ready_list, &amp;thread-&gt;general_tag));</span><br><span class="line">    list_append(&amp;thread_ready_list, &amp;thread-&gt;general_tag);</span><br><span class="line">    <span class="comment">//将线程加入就绪队列，general_tag为就绪队列/运行队列/阻塞队列等使用</span></span><br><span class="line"></span><br><span class="line">    ASSERT(!list_find(&amp;thread_all_list, &amp;thread-&gt;all_list_tag));</span><br><span class="line">    list_append(&amp;thread_all_list, &amp;thread-&gt;all_list_tag);</span><br><span class="line">    <span class="comment">//将线程加入系统线程队列，all_list_tag为系统线程队列使用</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">asm</span> <span class="title function_">volatile</span> <span class="params">(<span class="string">&quot;movl %0, %%esp; pop %%ebp; pop %%ebx; pop %%edi; pop %%esi; ret&quot;</span> : : <span class="string">&quot;g&quot;</span> (thread-&gt;self_kstack) : <span class="string">&quot;memory&quot;</span>)</span>;</span><br><span class="line">    <span class="comment">//将压栈的寄存器初始值弹栈，ret将线程需要执行的函数的相关数据弹栈并前往执行</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> thread;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    init_all();</span><br><span class="line">    thread_start(<span class="string">&quot;k_thread_1&quot;</span>, <span class="number">31</span>, k_thread_function, <span class="string">&quot;skywalker &quot;</span>);</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 
     </div>
 
@@ -1609,7 +1372,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Op-sys-learning-record"><span class="nav-text">Op_sys_learning_record</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6"><span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6"><span class="nav-text">软件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8"><span class="nav-text">系统启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF"><span class="nav-text">基础信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">物理地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SiFive-FU540%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">SiFive FU540物理地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E5%AD%98%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">显存地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-text">寄存器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Intel%E8%AF%AD%E6%B3%95%E9%A3%8E%E6%A0%BC"><span class="nav-text">Intel语法风格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AT-T%E8%AF%AD%E6%B3%95%E9%A3%8E%E6%A0%BC"><span class="nav-text">AT&amp;T语法风格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-C-%E7%9B%B8%E5%85%B3"><span class="nav-text">C&#x2F;C++ 相关</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GDT-LDT%E4%B8%8ETSS"><span class="nav-text">GDT, LDT与TSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E9%97%A8%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%8C%BA%E5%88%AB"><span class="nav-text">段描述符与门描述符区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E4%BD%BF%E7%94%A8%E6%83%85%E5%86%B5"><span class="nav-text">物理地址空间使用情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9Dsession"><span class="nav-text">会话session</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E5%AF%BC%E5%90%AF%E5%8A%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">引导启动程序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">启动流程图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BIOS"><span class="nav-text">BIOS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MBR"><span class="nav-text">MBR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#setup-loader"><span class="nav-text">setup&amp;loader</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F"><span class="nav-text">保护模式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E5%85%A8%E5%B1%80%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8GDT"><span class="nav-text">段描述符与全局描述符表GDT</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%90%AF%E5%8A%A8"><span class="nav-text">保护模式的启动</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#head-loader"><span class="nav-text">head&amp;loader</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%A1%B5%E8%A1%A8%E7%BB%84%E6%88%90%E4%B8%8E%E6%9E%84%E5%BB%BA"><span class="nav-text">页表组成与构建</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#head-s-%E9%A1%B5%E8%A1%A8%E6%9E%84%E5%BB%BA%E4%B8%8E%E8%BF%9B%E5%85%A5%E5%88%86%E9%A1%B5%E6%A8%A1%E5%BC%8F"><span class="nav-text">head.s &#x2F; 页表构建与进入分页模式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5%E6%9C%BA%E5%88%B6"><span class="nav-text">内存分段机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#main-c-loader"><span class="nav-text">main.c&amp;loader</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD"><span class="nav-text">中断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%E4%B8%8E%E5%86%85%E9%83%A8%E4%B8%AD%E6%96%AD"><span class="nav-text">外部中断与内部中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8"><span class="nav-text">实模式下的中断向量表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E9%97%A8%E4%B8%8E%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8IDT"><span class="nav-text">中断门与保护模式下的中断描述符表IDT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E8%BF%87%E7%A8%8B"><span class="nav-text">中断过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">中断初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="nav-text">中断处理过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F"><span class="nav-text">中断处理程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F%E4%B8%8E%E4%BF%A1%E5%8F%B7"><span class="nav-text">系统调用处理程序与信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%B3%A8%E5%86%8C"><span class="nav-text">中断处理程序&#x2F;系统调用处理程序的注册</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-text">进程与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TSS%E4%B8%8E%E4%BB%BB%E5%8A%A1%E9%93%BE"><span class="nav-text">TSS与任务链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PCB"><span class="nav-text">PCB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fork"><span class="nav-text">fork</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#execve"><span class="nav-text">execve</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6"><span class="nav-text">调度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%9D%83%E7%BA%A7"><span class="nav-text">特权级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%A8%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="nav-text">门描述符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B"><span class="nav-text">访问过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-text">内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-1"><span class="nav-text">内存管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E4%B8%8E%E7%BC%BA%E9%A1%B5"><span class="nav-text">动态加载与缺页</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-text">文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#i%E8%8A%82%E7%82%B9"><span class="nav-text">i节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80"><span class="nav-text">文件打开</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E4%B8%8E%E5%9D%97%E8%AE%BE%E5%A4%87"><span class="nav-text">字符设备与块设备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87"><span class="nav-text">字符设备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TTY"><span class="nav-text">TTY</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%97%E8%AE%BE%E5%A4%87"><span class="nav-text">块设备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kernel%E7%A8%8B%E5%BA%8F"><span class="nav-text">kernel程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VX6-kernel%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9"><span class="nav-text">VX6 kernel程序内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tiny-os-kernel%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9"><span class="nav-text">tiny-os kernel程序内容</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Op-sys-learning-record"><span class="nav-text">Op_sys_learning_record</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6"><span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6"><span class="nav-text">软件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8"><span class="nav-text">系统启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF"><span class="nav-text">基础信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">物理地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SiFive-FU540%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">SiFive FU540物理地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E5%AD%98%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-text">显存地址空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-text">寄存器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Intel%E8%AF%AD%E6%B3%95%E9%A3%8E%E6%A0%BC"><span class="nav-text">Intel语法风格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AT-amp-T%E8%AF%AD%E6%B3%95%E9%A3%8E%E6%A0%BC"><span class="nav-text">AT&amp;T语法风格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-C-%E7%9B%B8%E5%85%B3"><span class="nav-text">C&#x2F;C++ 相关</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GDT-LDT%E4%B8%8ETSS"><span class="nav-text">GDT, LDT与TSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E9%97%A8%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%8C%BA%E5%88%AB"><span class="nav-text">段描述符与门描述符区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E4%BD%BF%E7%94%A8%E6%83%85%E5%86%B5"><span class="nav-text">物理地址空间使用情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9Dsession"><span class="nav-text">会话session</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E5%AF%BC%E5%90%AF%E5%8A%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">引导启动程序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">启动流程图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BIOS"><span class="nav-text">BIOS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MBR"><span class="nav-text">MBR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#setup-amp-loader"><span class="nav-text">setup&amp;loader</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F"><span class="nav-text">保护模式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6%E4%B8%8E%E5%85%A8%E5%B1%80%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8GDT"><span class="nav-text">段描述符与全局描述符表GDT</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%90%AF%E5%8A%A8"><span class="nav-text">保护模式的启动</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#head-amp-loader"><span class="nav-text">head&amp;loader</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%A1%B5%E8%A1%A8%E7%BB%84%E6%88%90%E4%B8%8E%E6%9E%84%E5%BB%BA"><span class="nav-text">页表组成与构建</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#head-s-%E9%A1%B5%E8%A1%A8%E6%9E%84%E5%BB%BA%E4%B8%8E%E8%BF%9B%E5%85%A5%E5%88%86%E9%A1%B5%E6%A8%A1%E5%BC%8F"><span class="nav-text">head.s &#x2F; 页表构建与进入分页模式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5%E6%9C%BA%E5%88%B6"><span class="nav-text">内存分段机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#main-c-amp-loader"><span class="nav-text">main.c&amp;loader</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD"><span class="nav-text">中断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%E4%B8%8E%E5%86%85%E9%83%A8%E4%B8%AD%E6%96%AD"><span class="nav-text">外部中断与内部中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8"><span class="nav-text">实模式下的中断向量表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E9%97%A8%E4%B8%8E%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8IDT"><span class="nav-text">中断门与保护模式下的中断描述符表IDT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E8%BF%87%E7%A8%8B"><span class="nav-text">中断过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">中断初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="nav-text">中断处理过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F"><span class="nav-text">中断处理程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F%E4%B8%8E%E4%BF%A1%E5%8F%B7"><span class="nav-text">系统调用处理程序与信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%B3%A8%E5%86%8C"><span class="nav-text">中断处理程序&#x2F;系统调用处理程序的注册</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-text">进程与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TSS%E4%B8%8E%E4%BB%BB%E5%8A%A1%E9%93%BE"><span class="nav-text">TSS与任务链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PCB"><span class="nav-text">PCB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fork"><span class="nav-text">fork</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#execve"><span class="nav-text">execve</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6"><span class="nav-text">调度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%9D%83%E7%BA%A7"><span class="nav-text">特权级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%A8%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="nav-text">门描述符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B"><span class="nav-text">访问过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-text">内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86-1"><span class="nav-text">内存管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E4%B8%8E%E7%BC%BA%E9%A1%B5"><span class="nav-text">动态加载与缺页</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-text">文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#i%E8%8A%82%E7%82%B9"><span class="nav-text">i节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80"><span class="nav-text">文件打开</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E4%B8%8E%E5%9D%97%E8%AE%BE%E5%A4%87"><span class="nav-text">字符设备与块设备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87"><span class="nav-text">字符设备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TTY"><span class="nav-text">TTY</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%97%E8%AE%BE%E5%A4%87"><span class="nav-text">块设备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kernel%E7%A8%8B%E5%BA%8F"><span class="nav-text">kernel程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VX6-kernel%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9"><span class="nav-text">VX6 kernel程序内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tiny-os-kernel%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9"><span class="nav-text">tiny-os kernel程序内容</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1677,12 +1440,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">396k</span>
+    <span title="Symbols count total">395k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">12:01</span>
+    <span title="Reading time total">11:58</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
@@ -1737,6 +1500,8 @@
 
 
 
+
+  
 
   
 

@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/http2%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.jpeg">
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/http2%E9%98%BB%E5%A1%9E.jpeg">
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/fh5fm7pgm2.png">
-<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc8e97afd2124bddb52ee4f1911fa2da~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc8e97afd2124bddb52ee4f1911fa2da~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?">
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/quic%E6%97%A0%E9%98%BB%E5%A1%9E.jpeg">
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/28-HTTP3%E4%BA%A4%E4%BA%92%E6%AC%A1%E6%95%B0.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/02/19/Computer-Network/wangluo-45917c49-bb08-4f88-84d2-5e8ae53acc7c.png">
@@ -254,7 +254,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>8.5k</span>
+              <span>8.4k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -275,9 +275,6 @@
       
         <p>computer network</p>
 <span id="more"></span>
-
-
-
 <h1 id="Computer-Network"><a href="#Computer-Network" class="headerlink" title="Computer Network"></a>Computer Network</h1><h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><h3 id="QUIC"><a href="#QUIC" class="headerlink" title="QUIC"></a>QUIC</h3><p><strong>重传：</strong></p>
 <ul>
 <li><p>QUIC下的每个数据包的Packet Number唯一，丢包重传包的Packet Number与原始包不一样；</p>
@@ -288,15 +285,13 @@
 <p>乱序接收到ACK即可将窗口向右移动至最大ACK处，最终窗口卡在没有收到ACK的丢包处，发现丢包；</p>
 <p><strong>流量控制：</strong></p>
 <img src="/2025/02/19/Computer-Network/839501cffa7146cbb8d992264594e61d.png" class="" title="Connection 流量控制">
-
 <p>每个stream一个滑动窗口，不同stream间窗口独立，实现stream内有序，stream间乱序</p>
 <p><strong>拥塞控制：</strong></p>
 <p>应用层控制</p>
-<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><h3 id="三次握手-四次挥手"><a href="#三次握手-四次挥手" class="headerlink" title="三次握手&amp;四次挥手"></a>三次握手&amp;四次挥手</h3><p>三次握手</p>
+<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><h3 id="三次握手-amp-四次挥手"><a href="#三次握手-amp-四次挥手" class="headerlink" title="三次握手&amp;四次挥手"></a>三次握手&amp;四次挥手</h3><p>三次握手</p>
 <p><strong>首要原因：防止「历史连接」初始化了连接</strong></p>
 <p>考虑场景：服务器与旧的SYN请求建立连接</p>
 <img src="/2025/02/19/Computer-Network/fe898053d2e93abac950b1637645943f.png" class="" title="两次握手无法阻止历史连接">
-
 <p><strong>次要原因：同步双方初始序列号</strong></p>
 <p>两次握手只保证了一方的初始序列号能被对方成功接收，没办法保证双方的初始序列号都能被确认接收。</p>
 <p><strong>次要原因：资源浪费</strong></p>
@@ -313,9 +308,9 @@
 <p>如果服务端可以立即关闭，则可以当场回复FIN+ACK，实现三次挥手关闭连接</p>
 </blockquote>
 <h3 id="可靠传输"><a href="#可靠传输" class="headerlink" title="可靠传输"></a>可靠传输</h3><p>TCP 重传、滑动窗口流量控制、拥塞控制</p>
-<h4 id="重传"><a href="#重传" class="headerlink" title="重传"></a>重传</h4><p>服务端返回ACK &#x3D; x，x为服务端希望收到的最新包</p>
+<h4 id="重传"><a href="#重传" class="headerlink" title="重传"></a>重传</h4><p>服务端返回ACK = x，x为服务端希望收到的最新包</p>
 <blockquote>
-<p>例如，客户端一次发送id范围为(100, 500)的数据包，服务端返回ACK &#x3D; 501</p>
+<p>例如，客户端一次发送id范围为(100, 500)的数据包，服务端返回ACK = 501</p>
 </blockquote>
 <p><strong>超时重传</strong></p>
 <p><code>RTO(ReTransmission Timeout)</code>  &gt; <code>RTT(Round-Trip Time)</code></p>
@@ -333,18 +328,15 @@
 <p>处于窗口内的数据直接发送，等待ACK；</p>
 <p>接收到最大ACK后，移动窗口左端到最大ACK值处</p>
 <img src="/2025/02/19/Computer-Network/19.jpg" class="" title="SND.WND、SND.UN、SND.NXT">
-
 <p><strong>接收方窗口</strong></p>
 <img src="/2025/02/19/Computer-Network/20.jpg" class="" title="接收窗口">
-
-<p>通过接收端&#x2F;发送端窗口大小变化实现流量控制</p>
+<p>通过接收端/发送端窗口大小变化实现流量控制</p>
 <h4 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h4><img src="/2025/02/19/Computer-Network/%E6%8B%A5%E5%A1%9E%E5%8F%91%E7%94%9F-%E5%BF%AB%E9%80%9F%E9%87%8D%E4%BC%A0.drawio.png" class="" title="快速重传和快速恢复">
-
 <p><strong>慢启动</strong></p>
 <p><strong>拥塞避免</strong></p>
 <p><strong>快重传</strong></p>
 <p><strong>快速恢复</strong></p>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="TCP沾包"><a href="#TCP沾包" class="headerlink" title="TCP沾包"></a>TCP沾包</h4><p>沾包：多个数据包处于一个滑动窗口内，被一同发送，导致无法区分包的开始&#x2F;结束；</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="TCP沾包"><a href="#TCP沾包" class="headerlink" title="TCP沾包"></a>TCP沾包</h4><p>沾包：多个数据包处于一个滑动窗口内，被一同发送，导致无法区分包的开始/结束；</p>
 <p>拆包：单个数据包大于一个滑动窗口的大小，被拆成多个发送；</p>
 <blockquote>
 <p>UDP包的消息头包含了UDP长度</p>
@@ -367,7 +359,7 @@
 <p>在同一个TCP连接下，连续发送多个HTTP请求；要求对每一个请求进行回应；</p>
 <p>如果服务端在处理 A 请求时耗时比较长，那么后续的请求的处理都会被阻塞住，这称为「队头堵塞」。</p>
 <blockquote>
-<p>HTTP&#x2F;1.1 管道解决了请求的队头阻塞，但是没有解决响应的队头阻塞；请求的队头阻塞是指，请求后必须等待收到响应才能发送新请求；</p>
+<p>HTTP/1.1 管道解决了请求的队头阻塞，但是没有解决响应的队头阻塞；请求的队头阻塞是指，请求后必须等待收到响应才能发送新请求；</p>
 <p>实际上，HTTP 管道化技术不是默认开启，后续对HTTP 1.1 的讨论基于管道化技术没有开启</p>
 </blockquote>
 <p><strong>Host字段</strong></p>
@@ -375,12 +367,11 @@
 <p>HTTP1.1的请求消息和响应消息都应支持Host头域，且请求消息中如果没有Host头域会报告一个错误（400 Bad Request）。</p>
 <p>此外，服务器应该接受以绝对路径标记的资源请求。</p>
 <p><strong>Chunked Transfer Coding</strong></p>
-<p>HTTP&#x2F;1.1将发送方将消息分割成若干个任意大小的数据块，每个数据块在发送时都会附上块的长度，最后用一个零长度的块作为消息结束的标志。</p>
+<p>HTTP/1.1将发送方将消息分割成若干个任意大小的数据块，每个数据块在发送时都会附上块的长度，最后用一个零长度的块作为消息结束的标志。</p>
 <p>这种方法允许发送方只缓冲消息的一个片段，避免缓冲整个消息带来的过载。</p>
 <p><strong>Cache</strong></p>
-<p>HTTP&#x2F;1.1在1.0的基础上加入了一些Cache的新特性，当缓存对象的Age超过Expire时变为Stable对象，Cache不需要直接抛弃Stable对象，而是与源服务器进行重新激活。</p>
+<p>HTTP/1.1在1.0的基础上加入了一些Cache的新特性，当缓存对象的Age超过Expire时变为Stable对象，Cache不需要直接抛弃Stable对象，而是与源服务器进行重新激活。</p>
 <h3 id="HTTP2-0"><a href="#HTTP2-0" class="headerlink" title="HTTP2.0"></a>HTTP2.0</h3><img src="/2025/02/19/Computer-Network/25-HTTP2.png" class="" title="HTT&#x2F;1 ~ HTTP&#x2F;2">
-
 <p><strong>HTTP2.0和HTTP1.X相比的新特性</strong></p>
 <ul>
 <li><strong>二进制帧</strong>，<code>HTTP1.x</code>的解析是基于文本格式</li>
@@ -389,9 +380,8 @@
 <li><strong>服务端主动推送</strong></li>
 </ul>
 <img src="/2025/02/19/Computer-Network/http2%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.jpeg" class="" title="img">
-
 <p><strong>数据流</strong></p>
-<p>HTTP&#x2F;2 的数据包不是按顺序发送的，同一个连接里面连续的数据包，可能属于不同的回应。</p>
+<p>HTTP/2 的数据包不是按顺序发送的，同一个连接里面连续的数据包，可能属于不同的回应。</p>
 <p>因此，必须要对数据包做标记，指出它属于哪个回应。</p>
 <p>每个请求或回应的所有数据包，称为一个数据流（Stream）。</p>
 <p>每个数据流都标记着一个独一无二的编号，其中规定客户端发出的数据流编号为奇数， 服务器发出的数据流编号为偶数</p>
@@ -399,25 +389,21 @@
 <p>同一个stream上的帧可以保证顺序性，将http报文拆成帧后考虑在同一个stream上传输？</p>
 <p><strong>HTTP2.0的多路复用和HTTP1.X中的长连接复用有什么区别</strong></p>
 <ul>
-<li>HTTP&#x2F;1.1的Pipeling为若干个请求排队串行化单线程处理，后面的请求等待前面请求的返回才能获得执行机会，一旦有某请求超时等，后续请求只能被阻塞，毫无办法；</li>
+<li>HTTP/1.1的Pipeling为若干个请求排队串行化单线程处理，后面的请求等待前面请求的返回才能获得执行机会，一旦有某请求超时等，后续请求只能被阻塞，毫无办法；</li>
 <li>HTTP2.0多个请求可同时在一个连接上并行执行，某个请求任务耗时严重，不会影响到其它连接的正常执行</li>
 </ul>
 <p>存在问题：tcp链接产生的阻塞</p>
 <img src="/2025/02/19/Computer-Network/http2%E9%98%BB%E5%A1%9E.jpeg" class="" title="img">
-
-
-
 <h3 id="HTTP3-0"><a href="#HTTP3-0" class="headerlink" title="HTTP3.0"></a>HTTP3.0</h3><img src="/2025/02/19/Computer-Network/fh5fm7pgm2.png" class="" title="img">
-
 <p><strong>使用UDP协议</strong></p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc8e97afd2124bddb52ee4f1911fa2da~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" alt="image.png"></p>
-<p>HTTP&#x2F;2 主要的问题在于：多个 HTTP 请求在复用一个 TCP 连接，下层的 TCP 协议是不知道有多少个 HTTP 请求的。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc8e97afd2124bddb52ee4f1911fa2da~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" alt="image.png"></p>
+<p>HTTP/2 主要的问题在于：多个 HTTP 请求在复用一个 TCP 连接，下层的 TCP 协议是不知道有多少个 HTTP 请求的。</p>
 <p>所以一旦发生了丢包现象，就会触发 TCP 的重传机制，这样在一个 TCP 连接中的<strong>所有的 HTTP 请求都必须等待这个丢了的包被重传回来</strong>。</p>
 <ul>
-<li>HTTP&#x2F;1.1 中的管道传输中如果有一个请求阻塞了，那么队列后请求也统统被阻塞住了</li>
-<li>HTTP&#x2F;2 多请求复用一个TCP连接，一旦发生丢包，就会阻塞住所有的 HTTP 请求。</li>
+<li>HTTP/1.1 中的管道传输中如果有一个请求阻塞了，那么队列后请求也统统被阻塞住了</li>
+<li>HTTP/2 多请求复用一个TCP连接，一旦发生丢包，就会阻塞住所有的 HTTP 请求。</li>
 </ul>
-<p>这都是基于 TCP 传输层的问题，所以 <strong>HTTP&#x2F;3 把 HTTP 下层的 TCP 协议改成了 UDP！</strong></p>
+<p>这都是基于 TCP 传输层的问题，所以 <strong>HTTP/3 把 HTTP 下层的 TCP 协议改成了 UDP！</strong></p>
 <p>QUIC协议-基于UDP的可靠传输协议</p>
 <ul>
 <li><p>无队头阻塞；</p>
@@ -433,13 +419,9 @@
 <p>服务器公钥 + 签名（CA使用CA的私钥对服务器公钥进行的计算的结果）</p>
 <p>客户端使用预先保存的CA的公钥对签名进行解密，对比解密结果与公钥是否一致</p>
 <img src="/2025/02/19/Computer-Network/wangluo-45917c49-bb08-4f88-84d2-5e8ae53acc7c.png" class="" title="img">
-
-
-
 <p><strong>HTTPS流程</strong></p>
 <p>TCP(3) + TLS(4)</p>
 <img src="/2025/02/19/Computer-Network/23-HTTPS%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png" class="" title="HTTPS 连接建立过程">
-
 <ul>
 <li>Client发起一个HTTPS的请求</li>
 <li>Server把事先配置好的公钥证书返回给客户端。</li>
@@ -452,15 +434,15 @@
 </ul>
 <h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><p>流程</p>
 <ol>
-<li><p><strong>本地主机查询 (Local Host File Check):</strong> 首先会检查本地的 hosts 文件 (位于不同操作系统上的不同位置，例如 Windows 的 C:\Windows\System32\drivers\etc\hosts 或 Linux&#x2F;macOS 的 &#x2F;etc&#x2F;hosts) 是否包含 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 如果找到，则跳过后面的步骤，直接使用该 IP 地址。 这是一个优先于 DNS 查询的优化机制。</p>
+<li><p><strong>本地主机查询 (Local Host File Check):</strong> 首先会检查本地的 hosts 文件 (位于不同操作系统上的不同位置，例如 Windows 的 C:\Windows\System32\drivers\etc\hosts 或 Linux/macOS 的 /etc/hosts) 是否包含 www.example.com 的 IP 地址。 如果找到，则跳过后面的步骤，直接使用该 IP 地址。 这是一个优先于 DNS 查询的优化机制。</p>
 </li>
-<li><p><strong>递归查询本地 DNS 服务器 (Recursive Query to Local DNS Resolver):</strong> 如果 hosts 文件中没有找到，会向配置好的 <strong>本地 DNS 服务器 (Local DNS Resolver)</strong> 发送一个 **递归查询 (Recursive Query)**。 本地 DNS 服务器通常由 ISP (互联网服务提供商) 提供，也可能是手动配置的 (例如，Google Public DNS 或 Cloudflare DNS)。 “递归”意味着本地 DNS 服务器将负责完成整个解析过程，并最终返回 IP 地址。</p>
+<li><p><strong>递归查询本地 DNS 服务器 (Recursive Query to Local DNS Resolver):</strong> 如果 hosts 文件中没有找到，会向配置好的 <strong>本地 DNS 服务器 (Local DNS Resolver)</strong> 发送一个 <strong>递归查询 (Recursive Query)</strong>。 本地 DNS 服务器通常由 ISP (互联网服务提供商) 提供，也可能是手动配置的 (例如，Google Public DNS 或 Cloudflare DNS)。 “递归”意味着本地 DNS 服务器将负责完成整个解析过程，并最终返回 IP 地址。</p>
 </li>
-<li><p><strong>递归查询根 DNS 服务器 (Recursive Query to Root DNS Servers):</strong> 如果本地 DNS 服务器不知道 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址，它会联系其中一个 <strong>根 DNS 服务器 (Root DNS Servers)<strong>。 根 DNS 服务器知道所有顶级域名 (TLD) 服务器的地址。 全球共有 13 组根 DNS 服务器，它们具有不同的物理位置，并使用任播 (Anycast) 技术以提高可用性和效率。 本地 DNS 服务器会询问根服务器 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 根服务器</strong>不会直接返回 IP 地址</strong>，而是返回负责 .com 域的 <strong>TLD DNS 服务器</strong>的地址。</p>
+<li><p><strong>递归查询根 DNS 服务器 (Recursive Query to Root DNS Servers):</strong> 如果本地 DNS 服务器不知道 www.example.com 的 IP 地址，它会联系其中一个 <strong>根 DNS 服务器 (Root DNS Servers)</strong>。 根 DNS 服务器知道所有顶级域名 (TLD) 服务器的地址。 全球共有 13 组根 DNS 服务器，它们具有不同的物理位置，并使用任播 (Anycast) 技术以提高可用性和效率。 本地 DNS 服务器会询问根服务器 www.example.com 的 IP 地址。 根服务器<strong>不会直接返回 IP 地址</strong>，而是返回负责 .com 域的 <strong>TLD DNS 服务器</strong>的地址。</p>
 </li>
-<li><p><strong>递归查询 TLD DNS 服务器 (Recursive Query to TLD DNS Servers):</strong> 本地 DNS 服务器收到 .com TLD 服务器的地址后，会联系该 TLD 服务器，询问 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 .com TLD 服务器<strong>也不会直接返回 IP 地址</strong>，而是返回负责 example.com 域的 <strong>权威 DNS 服务器 (Authoritative DNS Servers)</strong> 的地址。</p>
+<li><p><strong>递归查询 TLD DNS 服务器 (Recursive Query to TLD DNS Servers):</strong> 本地 DNS 服务器收到 .com TLD 服务器的地址后，会联系该 TLD 服务器，询问 www.example.com 的 IP 地址。 .com TLD 服务器<strong>也不会直接返回 IP 地址</strong>，而是返回负责 example.com 域的 <strong>权威 DNS 服务器 (Authoritative DNS Servers)</strong> 的地址。</p>
 </li>
-<li><p><strong>递归查询权威 DNS 服务器 (Recursive Query to Authoritative DNS Servers):</strong> 本地 DNS 服务器收到 example.com 域的权威 DNS 服务器地址后，会联系这些权威 DNS 服务器，询问 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 <strong>权威 DNS 服务器拥有 example.com 域的 DNS 记录</strong>，并知道 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址。 它会将这个 IP 地址返回给本地 DNS 服务器。</p>
+<li><p><strong>递归查询权威 DNS 服务器 (Recursive Query to Authoritative DNS Servers):</strong> 本地 DNS 服务器收到 example.com 域的权威 DNS 服务器地址后，会联系这些权威 DNS 服务器，询问 www.example.com 的 IP 地址。 <strong>权威 DNS 服务器拥有 example.com 域的 DNS 记录</strong>，并知道 www.example.com 的 IP 地址。 它会将这个 IP 地址返回给本地 DNS 服务器。</p>
 <blockquote>
 <p>例如，假设 example.com 的权威 DNS 服务器有以下 DNS 记录：</p>
 <ul>
@@ -471,23 +453,19 @@
 <p>当本地 DNS 服务器查询 bbb.example.com 时，权威 DNS 服务器会返回 192.0.2.2。同样，当查询 aaa.example.com 时，权威 DNS 服务器会返回 192.0.2.3。</p>
 </blockquote>
 </li>
-<li><p><strong>缓存与返回 (Caching and Return):</strong> 本地 DNS 服务器将收到的 IP 地址缓存起来，以便下次有人请求 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 时，它可以直接返回该 IP 地址，而无需再次执行上述步骤。 缓存时间由 DNS 记录的 <strong>TTL (Time To Live)</strong> 值决定。 最后，本地 DNS 服务器将 IP 地址返回给你的电脑。</p>
+<li><p><strong>缓存与返回 (Caching and Return):</strong> 本地 DNS 服务器将收到的 IP 地址缓存起来，以便下次有人请求 www.example.com 时，它可以直接返回该 IP 地址，而无需再次执行上述步骤。 缓存时间由 DNS 记录的 <strong>TTL (Time To Live)</strong> 值决定。 最后，本地 DNS 服务器将 IP 地址返回给你的电脑。</p>
 </li>
-<li><p><strong>连接服务器 (Connect to Server):</strong> 你的电脑现在有了 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 IP 地址，可以使用该 IP 地址连接到网站服务器，并获取网页内容。</p>
+<li><p><strong>连接服务器 (Connect to Server):</strong> 你的电脑现在有了 www.example.com 的 IP 地址，可以使用该 IP 地址连接到网站服务器，并获取网页内容。</p>
 </li>
 </ol>
-<h2 id="Cookie-Session-Token"><a href="#Cookie-Session-Token" class="headerlink" title="Cookie &amp; Session &amp; Token"></a>Cookie &amp; Session &amp; Token</h2><p><strong>Cookie</strong></p>
+<h2 id="Cookie-amp-Session-amp-Token"><a href="#Cookie-amp-Session-amp-Token" class="headerlink" title="Cookie &amp; Session &amp; Token"></a>Cookie &amp; Session &amp; Token</h2><p><strong>Cookie</strong></p>
 <p>HTTP 1.1 出现</p>
 <p>Cookie是服务器发送到用户浏览器并保存在用户浏览器的数据(服务端生成后不保存)</p>
 <p>后续用户在访问同一服务器时，会在请求头中添加Cookie</p>
 <p><strong>服务器返回报文</strong></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.0 200 OK</span><br><span class="line">Content-type: text/html</span><br><span class="line">Set-Cookie: yummy_cookie=choco</span><br><span class="line">Set-Cookie: tasty_cookie=strawberry</span><br><span class="line"></span><br><span class="line">[page content]</span><br></pre></td></tr></table></figure>
-
 <p><strong>客户端请求报文</strong></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /sample_page.html HTTP/1.1</span><br><span class="line">Host: www.example.org</span><br><span class="line">Cookie: yummy_cookie=choco; tasty_cookie=strawberry</span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
 <p>实际上，客户端可以修改保存在本地的 Cookie，因此服务器需要采取一些措施来确保 Cookie 的有效性和安全性。</p>
 </blockquote>
@@ -507,12 +485,8 @@
 <p><strong>所有信息都包含在 Token 中，Token 中包含所有必要信息，减少数据库查询。因此，JWT 一旦签发，无法直接撤销，除非使用黑名单机制或设置较短的过期时间。</strong></p>
 <p><strong>服务器返回报文</strong></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>客户端请求报文</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /protected-resource HTTP/1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
 <p>JWT</p>
 <p>JWT<strong>（JSON Web Token）</strong> 是一种开放标准（RFC 7519），用于在网络应用间安全地传递信息。JWT 是一个自包含的 Token，包含用户信息、签名和可选的其他元数据。</p>
@@ -539,55 +513,47 @@
 <h2 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h2><h3 id="同步IO"><a href="#同步IO" class="headerlink" title="同步IO"></a>同步IO</h3><p><strong>同步阻塞IO</strong></p>
 <p>应用进程被阻塞，直到数据复制到应用进程缓冲区中才返回。</p>
 <p><strong>同步非阻塞IO</strong></p>
-<p>应用进程执行系统调用之后，内核返回一个错误码。应用进程可以继续执行，但是需要不断的执行系统调用来获知 I&#x2F;O 是否完成，这种方式称为轮询(polling)。</p>
+<p>应用进程执行系统调用之后，内核返回一个错误码。应用进程可以继续执行，但是需要不断的执行系统调用来获知 I/O 是否完成，这种方式称为轮询(polling)。</p>
 <p><strong>同步多路复用IO</strong></p>
 <p>多个同步阻塞IO，任一就绪-返回</p>
 <p>流程的多路复用IO实现主要包括四种: <code>select</code>、<code>poll</code>、<code>kqueue</code></p>
 <p><code>epoll</code></p>
 <h3 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h3><p>相对于同步IO，异步IO不是顺序执行。用户进程进行aio_read系统调用之后，无论内核数据是否准备好，都会直接返回给用户进程，然后用户态进程可以去做别的事情。等到socket数据准备好了，内核直接复制数据给进程，然后从内核向进程发送通知。IO两个阶段，进程都是非阻塞的。</p>
 <p><strong>异步多路复用IO</strong></p>
-<h3 id="select-poll-epoll"><a href="#select-poll-epoll" class="headerlink" title="select, poll &amp; epoll"></a>select, poll &amp; epoll</h3><p><code>select</code></p>
+<h3 id="select-poll-amp-epoll"><a href="#select-poll-amp-epoll" class="headerlink" title="select, poll &amp; epoll"></a>select, poll &amp; epoll</h3><p><code>select</code></p>
 <p>位图+轮询 监控 文件描述符 集合</p>
-<p><code>select</code> 是一种经典的 I&#x2F;O 多路复用技术，它允许程序监视多个文件描述符（FD），并在这些文件描述符上发生 I&#x2F;O 操作时得到通知。它的工作原理和实现可以总结如下：</p>
+<p><code>select</code> 是一种经典的 I/O 多路复用技术，它允许程序监视多个文件描述符（FD），并在这些文件描述符上发生 I/O 操作时得到通知。它的工作原理和实现可以总结如下：</p>
 <ul>
-<li><p><strong>工作方式</strong>：<code>select</code> 使用一个固定大小的位图（bitmap），标记哪些文件描述符需要检查。程序通过 <code>select()</code> 系统调用来监视这些文件描述符的状态变化（如是否可读、是否可写）。</p>
-</li>
-<li><p><strong>阻塞&#x2F;非阻塞</strong>：<code>select</code> 可以设置为阻塞模式（一直等待直到有数据可用）或非阻塞模式（即不阻塞，立即返回）。</p>
-</li>
-<li><p><strong>文件描述符上限</strong>：<code>select</code> 在每次调用时，都需要传入一个文件描述符集合。由于它使用一个位图来表示文件描述符，因此其最大的文件描述符数量受到操作系统的限制，通常为 1024（可以通过修改系统配置增大，但通常仍有限制）。</p>
-</li>
-<li><p>适用于小规模的文件描述符管理，容易实现，但由于它使用位图，文件描述符数目过多时会导致性能下降。</p>
-</li>
-<li><p>由于每次都需要遍历所有的文件描述符，它的性能在大量文件描述符时可能非常低效。</p>
-</li>
+<li><strong>工作方式</strong>：<code>select</code> 使用一个固定大小的位图（bitmap），标记哪些文件描述符需要检查。程序通过 <code>select()</code> 系统调用来监视这些文件描述符的状态变化（如是否可读、是否可写）。</li>
+<li><strong>阻塞/非阻塞</strong>：<code>select</code> 可以设置为阻塞模式（一直等待直到有数据可用）或非阻塞模式（即不阻塞，立即返回）。</li>
+<li><strong>文件描述符上限</strong>：<code>select</code> 在每次调用时，都需要传入一个文件描述符集合。由于它使用一个位图来表示文件描述符，因此其最大的文件描述符数量受到操作系统的限制，通常为 1024（可以通过修改系统配置增大，但通常仍有限制）。</li>
+</ul>
+<ul>
+<li>适用于小规模的文件描述符管理，容易实现，但由于它使用位图，文件描述符数目过多时会导致性能下降。</li>
+<li>由于每次都需要遍历所有的文件描述符，它的性能在大量文件描述符时可能非常低效。</li>
 </ul>
 <p><code>poll</code></p>
 <p>链表+轮询 监控 文件描述符 集合</p>
 <p><code>poll</code> 是对 <code>select</code> 的改进，解决了 <code>select</code> 存在的一些缺点，特别是在文件描述符上限和灵活性方面。</p>
 <ul>
-<li><p><strong>工作方式</strong>：<code>poll</code> 也用来监视多个文件描述符，但是它不像 <code>select</code> 使用位图，而是使用链表（每个文件描述符一个 <code>pollfd</code> 结构体），其中每个元素包含文件描述符和该描述符的状态信息（如是否可读、是否可写等）。</p>
-</li>
-<li><p><strong>没有上限限制</strong>：与 <code>select</code> 的 1024 文件描述符的限制不同，<code>poll</code> 的文件描述符数目不受固定上限的限制，实际上只受系统内存限制。</p>
-</li>
-<li><p><strong>性能问题</strong>：虽然 <code>poll</code> 提高了灵活性，解决了文件描述符上限的问题，但它仍然需要遍历所有文件描述符，性能在大规模应用时依然较差。</p>
-</li>
-<li><p>相对于 <code>select</code>，<code>poll</code> 更加灵活，没有文件描述符的数量限制，但仍然是线性扫描的方式，性能在大量文件描述符时依然不佳。</p>
-</li>
+<li><strong>工作方式</strong>：<code>poll</code> 也用来监视多个文件描述符，但是它不像 <code>select</code> 使用位图，而是使用链表（每个文件描述符一个 <code>pollfd</code> 结构体），其中每个元素包含文件描述符和该描述符的状态信息（如是否可读、是否可写等）。</li>
+<li><strong>没有上限限制</strong>：与 <code>select</code> 的 1024 文件描述符的限制不同，<code>poll</code> 的文件描述符数目不受固定上限的限制，实际上只受系统内存限制。</li>
+<li><strong>性能问题</strong>：虽然 <code>poll</code> 提高了灵活性，解决了文件描述符上限的问题，但它仍然需要遍历所有文件描述符，性能在大规模应用时依然较差。</li>
+</ul>
+<ul>
+<li>相对于 <code>select</code>，<code>poll</code> 更加灵活，没有文件描述符的数量限制，但仍然是线性扫描的方式，性能在大量文件描述符时依然不佳。</li>
 </ul>
 <p><code>epoll</code></p>
 <p>链表+事件回调 监控 文件描述符 集合</p>
-<p><code>epoll</code> 是 Linux 下特有的一种高效的 I&#x2F;O 多路复用机制，它比 <code>select</code> 和 <code>poll</code> 在处理大量文件描述符时具有更高的效率。</p>
+<p><code>epoll</code> 是 Linux 下特有的一种高效的 I/O 多路复用机制，它比 <code>select</code> 和 <code>poll</code> 在处理大量文件描述符时具有更高的效率。</p>
 <ul>
-<li><p><strong>工作方式</strong>：<code>epoll</code> 提供了一种事件驱动的机制，注册感兴趣的文件描述符，当文件描述符发生事件时，<code>epoll</code> 通过回调函数通知应用程序。这使得它避免了每次都需要遍历所有文件描述符的低效问题。</p>
-</li>
-<li><p><strong>事件驱动</strong>：<code>epoll</code> 使用事件驱动模型，只关心发生事件的文件描述符。当事件发生时，内核会将文件描述符加入就绪队列，应用程序可以通过 <code>epoll_wait</code> 函数获取所有就绪的文件描述符，避免了像 <code>select</code> 和 <code>poll</code> 一样每次都遍历所有文件描述符。</p>
-</li>
-<li><p><strong>性能</strong>：<code>epoll</code> 在处理大量文件描述符时具有显著的性能优势，因为它采用了基于内存的事件回调机制，可以更高效地通知应用程序哪些文件描述符准备好进行 I&#x2F;O 操作。</p>
-</li>
-<li><p><strong>支持边缘触发（Edge Triggered）和水平触发（Level Triggered）</strong>：<code>epoll</code> 提供了两种触发模式，边缘触发和水平触发，提供更多的灵活性和控制。</p>
-</li>
-<li><p><code>epoll</code> 是在处理大量文件描述符时，性能最优的 I&#x2F;O 多路复用技术。它基于事件驱动，避免了每次遍历所有文件描述符的低效操作，并提供了高效的通知机制。</p>
-</li>
+<li><strong>工作方式</strong>：<code>epoll</code> 提供了一种事件驱动的机制，注册感兴趣的文件描述符，当文件描述符发生事件时，<code>epoll</code> 通过回调函数通知应用程序。这使得它避免了每次都需要遍历所有文件描述符的低效问题。</li>
+<li><strong>事件驱动</strong>：<code>epoll</code> 使用事件驱动模型，只关心发生事件的文件描述符。当事件发生时，内核会将文件描述符加入就绪队列，应用程序可以通过 <code>epoll_wait</code> 函数获取所有就绪的文件描述符，避免了像 <code>select</code> 和 <code>poll</code> 一样每次都遍历所有文件描述符。</li>
+<li><strong>性能</strong>：<code>epoll</code> 在处理大量文件描述符时具有显著的性能优势，因为它采用了基于内存的事件回调机制，可以更高效地通知应用程序哪些文件描述符准备好进行 I/O 操作。</li>
+<li><strong>支持边缘触发（Edge Triggered）和水平触发（Level Triggered）</strong>：<code>epoll</code> 提供了两种触发模式，边缘触发和水平触发，提供更多的灵活性和控制。</li>
+</ul>
+<ul>
+<li><code>epoll</code> 是在处理大量文件描述符时，性能最优的 I/O 多路复用技术。它基于事件驱动，避免了每次遍历所有文件描述符的低效操作，并提供了高效的通知机制。</li>
 </ul>
 
     </div>
@@ -672,7 +638,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Computer-Network"><span class="nav-text">Computer Network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-text">UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QUIC"><span class="nav-text">QUIC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B-%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="nav-text">三次握手&amp;四次挥手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93"><span class="nav-text">可靠传输</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E4%BC%A0"><span class="nav-text">重传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%8E%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="nav-text">滑动窗口与流量控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-text">拥塞控制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP%E6%B2%BE%E5%8C%85"><span class="nav-text">TCP沾包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP1-1"><span class="nav-text">HTTP1.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP2-0"><span class="nav-text">HTTP2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP3-0"><span class="nav-text">HTTP3.0</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS"><span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-text">DNS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie-Session-Token"><span class="nav-text">Cookie &amp; Session &amp; Token</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO"><span class="nav-text">IO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5IO"><span class="nav-text">同步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5IO"><span class="nav-text">异步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-poll-epoll"><span class="nav-text">select, poll &amp; epoll</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Computer-Network"><span class="nav-text">Computer Network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-text">UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QUIC"><span class="nav-text">QUIC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B-amp-%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="nav-text">三次握手&amp;四次挥手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93"><span class="nav-text">可靠传输</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E4%BC%A0"><span class="nav-text">重传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%8E%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="nav-text">滑动窗口与流量控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-text">拥塞控制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP%E6%B2%BE%E5%8C%85"><span class="nav-text">TCP沾包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP1-1"><span class="nav-text">HTTP1.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP2-0"><span class="nav-text">HTTP2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP3-0"><span class="nav-text">HTTP3.0</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS"><span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-text">DNS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie-amp-Session-amp-Token"><span class="nav-text">Cookie &amp; Session &amp; Token</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO"><span class="nav-text">IO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5IO"><span class="nav-text">同步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5IO"><span class="nav-text">异步IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-poll-amp-epoll"><span class="nav-text">select, poll &amp; epoll</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -740,12 +706,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">396k</span>
+    <span title="Symbols count total">395k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">12:01</span>
+    <span title="Reading time total">11:58</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
@@ -800,6 +766,8 @@
 
 
 
+
+  
 
   
 

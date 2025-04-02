@@ -27,7 +27,9 @@
 <meta property="og:site_name" content="Marigold">
 <meta property="og:description" content="LLM相关">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/8361e16bac5ee3235ef89c78b1a1cf6b.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250402135041892.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325195407601.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325195428329.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325195443397.png">
@@ -44,11 +46,11 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325202638658.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325201533207.png">
 <meta property="article:published_time" content="2025-03-19T02:50:14.000Z">
-<meta property="article:modified_time" content="2025-03-31T02:59:24.585Z">
+<meta property="article:modified_time" content="2025-04-02T06:02:29.658Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python, Pytorch">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image.png">
+<meta name="twitter:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/8361e16bac5ee3235ef89c78b1a1cf6b.png">
 
 <link rel="canonical" href="https://marigo1d.github.io/2025/03/19/LLM-Rela/">
 
@@ -237,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-31 10:59:24" itemprop="dateModified" datetime="2025-03-31T10:59:24+08:00">2025-03-31</time>
+                <time title="Modified: 2025-04-02 14:02:29" itemprop="dateModified" datetime="2025-04-02T14:02:29+08:00">2025-04-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,14 +257,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>8.1k</span>
+              <span>9.7k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>15 mins.</span>
+              <span>18 mins.</span>
             </span>
 
         </div>
@@ -276,28 +278,42 @@
       
         <p>LLM相关</p>
 <span id="more"></span>
-
-<h1 id="LLM-Rela"><a href="#LLM-Rela" class="headerlink" title="LLM&amp;Rela"></a>LLM&amp;Rela</h1><h2 id="Prompt-Engineering"><a href="#Prompt-Engineering" class="headerlink" title="Prompt Engineering"></a>Prompt Engineering</h2><p>few-shot prompting</p>
-<h2 id="LLM"><a href="#LLM" class="headerlink" title="LLM"></a>LLM</h2><h3 id="梯度消失-爆炸"><a href="#梯度消失-爆炸" class="headerlink" title="梯度消失&amp;爆炸"></a>梯度消失&amp;爆炸</h3><p>梯度消失是指，损失函数对网络中某参数计算梯度，由于链式法则，计算链过长，得到的梯度计算结果接近0</p>
+<h1 id="LLM-amp-Rela"><a href="#LLM-amp-Rela" class="headerlink" title="LLM&amp;Rela"></a>LLM&amp;Rela</h1><h2 id="Prompt-Engineering"><a href="#Prompt-Engineering" class="headerlink" title="Prompt Engineering"></a>Prompt Engineering</h2><p>Zero-Shot Prompting</p>
+<p>Few-Shot Prompting</p>
+<p>Chain-of-Thought (CoT) Prompting</p>
+<h2 id="NN-base"><a href="#NN-base" class="headerlink" title="NN-base"></a>NN-base</h2><h3 id="通道"><a href="#通道" class="headerlink" title="通道"></a>通道</h3><img src="/2025/03/19/LLM-Rela/8361e16bac5ee3235ef89c78b1a1cf6b.png" class="" title="channel">
+<p>多通道卷积过程</p>
+<p>输入一张三通道的图片，有多个卷积核进行卷积，并且每个卷积核都有三通道，分别对这张输入图片的三通道进行卷积操作。每个卷积核，分别输出三个通道，这三个通道进行求和，得到一个featuremap，有多少个卷积核，就有多少个featuremap</p>
+<h3 id="梯度消失-amp-爆炸"><a href="#梯度消失-amp-爆炸" class="headerlink" title="梯度消失&amp;爆炸"></a>梯度消失&amp;爆炸</h3><p>梯度消失是指，损失函数对网络中某参数计算梯度，由于链式法则，计算链过长，得到的梯度计算结果接近0</p>
 <p>可能出现：</p>
 <ol>
 <li>参数初始化存在问题，权重参数w_i过小导致梯度计算值接近0</li>
-<li>参数&#x2F;激活函数存在指数运算，值被快速缩小导致梯度计算值接近0</li>
+<li>参数/激活函数存在指数运算，值被快速缩小导致梯度计算值接近0</li>
 </ol>
 <p>参数的更新依赖于梯度，当出现梯度消失时，参数无法得到更新</p>
 <img src="/2025/03/19/LLM-Rela/image.png" class="" title="image">
-
 <p>优化方式：</p>
 <p>1.使用加而不是乘的方式</p>
 <p>残差网络 ResNet</p>
 <p>2.更好的权重初始化</p>
-<h3 id="Transformer结构"><a href="#Transformer结构" class="headerlink" title="Transformer结构"></a>Transformer结构</h3><img src="/2025/03/19/LLM-Rela/image-20250325195407601.png" class="" title="image-20250325195407601">
-
+<h3 id="Mask"><a href="#Mask" class="headerlink" title="Mask"></a>Mask</h3><p><strong>Element-wise multiplication（逐元素乘法）</strong></p>
+<img src="/2025/03/19/LLM-Rela/image-20250402135041892.png" class="" title="image-20250402135041892">
+<p>Mask</p>
+<p>在深度学习和图像处理中，<strong>掩膜（mask）</strong> 是一种通过逐元素乘法（element-wise multiplication）来选择性过滤或加权张量（如权重、滤波器、通道等）的技术。</p>
+<p><strong>权重掩膜（Weight Mask）</strong></p>
+<p><strong>作用</strong>：对神经网络的权重进行选择性屏蔽，例如在剪枝（pruning）中去除不重要的连接。</p>
+<p>假设有一个全连接层的权重矩阵 ( W ) 和一个二进制掩膜 ( M )（0表示屏蔽，1表示保留）：<br>\[<br>W = \begin{bmatrix} 0.1 &amp; -0.2 \ 0.3 &amp; 0.4 \end{bmatrix}, \quad M = \begin{bmatrix} 1 &amp; 0 \ 0 &amp; 1 \end{bmatrix}<br>\]<br>逐元素乘法后的结果：<br>\[<br>W \odot M = \begin{bmatrix} 0.1 \times 1 &amp; -0.2 \times 0 \ 0.3 \times 0 &amp; 0.4 \times 1 \end{bmatrix} = \begin{bmatrix} 0.1 &amp; 0 \ 0 &amp; 0.4 \end{bmatrix}<br>\]<br><strong>效果</strong>：第二行第一列和第一行第二列的权重被置零，实现了稀疏化。</p>
+<p><strong>滤波器掩膜（Filter Mask）</strong></p>
+<p><strong>作用</strong>：在卷积神经网络中，对滤波器的通道或空间区域进行屏蔽。</p>
+<p><strong>通道掩膜（Channel Mask）</strong></p>
+<p><strong>作用</strong>：对特征图的特定通道进行加权或屏蔽，例如在注意力机制中。</p>
+<p>假设特征图 ( F ) 的形状为 ( 2 \times 2 \times 3 )（高×宽×通道），掩膜 ( M ) 对通道加权：<br>\[<br>F = \begin{bmatrix} \begin{bmatrix} 1 &amp; 2 \ 3 &amp; 4 \end{bmatrix} &amp; \begin{bmatrix} 5 &amp; 6 \ 7 &amp; 8 \end{bmatrix} &amp; \begin{bmatrix} 9 &amp; 10 \ 11 &amp; 12 \end{bmatrix} \end{bmatrix}, \quad M = \begin{bmatrix} 0.5 &amp; 1.0 &amp; 0.2 \end{bmatrix}<br>\]<br>逐通道乘法：<br>\[<br>F \odot M = \begin{bmatrix} 0.5 \times \begin{bmatrix} 1 &amp; 2 \ 3 &amp; 4 \end{bmatrix} &amp; 1.0 \times \begin{bmatrix} 5 &amp; 6 \ 7 &amp; 8 \end{bmatrix} &amp; 0.2 \times \begin{bmatrix} 9 &amp; 10 \ 11 &amp; 12 \end{bmatrix} \end{bmatrix}<br>\]<br><strong>效果</strong>：第一通道权重减半，第三通道权重缩小为 20%。</p>
+<p><strong>空间掩膜（Spatial Mask）</strong></p>
+<p><strong>作用</strong>：对特征图的特定空间区域（如像素）进行屏蔽，常见于图像分割或遮挡实验。</p>
+<p>输入图像 ( I ) 和矩形掩膜 ( M )（黑色区域为0）：<br>\[<br>I = \begin{bmatrix} 255 &amp; 128 \ 64 &amp; 32 \end{bmatrix}, \quad M = \begin{bmatrix} 1 &amp; 0 \ 1 &amp; 1 \end{bmatrix}<br>\]<br>逐元素乘法：<br>\[<br>I \odot M = \begin{bmatrix} 255 &amp; 0 \ 64 &amp; 32 \end{bmatrix}<br>\]<br><strong>效果</strong>：图像右上角像素被屏蔽（变黑）。</p>
+<h2 id="LLM"><a href="#LLM" class="headerlink" title="LLM"></a>LLM</h2><h3 id="Transformer结构"><a href="#Transformer结构" class="headerlink" title="Transformer结构"></a>Transformer结构</h3><img src="/2025/03/19/LLM-Rela/image-20250325195407601.png" class="" title="image-20250325195407601">
 <p>过程</p>
 <img src="/2025/03/19/LLM-Rela/image-20250325195428329.png" class="" title="image-20250325195428329">
-
-
-
 <h3 id="词嵌入"><a href="#词嵌入" class="headerlink" title="词嵌入"></a>词嵌入</h3><p>单个词 token → 词向量</p>
 <p>训练方法</p>
 <p>Word2Vec的CBOW（Continuous Bag of Words）模型是一种通过上下文词预测目标词的神经网络模型。以下是其训练流程的详细说明，并结合具体例子进行解释：</p>
@@ -397,7 +413,6 @@
 <p>绝对位置编码 ps: 注意力机制的矩阵A为相对位置编码</p>
 <h3 id="Muti-Head-Attention"><a href="#Muti-Head-Attention" class="headerlink" title="Muti-Head Attention"></a>Muti-Head Attention</h3><p>自注意力</p>
 <img src="/2025/03/19/LLM-Rela/image-20250325195443397.png" class="" title="image-20250325195443397">
-
 <p>理解：原始词向量为客观语义，注意力矩阵为主观语义</p>
 <p>矩阵A 相当于计算 token_i 与 token_j 的相似度</p>
 <p>q_i 为 query化 后 token_i 的词向量</p>
@@ -405,34 +420,28 @@
 <p>矩阵A 与 矩阵V 相乘</p>
 <p>对每个词 value化 词向量矩阵 进行相关性修正，得到注意力矩阵（包含其他相似词词向量加和的词向量）</p>
 <p>理解：</p>
-<p>为什么 A  &#x3D; X * W_q * [X * W_k]^T，而不是A &#x3D; X * W_A?</p>
+<p>为什么 A  = X <em> W_q </em> [X <em> W_k]^T，而不是A = X </em> W_A?</p>
 <p>第一种为二次型，第二种为线性，二次型可表达映射关系更复杂</p>
 <p>交叉注意力</p>
 <img src="/2025/03/19/LLM-Rela/image-20250325195459862.png" class="" title="image-20250325195459862">
-
-
-
 <p>多头注意力机制</p>
 <p>对输出词向量进行多次注意力的计算</p>
 <p>Z：在多头注意力机制中，输入会经过多个独立的注意力头（Attention Head），每个头会计算自己的注意力矩阵，并生成一个独立的输出。</p>
 <p>与Z相乘的W：在论文中表述为W_o，对Z进行线性变换，类似于对多通道结果进行加和</p>
 <img src="/2025/03/19/LLM-Rela/image-20250325195513579.png" class="" title="image-20250325195513579">
-
-
-
 <h3 id="FFN"><a href="#FFN" class="headerlink" title="FFN"></a>FFN</h3><p><strong>Feed-Forward Network (FFN)</strong> FFN 的结构通常是一个简单的两层 MLP（多层感知机），其作用是对每个位置的特征进行进一步的处理和增强。</p>
 <p><strong>FFN 的结构</strong></p>
 <p>FFN 的典型结构如下：</p>
 <ol>
-<li><strong>第一层</strong>：一个全连接层，将输入特征从 ( $d*{model}$ ) 维度映射到一个更高的维度 ( $d*{ff}$ )（通常 ( $d*{ff} &#x3D; 4 \times d*{model}$ )）。</li>
+<li><strong>第一层</strong>：一个全连接层，将输入特征从 ( $d<em>{model}$ ) 维度映射到一个更高的维度 ( $d</em>{ff}$ )（通常 ( $d<em>{ff} = 4 \times d</em>{model}$ )）。</li>
 <li><strong>激活函数</strong>：通常使用 ReLU（或其他非线性激活函数，如 GELU）。</li>
-<li><strong>第二层</strong>：另一个全连接层，将特征从 ( d*{ff} ) 维度映射回 ( d*{model} ) 维度。</li>
+<li><strong>第二层</strong>：另一个全连接层，将特征从 ( d<em>{ff} ) 维度映射回 ( d</em>{model} ) 维度。</li>
 </ol>
-<p>公式表示为：$\text{FFN}(x) &#x3D; W_2 \cdot \text{ReLU}(W_1 \cdot x + b_1) + b_2$其中： </p>
+<p>公式表示为：$\text{FFN}(x) = W_2 \cdot \text{ReLU}(W_1 \cdot x + b_1) + b_2$其中： </p>
 <p>• ( x \in \mathbb{R}^{d*{model}} ) 是输入特征，</p>
 <p><em>• ( W_1 \in \mathbb{R}^{d</em>{ff} \times d*{model}} ) 是第一层的权重矩阵，</p>
 <p><em>• ( b_1 \in \mathbb{R}^{d</em>{ff}} ) 是第一层的偏置向量， </p>
-<p>• ( W_2 \in \mathbb{R}^{d*{model} \times d*{ff}} ) 是第二层的权重矩阵， </p>
+<p>• ( W_2 \in \mathbb{R}^{d<em>{model} \times d</em>{ff}} ) 是第二层的权重矩阵， </p>
 <p>• ( b_2 \in \mathbb{R}^{d_{model}} ) 是第二层的偏置向量。</p>
 <p>如果无法对模型进行微调，但希望模型在特定任务上表现更好，可以考虑以下方法：</p>
 <ol>
@@ -444,14 +453,8 @@
 <p>ref: <a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/introduction">https://modelcontextprotocol.io/introduction</a></p>
 <p>ref: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/29001189476">https://zhuanlan.zhihu.com/p/29001189476</a></p>
 <img src="/2025/03/19/LLM-Rela/v2-2bcd98f6541da0b6f14dc9082ee2dcda_1440w.jpg" class="" title="mcp">
-
-
-
 <p><a target="_blank" rel="noopener" href="https://github.com/modelcontextprotocol/python-sdk/tree/main/examples/clients/simple-chatbot/mcp_simple_chatbot">example</a></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># client </span></span><br><span class="line">   ... <span class="comment"># 省略了无关的代码</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">start</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="comment"># 初始化所有的 mcp server</span></span><br><span class="line">    <span class="keyword">for</span> server <span class="keyword">in</span> self.servers:</span><br><span class="line">        <span class="keyword">await</span> server.initialize()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取所有的 tools 命名为 all_tools</span></span><br><span class="line">    all_tools = []</span><br><span class="line">    <span class="keyword">for</span> server <span class="keyword">in</span> self.servers:</span><br><span class="line">        tools = <span class="keyword">await</span> server.list_tools()</span><br><span class="line">        all_tools.extend(tools)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将所有的 tools 的功能描述格式化成字符串供 LLM 使用</span></span><br><span class="line">    <span class="comment"># tool.format_for_llm() 我放到了这段代码最后，方便阅读。</span></span><br><span class="line">    tools_description = <span class="string">&quot;\n&quot;</span>.join(</span><br><span class="line">        [tool.format_for_llm() <span class="keyword">for</span> tool <span class="keyword">in</span> all_tools]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 这里就不简化了，以供参考，实际上就是基于 prompt 和当前所有工具的信息</span></span><br><span class="line">    <span class="comment"># 询问 LLM（Claude） 应该使用哪些工具。</span></span><br><span class="line">    system_message = (</span><br><span class="line">        <span class="string">&quot;You are a helpful assistant with access to these tools:\n\n&quot;</span></span><br><span class="line">        <span class="string">f&quot;<span class="subst">&#123;tools_description&#125;</span>\n&quot;</span></span><br><span class="line">        <span class="string">&quot;Choose the appropriate tool based on the user&#x27;s question. &quot;</span></span><br><span class="line">        <span class="string">&quot;If no tool is needed, reply directly.\n\n&quot;</span></span><br><span class="line">        <span class="string">&quot;IMPORTANT: When you need to use a tool, you must ONLY respond with &quot;</span></span><br><span class="line">        <span class="string">&quot;the exact JSON object format below, nothing else:\n&quot;</span></span><br><span class="line">        <span class="string">&quot;&#123;\n&quot;</span></span><br><span class="line">        <span class="string">&#x27;    &quot;tool&quot;: &quot;tool-name&quot;,\n&#x27;</span></span><br><span class="line">        <span class="string">&#x27;    &quot;arguments&quot;: &#123;\n&#x27;</span></span><br><span class="line">        <span class="string">&#x27;        &quot;argument-name&quot;: &quot;value&quot;\n&#x27;</span></span><br><span class="line">        <span class="string">&quot;    &#125;\n&quot;</span></span><br><span class="line">        <span class="string">&quot;&#125;\n\n&quot;</span></span><br><span class="line">        <span class="string">&quot;After receiving a tool&#x27;s response:\n&quot;</span></span><br><span class="line">        <span class="string">&quot;1. Transform the raw data into a natural, conversational response\n&quot;</span></span><br><span class="line">        <span class="string">&quot;2. Keep responses concise but informative\n&quot;</span></span><br><span class="line">        <span class="string">&quot;3. Focus on the most relevant information\n&quot;</span></span><br><span class="line">        <span class="string">&quot;4. Use appropriate context from the user&#x27;s question\n&quot;</span></span><br><span class="line">        <span class="string">&quot;5. Avoid simply repeating the raw data\n\n&quot;</span></span><br><span class="line">        <span class="string">&quot;Please use only the tools that are explicitly defined above.&quot;</span></span><br><span class="line">    )</span><br><span class="line">    messages = [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: system_message&#125;]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># Final... 假设这里已经处理了用户消息输入.</span></span><br><span class="line">        messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: user_input&#125;)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将 system_message 和用户消息输入一起发送给 LLM</span></span><br><span class="line">        llm_response = self.llm_client.get_response(messages)</span><br><span class="line"></span><br><span class="line">    ... <span class="comment"># 后面和确定使用哪些工具无关</span></span><br><span class="line">    </span><br><span class="line"><span class="comment"># server</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Tool</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Represents a tool with its properties and formatting.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self, name: <span class="built_in">str</span>, description: <span class="built_in">str</span>, input_schema: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]</span></span><br><span class="line"><span class="params">    </span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        self.name: <span class="built_in">str</span> = name</span><br><span class="line">        self.description: <span class="built_in">str</span> = description</span><br><span class="line">        self.input_schema: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>] = input_schema</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 把工具的名字 / 工具的用途（description）和工具所需要的参数（args_desc）转化为文本</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">format_for_llm</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Format tool information for LLM.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            A formatted string describing the tool.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        args_desc = []</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;properties&quot;</span> <span class="keyword">in</span> self.input_schema:</span><br><span class="line">            <span class="keyword">for</span> param_name, param_info <span class="keyword">in</span> self.input_schema[<span class="string">&quot;properties&quot;</span>].items():</span><br><span class="line">                arg_desc = (</span><br><span class="line">                    <span class="string">f&quot;- <span class="subst">&#123;param_name&#125;</span>: <span class="subst">&#123;param_info.get(<span class="string">&#x27;description&#x27;</span>, <span class="string">&#x27;No description&#x27;</span>)&#125;</span>&quot;</span></span><br><span class="line">                )</span><br><span class="line">                <span class="keyword">if</span> param_name <span class="keyword">in</span> self.input_schema.get(<span class="string">&quot;required&quot;</span>, []):</span><br><span class="line">                    arg_desc += <span class="string">&quot; (required)&quot;</span></span><br><span class="line">                args_desc.append(arg_desc)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Tool: <span class="subst">&#123;self.name&#125;</span></span></span><br><span class="line"><span class="string">Description: <span class="subst">&#123;self.description&#125;</span></span></span><br><span class="line"><span class="string">Arguments:</span></span><br><span class="line"><span class="string"><span class="subst">&#123;<span class="built_in">chr</span>(<span class="number">10</span>).join(args_desc)&#125;</span></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="LLM-PPO"><a href="#LLM-PPO" class="headerlink" title="LLM-PPO"></a>LLM-PPO</h2><p>状态空间：模型输入prompt</p>
 <p>动作空间：模型输出output</p>
 <p>Actor：SFT后的LLM网络，进行更新</p>
@@ -462,29 +465,22 @@
 <p>在RL-PPO过程中这两个网络不更新</p>
 </blockquote>
 <img src="/2025/03/19/LLM-Rela/image-20250325131654259.png" class="" title="image-20250325131654259">
-
 <p>SFT LLM</p>
 <p>train Reward Model</p>
 <img src="/2025/03/19/LLM-Rela/image-20250325151928459.png" class="" title="image-20250325151928459">
-
 <p>use LLM_sft to be the Actor(reference model)</p>
 <img src="/2025/03/19/LLM-Rela/image-20250325153214542.png" class="" title="image-20250325153214542">
-
 <img src="/2025/03/19/LLM-Rela/image-20250325153304648.png" class="" title="image-20250325153304648">
-
 <img src="/2025/03/19/LLM-Rela/image-20250325153337812.png" class="" title="image-20250325153337812">
-
 <blockquote>
 <p>广义优势A^t为多步时序差分的指数加权平均，详见reinforce-learning-record，参数含Value值和Reward值</p>
 </blockquote>
 <p><strong>为什么引入KL散度项？</strong></p>
 <p>This KL term serves two purposes. First, it acts as an entropy bonus, encouraging the policy to explore and deterring it from collapsing to a single mode. Second, it ensures the policy doesn’t learn to produce outputs that are too different from those that the reward model has seen during training.</p>
 <h2 id="LLM-GRPO"><a href="#LLM-GRPO" class="headerlink" title="LLM-GRPO"></a>LLM-GRPO</h2><img src="/2025/03/19/LLM-Rela/image-20250325195333997.png" class="" title="image-20250325195333997">
-
 <p>由于PPO算法中使用的价值函数通常是与策略模型规模相当的另一个模型，这会带来巨大的内存和计算负担。此外，在强化学习训练过程中，价值函数被作为计算优势函数（advantage）的基线以实现方差缩减。然而在大型语言模型（LLM）场景中，通常只有最后一个token会被奖励模型分配奖励分数，这可能导致对每个token都精确建模价值函数的训练变得复杂。为解决这一问题，如图4所示，我们提出了组相对策略优化（Group Relative Policy Optimization, GRPO）</p>
 <p>每一个 o_g 为策略模型对于输入 q 的输出，每一个 r_g 为 RM 对 每一个 o_g 的评分</p>
 <img src="/2025/03/19/LLM-Rela/image-20250325201341810.png" class="" title="image-20250325201341810">
-
 <p>不同点：</p>
 <ol>
 <li><p>优势函数：过程监督与结果监督</p>
@@ -494,7 +490,6 @@
 </li>
 </ol>
 <img src="/2025/03/19/LLM-Rela/image-20250325201533207.png" class="" title="image-20250325201533207">
-
 
     </div>
 
@@ -578,7 +573,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LLM-Rela"><span class="nav-text">LLM&amp;Rela</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Prompt-Engineering"><span class="nav-text">Prompt Engineering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM"><span class="nav-text">LLM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1-%E7%88%86%E7%82%B8"><span class="nav-text">梯度消失&amp;爆炸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transformer%E7%BB%93%E6%9E%84"><span class="nav-text">Transformer结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E5%B5%8C%E5%85%A5"><span class="nav-text">词嵌入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Positional-Encoding"><span class="nav-text">Positional Encoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Muti-Head-Attention"><span class="nav-text">Muti-Head Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FFN"><span class="nav-text">FFN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP"><span class="nav-text">MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-PPO"><span class="nav-text">LLM-PPO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-GRPO"><span class="nav-text">LLM-GRPO</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LLM-amp-Rela"><span class="nav-text">LLM&amp;Rela</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Prompt-Engineering"><span class="nav-text">Prompt Engineering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NN-base"><span class="nav-text">NN-base</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E9%81%93"><span class="nav-text">通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1-amp-%E7%88%86%E7%82%B8"><span class="nav-text">梯度消失&amp;爆炸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mask"><span class="nav-text">Mask</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM"><span class="nav-text">LLM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Transformer%E7%BB%93%E6%9E%84"><span class="nav-text">Transformer结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E5%B5%8C%E5%85%A5"><span class="nav-text">词嵌入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Positional-Encoding"><span class="nav-text">Positional Encoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Muti-Head-Attention"><span class="nav-text">Muti-Head Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FFN"><span class="nav-text">FFN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP"><span class="nav-text">MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-PPO"><span class="nav-text">LLM-PPO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-GRPO"><span class="nav-text">LLM-GRPO</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -646,12 +641,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">396k</span>
+    <span title="Symbols count total">395k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">12:01</span>
+    <span title="Reading time total">11:58</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
@@ -708,6 +703,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

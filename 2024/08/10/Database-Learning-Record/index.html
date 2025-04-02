@@ -277,7 +277,7 @@
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>53 mins.</span>
+              <span>52 mins.</span>
             </span>
 
         </div>
@@ -291,11 +291,7 @@
       
         <p>MySQL和Redis数据库相关学习记录</p>
 <span id="more"></span>
-
-
-
 <h1 id="Database-Learning-Record"><a href="#Database-Learning-Record" class="headerlink" title="Database Learning Record"></a>Database Learning Record</h1><h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="operator">&lt;</span>cte_name<span class="operator">&gt;</span> <span class="keyword">AS</span> ( <span class="operator">&lt;</span>cte_query<span class="operator">&gt;</span> ) [, <span class="operator">&lt;</span>cte_name<span class="operator">&gt;</span> <span class="keyword">AS</span> ( <span class="operator">&lt;</span>cte_query<span class="operator">&gt;</span> )]...  <span class="comment">-- Common Table Expressions (可选)</span></span><br><span class="line"><span class="keyword">SELECT</span> [<span class="keyword">DISTINCT</span> <span class="operator">|</span> <span class="keyword">ALL</span>] <span class="operator">&lt;</span>select_list<span class="operator">&gt;</span>  <span class="comment">-- 选择哪些列</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="operator">&lt;</span>table_name<span class="operator">&gt;</span> <span class="operator">|</span> <span class="operator">&lt;</span>view_name<span class="operator">&gt;</span> <span class="operator">|</span> <span class="operator">&lt;</span>joined_tables<span class="operator">&gt;</span>  <span class="comment">-- 从哪个表/视图/连接结果中选择</span></span><br><span class="line"><span class="keyword">WHERE</span> <span class="operator">&lt;</span>search_condition<span class="operator">&gt;</span>  <span class="comment">-- 过滤行</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="operator">&lt;</span>grouping_columns<span class="operator">&gt;</span>  <span class="comment">-- 分组行</span></span><br><span class="line"><span class="keyword">HAVING</span> <span class="operator">&lt;</span>group_condition<span class="operator">&gt;</span>  <span class="comment">-- 过滤分组后的行</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="operator">&lt;</span>ordering_columns<span class="operator">&gt;</span> [<span class="keyword">ASC</span> <span class="operator">|</span> <span class="keyword">DESC</span>]  <span class="comment">-- 排序结果</span></span><br><span class="line">LIMIT <span class="operator">&lt;</span>row_count<span class="operator">&gt;</span> <span class="keyword">OFFSET</span> <span class="operator">&lt;</span><span class="keyword">offset</span><span class="operator">&gt;</span>  <span class="comment">-- 限制返回的行数 (某些数据库使用不同的语法，例如 TOP)</span></span><br><span class="line"><span class="keyword">UNION</span> [<span class="keyword">ALL</span>] <span class="operator">&lt;</span>another_select_statement<span class="operator">&gt;</span>  <span class="comment">-- 合并多个查询结果 (可选)</span></span><br><span class="line"><span class="keyword">INTERSECT</span> <span class="operator">&lt;</span>another_select_statement<span class="operator">&gt;</span>  <span class="comment">-- 返回多个查询结果的交集 (可选)</span></span><br><span class="line"><span class="keyword">EXCEPT</span> <span class="operator">|</span> MINUS <span class="operator">&lt;</span>another_select_statement<span class="operator">&gt;</span>  <span class="comment">-- 返回第一个查询结果中存在但第二个查询结果中不存在的行 (可选)</span></span><br><span class="line"><span class="keyword">FOR</span> <span class="keyword">UPDATE</span> [<span class="keyword">OF</span> <span class="operator">&lt;</span>column_list<span class="operator">&gt;</span>]  <span class="comment">-- 锁定选定的行以进行更新 (可选)</span></span><br></pre></td></tr></table></figure>
-
 <p>顺序：</p>
 <p>1.FROM 获得表格（在此处进行JOIN联结表与表）</p>
 <p>2.WHERE 筛选行</p>
@@ -321,7 +317,6 @@
 </ul>
 <p>示例:</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> salary <span class="operator">&gt;</span> <span class="number">50000</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;Electronics&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
 <p><strong>逻辑运算符:</strong></p>
 <ul>
 <li><strong><code>AND</code>:</strong> 两个条件都必须为真</li>
@@ -330,12 +325,10 @@
 </ul>
 <p>示例:</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department <span class="operator">=</span> <span class="string">&#x27;Sales&#x27;</span> <span class="keyword">AND</span> salary <span class="operator">&gt;</span> <span class="number">60000</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;Electronics&#x27;</span> <span class="keyword">OR</span> category <span class="operator">=</span> <span class="string">&#x27;Books&#x27;</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> <span class="keyword">NOT</span> country <span class="operator">=</span> <span class="string">&#x27;USA&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
 <p><strong><code>BETWEEN</code> 运算符:</strong></p>
 <p>检查值是否在指定范围内。</p>
 <p>示例:</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> orders <span class="keyword">WHERE</span> order_date <span class="keyword">BETWEEN</span> <span class="string">&#x27;2023-01-01&#x27;</span> <span class="keyword">AND</span> <span class="string">&#x27;2023-12-31&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
 <p><strong><code>LIKE</code> 运算符:</strong></p>
 <p>用于模式匹配。</p>
 <blockquote>
@@ -351,6 +344,8 @@
 </li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p><strong><code>_</code> (下划线):</strong> 匹配任何单个字符。</p>
 <ul>
 <li><strong>示例:</strong><ul>
@@ -361,6 +356,8 @@
 </li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p><strong><code>[]</code> (方括号):</strong> 匹配指定集合中的任何单个字符。</p>
 <ul>
 <li><strong>示例:</strong><ul>
@@ -371,6 +368,8 @@
 </li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p><strong><code>[^]</code> (方括号加脱字符):</strong> 匹配不在指定集合中的任何单个字符。</p>
 <ul>
 <li><strong>示例:</strong><ul>
@@ -387,39 +386,33 @@
 <li><strong>示例:</strong></li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> product_name <span class="keyword">LIKE</span> <span class="string">&#x27;%10\% off%&#x27;</span>; <span class="comment">-- 错误，会将 &quot;%&quot; 视为通配符</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> product_name <span class="keyword">LIKE</span> <span class="string">&#x27;%10!% off%&#x27;</span> <span class="keyword">ESCAPE</span> <span class="string">&#x27;!&#x27;</span>;  <span class="comment">-- 正确，使用 &quot;!&quot; 作为转义字符，查找包含 &quot;10% off&quot; 的字符串</span></span><br></pre></td></tr></table></figure>
-
 <p>在这个例子中，<code>ESCAPE &#39;!&#39;</code>  指定 “!” 作为转义字符。 因此，<code>!%</code> 被解释为字面上的 “%” 字符，而不是通配符。</p>
 <p><strong>结合使用:</strong></p>
 <ul>
 <li><strong>示例:</strong></li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> email <span class="keyword">LIKE</span> <span class="string">&#x27;[a-z]%@[a-z]%.[a-z]%&#x27;</span>;  <span class="comment">-- 匹配简单的电子邮件地址格式</span></span><br></pre></td></tr></table></figure>
-
 </blockquote>
 <p><strong><code>IN</code> 运算符:</strong></p>
 <p>检查值是否在指定的值列表中。</p>
 <p>示例:</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="keyword">IN</span> (<span class="string">&#x27;Electronics&#x27;</span>, <span class="string">&#x27;Books&#x27;</span>, <span class="string">&#x27;Clothing&#x27;</span>);</span><br></pre></td></tr></table></figure>
-
 <p><strong><code>IS NULL</code> 运算符:</strong></p>
 <p>检查值是否为 NULL。</p>
 <p>示例:</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> email <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br></pre></td></tr></table></figure>
-
 <p><strong><code>IS NOT NULL</code> 运算符:</strong></p>
 <p>检查值是否不为 NULL。</p>
 <p>示例:</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> customers <span class="keyword">WHERE</span> email <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>;</span><br></pre></td></tr></table></figure>
-
 <p>其他运算符:</p>
 <p>一些数据库系统还支持其他运算符，例如：</p>
 <ul>
 <li><strong><code>EXISTS</code>:</strong> 检查子查询是否返回任何行。</li>
-<li><strong><code>ANY</code> &#x2F; <code>SOME</code> &#x2F; <code>ALL</code>:</strong>  与子查询一起使用，比较值与子查询返回的所有值。</li>
+<li><strong><code>ANY</code> / <code>SOME</code> / <code>ALL</code>:</strong>  与子查询一起使用，比较值与子查询返回的所有值。</li>
 </ul>
 <p><code>GROUP BY [column]</code>: </p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> CustomerID, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> OrderCount</span><br><span class="line"><span class="keyword">FROM</span> Orders</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> CustomerID;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> Region, Product, <span class="built_in">SUM</span>(Sales) <span class="keyword">AS</span> TotalSales</span><br><span class="line"><span class="keyword">FROM</span> Sales</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> Region, Product;</span><br></pre></td></tr></table></figure>
-
 <p>当使用 GROUP BY 子句时，SELECT 列表中只能包含以下两类列：</p>
 <ol>
 <li>出现在 GROUP BY 子句中的列。</li>
@@ -458,11 +451,6 @@
 <p>推荐使用子查询</p>
 </blockquote>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> region, total_sales</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> region, <span class="built_in">SUM</span>(amount) <span class="keyword">AS</span> total_sales</span><br><span class="line">    <span class="keyword">FROM</span> sales</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> region</span><br><span class="line">) <span class="keyword">AS</span> regional_sales</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> total_sales <span class="keyword">DESC</span></span><br><span class="line">LIMIT <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> employee_id, first_name, last_name, salary</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">WHERE</span> salary <span class="operator">&gt;</span> (<span class="keyword">SELECT</span> <span class="built_in">AVG</span>(salary) <span class="keyword">FROM</span> employees);</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <p><code>union</code></p>
 <p>合并查询结果</p>
 <ul>
@@ -475,13 +463,7 @@
 <p><strong>列名可以不同，但结果集会采用第一个 SELECT 语句的列名</strong>： 合并后的结果集会使用第一个 SELECT 语句中的列名作为最终的列名。 如果需要指定不同的列名，可以在第一个 SELECT 语句中使用 AS 别名。</p>
 </blockquote>
 <h2 id="SQL执行流程"><a href="#SQL执行流程" class="headerlink" title="SQL执行流程"></a>SQL执行流程</h2><img src="/2024/08/10/Database-Learning-Record/db-mysql-sql-8.png" class="" title="img">
-
 <img src="/2024/08/10/Database-Learning-Record/db-mysql-sql-14.png" class="" title="sqlworkflow">
-
-
-
-
-
 <p>app 使用数据库连接池连接数据库</p>
 <p>数据库线程接收连接，得到sql语句</p>
 <p>sql语句解析</p>
@@ -591,11 +573,6 @@
 <li>ROW_ID: 无主键id时启用</li>
 </ul>
 <img src="/2024/08/10/Database-Learning-Record/20210924000726.png" class="" title="img">
-
-
-
-
-
 <p><strong>ReadView：判断当前事务能够看见哪些版本的</strong></p>
 <ul>
 <li><code>m_ids</code>：生成 ReadView 时有哪些事务在执行但是还没提交的（称为 ”<strong>活跃事务</strong>“），这些活跃事务的 id 就存在这个字段里</li>
@@ -603,32 +580,22 @@
 <li><code>max_trx_id</code>：生成 ReadView 时下一个会启动事务的 ID 的值（事务 ID 是递增分配的，越后面申请的事务 ID 越大）</li>
 <li><code>creator_trx_id</code>：当前创建 ReadView 事务的 ID</li>
 </ul>
-<p>事务A(trx_id &#x3D; 100)，小于min_trx_id，事务B可以看见事务A的修改</p>
-<p>事务C(trx_id &#x3D; 300)，位于(min_trx_id, max_trx_id)之中，事务B不能看见事务C的修改（insert，update），通过undo log查到小于min_trx_id版本的值</p>
-<p>事务D(trx_id &#x3D; 500)，大于max_trx_id，事务B不能看见事务D的修改</p>
+<p>事务A(trx_id = 100)，小于min_trx_id，事务B可以看见事务A的修改</p>
+<p>事务C(trx_id = 300)，位于(min_trx_id, max_trx_id)之中，事务B不能看见事务C的修改（insert，update），通过undo log查到小于min_trx_id版本的值</p>
+<p>事务D(trx_id = 500)，大于max_trx_id，事务B不能看见事务D的修改</p>
 <img src="/2024/08/10/Database-Learning-Record/20210924205057.png" class="" title="img">
-
-
-
 <h3 id="MVCC与幻读"><a href="#MVCC与幻读" class="headerlink" title="MVCC与幻读"></a>MVCC与幻读</h3><p>通过MVCC实现快照读（select  * from table where …）</p>
 <p>通过间隙锁实现当前读（select … for update）</p>
 <h2 id="MySQL-Struc"><a href="#MySQL-Struc" class="headerlink" title="MySQL Struc"></a>MySQL Struc</h2><img src="/2024/08/10/Database-Learning-Record/image-20240919111718667.png" class="" title="image-20240919111718667">
-
-
-
 <h3 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h3><p>页 作为 B树的节点</p>
 <p>B树的节点，每个节点均包含数条数据</p>
 <p>页中 行的主键作为B树节点的key</p>
 <img src="/2024/08/10/Database-Learning-Record/image-20240919155834155.png" class="" title="image-20240919155834155">
-
 <p>B+树</p>
 <p>将原B树的 <strong>非叶子节点的数据行</strong> 存放在 <strong>叶子节点</strong>，原 <strong>非叶子节点的数据行</strong> 数据区域变更为保存目标页地址 -&gt; 稳定查询次数</p>
 <p><strong>非叶子节点</strong>由于不再保存真实数据，可保存条目增加 -&gt; 树高度降低</p>
 <p>叶子节点通过指针连接 -&gt; 范围查询</p>
 <img src="/2024/08/10/Database-Learning-Record/image-20240919160103358.png" class="" title="image-20240919160103358">
-
-
-
 <p><strong>Buffer Pool</strong></p>
 <p>存储页</p>
 <h3 id="Undo-Log"><a href="#Undo-Log" class="headerlink" title="Undo Log"></a>Undo Log</h3><p><strong>Undo Log 刷盘</strong></p>
@@ -643,7 +610,6 @@
 <li><strong>Undo Log 的轮转</strong>：MySQL 会定期轮转 <code>UNDO LOG</code>，即当某个 Undo Tablespace 中的 <code>UNDO LOG</code> 记录不再需要时，MySQL 会将其标记为可重用，并在需要时覆盖这些空间。</li>
 </ol>
 <h3 id="redo-log-和-binlog"><a href="#redo-log-和-binlog" class="headerlink" title="redo log 和 binlog"></a>redo log 和 binlog</h3><img src="/2024/08/10/Database-Learning-Record/wal.png" class="" title="img">
-
 <p>事务开始时，记录对数据库的修改，同时写入redo log和Undo log，如果发生崩溃，可通过redo log重放恢复到崩溃前状态</p>
 <p>redo log 和 binlog 均需要持久化到磁盘</p>
 <blockquote>
@@ -660,9 +626,6 @@
 <p>文件系统中存在两个redo log file，redo log buffer刷盘时，环形写入redo log file0和redo log file1；</p>
 <p>check point表示buffer pool中脏页已刷盘，不需要重放的数据。如果write pos追上check point，则MySQL会强制暂停开始将buffer pool脏页刷盘；</p>
 <img src="/2024/08/10/Database-Learning-Record/checkpoint.png" class="" title="img">
-
-
-
 <p>事务每条语句会产生一条 binlog 记录到 binlog buffer；当事务提交时，写 binlog buffer 到磁盘；</p>
 <p>binlog 只记录对数据库的更新操作</p>
 <p><strong>对比</strong></p>
@@ -694,7 +657,6 @@
 </ul>
 <p><strong>示例：</strong></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> students (</span><br><span class="line">    id <span class="type">INT</span> AUTO_INCREMENT <span class="keyword">PRIMARY</span> KEY, <span class="comment">-- 主索引</span></span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>),</span><br><span class="line">    age <span class="type">INT</span>,</span><br><span class="line">    INDEX idx_name (name) <span class="comment">-- 辅助索引</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
 <p>在此表中：</p>
 <ul>
 <li>主索引：<code>id</code> 直接存储了完整的数据行。</li>
@@ -703,7 +665,6 @@
 <hr>
 <p><strong>查询过程：</strong> 当执行以下查询时：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> students <span class="keyword">WHERE</span> name <span class="operator">=</span> <span class="string">&#x27;Alice&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
 <p>查询过程如下：</p>
 <ol>
 <li>MySQL 使用辅助索引 <code>idx_name</code>，找到 <code>name = &#39;Alice&#39;</code> 对应的主键值 <code>id</code>（假如为 <code>10</code>）。</li>
@@ -729,10 +690,8 @@
 <p><strong>示例：</strong></p>
 <p>假设表 <code>payment</code>：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> payment (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    customer_id <span class="type">INT</span>,</span><br><span class="line">    staff_id <span class="type">INT</span>,</span><br><span class="line">    amount <span class="type">DECIMAL</span>(<span class="number">10</span>, <span class="number">2</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建多列索引</span></span><br><span class="line"><span class="keyword">CREATE</span> INDEX idx_customer_staff <span class="keyword">ON</span> payment (customer_id, staff_id);</span><br></pre></td></tr></table></figure>
-
 <p>索引内容（B+ 树的 <code>key</code>）可能如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(customer_id, staff_id) -&gt; id</span><br><span class="line">(101, 1) -&gt; 10</span><br><span class="line">(101, 2) -&gt; 11</span><br><span class="line">(102, 1) -&gt; 12</span><br></pre></td></tr></table></figure>
-
 <p><strong>B+ 树节点存储：</strong></p>
 <p>每个节点的 <code>key</code> 是 <code>(customer_id, staff_id)</code> 的组合值，而 <code>value</code> 是主键 <code>id</code> 或行的物理指针。</p>
 <ul>
@@ -749,9 +708,6 @@
 </li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 假设表 emails 中 email 列为 VARCHAR(255)</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> emails (</span><br><span class="line">    id <span class="type">INT</span> AUTO_INCREMENT <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    email <span class="type">VARCHAR</span>(<span class="number">255</span>),</span><br><span class="line">    content TEXT</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建前缀索引</span></span><br><span class="line"><span class="keyword">CREATE</span> INDEX idx_email_prefix <span class="keyword">ON</span> emails (email(<span class="number">10</span>)); <span class="comment">-- 只索引前 10 个字符</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查询</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> emails <span class="keyword">WHERE</span> email <span class="keyword">LIKE</span> <span class="string">&#x27;example%&#x27;</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>MySQL 不使用索引的情况：</strong></p>
 <ul>
 <li>索引列被计算或函数包裹。</li>
@@ -789,7 +745,7 @@
 <ul>
 <li>在哪个数据页修改了哪个字节，修改后的值是什么。</li>
 </ul>
-<p>当事务修改数据时，先将修改记录写入 Redo Log Buffer, 在事务提交时，将 Redo Log Buffer 中的内容刷新到 Redo Log Files, 数据库崩溃恢复&#x2F;内存掉电数据清空时，会读取 Redo Log Files，重新执行其中的修改操作，将数据库恢复到崩溃前的最新状态。</p>
+<p>当事务修改数据时，先将修改记录写入 Redo Log Buffer, 在事务提交时，将 Redo Log Buffer 中的内容刷新到 Redo Log Files, 数据库崩溃恢复/内存掉电数据清空时，会读取 Redo Log Files，重新执行其中的修改操作，将数据库恢复到崩溃前的最新状态。</p>
 <p><strong>Redo Log 的作用是保证已提交事务的持久性，而不是未提交事务的恢复。</strong></p>
 <p>Redo Log 存储在 Redo Log Files 中，通常是两个或多个循环使用的文件。</p>
 <h2 id="MySQL存储引擎"><a href="#MySQL存储引擎" class="headerlink" title="MySQL存储引擎"></a>MySQL存储引擎</h2><p>MyISAM 存储引擎 和 InnoDB 存储引擎</p>
@@ -811,11 +767,10 @@
 </ul>
 <h2 id="MySQL主从复制"><a href="#MySQL主从复制" class="headerlink" title="MySQL主从复制"></a>MySQL主从复制</h2><p>MySQL的主从复制为BinLog</p>
 <img src="/2024/08/10/Database-Learning-Record/master-slave.png" class="" title="mysqlms">
-
-<p>主要涉及三个线程: binlog 线程、I&#x2F;O 线程和 SQL 线程。</p>
+<p>主要涉及三个线程: binlog 线程、I/O 线程和 SQL 线程。</p>
 <ul>
 <li><strong>binlog 线程</strong> : 负责将主服务器上的数据更改写入二进制日志中。</li>
-<li><strong>I&#x2F;O 线程</strong> : 负责从主服务器上读取二进制日志，并写入从服务器的中继日志中。</li>
+<li><strong>I/O 线程</strong> : 负责从主服务器上读取二进制日志，并写入从服务器的中继日志中。</li>
 <li><strong>SQL 线程</strong> : 负责读取中继日志并重放其中的 SQL 语句。</li>
 </ul>
 <p><strong>流程</strong></p>
@@ -834,7 +789,7 @@
 </li>
 <li>ROW 格式（行模式，诞生于 MySQL 5.1）：在这种格式下，binlog 记录的是每一行数据更改的具体内容。<ol>
 <li>优点：能够精确地记录数据的变化，避免了 STATEMENT 格式中的环境依赖问题，提供了更强的一致性保证。</li>
-<li>缺点：日志文件可能会比 STATEMENT 格式大，因为记录了每一行的详细变化。此外，ROW 格式的日志在进行大量数据更新时可能会导致更高的 I&#x2F;O 开销。</li>
+<li>缺点：日志文件可能会比 STATEMENT 格式大，因为记录了每一行的详细变化。此外，ROW 格式的日志在进行大量数据更新时可能会导致更高的 I/O 开销。</li>
 </ol>
 </li>
 <li>MIXED 格式（混合模式）：在这种格式下，binlog 可以根据具体的 SQL 语句和操作自动选择使用 STATEMENT 或 ROW 格式。<ol>
@@ -859,6 +814,7 @@
 </ol>
 <p>如果对数据一致性和可靠性要求较高，可以考虑使用半同步复制；如果对延迟和主服务器性能要求较高，可以继续使用异步复制，根据实际需求调整复制模式。</p>
 <h2 id="MySQL锁"><a href="#MySQL锁" class="headerlink" title="MySQL锁"></a>MySQL锁</h2><h3 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h3><p>意向锁</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -868,7 +824,8 @@
 <th>是否冲突</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><strong>IS 锁</strong></td>
 <td>表级</td>
 <td>表示事务要在某些行加 <strong>S 锁</strong></td>
@@ -878,7 +835,7 @@
 <td><strong>IX 锁</strong></td>
 <td>表级</td>
 <td>表示事务要在某些行加 <strong>X 锁</strong></td>
-<td><strong>不与 IS 或 IX 冲突</strong>，但与 <strong>表级 S&#x2F;X 锁</strong> 冲突</td>
+<td><strong>不与 IS 或 IX 冲突</strong>，但与 <strong>表级 S/X 锁</strong> 冲突</td>
 </tr>
 <tr>
 <td><strong>S 锁</strong></td>
@@ -890,9 +847,11 @@
 <td><strong>X 锁</strong></td>
 <td>行级</td>
 <td>允许读写该行，其他事务不能访问</td>
-<td><strong>与 S&#x2F;X 锁冲突</strong></td>
+<td><strong>与 S/X 锁冲突</strong></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>意向锁用于，当某个事务尝试对表进行加锁时，不需要遍历查找该表的行级锁加锁情况</p>
 <h3 id="行级锁"><a href="#行级锁" class="headerlink" title="行级锁"></a>行级锁</h3><p>行级锁分为 </p>
 <ul>
@@ -900,10 +859,8 @@
 <li>S行级锁</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select ... lock in share mode </span><br></pre></td></tr></table></figure>
-
 <p>获取S锁 (next-key lock)</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select ... for update </span><br><span class="line"></span><br><span class="line">update ... </span><br><span class="line"></span><br><span class="line">delete ...</span><br></pre></td></tr></table></figure>
-
 <p>获取X锁 (next-key lock)</p>
 <blockquote>
 <p>insert … 语句插入受阻时获取插入意向锁</p>
@@ -912,7 +869,7 @@
 </blockquote>
 <p>行级锁分为</p>
 <ul>
-<li><p>next-key lock（临键锁 &#x3D; 记录锁+间隙锁）<strong>左开右闭</strong></p>
+<li><p>next-key lock（临键锁 = 记录锁+间隙锁）<strong>左开右闭</strong></p>
 </li>
 <li><p>记录锁</p>
 </li>
@@ -929,23 +886,19 @@
 <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>主索引，即聚簇索引（也称聚集索引，clustered index）</p>
 <p>辅助索引（有时也称非聚簇索引或二级索引，secondary index，non-clustered index）。</p>
 <img src="/2024/08/10/Database-Learning-Record/db-mysql-index-1.png" class="" title="index">
-
 <p>如上图，<strong>主键索引的叶子节点保存的是真正的数据。而辅助索引叶子节点的数据区保存的是主键索引关键字的值</strong>。</p>
-<p>假如要查询name &#x3D; C 的数据，其搜索过程如下：a) 先在辅助索引中通过C查询最后找到主键id &#x3D; 9; b) 在主键索引中搜索id为9的数据，最终在主键索引的叶子节点中获取到真正的数据。所以通过辅助索引进行检索，需要检索两次索引。</p>
+<p>假如要查询name = C 的数据，其搜索过程如下：a) 先在辅助索引中通过C查询最后找到主键id = 9; b) 在主键索引中搜索id为9的数据，最终在主键索引的叶子节点中获取到真正的数据。所以通过辅助索引进行检索，需要检索两次索引。</p>
 <p>之所以这样设计，一个原因就是：如果和MyISAM一样在主键索引和辅助索引的叶子节点中都存放数据行指针，一旦数据发生迁移，则需要去重新组织维护所有的索引。</p>
 <p>ref: <a target="_blank" rel="noopener" href="https://pdai.tech/md/interview/x-interview.html#_8-2-mysql">https://pdai.tech/md/interview/x-interview.html#_8-2-mysql</a></p>
 <p><strong>索引失效场景</strong></p>
 <ul>
 <li><p>使用左或者左右模糊搜素，例如，<code>like %xx</code>, <code>like %xx%</code></p>
 </li>
-<li><p>对索引列使用函数&#x2F;表达式计算</p>
+<li><p>对索引列使用函数/表达式计算</p>
 </li>
-<li><p>对索引隐式类型转化（例如，String转int，发生了函数计算）</p>
-</li>
-<li><p>联合索引非最左匹配</p>
-</li>
-<li><p>WHERE 子句使用 OR，存在 OR 的字段不是索引列</p>
-</li>
+<li>对索引隐式类型转化（例如，String转int，发生了函数计算）</li>
+<li>联合索引非最左匹配</li>
+<li>WHERE 子句使用 OR，存在 OR 的字段不是索引列</li>
 </ul>
 <p><strong>索引构建原则</strong></p>
 <p>最左前缀匹配原则</p>
@@ -962,24 +915,20 @@
 </blockquote>
 <p><strong>组合索引</strong></p>
 <img src="/2024/08/10/Database-Learning-Record/492e0e5857459a335db7c7aea5377791.png" class="" title="combine_index">
-
 <blockquote>
 <p>感觉可用理解为，每一个filed均进行hashcode计算，然后加和，然后按照和的大小建立B+树</p>
 </blockquote>
 <h2 id="SQL优化"><a href="#SQL优化" class="headerlink" title="SQL优化"></a>SQL优化</h2><p>使用 <code>EXPLAIN</code> 优化</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> name, age <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department <span class="operator">=</span> <span class="string">&#x27;HR&#x27;</span> <span class="keyword">AND</span> salary <span class="operator">&gt;</span> <span class="number">50000</span>;</span><br></pre></td></tr></table></figure>
-
-
-
 <p>例如：</p>
 <p><strong>explain</strong></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">   <span class="keyword">distinct</span> cert.emp_id </span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">   cm_log cl </span><br><span class="line"><span class="keyword">inner</span> <span class="keyword">join</span></span><br><span class="line">   (</span><br><span class="line">      <span class="keyword">select</span></span><br><span class="line">         emp.id <span class="keyword">as</span> emp_id,</span><br><span class="line">         emp_cert.id <span class="keyword">as</span> cert_id </span><br><span class="line">      <span class="keyword">from</span></span><br><span class="line">         employee emp </span><br><span class="line">      <span class="keyword">left</span> <span class="keyword">join</span></span><br><span class="line">         emp_certificate emp_cert </span><br><span class="line">            <span class="keyword">on</span> emp.id <span class="operator">=</span> emp_cert.emp_id </span><br><span class="line">      <span class="keyword">where</span></span><br><span class="line">         emp.is_deleted<span class="operator">=</span><span class="number">0</span></span><br><span class="line">   ) cert </span><br><span class="line">      <span class="keyword">on</span> (</span><br><span class="line">         cl.ref_table<span class="operator">=</span><span class="string">&#x27;Employee&#x27;</span> </span><br><span class="line">         <span class="keyword">and</span> cl.ref_oid<span class="operator">=</span> cert.emp_id</span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">or</span> (</span><br><span class="line">         cl.ref_table<span class="operator">=</span><span class="string">&#x27;EmpCertificate&#x27;</span> </span><br><span class="line">         <span class="keyword">and</span> cl.ref_oid<span class="operator">=</span> cert.cert_id</span><br><span class="line">      ) </span><br><span class="line"><span class="keyword">where</span></span><br><span class="line">   cl.last_upd_date <span class="operator">&gt;=</span><span class="string">&#x27;2013-11-07 15:03:00&#x27;</span> </span><br><span class="line">   <span class="keyword">and</span> cl.last_upd_date<span class="operator">&lt;=</span><span class="string">&#x27;2013-11-08 16:00:00&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
 <p>思路：将 cm_log 表与 (emp+emp_cert) cert 表取交集，约束范围并返回emp_id</p>
 <blockquote>
 <p>显然 (emp+emp_cert) cert 表的行数肯定很多，再和一个没有做值筛选的表进行交集，非常慢</p>
 <p>优化思路，将  cm_log 表分别与 emp 表和 emp_cert 表做交集，再union</p>
 </blockquote>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -995,7 +944,8 @@
 <th>Extra</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>1</td>
 <td>PRIMARY</td>
 <td>cl</td>
@@ -1010,7 +960,7 @@
 <tr>
 <td>1</td>
 <td>PRIMARY</td>
-<td>&lt;derived2&gt;</td>
+<td>\<derived2\></td>
 <td>ALL</td>
 <td>NULL</td>
 <td>NULL</td>
@@ -1043,35 +993,37 @@
 <td>1</td>
 <td>Using index</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <ul>
-<li>**id &#x3D; 1 (PRIMARY)**：这是最外层的 SELECT 查询。<ul>
-<li>table &#x3D; cl：该查询首先访问 cm_log 表（cl）。</li>
-<li>type &#x3D; range：使用了范围扫描，通过索引进行查询。</li>
-<li>possible_keys &#x3D; cm_log_cls_id, idx_last_upd_date：优化器考虑了两个索引 cm_log_cls_id 和 idx_last_upd_date。</li>
-<li>key &#x3D; idx_last_upd_date：最终选择了 idx_last_upd_date 索引。</li>
-<li>key_len &#x3D; 8：使用了索引的全部长度。</li>
-<li>rows &#x3D; 379：估计需要扫描 379 行。</li>
-<li>Extra &#x3D; Using where; Using temporary：Using where 表示在索引扫描后，还需要进行 WHERE 条件的过滤。Using temporary 表示需要使用临时表来处理结果，通常发生在需要排序或者去重操作时，这里很有可能是 distinct 导致。</li>
-<li>table &#x3D; &lt;derived2&gt;：该查询还需要访问 id&#x3D;2 的子查询产生的结果表，也就是子查询 cert。</li>
-<li>type &#x3D; ALL：对子查询的结果表进行了全表扫描。</li>
-<li>rows &#x3D; 63727：估计需要扫描 63727 行。</li>
-<li>Extra &#x3D; Using where; Using join buffer：Using where 表示需要进行 WHERE 条件的过滤。 Using join buffer 说明 MySQL 使用了 Join Buffer 来加速 Join 过程。</li>
+<li><strong>id = 1 (PRIMARY)</strong>：这是最外层的 SELECT 查询。<ul>
+<li>table = cl：该查询首先访问 cm_log 表（cl）。</li>
+<li>type = range：使用了范围扫描，通过索引进行查询。</li>
+<li>possible_keys = cm_log_cls_id, idx_last_upd_date：优化器考虑了两个索引 cm_log_cls_id 和 idx_last_upd_date。</li>
+<li>key = idx_last_upd_date：最终选择了 idx_last_upd_date 索引。</li>
+<li>key_len = 8：使用了索引的全部长度。</li>
+<li>rows = 379：估计需要扫描 379 行。</li>
+<li>Extra = Using where; Using temporary：Using where 表示在索引扫描后，还需要进行 WHERE 条件的过滤。Using temporary 表示需要使用临时表来处理结果，通常发生在需要排序或者去重操作时，这里很有可能是 distinct 导致。</li>
+<li>table = \<derived2\>：该查询还需要访问 id=2 的子查询产生的结果表，也就是子查询 cert。</li>
+<li>type = ALL：对子查询的结果表进行了全表扫描。</li>
+<li>rows = 63727：估计需要扫描 63727 行。</li>
+<li>Extra = Using where; Using join buffer：Using where 表示需要进行 WHERE 条件的过滤。 Using join buffer 说明 MySQL 使用了 Join Buffer 来加速 Join 过程。</li>
 </ul>
 </li>
-<li>**id &#x3D; 2 (DERIVED)**：这是一个子查询，别名为 cert。<ul>
-<li>table &#x3D; emp：该子查询首先访问 employee 表（emp）。</li>
-<li>type &#x3D; ALL：对 employee 表进行了全表扫描。</li>
-<li>rows &#x3D; 13317：估计需要扫描 13317 行。</li>
-<li>Extra &#x3D; Using where：表示在全表扫描后，需要进行 WHERE 条件 emp.is_deleted&#x3D;0 的过滤。</li>
-<li>table &#x3D; emp_cert：该子查询还访问 emp_certificate 表（emp_cert）。</li>
-<li>type &#x3D; ref：使用了 ref 类型的连接，通过索引进行查询。</li>
-<li>possible_keys &#x3D; emp_certificate_empid：优化器考虑了索引 emp_certificate_empid。</li>
-<li>key &#x3D; emp_certificate_empid：最终选择了 emp_certificate_empid 索引。</li>
-<li>key_len &#x3D; 4：使用了索引的全部长度。</li>
-<li>ref &#x3D; meituanorg.emp.id：使用 emp.id 作为索引的参考值。</li>
-<li>rows &#x3D; 1：估计对于每个 emp.id，只需要扫描 emp_certificate 表的 1 行。</li>
-<li>Extra &#x3D; Using index：表示查询可以直接使用索引中的数据，不需要回表查询。</li>
+<li><strong>id = 2 (DERIVED)</strong>：这是一个子查询，别名为 cert。<ul>
+<li>table = emp：该子查询首先访问 employee 表（emp）。</li>
+<li>type = ALL：对 employee 表进行了全表扫描。</li>
+<li>rows = 13317：估计需要扫描 13317 行。</li>
+<li>Extra = Using where：表示在全表扫描后，需要进行 WHERE 条件 emp.is_deleted=0 的过滤。</li>
+<li>table = emp_cert：该子查询还访问 emp_certificate 表（emp_cert）。</li>
+<li>type = ref：使用了 ref 类型的连接，通过索引进行查询。</li>
+<li>possible_keys = emp_certificate_empid：优化器考虑了索引 emp_certificate_empid。</li>
+<li>key = emp_certificate_empid：最终选择了 emp_certificate_empid 索引。</li>
+<li>key_len = 4：使用了索引的全部长度。</li>
+<li>ref = meituanorg.emp.id：使用 emp.id 作为索引的参考值。</li>
+<li>rows = 1：估计对于每个 emp.id，只需要扫描 emp_certificate 表的 1 行。</li>
+<li>Extra = Using index：表示查询可以直接使用索引中的数据，不需要回表查询。</li>
 </ul>
 </li>
 </ul>
@@ -1088,14 +1040,12 @@
 <li>在这种情况下，查询直接使用<code>create_time</code>字段的原始值进行比较，不需要任何计算或函数调用。</li>
 <li>因为<code>create_time</code>列上的索引可以直接用于定位记录，查询性能大大提高。</li>
 </ul>
-<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>指令 对象 [value]&#x2F;[key-value]</p>
-<h3 id="数据结构-底层原理"><a href="#数据结构-底层原理" class="headerlink" title="数据结构&amp;底层原理"></a>数据结构&amp;底层原理</h3><img src="/2024/08/10/Database-Learning-Record/db-redis-object-2-3.png" class="" title="redisds">
-
+<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>指令 对象 [value]/[key-value]</p>
+<h3 id="数据结构-amp-底层原理"><a href="#数据结构-amp-底层原理" class="headerlink" title="数据结构&amp;底层原理"></a>数据结构&amp;底层原理</h3><img src="/2024/08/10/Database-Learning-Record/db-redis-object-2-3.png" class="" title="redisds">
 <p>redis所有数据结构均为 key - value结构</p>
 <p><strong>value为以下结构</strong></p>
 <p>String(~)</p>
 <img src="/2024/08/10/Database-Learning-Record/raw.png" class="" title="img">
-
 <ul>
 <li>int 或者 SDS， SDS由长度（<code>len</code>）、内存空间大小（<code>alloc</code>）、字符串类型（<code>flags</code>）和存储的字节数组（<code>buf</code>）四个部分组成。</li>
 </ul>
@@ -1134,13 +1084,11 @@
 <li>跳表 + 字典</li>
 </ul>
 <img src="/2024/08/10/Database-Learning-Record/19063731-d7bc5026051ea412.png" class="" title="skip-pic">
-
 <img src="/2024/08/10/Database-Learning-Record/image-20250306123144745.png" class="" title="image-20250306123144745">
-
-<p>可用场景：排行榜，电话&#x2F;姓名排序，延迟队列</p>
+<p>可用场景：排行榜，电话/姓名排序，延迟队列</p>
 <p>Bitmap(~BIT)</p>
 <ul>
-<li>String&#x2F;bit数组</li>
+<li>String/bit数组</li>
 </ul>
 <p>可用场景：签到统计，判断用户登录状态，连续签到用户总数</p>
 <p>Geo(GEO)</p>
@@ -1173,7 +1121,7 @@
 <p><strong>读写影响：</strong></p>
 <ul>
 <li><strong><code>SAVE</code> 命令：</strong>阻塞主线程，影响读写性能，适合非高负载场景。</li>
-<li><strong><code>BGSAVE</code> 命令：</strong>使用子进程完成，但可能增加系统 I&#x2F;O 压力，特别是数据量较大时。</li>
+<li><strong><code>BGSAVE</code> 命令：</strong>使用子进程完成，但可能增加系统 I/O 压力，特别是数据量较大时。</li>
 </ul>
 <hr>
 <p><strong>AOF（Append Only File）持久化</strong></p>
@@ -1196,7 +1144,7 @@
 <p><strong>读写影响：</strong></p>
 <ul>
 <li><strong>追加模式：</strong>性能影响较小，因写操作只需追加日志。</li>
-<li><strong>重写操作：</strong>由子进程完成，主线程继续处理请求，可能增加 I&#x2F;O 压力。</li>
+<li><strong>重写操作：</strong>由子进程完成，主线程继续处理请求，可能增加 I/O 压力。</li>
 </ul>
 <h3 id="Redis-淘汰机制"><a href="#Redis-淘汰机制" class="headerlink" title="Redis 淘汰机制"></a>Redis 淘汰机制</h3><p><strong>Redis 过期键的删除策略</strong></p>
 <p>Redis 主要有两种策略来删除过期键：</p>
@@ -1207,7 +1155,6 @@
 <p><strong>内存限制配置</strong></p>
 <p>通过参数 <code>maxmemory</code> 设置 Redis 实例的内存上限。可以在配置文件中设置，也可以通过运行时命令动态配置：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CONFIG SET maxmemory &lt;bytes&gt;</span><br></pre></td></tr></table></figure>
-
 <p> <strong>Redis 内存淘汰策略</strong></p>
 <p>当 Redis 的内存超过最大内存限制（<code>maxmemory</code>）时，会触发内存淘汰机制，通过参数 <code>maxmemory-policy</code> 配置 Redis 的淘汰策略。主要分为以下几种：</p>
 <p>不淘汰 </p>
@@ -1241,7 +1188,6 @@
 </ul>
 </blockquote>
 <h3 id="Redis高可用"><a href="#Redis高可用" class="headerlink" title="Redis高可用"></a>Redis高可用</h3><h4 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h4><img src="/2024/08/10/Database-Learning-Record/redis-x-rdb-4.jpg" class="" title="redisms">
-
 <ol>
 <li>RDB持久化是把当前进程数据生成快照保存到磁盘上的过程; 针对RDB不适合实时持久化的问题，Redis提供了AOF持久化方式来解决.</li>
 <li>AOF是“写后”日志，Redis先执行命令，把数据<strong>先写入内存，再记录日志</strong>。日志里记录的是Redis收到的每一条命令，这些命令是以文本形式保存。</li>
@@ -1257,15 +1203,9 @@
 <hr>
 <p>著作权归@pdai所有 原文链接：<a target="_blank" rel="noopener" href="https://pdai.tech/md/interview/x-interview.html">https://pdai.tech/md/interview/x-interview.html</a></p>
 <img src="/2024/08/10/Database-Learning-Record/redis-x-aof-42.jpg" class="" title="bgsavecpow">
-
-
-
-
-
 <h4 id="集群哨兵"><a href="#集群哨兵" class="headerlink" title="集群哨兵"></a>集群哨兵</h4><p>主从复制</p>
 <p>Redis的主从复制为RDB文件+命令</p>
 <img src="/2024/08/10/Database-Learning-Record/db-redis-copy-1.png" class="" title="redisss">
-
 <p>主从库之间采用的是<strong>读写分离</strong>的方式。</p>
 <ul>
 <li>读操作：主库、从库都可以接收；</li>
@@ -1277,35 +1217,31 @@
 <img src="/2024/08/10/Database-Learning-Record/db-redis-copy-2.jpg" class="" title="img">
 </li>
 <li><p><strong>增量（同步）复制</strong>：只会把主从库网络断连期间主库收到的命令，同步给从库</p>
-<img src="/2024/08/10/Database-Learning-Record/db-redis-copy-3.jpg" class="" title="img"></li>
+<img src="/2024/08/10/Database-Learning-Record/db-redis-copy-3.jpg" class="" title="img">
+</li>
 </ul>
 <p><strong>哨兵</strong></p>
 <p><strong>哨兵集群组建</strong></p>
 <img src="/2024/08/10/Database-Learning-Record/db-redis-sen-6.jpg" class="" title="img">
-
 <p><strong>监控过程</strong></p>
 <img src="/2024/08/10/Database-Learning-Record/db-redis-sen-7.jpg" class="" title="img">
-
 <p><strong>库离线判断</strong></p>
 <ul>
 <li><strong>主观下线</strong>：任何一个哨兵都是可以监控探测，并作出Redis节点下线的判断；</li>
 <li><strong>客观下线</strong>：有哨兵集群共同决定Redis节点是否下线；</li>
 </ul>
 <p>当某个哨兵（如下图中的哨兵2）判断主库“主观下线”后，就会给其他哨兵发送 <code>is-master-down-by-addr</code> 命令。接着，其他哨兵会根据自己和主库的连接情况，做出 Y 或 N 的响应，Y 相当于赞成票，N 相当于反对票。</p>
-<p>如果赞成票数（这里是2）是大于等于哨兵配置文件中的 <code>quorum</code> 配置项（比如这里如果是quorum&#x3D;2）, 则可以判定<strong>主库客观下线</strong>了。</p>
+<p>如果赞成票数（这里是2）是大于等于哨兵配置文件中的 <code>quorum</code> 配置项（比如这里如果是quorum=2）, 则可以判定<strong>主库客观下线</strong>了。</p>
 <hr>
 <p>著作权归@pdai所有 原文链接：<a target="_blank" rel="noopener" href="https://pdai.tech/md/interview/x-interview.html">https://pdai.tech/md/interview/x-interview.html</a></p>
 <img src="/2024/08/10/Database-Learning-Record/db-redis-sen-2.jpg" class="" title="img">
-
-
-
 <blockquote>
 <p><strong>Redis 哨兵的选举机制是什么样的？</strong></p>
 <p>Redis 哨兵（Sentinel）是 Redis 集群中负责监控、通知、自动故障转移和服务发现的组件。它的选举机制是确保在主节点（Master）故障时，能够自动选举一个新的主节点，并促使系统恢复正常运行。</p>
 <ul>
 <li><strong>哨兵的选举机制是什么样的</strong>？</li>
 </ul>
-<p>哨兵的选举机制其实很简单，就是一个Raft选举算法： <strong>选举的票数大于等于num(sentinels)&#x2F;2+1时，将成为领导者，如果没有超过，继续选举</strong></p>
+<p>哨兵的选举机制其实很简单，就是一个Raft选举算法： <strong>选举的票数大于等于num(sentinels)/2+1时，将成为领导者，如果没有超过，继续选举</strong></p>
 <p>Raft算法可以参看这篇文章<a href="">分布式算法 - Raft算法</a></p>
 <ul>
 <li>任何一个想成为 主节点 的节点，要满足两个条件： <ul>
@@ -1315,24 +1251,19 @@
 </li>
 </ul>
 <p>以 3 个哨兵为例，假设此时的 quorum 设置为 2，那么，任何一个想成为主节点 只要拿到 2 张赞成票，就可以了。</p>
-<p><a href="#redis-1%E4%B8%BB4%E4%BB%8E-5%E4%B8%AA%E5%93%A8%E5%85%B5-%E5%93%A8%E5%85%B5%E9%85%8D%E7%BD%AEquorum%E4%B8%BA2-%E5%A6%82%E6%9E%9C3%E4%B8%AA%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C-%E5%BD%93%E4%B8%BB%E5%BA%93%E5%AE%95%E6%9C%BA%E6%97%B6-%E5%93%A8%E5%85%B5%E8%83%BD%E5%90%A6%E5%88%A4%E6%96%AD%E4%B8%BB%E5%BA%93-%E5%AE%A2%E8%A7%82%E4%B8%8B%E7%BA%BF-%E8%83%BD%E5%90%A6%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2">#</a>Redis 1主4从，5个哨兵，哨兵配置quorum为2，如果3个哨兵故障，当主库宕机时，哨兵能否判断主库“客观下线”？能否自动切换？</p>
+<p><a href="#redis-1主4从-5个哨兵-哨兵配置quorum为2-如果3个哨兵故障-当主库宕机时-哨兵能否判断主库-客观下线-能否自动切换">#</a>Redis 1主4从，5个哨兵，哨兵配置quorum为2，如果3个哨兵故障，当主库宕机时，哨兵能否判断主库“客观下线”？能否自动切换？</p>
 <p>经过实际测试：</p>
-<p>1、哨兵集群可以判定主库“客观下线”。由于quorum&#x3D;2，所以当一个哨兵判断主库“主观下线”后，询问另外一个哨兵后也会得到同样的结果，2个哨兵都判定“主观下线”，达到了quorum的值，因此，<strong>哨兵集群可以判定主库为“客观下线”</strong>。</p>
-<p>2、<strong>但哨兵不能完成主从切换</strong>。哨兵标记主库“客观下线后”，在选举“主节点”时，一个节点必须拿到超过多数的选票(5&#x2F;2+1&#x3D;3票)。但目前只有2个哨兵活着，无论怎么投票，一个节点最多只能拿到2票，永远无法达到<code>N/2+1</code>选票的结果。</p>
+<p>1、哨兵集群可以判定主库“客观下线”。由于quorum=2，所以当一个哨兵判断主库“主观下线”后，询问另外一个哨兵后也会得到同样的结果，2个哨兵都判定“主观下线”，达到了quorum的值，因此，<strong>哨兵集群可以判定主库为“客观下线”</strong>。</p>
+<p>2、<strong>但哨兵不能完成主从切换</strong>。哨兵标记主库“客观下线后”，在选举“主节点”时，一个节点必须拿到超过多数的选票(5/2+1=3票)。但目前只有2个哨兵活着，无论怎么投票，一个节点最多只能拿到2票，永远无法达到<code>N/2+1</code>选票的结果。</p>
 </blockquote>
 <p><strong>故障转移</strong></p>
 <img src="/2024/08/10/Database-Learning-Record/db-redis-sen-4.png" class="" title="img">
-
-
-
-
-
 <h3 id="Lua脚本-与-Redis事务"><a href="#Lua脚本-与-Redis事务" class="headerlink" title="Lua脚本 与 Redis事务"></a>Lua脚本 与 Redis事务</h3><p><strong>Lua脚本</strong>：</p>
 <ul>
 <li>Redis 在执行 Lua 脚本时，保证脚本中的所有命令在一个原子操作内完成。即使脚本包含多个 Redis 命令，这些命令也不会被其他客户端的命令插入。</li>
 <li>Redis 使用单线程模型，Lua 脚本执行期间不会有其他命令被执行，因此具备天然的原子性。</li>
 </ul>
-<p><strong>事务（MULTI&#x2F;EXEC）</strong>：</p>
+<p><strong>事务（MULTI/EXEC）</strong>：</p>
 <ul>
 <li>Redis 事务中的命令从 MULTI 到 EXEC 的提交过程被称为事务块。但 Redis 不保证事务中的命令是完全原子的。</li>
 <li>如果事务中的某些命令失败（例如操作数据类型错误），事务中其他命令仍会执行。</li>
@@ -1346,7 +1277,6 @@
 <p><strong>实现</strong></p>
 <p>使用 Redis 的 <code>SET</code> 指令实现分布式锁：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接 Redis</span></span><br><span class="line">redis_client = redis.StrictRedis(host=<span class="string">&#x27;localhost&#x27;</span>, port=<span class="number">6379</span>, decode_responses=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">acquire_lock</span>(<span class="params">lock_key, lock_value, expire_time</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    尝试获取锁</span></span><br><span class="line"><span class="string">    :param lock_key: 锁的键</span></span><br><span class="line"><span class="string">    :param lock_value: 锁的唯一标识值（通常用 UUID）</span></span><br><span class="line"><span class="string">    :param expire_time: 锁的过期时间（单位：秒）</span></span><br><span class="line"><span class="string">    :return: True 获取成功，False 获取失败</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> redis_client.<span class="built_in">set</span>(lock_key, lock_value, ex=expire_time, nx=<span class="literal">True</span>)  // 使用SETNX实现</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">release_lock</span>(<span class="params">lock_key, lock_value</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    释放锁</span></span><br><span class="line"><span class="string">    :param lock_key: 锁的键</span></span><br><span class="line"><span class="string">    :param lock_value: 锁的唯一标识值</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    script = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    if redis.call(&quot;GET&quot;, KEYS[1]) == ARGV[1] then</span></span><br><span class="line"><span class="string">        return redis.call(&quot;DEL&quot;, KEYS[1])</span></span><br><span class="line"><span class="string">    else</span></span><br><span class="line"><span class="string">        return 0</span></span><br><span class="line"><span class="string">    end</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    redis_client.<span class="built_in">eval</span>(script, <span class="number">1</span>, lock_key, lock_value)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例：使用锁</span></span><br><span class="line">lock_key = <span class="string">&quot;product_123_lock&quot;</span></span><br><span class="line">lock_value = <span class="string">&quot;unique_id_456&quot;</span>  <span class="comment"># 通常用 UUID 生成</span></span><br><span class="line">expire_time = <span class="number">10</span>  <span class="comment"># 锁的过期时间为 10 秒</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> acquire_lock(lock_key, lock_value, expire_time):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;获取锁成功，处理逻辑...&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">5</span>)  <span class="comment"># 模拟业务逻辑</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        release_lock(lock_key, lock_value)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;锁已释放&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;获取锁失败，稍后再试&quot;</span>)</span><br></pre></td></tr></table></figure>
-
 <p><strong>关键点</strong></p>
 <ol>
 <li>SET 命令的参数：<ul>
@@ -1363,14 +1293,14 @@
 <p>假设用户登录系统后，生成一个会话 ID（如 <code>session_id</code>），将用户信息存储到 Redis 中。</p>
 <p><strong>代码示例</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接 Redis</span></span><br><span class="line">redis_client = redis.StrictRedis(host=<span class="string">&#x27;localhost&#x27;</span>, port=<span class="number">6379</span>, decode_responses=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_session</span>(<span class="params">user_id</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    创建会话</span></span><br><span class="line"><span class="string">    :param user_id: 用户 ID</span></span><br><span class="line"><span class="string">    :return: session_id</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    session_id = <span class="built_in">str</span>(uuid.uuid4())  <span class="comment"># 生成唯一会话 ID</span></span><br><span class="line">    session_key = <span class="string">f&quot;session:<span class="subst">&#123;session_id&#125;</span>&quot;</span></span><br><span class="line">    session_data = &#123;<span class="string">&quot;user_id&quot;</span>: user_id, <span class="string">&quot;login_time&quot;</span>: time.time()&#125;</span><br><span class="line">    redis_client.hmset(session_key, session_data)</span><br><span class="line">    redis_client.expire(session_key, <span class="number">3600</span>)  <span class="comment"># 设置过期时间为 1 小时</span></span><br><span class="line">    <span class="keyword">return</span> session_id</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_session</span>(<span class="params">session_id</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    获取会话信息</span></span><br><span class="line"><span class="string">    :param session_id: 会话 ID</span></span><br><span class="line"><span class="string">    :return: 会话数据</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    session_key = <span class="string">f&quot;session:<span class="subst">&#123;session_id&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> redis_client.hgetall(session_key)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete_session</span>(<span class="params">session_id</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    删除会话</span></span><br><span class="line"><span class="string">    :param session_id: 会话 ID</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    session_key = <span class="string">f&quot;session:<span class="subst">&#123;session_id&#125;</span>&quot;</span></span><br><span class="line">    redis_client.delete(session_key)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例：创建和获取会话</span></span><br><span class="line">user_id = <span class="number">101</span></span><br><span class="line">session_id = create_session(user_id)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;新会话创建成功：<span class="subst">&#123;session_id&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取会话</span></span><br><span class="line">session_data = get_session(session_id)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;会话数据：<span class="subst">&#123;session_data&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除会话</span></span><br><span class="line">delete_session(session_id)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;会话已删除&quot;</span>)</span><br></pre></td></tr></table></figure>
-
 <p><strong>关键点</strong></p>
 <ol>
 <li><strong>会话 ID</strong>：每个用户对应一个唯一会话 ID，可通过 <code>uuid</code> 生成。</li>
 <li><strong>会话存储格式</strong>：通常使用 Redis 的哈希结构（<code>HSET</code>）存储用户数据。</li>
 <li><strong>会话过期时间</strong>：通过 <code>EXPIRE</code> 设置会话的有效期，超时后自动清除。</li>
 </ol>
-<h2 id="Redis-分布式锁-1"><a href="#Redis-分布式锁-1" class="headerlink" title="Redis 分布式锁"></a>Redis 分布式锁</h2><table>
+<h2 id="Redis-分布式锁-1"><a href="#Redis-分布式锁-1" class="headerlink" title="Redis 分布式锁"></a>Redis 分布式锁</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>分类</th>
@@ -1380,7 +1310,8 @@
 <th>缺点</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>基于数据库</td>
 <td>基于mysql 表唯一索引</td>
 <td>1.表增加唯一索引 2.加锁：执行insert语句，若报错，则表明加锁失败 3.解锁：执行delete语句</td>
@@ -1397,7 +1328,7 @@
 <tr>
 <td>基于分布式协调系统</td>
 <td>基于ZooKeeper</td>
-<td>1.加锁：在&#x2F;lock目录下创建临时有序节点，判断创建的节点序号是否最小。若是，则表示获取到锁；否，则则watch &#x2F;lock目录下序号比自身小的前一个节点 2.解锁：删除节点</td>
+<td>1.加锁：在/lock目录下创建临时有序节点，判断创建的节点序号是否最小。若是，则表示获取到锁；否，则则watch /lock目录下序号比自身小的前一个节点 2.解锁：删除节点</td>
 <td>1.由zk保障系统高可用 2.Curator框架已原生支持系列分布式锁命令，使用简单</td>
 <td>需单独维护一套zk集群，维保成本高</td>
 </tr>
@@ -1411,43 +1342,33 @@
 <tr>
 <td>基于缓存</td>
 <td>基于redis Lua脚本能力</td>
-<td>1. 加锁：执行SET lock_name random_value EX seconds NX 命令  2. 解锁：执行Lua脚本，释放锁时验证random_value  – ARGV[1]为random_value, KEYS[1]为lock_nameif redis.call(“get”, KEYS[1]) &#x3D;&#x3D; ARGV[1] then  return redis.call(“del”,KEYS[1])else  return 0end</td>
+<td>1. 加锁：执行SET lock_name random_value EX seconds NX 命令  2. 解锁：执行Lua脚本，释放锁时验证random_value  — ARGV[1]为random_value, KEYS[1]为lock_nameif redis.call(“get”, KEYS[1]) == ARGV[1] then  return redis.call(“del”,KEYS[1])else  return 0end</td>
 <td>同上；实现逻辑上也更严谨，除了单点问题，生产环境采用用这种方案，问题也不大。</td>
 <td>不支持锁重入，不支持阻塞等待</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p><strong>Redisson 分布式重入锁用法</strong></p>
 <p>Redisson 支持单点模式、主从模式、哨兵模式、集群模式，这里以单点模式为例：</p>
 <p><strong>底层原理</strong>：Redisson 使用 Redis 实现分布式锁。通过 Redis 的 <code>SETNX</code> 命令（SET if Not eXists）和键值过期机制，确保即使某个客户端崩溃，锁也会自动过期，不会导致死锁。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1.构造redisson实现分布式锁必要的Config</span></span><br><span class="line"><span class="type">Config</span> <span class="variable">config</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Config</span>();</span><br><span class="line">config.useSingleServer().setAddress(<span class="string">&quot;redis://127.0.0.1:5379&quot;</span>).setPassword(<span class="string">&quot;123456&quot;</span>).setDatabase(<span class="number">0</span>);</span><br><span class="line"><span class="comment">// 2.构造RedissonClient</span></span><br><span class="line"><span class="type">RedissonClient</span> <span class="variable">redissonClient</span> <span class="operator">=</span> Redisson.create(config);</span><br><span class="line"><span class="comment">// 3.获取锁对象实例（无法保证是按线程的顺序获取到）</span></span><br><span class="line"><span class="type">RLock</span> <span class="variable">rLock</span> <span class="operator">=</span> redissonClient.getLock(lockKey);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 4.尝试获取锁</span></span><br><span class="line"><span class="comment">     * waitTimeout 尝试获取锁的最大等待时间，超过这个值，则认为获取锁失败</span></span><br><span class="line"><span class="comment">     * leaseTime   锁的持有时间,超过这个时间锁会自动失效（值应设置为大于业务处理的时间，确保在锁有效期内业务能处理完）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="type">boolean</span> <span class="variable">res</span> <span class="operator">=</span> rLock.tryLock((<span class="type">long</span>)waitTimeout, (<span class="type">long</span>)leaseTime, TimeUnit.SECONDS);</span><br><span class="line">    <span class="keyword">if</span> (res) &#123;</span><br><span class="line">        <span class="comment">//成功获得锁，在这里处理业务</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;aquire lock fail&quot;</span>);</span><br><span class="line">&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">    <span class="comment">//无论如何, 最后都要解锁</span></span><br><span class="line">    rLock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
 <h2 id="Redis-与-数据库-数据一致性"><a href="#Redis-与-数据库-数据一致性" class="headerlink" title="Redis 与 数据库 数据一致性"></a>Redis 与 数据库 数据一致性</h2><p>假设 redis，数据库 存在相同数据</p>
 <p><strong>方案 1：删缓存写数据库</strong></p>
 <img src="/2024/08/10/Database-Learning-Record/ed50ea3d-77c9-42fc-bafe-6a5d1349cacb" class="" title="img">
-
 <p>存在图中所示问题</p>
 <p><strong>方案 2：写数据库，删缓存</strong></p>
 <img src="/2024/08/10/Database-Learning-Record/cff9f70e-fa29-4188-873f-7daabc142dab" class="" title="img">
-
-
-
 <p><strong>流程：</strong></p>
 <ul>
 <li>直接修改数据库中的数据</li>
-<li>数据库完成修改后，删除redis中数据—-（分界线：此动作前后查询到的数据发生变化）</li>
+<li>数据库完成修改后，删除redis中数据——（分界线：此动作前后查询到的数据发生变化）</li>
 <li>访问redis发生缺失时，触发miss并查询数据库新数据，然后写入redis</li>
 </ul>
 <p>方案2可能存在的问题：</p>
 <p>假设A请求更新了数据库，还未情况缓存的情况下，B请求拿到的是缓存内的旧数据，因为A还没来得及把新的数据填充到缓存。</p>
 <p>极端条件</p>
 <img src="/2024/08/10/Database-Learning-Record/03971152-0047-4160-a366-599329148f02" class="" title="img">
-
 <p>如图</p>
 <p>删除Redis中缓存时失败</p>
 <ul>
@@ -1460,22 +1381,11 @@
 <p>方案2：若删除失败，将Redis Key写入待删除数据库表中，通过定时任务扫描待删除表，尝试再次删除</p>
 <p><strong>方案3：缓存双删</strong></p>
 <img src="/2024/08/10/Database-Learning-Record/01b1956b-a3b0-451a-83bb-7117859ef9b5" class="" title="img">
-
 <p>可能存在问题：无法保证第二次删除在读请求回写缓存之后</p>
-<p>通过引入消息队列&#x2F;延迟队列实现</p>
+<p>通过引入消息队列/延迟队列实现</p>
 <img src="/2024/08/10/Database-Learning-Record/885e438e-cf54-41f6-880e-faf36e72cd57" class="" title="img">
-
-
-
 <p><strong>方案4：Binlog 配合 MQ 实现缓存一致性</strong></p>
 <img src="/2024/08/10/Database-Learning-Record/f2993d30-3803-4543-97db-f98cdca3a493" class="" title="img">
-
-
-
-
-
-
-
 <h2 id="分库分表相关"><a href="#分库分表相关" class="headerlink" title="分库分表相关"></a>分库分表相关</h2><blockquote>
 <p>流程：单表 -&gt; 读写分离 -&gt; 分表 -&gt; 分库</p>
 </blockquote>
@@ -1507,19 +1417,19 @@
 <p>客户端请求缓存和数据库中不存在的数据，导致所有的请求都打到数据库上</p>
 <p>考虑限流 + 暂存不存在数据到缓存 + 布隆过滤器（布隆过滤器将维护所有合法key）</p>
 <p><strong>缓存击穿</strong></p>
-<p>缓存过期 &#x2F; 缓存被不正常移除，导致查询命中数据库</p>
+<p>缓存过期 / 缓存被不正常移除，导致查询命中数据库</p>
 <p>判断热点数据过期逻辑是否合适</p>
 <p><strong>缓存雪崩</strong></p>
-<p>缓存大面积过期 &#x2F; 缓存大量被移除，导致大量查询命中数据库</p>
+<p>缓存大面积过期 / 缓存大量被移除，导致大量查询命中数据库</p>
 <p>缓存预热 + 重设热点数据过期时间（例如，加入随机过期时间）+ 加入同步锁</p>
 <h2 id="缓存可用性"><a href="#缓存可用性" class="headerlink" title="缓存可用性"></a>缓存可用性</h2><p>提高Redis可用性：Redis集群架构 + 主从哨兵</p>
 <p>减少对Redis依赖：加入本地缓存 Guava</p>
 <p>业务降级：限流</p>
 <h2 id="count-与-count-1"><a href="#count-与-count-1" class="headerlink" title="count(*) 与 count(1)"></a>count(*) 与 count(1)</h2><p><code>count()</code> 用于统计复合条件的记录中，函数指定参数不为null的记录的数量</p>
 <p><strong>性能排序</strong></p>
-<p>count(*) &#x3D; count(1) &gt; count(主键字段) &gt; count(字段)</p>
+<p>count(*) = count(1) &gt; count(主键字段) &gt; count(字段)</p>
 <p>count(1) 表示 在表中，使 <code>1</code> 这个表达式不为NULL的记录的数量</p>
-<p>count(*) &#x3D; count(0)</p>
+<p>count(*) = count(0)</p>
 <h2 id="一致性哈希"><a href="#一致性哈希" class="headerlink" title="一致性哈希"></a>一致性哈希</h2><p>一致性哈希算法就很好地解决了分布式系统在扩容或者缩容时，发生过多的数据迁移的问题。</p>
 <p><strong>一致哈希算法是对 2^32 进行取模运算，是一个固定的值</strong>。</p>
 <p>对存储节点进行哈希计算，也就是对存储节点做哈希映射，比如根据节点的 IP 地址进行哈希；</p>
@@ -1611,7 +1521,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">SQL执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVCC%E4%B8%8E%E5%B9%BB%E8%AF%BB"><span class="nav-text">MVCC与幻读</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Undo-Log"><span class="nav-text">Undo Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log-%E5%92%8C-binlog"><span class="nav-text">redo log 和 binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">联合索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-text">MySQL存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">MySQL主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E9%94%81"><span class="nav-text">MySQL锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81"><span class="nav-text">表级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E7%BA%A7%E9%94%81"><span class="nav-text">行级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E5%AF%B9%E8%B1%A1"><span class="nav-text">锁对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-1"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9B%B8%E5%85%B3"><span class="nav-text">分库分表相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存穿透，缓存雪崩，缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">缓存可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#count-%E4%B8%8E-count-1"><span class="nav-text">count(*) 与 count(1)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C"><span class="nav-text">一致性哈希</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Learning-Record"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">SQL执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVCC%E4%B8%8E%E5%B9%BB%E8%AF%BB"><span class="nav-text">MVCC与幻读</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Undo-Log"><span class="nav-text">Undo Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log-%E5%92%8C-binlog"><span class="nav-text">redo log 和 binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">联合索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-text">MySQL存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">MySQL主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E9%94%81"><span class="nav-text">MySQL锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81"><span class="nav-text">表级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E7%BA%A7%E9%94%81"><span class="nav-text">行级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E5%AF%B9%E8%B1%A1"><span class="nav-text">锁对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-amp-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-1"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9B%B8%E5%85%B3"><span class="nav-text">分库分表相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存穿透，缓存雪崩，缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">缓存可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#count-%E4%B8%8E-count-1"><span class="nav-text">count(*) 与 count(1)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C"><span class="nav-text">一致性哈希</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1679,12 +1589,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">396k</span>
+    <span title="Symbols count total">395k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">12:01</span>
+    <span title="Reading time total">11:58</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
@@ -1739,6 +1649,8 @@
 
 
 
+
+  
 
   
 
