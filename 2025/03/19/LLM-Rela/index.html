@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"marigo1d.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="LLM相关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LLM&amp;Rela">
+<meta property="og:url" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/index.html">
+<meta property="og:site_name" content="Marigold">
+<meta property="og:description" content="LLM相关">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/8361e16bac5ee3235ef89c78b1a1cf6b.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250402161828313.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250402162106999.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325195407601.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325195428329.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250404192612286.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325195443397.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325195459862.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250404100511037.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250405101512560.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/v2-eaaf1c00d0c4ea350cd3a79b47de26d3_1440w.jpg">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/v2-2bcd98f6541da0b6f14dc9082ee2dcda_1440w.jpg">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325131654259.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325151928459.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325153214542.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325153304648.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325153337812.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325195333997.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325201341810.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325202638658.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325201533207.png">
+<meta property="article:published_time" content="2025-03-19T02:50:14.000Z">
+<meta property="article:modified_time" content="2025-04-07T01:14:45.562Z">
+<meta property="article:author" content="marigo1d">
+<meta property="article:tag" content="Python, Pytorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image.png">
+
+<link rel="canonical" href="https://marigo1d.github.io/2025/03/19/LLM-Rela/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>LLM&Rela | Marigold</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Marigold</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Salt, Pepper and Birds~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://marigo1d.github.io/2025/03/19/LLM-Rela/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="marigo1d">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Marigold">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LLM&Rela
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-03-19 10:50:14" itemprop="dateCreated datePublished" datetime="2025-03-19T10:50:14+08:00">2025-03-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-04-07 09:14:45" itemprop="dateModified" datetime="2025-04-07T09:14:45+08:00">2025-04-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LLM/" itemprop="url" rel="index"><span itemprop="name">LLM</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>26k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>48 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>LLM相关</p>
+<span id="more"></span>
+<h1 id="LLM-amp-Rela"><a href="#LLM-amp-Rela" class="headerlink" title="LLM&amp;Rela"></a>LLM&amp;Rela</h1><h2 id="Prompt-Engineering"><a href="#Prompt-Engineering" class="headerlink" title="Prompt Engineering"></a>Prompt Engineering</h2><h3 id="Zero-Shot-Prompting"><a href="#Zero-Shot-Prompting" class="headerlink" title="Zero-Shot Prompting"></a>Zero-Shot Prompting</h3><p>Zero-Shot Prompting 是指在不给模型任何示例的情况下，直接提出问题或任务。该方法依赖于模型的预训练知识，适用于模型已广泛学习相关领域信息的情况。例如：</p>
+<blockquote>
+<p><strong>Prompt</strong>：将下面这句话翻译成英文：我喜欢学习人工智能。<br> <strong>Output</strong>：I like studying artificial intelligence.</p>
+</blockquote>
+<p>该方法简单高效，适用于任务明确、模型已具备相关背景知识的场景。</p>
+<hr>
+<h3 id="Few-Shot-Prompting"><a href="#Few-Shot-Prompting" class="headerlink" title="Few-Shot Prompting"></a>Few-Shot Prompting</h3><p>Few-Shot Prompting 是在提示中提供少量（通常是1-5个）示例，以帮助模型理解任务格式或逻辑。这种方式可以显著提升模型在结构化任务中的表现。例如：</p>
+<blockquote>
+<p><strong>Prompt</strong>：<br> 翻译下列句子：<br> 例1：我爱编程。 → I love programming.<br> 例2：天气很好。 → The weather is nice.<br> 请翻译：我在看书。<br> <strong>Output</strong>：I am reading a book.</p>
+</blockquote>
+<p>Few-Shot Prompting 利用“类比”方式，帮助模型对任务形成更明确的理解。</p>
+<hr>
+<h3 id="Chain-of-Thought-CoT-Prompting"><a href="#Chain-of-Thought-CoT-Prompting" class="headerlink" title="Chain-of-Thought (CoT) Prompting"></a>Chain-of-Thought (CoT) Prompting</h3><p>Chain-of-Thought Prompting 通过鼓励模型逐步推理，从而提升复杂任务的表现，尤其适用于数学、逻辑推理、多步推理等任务。CoT 提示通常包含“让我们一步一步来”等引导性语句。例如：</p>
+<blockquote>
+<p><strong>Prompt</strong>：<br> 如果一辆车每小时行驶60公里，它在2.5小时内能行驶多远？让我们一步一步来。<br> <strong>Output</strong>：<br> 首先，我们知道速度是60公里/小时。<br> 接着，时间是2.5小时。<br> 那么，距离 = 速度 × 时间 = 60 × 2.5 = 150公里。<br> 答案是：150公里。</p>
+</blockquote>
+<p>通过这种方式，模型能更清晰地展现推理过程，并减少逻辑错误。</p>
+<hr>
+<h3 id="Self-Consistency-Prompting"><a href="#Self-Consistency-Prompting" class="headerlink" title="Self-Consistency Prompting"></a>Self-Consistency Prompting</h3><p>Self-Consistency Prompting 是 Chain-of-Thought 的一种增强策略。其核心思想是：在面对复杂推理问题时，通过生成多个不同的推理路径（多次生成），然后对这些路径的最终结果进行投票或汇总，以提高答案的可靠性和稳定性。</p>
+<p>例如，对于一道数学题，模型可能在不同尝试中给出不同的思路或答案，但通过“多数投票”可以获得更一致、准确的结果。</p>
+<blockquote>
+<p><strong>应用示例</strong>：</p>
+<ul>
+<li>生成5条不同的推理路径</li>
+<li>汇总5个最终答案</li>
+<li>选择出现频率最高的一个作为最终输出</li>
+</ul>
+</blockquote>
+<p>这种方法特别适合对单次输出不够稳定的任务，比如复杂逻辑、数学题等场景。</p>
+<hr>
+<h3 id="Retrieval-Augmented-Generation-RAG"><a href="#Retrieval-Augmented-Generation-RAG" class="headerlink" title="Retrieval-Augmented Generation (RAG)"></a>Retrieval-Augmented Generation (RAG)</h3><p>RAG 是将外部知识检索机制（如文档、数据库、搜索引擎）与语言模型生成能力结合起来的一种方法。模型在回答问题前，会先“检索”相关内容，再基于检索结果生成答案。</p>
+<p>这种方法克服了大模型“记忆有限”的问题，尤其在处理需要时效性或特定背景知识的任务时非常有效。</p>
+<blockquote>
+<p><strong>示例流程</strong>：</p>
+<ol>
+<li>用户提问：“请解释什么是量子纠缠？”</li>
+<li>模型调用检索模块，从知识库或网络中找到高相关资料</li>
+<li>基于资料，生成符合上下文、准确可靠的回答</li>
+</ol>
+</blockquote>
+<p>RAG 适用于问答系统、知识密集型对话系统、企业内部知识库应用等场景。</p>
+<h2 id="LLM-base"><a href="#LLM-base" class="headerlink" title="LLM-base"></a>LLM-base</h2><h3 id="期望与方差"><a href="#期望与方差" class="headerlink" title="期望与方差"></a>期望与方差</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>性质</strong></th>
+<th style="text-align:center"><strong>期望 E[⋅]</strong></th>
+<th style="text-align:center"><strong>方差 Var(⋅)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>线性变换</strong></td>
+<td style="text-align:center">$E[aX+b]=aE[X]+b$</td>
+<td style="text-align:center">$Var(aX+b)=a^2Var(X)$</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>独立性影响</strong></td>
+<td style="text-align:center">$E[XY]=E[X]E[Y]$（若独立）</td>
+<td style="text-align:center">$Var(X+Y)=Var(X)+Var(Y)$（若独立）</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>与矩的关系</strong></td>
+<td style="text-align:center">一阶原点矩</td>
+<td style="text-align:center">二阶中心矩</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="协方差"><a href="#协方差" class="headerlink" title="协方差"></a>协方差</h3><script type="math/tex; mode=display">Cov(X, Y) = E[XY] - E[X]E[Y]</script><p>X, Y相互独立 -&gt; $Cov(X, Y) = 0$</p>
+<p>协方差为零仅排除线性关系，而独立性排除所有形式的依赖，在联合正态分布中，两者等价，这是特例而非普遍规律。</p>
+<blockquote>
+<p>没有线性关系意味着 不能通过线性方程 （如 $Y = aX + b$）来描述变量间的关系，但是它们可能存在非线性关系（如 $Y = aX^2 + bX + c$ 或 $Y = sin(X)$）</p>
+<p><strong>独立性</strong> 意味着两个随机变量 $X$ 和 $Y$ 的联合分布完全由它们的边缘分布决定，即 $P(X,Y)=P(X)P(Y)$，且<strong>无法通过用任何有统计意义的任何函数（无论是线性还是非线性）从其中一个变量预测另一个变量</strong>。</p>
+</blockquote>
+<h3 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h3><p>激活函数在神经网络的每一层中引入非线性，使得神经网络能够拟合复杂的非线性模式。常见的激活函数有 Sigmoid、ReLU（Rectified Linear Unit）、Tanh、Leaky ReLU 等</p>
+<p><strong>Sigmoid 函数</strong></p>
+<p><strong>公式：</strong></p>
+<p>$\sigma(x) = \frac{1}{1 + e^{-x}}$</p>
+<p><strong>特点：</strong></p>
+<ul>
+<li>输出范围在 (0, 1) 之间</li>
+<li>常用于二分类问题的输出层</li>
+<li>缺点：在极端值处梯度很小，容易导致梯度消失</li>
+</ul>
+<p><strong>Tanh（双曲正切）函数</strong></p>
+<p><strong>公式：</strong></p>
+<p>$\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$</p>
+<p><strong>特点：</strong></p>
+<ul>
+<li>输出范围在 (-1, 1) 之间</li>
+<li>相比 Sigmoid 更适合隐藏层，因为它的均值为 0</li>
+<li>同样存在梯度消失问题（但稍弱于 Sigmoid）</li>
+</ul>
+<p><strong>ReLU（Rectified Linear Unit）函数</strong></p>
+<p><strong>公式：</strong></p>
+<p>$\text{ReLU}(x) = \max(0, x)$</p>
+<p><strong>特点：</strong></p>
+<ul>
+<li>简单、高效，收敛速度快</li>
+<li>输出范围：[0, +∞)</li>
+<li>缺点：负值部分梯度为 0，可能导致“神经元死亡”</li>
+</ul>
+<p><strong>Leaky ReLU 函数</strong></p>
+<p><strong>公式：</strong></p>
+<p>$\text{Leaky ReLU}(x) = \begin{cases} x &amp; \text{if } x \geq 0 \ \alpha x &amp; \text{if } x &lt; 0 \end{cases}$</p>
+<p>其中，$\alpha$ 是一个很小的正数（如 0.01）</p>
+<p><strong>特点：</strong></p>
+<ul>
+<li>改进了 ReLU 的“死亡神经元”问题</li>
+<li>允许负方向有微小的梯度，避免完全失活</li>
+</ul>
+<h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p><strong>均方误差（Mean Squared Error, MSE）</strong></p>
+<p><strong>公式：</strong></p>
+<p>$\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$</p>
+<ul>
+<li>$y_i$：真实值</li>
+<li>$\hat{y}_i$：预测值</li>
+<li>$n$：样本数</li>
+</ul>
+<p><strong>应用场景：</strong></p>
+<ul>
+<li>回归问题（如房价预测）</li>
+<li>对异常值敏感，平方项放大误差</li>
+</ul>
+<p><strong>平均绝对误差（Mean Absolute Error, MAE）</strong></p>
+<p><strong>公式：</strong></p>
+<p>$\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$</p>
+<p><strong>应用场景：</strong></p>
+<ul>
+<li>回归问题</li>
+<li>更鲁棒，不像 MSE 那样对异常值敏感</li>
+</ul>
+<p><strong>Huber Loss（平滑的 MSE 和 MAE 的结合）</strong></p>
+<p><strong>公式：</strong></p>
+<p>$L_\delta(a) = \begin{cases} \frac{1}{2} a^2 &amp; \text{if } |a| \leq \delta \ \delta (|a| - \frac{1}{2} \delta) &amp; \text{otherwise} \end{cases}$</p>
+<p>其中 $a = y - \hat{y}$</p>
+<p><strong>应用场景：</strong></p>
+<ul>
+<li>回归问题</li>
+<li>同时兼顾 MAE 的鲁棒性和 MSE 的可导性</li>
+</ul>
+<p><strong>交叉熵损失（Cross-Entropy Loss）</strong></p>
+<p>▶ 二分类交叉熵（Binary Cross-Entropy）：</p>
+<p><strong>公式：</strong></p>
+<p>$\text{Loss} = - \left[ y \log(\hat{y}) + (1 - y) \log(1 - \hat{y}) \right]$</p>
+<ul>
+<li>$y \in {0, 1}$ 为真实标签</li>
+<li>$\hat{y}$ 是预测概率</li>
+</ul>
+<p><strong>应用场景：</strong></p>
+<ul>
+<li>二分类问题（如猫 vs 狗）</li>
+</ul>
+<p>▶ 多分类交叉熵（Categorical Cross-Entropy）：</p>
+<p><strong>公式（softmax 输出）：</strong></p>
+<p>$\text{Loss} = - \sum_{i=1}^{C} y_i \log(\hat{y}_i)$</p>
+<ul>
+<li>$C$ 是类别总数</li>
+<li>$y_i$ 是 one-hot 编码的真实标签</li>
+<li>$\hat{y}_i$ 是第 ii 类的预测概率</li>
+</ul>
+<p><strong>应用场景：</strong></p>
+<ul>
+<li>多分类问题（如数字识别）</li>
+</ul>
+<p><strong>KL 散度（Kullback–Leibler Divergence）</strong></p>
+<p><strong>公式：</strong></p>
+<p>$D_{KL}(P \parallel Q) = \sum_{i} P(i) \log\left(\frac{P(i)}{Q(i)}\right)$</p>
+<ul>
+<li>$P$：真实分布</li>
+<li>$Q$：预测分布</li>
+</ul>
+<p><strong>应用场景：</strong></p>
+<ul>
+<li>分布之间的距离度量（如在生成模型中）</li>
+</ul>
+<h3 id="优化算法"><a href="#优化算法" class="headerlink" title="优化算法"></a>优化算法</h3><h4 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h4><p>Gradient Descent</p>
+<p><strong>公式：</strong></p>
+<p>$\theta := \theta - \eta \cdot \nabla_\theta J(\theta)$</p>
+<ul>
+<li>$\theta$：模型参数</li>
+<li>$\eta$：学习率（learning rate）</li>
+<li>$\nabla_\theta J(\theta)$：损失函数 $J$ 关于参数 $\theta$ 的梯度</li>
+</ul>
+<p><strong>特点：</strong></p>
+<ul>
+<li>每次用<strong>全部数据</strong>计算梯度，更新参数</li>
+<li>精度高但计算开销大，适合小数据集</li>
+</ul>
+<h4 id="随机梯度下降"><a href="#随机梯度下降" class="headerlink" title="随机梯度下降"></a>随机梯度下降</h4><p>Stochastic Gradient Descent, SGD</p>
+<p><strong>公式：</strong></p>
+<p>$\theta := \theta - \eta \cdot \nabla_\theta J(\theta; x^{(i)}, y^{(i)})$</p>
+<ul>
+<li>每次仅用<strong>一个样本</strong> $(x(i),y(i))(x^{(i)}, y^{(i)})$ 更新一次参数</li>
+</ul>
+<p><strong>特点：</strong></p>
+<ul>
+<li>计算效率高、更新频繁</li>
+<li>噪声大，有时不稳定，但有助于跳出局部最优</li>
+</ul>
+<h4 id="小批量梯度下降"><a href="#小批量梯度下降" class="headerlink" title="小批量梯度下降"></a>小批量梯度下降</h4><p>Adaptive Moment Estimation</p>
+<p><strong>公式：</strong></p>
+<p>$\theta := \theta - \eta \cdot \frac{1}{m} \sum_{i=1}^{m} \nabla_\theta J(\theta; x^{(i)}, y^{(i)})$</p>
+<ul>
+<li>每次用一小批（mini-batch）样本来计算梯度</li>
+<li>折中效率与稳定性，是深度学习中<strong>最常用的方式</strong></li>
+</ul>
+<h4 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h4><p>Adaptive Moment Estimation</p>
+<p>Adam = <strong>Momentum（动量）</strong> + <strong>RMSProp（自适应学习率）</strong> + <strong>偏差修正</strong></p>
+<p><strong>动量法（Momentum）来源</strong></p>
+<p>先看普通的梯度下降更新：</p>
+<p>$\theta := \theta - \eta \cdot \nabla_\theta J(\theta)$</p>
+<p>但这个更新方向容易“来回震荡”，所以引入动量的思想，让参数更新像“带惯性的小球”那样滑下去：</p>
+<p>动量法公式：</p>
+<p>$v_t = \beta_1 v_{t-1} + (1 - \beta_1) \nabla_\theta J(\theta)θ:=θ−η⋅vt\theta := \theta - \eta \cdot v_t$</p>
+<p>这个动量 $v_t$ 相当于对梯度的指数加权平均。</p>
+<p>Adam 的第一部分：</p>
+<p>$m_t = \beta_1 m_{t-1} + (1 - \beta_1) \cdot g_t$</p>
+<p>就是来自这个思路，$m_t$ ≈ 平滑梯度（momentum）</p>
+<p><strong>RMSProp 来源：自适应学习率</strong></p>
+<p>RMSProp 想解决的问题是：<strong>不同参数的梯度尺度不同时，用相同学习率不合适</strong>。</p>
+<p>所以它引入一个“平方梯度的指数平均”：</p>
+<p>$s_t = \beta_2 s_{t-1} + (1 - \beta_2) g_t^2θ:=θ−ηst+ϵ⋅gt\theta := \theta - \frac{\eta}{\sqrt{s_t} + \epsilon} \cdot g_t$</p>
+<p>Adam 的第二部分：</p>
+<p>$v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$</p>
+<p>就是借鉴了 RMSProp，让学习率根据梯度历史自适应调整。</p>
+<p><strong>偏差修正的来由</strong></p>
+<p>Adam 一开始 m_1, v_1 都是从 0 开始的，但因为是指数加权平均，会导致初始几步偏小，<strong>“有偏估计”</strong>。</p>
+<p>所以做了修正：</p>
+<p>$\hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}$</p>
+<p>这个公式来源于“期望的无偏估计推导”，用数学方法校正初期偏小的问题。</p>
+<blockquote>
+<p>Q：为什么要做偏差修正？</p>
+<p>A：因为初始时刻 $m_t$、$v_t$ 都从 0 开始，用指数加权会造成“低估”真实值（特别在前几步）。</p>
+<p>所以 Adam 中引入了：</p>
+<p>$\hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}$</p>
+<p>下面<strong>推导</strong>这个修正项是怎么来的。</p>
+<p>推导一阶动量偏差修正项（以 $m_t$ 为例）</p>
+<p>我们从递推公式出发（假设 $m_0$ = 0）：</p>
+<p>$m_1 = (1 - \beta_1) g_1  $</p>
+<p>$m_2 = \beta_1 m_1 + (1 - \beta_1) g_2 = \beta_1 (1 - \beta_1) g_1 + (1 - \beta_1) g_2$</p>
+<p>$m_3 = \beta_1^2 (1 - \beta_1) g_1 + \beta_1 (1 - \beta_1) g_2 + (1 - \beta_1) g_3$</p>
+<p>可推广为：</p>
+<p>$m_t = (1 - \beta_1) \sum_{i=1}^{t} \beta_1^{t-i} g_i$</p>
+<p>期望分析：$m_t$ 是一个<strong>有偏估计</strong></p>
+<p>我们希望的是：</p>
+<p>$\mathbb{E}[m_t] = \mathbb{E}[g_t]$</p>
+<p>但是上面推导的形式中：</p>
+<p>$\mathbb{E}[m_t] = (1 - \beta_1) \sum_{i=1}^{t} \beta_1^{t-i} \mathbb{E}[g_i]$</p>
+<p>如果我们假设：</p>
+<ul>
+<li><p>梯度是平稳的（即各时刻期望相同）：</p>
+<p>$\mathbb{E}[g_1] = \mathbb{E}[g_2] = \dots = \mathbb{E}[g_t] = \mu$</p>
+</li>
+</ul>
+<p>那么就有：</p>
+<p>$\mathbb{E}[m_t] = (1 - \beta_1) \cdot \mu \sum_{i=1}^{t} \beta_1^{t - i} = \mu \cdot (1 - \beta_1) \cdot \sum_{k=0}^{t-1} \beta_1^k$</p>
+<p>这是一个等比数列，求和后得到：</p>
+<p>$\mathbb{E}[m_t] = \mu \cdot (1 - \beta_1) \cdot \frac{1 - \beta_1^t}{1 - \beta_1} = \mu \cdot (1 - \beta_1^t)$</p>
+<p>所以：</p>
+<p>$\boxed{\mathbb{E}[m_t] = \mu \cdot (1 - \beta_1^t)} \quad \text{有偏！}$</p>
+<p>如何修正？</p>
+<p>为了得到无偏估计，我们让：</p>
+<p>$\hat{m}_t = \frac{m_t}{1 - \beta_1^t}$</p>
+<p>那么：</p>
+<p>$\mathbb{E}[\hat{m}_t] = \frac{\mathbb{E}[m_t]}{1 - \beta_1^t} = \mu$</p>
+<p>成功修正偏差 🎉！</p>
+<p>同理：</p>
+<p>对于二阶动量 $v_t$，完全一样的推理过程也可以得到：</p>
+<p>$\hat{v}_t = \frac{v_t}{1 - \beta_2^t}$</p>
+</blockquote>
+<p><strong>Adam公式：</strong></p>
+<ol>
+<li><p>一阶矩估计（类似动量）：</p>
+<p>$m_t = \beta_1 m_{t-1} + (1 - \beta_1) \nabla_\theta J(\theta)$</p>
+</li>
+<li><p>二阶矩估计（平方梯度）：</p>
+<p>$v_t = \beta_2 v_{t-1} + (1 - \beta_2)(\nabla_\theta J(\theta))^2$</p>
+</li>
+<li><p>偏差校正：</p>
+<p>$\hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}$</p>
+</li>
+<li><p>参数更新：</p>
+<p>$\theta := \theta - \eta \cdot \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}$</p>
+</li>
+</ol>
+<ul>
+<li>通常 $\beta_1 = 0.9, \beta_2 = 0.999, \epsilon = 10^{-8}$</li>
+</ul>
+<p><strong>特点：</strong></p>
+<ul>
+<li>自适应调整每个参数的学习率</li>
+<li>适用于大规模数据和参数模型，深度学习中的默认选择之一</li>
+</ul>
+<h3 id="梯度消失-amp-爆炸"><a href="#梯度消失-amp-爆炸" class="headerlink" title="梯度消失&amp;爆炸"></a>梯度消失&amp;爆炸</h3><p>梯度消失是指，损失函数对网络中某参数计算梯度，由于链式法则，计算链过长，得到的梯度计算结果接近0</p>
+<p>可能出现：</p>
+<ol>
+<li>参数初始化存在问题，权重参数w_i过小导致梯度计算值接近0</li>
+<li>参数/激活函数存在指数运算，值被快速缩小导致梯度计算值接近0</li>
+</ol>
+<p>参数的更新依赖于梯度，当出现梯度消失时，参数无法得到更新</p>
+<img src="/2025/03/19/LLM-Rela/image.png" class="" title="image">
+<p><strong>解决梯度消失问题的方法：</strong></p>
+<ol>
+<li>使用恰当的激活函数：某些激活函数（如ReLU和Leaky ReLU）在反向传播过程中更不容易出现梯度消失问题，可以考虑使用它们替代Sigmoid和Tanh。</li>
+<li>批量归一化（Batch Normalization）：批量归一化可以加速训练过程，还可以缓解梯度消失问题，使得网络更稳定和更易训练。</li>
+<li>使用残差连接（Residual Connections）：残差连接可以跳过某些层，将输入直接与输出相加，有助于信息的传递和梯度的流动，减少梯度消失问题。</li>
+<li>调整网络架构：适当调整网络的深度，避免设计过深的网络结构，也有助于减少梯度消失的影响。</li>
+</ol>
+<p><strong>解决梯度爆炸问题的方法：</strong></p>
+<ol>
+<li>梯度截断（Gradient Clipping）：设置一个梯度阈值，在反向传播过程中，如果梯度超过该阈值，则将其裁剪为阈值以内的数值，避免梯度爆炸。</li>
+<li>使用恰当的权重初始化：合适的权重初始化可以减少梯度爆炸问题。例如，Xavier/Glorot初始化针对Sigmoid和Tanh激活函数的网络效果较好，而He初始化针对ReLU激活函数的网络效果较好。</li>
+<li>减少学习率：较小的学习率可以缓解梯度爆炸的影响，但要注意不要将学习率设置得过小，以免影响收敛速度。</li>
+<li>批量归一化（Batch Normalization）：同样，批量归一化在训练过程中有助于控制梯度的大小，减少梯度爆炸问题。</li>
+</ol>
+<h3 id="正则化-amp-归一化"><a href="#正则化-amp-归一化" class="headerlink" title="正则化&amp;归一化"></a>正则化&amp;归一化</h3><p><strong>正则化（Regularization）：</strong> 正则化是通过在损失函数中添加一个额外的项，来限制模型参数的大小，从而避免过拟合问题。常见的正则化项有L1正则化和L2正则化。</p>
+<ul>
+<li>L1正则化：在损失函数中添加模型参数的绝对值之和。L1正则化有助于稀疏模型，即将一些参数的值压缩为0，从而减少模型的复杂度。</li>
+<li>L2正则化：在损失函数中添加模型参数的平方之和。L2正则化对参数的惩罚更加平滑，通常会让参数接近于0，但不会严格地等于0。</li>
+</ul>
+<p>正则化的目的是防止模型在训练集上过度拟合，使得模型能够更好地泛化到未见过的新数据上。</p>
+<p>假设我们在线性回归中训练一个模型：</p>
+<p>原始损失函数（MSE）：</p>
+<p>$Loss = (y - ŷ )²$</p>
+<p>加入 L2 正则化后：</p>
+<p>$Loss = (y - ŷ )² + λ * ||w||²$</p>
+<p>其中：</p>
+<ul>
+<li><code>||w||²</code> 表示所有权重的平方和</li>
+<li><code>λ</code> 是正则化强度（超参数）</li>
+</ul>
+<p>➡️ <strong>作用：</strong> 如果某些权重太大，会被惩罚，从而让模型更简单、泛化能力更强。</p>
+<p><strong>归一化（Normalization）：</strong> 归一化是将数据按比例缩放，使其值落在特定范围内。在深度学习中，常见的归一化方法是将输入特征缩放到0和1之间，或者使其均值为0，方差为1。</p>
+<ul>
+<li>最小-最大归一化（Normalization）：将数据缩放到指定的最小值和最大值之间，公式为：$(x - x_{min}) / (x_{max} - x_{min})$</li>
+<li>均值-方差归一化（Standardization）：将数据缩放为均值为0，方差为1的分布，公式为：$(x - mean) / std$</li>
+</ul>
+<p>归一化的目的是将特征的值统一到相似的范围内，加速模型的训练过程，同时有助于梯度的传播和优化算法的收敛。</p>
+<p>常见方法：</p>
+<ul>
+<li><p><strong>Min-Max 归一化：</strong> 把数据压缩到 [0,1] 区间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x&#x27; = (x - min) / (max - min)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Z-score 标准化（Standardization）：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x&#x27; = (x - mean) / std</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>两者的作用：</strong></p>
+<ul>
+<li>正则化用于防止过拟合，通过约束模型参数的大小，减少模型的复杂度，提高模型的泛化能力。</li>
+<li>归一化用于将数据的特征缩放到统一的范围内，使得训练过程更稳定，加速优化算法的收敛，并且有助于避免梯度消失或梯度爆炸问题。</li>
+</ul>
+<p>在实际应用中，正则化和归一化通常是一起使用的，以提高深度学习模型的性能和训练效果。</p>
+<h3 id="通道"><a href="#通道" class="headerlink" title="通道"></a>通道</h3><img src="/2025/03/19/LLM-Rela/8361e16bac5ee3235ef89c78b1a1cf6b.png" class="" title="channel">
+<p>多通道卷积过程</p>
+<p>输入一张三通道的图片，有多个卷积核进行卷积，并且每个卷积核都有三通道，分别对这张输入图片的三通道进行卷积操作。每个卷积核，分别输出三个通道，这三个通道进行求和，得到一个featuremap，有多少个卷积核，就有多少个featuremap</p>
+<h3 id="Mask"><a href="#Mask" class="headerlink" title="Mask"></a>Mask</h3><p><strong>Element-wise multiplication（逐元素乘法）</strong></p>
+<p>假设有两个 2 \times 2 矩阵：</p>
+<script type="math/tex; mode=display">
+A = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}, \quad B = \begin{bmatrix} 5 & 6 \\ 7 & 8 \end{bmatrix}</script><p>逐元素乘法的结果：</p>
+<script type="math/tex; mode=display">
+A \odot B = \begin{bmatrix} 1 \times 5 & 2 \times 6 \\ 3 \times 7 & 4 \times 8 \end{bmatrix} = \begin{bmatrix} 5 & 12 \\ 21 & 32 \end{bmatrix}</script><p>Mask</p>
+<p>在深度学习和图像处理中，<strong>掩膜（mask）</strong> 是一种通过逐元素乘法（element-wise multiplication）来选择性过滤或加权张量（如权重、滤波器、通道等）的技术。</p>
+<p><strong>权重掩膜（Weight Mask）</strong></p>
+<p><strong>作用</strong>：对神经网络的权重进行选择性屏蔽，例如在剪枝（pruning）中去除不重要的连接。</p>
+<p>假设有一个全连接层的权重矩阵  W  和一个二进制掩膜  M （0表示屏蔽，1表示保留）：</p>
+<script type="math/tex; mode=display">
+W = \begin{bmatrix} 0.1 & -0.2 \\ 0.3 & 0.4 \end{bmatrix}, \quad M = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}</script><p>逐元素乘法后的结果：</p>
+<script type="math/tex; mode=display">
+W \odot M = \begin{bmatrix} 0.1 \times 1 & -0.2 \times 0 \\ 0.3 \times 0 & 0.4 \times 1 \end{bmatrix} = \begin{bmatrix} 0.1 & 0 \\ 0 & 0.4 \end{bmatrix}</script><p><strong>效果</strong>：第二行第一列和第一行第二列的权重被置零，实现了稀疏化。</p>
+<p><strong>滤波器掩膜（Filter Mask）</strong></p>
+<p><strong>作用</strong>：在卷积神经网络中，对滤波器的通道或空间区域进行屏蔽。</p>
+<p><strong>通道掩膜（Channel Mask）</strong></p>
+<p><strong>作用</strong>：对特征图的特定通道进行加权或屏蔽，例如在注意力机制中。</p>
+<p>假设特征图  F  的形状为  $2 \times 2 \times 3$ （高×宽×通道），掩膜  M  对通道加权：</p>
+<script type="math/tex; mode=display">
+F = \begin{bmatrix} \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix} & \begin{bmatrix} 5 & 6 \\ 7 & 8 \end{bmatrix} & \begin{bmatrix} 9 & 10 \\ 11 & 12 \end{bmatrix} \end{bmatrix}, \quad M = \begin{bmatrix} 0.5 & 1.0 & 0.2 \end{bmatrix}</script><p>逐通道乘法：</p>
+<script type="math/tex; mode=display">
+F \odot M = \begin{bmatrix} 0.5 \times \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix} & 1.0 \times \begin{bmatrix} 5 & 6 \\ 7 & 8 \end{bmatrix} & 0.2 \times \begin{bmatrix} 9 & 10 \\ 11 & 12 \end{bmatrix} \end{bmatrix}</script><p><strong>效果</strong>：第一通道权重减半，第三通道权重缩小为 20%。</p>
+<p><strong>空间掩膜（Spatial Mask）</strong></p>
+<p><strong>作用</strong>：对特征图的特定空间区域（如像素）进行屏蔽，常见于图像分割或遮挡实验。</p>
+<p>输入图像  I  和矩形掩膜  M （黑色区域为0）：</p>
+<script type="math/tex; mode=display">
+I = \begin{bmatrix} 255 & 128 \\ 64 & 32 \end{bmatrix}, \quad M = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}</script><p>逐元素乘法：</p>
+<script type="math/tex; mode=display">
+I \odot M = \begin{bmatrix} 255 & 0 \\ 64 & 32 \end{bmatrix}</script><p><strong>效果</strong>：图像右上角像素被屏蔽（变黑）。</p>
+<h3 id="LSTM"><a href="#LSTM" class="headerlink" title="LSTM"></a>LSTM</h3><p>输出</p>
+<p>短期记忆 $h_t$，长期记忆 $c_t$，input $x_t$</p>
+<script type="math/tex; mode=display">
+o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o)</script><script type="math/tex; mode=display">
+h_t = o_t \odot \tanh(c_t)</script><p><strong>遗忘门(蓝色)</strong></p>
+<script type="math/tex; mode=display">
+f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)</script><p><strong>输入门和候选记忆</strong></p>
+<ul>
+<li>输入门控制当前输入信息 $x_t$ 的写入程度：</li>
+</ul>
+<script type="math/tex; mode=display">
+i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)</script><ul>
+<li>候选记忆生成新的候选信息 $\tilde{c}_t$：</li>
+</ul>
+<script type="math/tex; mode=display">
+\tilde{c}_t = \tanh(W_c \cdot [h_{t-1}, x_t] + b_c)</script><p><strong>短期记忆更新</strong></p>
+<p>结合遗忘门和输入门的结果更新短期记忆 $c_t$：</p>
+<script type="math/tex; mode=display">
+c_t = f_t \odot c_{t-1} + i_t \odot \tilde{c}_t</script><ul>
+<li>$\odot$ 表示逐元素相乘。</li>
+<li>第一项 $f_t \odot c_{t-1}$ 保留历史信息，第二项 $i_t \odot \tilde{c}_t$ 添加新信息。</li>
+</ul>
+<img src="/2025/03/19/LLM-Rela/image-20250402161828313.png" class="" title="image-20250402161828313">
+<p>recurrent LSTM</p>
+<img src="/2025/03/19/LLM-Rela/image-20250402162106999.png" class="" title="image-20250402162106999">
+<h3 id="自回归模型"><a href="#自回归模型" class="headerlink" title="自回归模型"></a>自回归模型</h3><p>自回归（Autoregressive, AR）模型的核心是通过条件概率逐步生成序列，数学表示为：</p>
+<script type="math/tex; mode=display">p(x_1, x_2, ..., x_T) = \prod_{t=1}^T p(x_t | x_1, ..., x_{t-1})</script><p>这种生成方式适用于文本、图像等序列数据，无论底层模型架构如何（如RNN、CNN或Transformer）。</p>
+<p>注意：</p>
+<ul>
+<li><p><strong>Decoder-Only是自回归的实现方式之一</strong>：Transformer的Decoder-Only架构天然适合自回归生成，因其单向注意力与自回归的逐步生成逻辑一致</p>
+</li>
+<li><p><strong>自回归不限于Decoder-Only</strong>：例如，扩散模型也可通过多步生成实现自回归效果（如逐像素生成图像）。传统RNN或CNN同样能构建自回归模型。</p>
+</li>
+</ul>
+<h2 id="LLM-struc"><a href="#LLM-struc" class="headerlink" title="LLM-struc"></a>LLM-struc</h2><p>大模型从模型架构上主要分为三种：Only-encoder, Only-Decoder, Encoder-Decoder三种模型架构</p>
+<ul>
+<li>Only-encoder：例如BERT，通过在大规模无标签文本上进行预训练，然后在下游任务上进行微调，具有强大的语言理解能力和表征能力。</li>
+<li>Only-Decoder: 例如GPT，通过在大规模无标签文本上进行预训练，然后在特定任务上进行微调，具有很强的生成能力和语言理解能力。</li>
+<li>Encoder-Decoder：例如T5（Text-to-Text Transfer Transformer）可以用于多种自然语言处理任务，如文本分类、机器翻译、问答等。</li>
+</ul>
+<p>而LLM之所以主要都用Decoder-only架构，除了训练效率和工程实现上的优势外，在理论上是因为Encoder的双向注意力会存在低秩问题，这可能会削弱模型表达能力，就生成任务而言，引入双向注意力并无实质好处。而Encoder-Decoder架构之所以能够在某些场景下表现更好，大概只是因为它多了一倍参数。所以，在同等参数量、同等推理成本下，Decoder-only架构就是最优选择了。</p>
+<h3 id="Encoder-amp-Decoder"><a href="#Encoder-amp-Decoder" class="headerlink" title="Encoder&amp;Decoder"></a>Encoder&amp;Decoder</h3><img src="/2025/03/19/LLM-Rela/image-20250325195407601.png" class="" title="image-20250325195407601">
+<p>过程</p>
+<img src="/2025/03/19/LLM-Rela/image-20250325195428329.png" class="" title="image-20250325195428329">
+<h3 id="Tokenization"><a href="#Tokenization" class="headerlink" title="Tokenization"></a>Tokenization</h3><p>单个词 token → 词向量</p>
+<p>训练方法</p>
+<p>Word2Vec的CBOW（Continuous Bag of Words）模型是一种通过上下文词预测目标词的神经网络模型。以下是其训练流程的详细说明，并结合具体例子进行解释：</p>
+<ol>
+<li>数据准备</li>
+</ol>
+<p>首先，需要准备训练数据，通常是大量的文本语料。文本数据需要进行分词等预处理，将文本转换为词语序列。例如，句子“I learn NLP everyday”会被分词为<code>[&quot;I&quot;, &quot;learn&quot;, &quot;NLP&quot;, &quot;everyday&quot;]</code>。</p>
+<ol>
+<li>创建上下文窗口</li>
+</ol>
+<p>对于每个目标词，CBOW模型定义了一个上下文窗口。窗口大小由超参数<code>window</code>指定，表示目标词左右两侧的词语数目。例如，窗口大小为2时，目标词“NLP”的上下文词为<code>[&quot;I&quot;, &quot;learn&quot;, &quot;everyday&quot;]</code>。</p>
+<ol>
+<li>构建训练样本</li>
+</ol>
+<p>对于每个目标词，CBOW模型从其上下文窗口中收集上下文词。每个训练样本由上下文词构成，目标是预测目标词。例如，目标词“NLP”的训练样本为<code>&#123;&quot;context&quot;: [&quot;I&quot;, &quot;learn&quot;, &quot;everyday&quot;], &quot;target&quot;: &quot;NLP&quot;&#125;</code>。</p>
+<ol>
+<li>模型结构</li>
+</ol>
+<p>CBOW模型是一个简单的三层神经网络，包括输入层、隐藏层和输出层： • <strong>输入层</strong>：上下文词用one-hot向量表示。例如，词汇表大小为10,000，单词“I”可能表示为<code>[1, 0, 0, ..., 0]</code>。 • <strong>隐藏层</strong>：通过词向量矩阵（Embedding Matrix）将输入的one-hot向量转换为低维词向量（通常是100～300维）。然后将所有上下文词的词向量相加取平均，作为隐藏层向量。 • <strong>输出层</strong>：隐藏层向量乘以输出权重矩阵，得到输出向量。使用Softmax函数计算目标词的概率分布。</p>
+<ol>
+<li>训练目标</li>
+</ol>
+<p>CBOW模型的训练目标是最大化给定上下文词时目标词的条件概率，即最大化$P(w_t | w_{t-c}, w_{t-c+1}, …, w_{t+c})$，其中$w_t$是目标词，$w_{t-c}$到$w_{t+c}$是上下文词。</p>
+<ol>
+<li>梯度下降</li>
+</ol>
+<p>使用梯度下降或其变种，通过反向传播算法调整嵌入层的权重，使得模型的预测更接近实际的目标词。</p>
+<ol>
+<li>重复迭代</li>
+</ol>
+<p>重复以上步骤多次，直到模型收敛到一个合适的状态。每一轮迭代都遍历整个训练数据。</p>
+<p>具体例子</p>
+<p>假设语料为“I learn NLP everyday”，目标词为“NLP”，上下文词为<code>[&quot;I&quot;, &quot;learn&quot;, &quot;everyday&quot;]</code>：</p>
+<ol>
+<li>将上下文词转换为one-hot向量。</li>
+<li>将one-hot向量乘以输入权重矩阵，得到词向量。</li>
+<li>将所有上下文词的词向量相加取平均，得到隐藏层向量。</li>
+<li>将隐藏层向量乘以输出权重矩阵，得到输出向量。</li>
+<li>使用Softmax函数计算目标词“NLP”的概率分布。</li>
+<li>通过损失函数（如负对数似然）计算预测误差，并使用梯度下降更新模型参数。</li>
+</ol>
+<p>以上便是CBOW模型的完整训练流程。</p>
+<p>Word2Vec的<strong>Skip-Gram</strong>模型与CBOW模型相反，它通过<strong>目标词</strong>预测其<strong>上下文词</strong>。Skip-Gram模型的训练流程如下，并结合具体例子详细说明：</p>
+<hr>
+<ol>
+<li>数据准备</li>
+</ol>
+<p>首先，准备训练数据，通常是大量的文本语料。文本数据需要进行分词等预处理，将文本转换为词语序列。例如，句子“I learn NLP everyday”会被分词为<code>[&quot;I&quot;, &quot;learn&quot;, &quot;NLP&quot;, &quot;everyday&quot;]</code>。</p>
+<hr>
+<ol>
+<li>创建上下文窗口</li>
+</ol>
+<p>对于每个目标词，Skip-Gram模型定义了一个上下文窗口。窗口大小由超参数<code>window</code>指定，表示目标词左右两侧的词语数目。例如，窗口大小为2时，目标词“learn”的上下文词为<code>[&quot;I&quot;, &quot;NLP&quot;, &quot;everyday&quot;]</code>。</p>
+<hr>
+<ol>
+<li>构建训练样本</li>
+</ol>
+<p>对于每个目标词，Skip-Gram模型从其上下文窗口中收集上下文词。每个训练样本由目标词和上下文词组成。例如，目标词“learn”的训练样本为： • <code>&#123;&quot;target&quot;: &quot;learn&quot;, &quot;context&quot;: &quot;I&quot;&#125;</code> • <code>&#123;&quot;target&quot;: &quot;learn&quot;, &quot;context&quot;: &quot;NLP&quot;&#125;</code> • <code>&#123;&quot;target&quot;: &quot;learn&quot;, &quot;context&quot;: &quot;everyday&quot;&#125;</code></p>
+<hr>
+<ol>
+<li>模型结构</li>
+</ol>
+<p>Skip-Gram模型是一个简单的三层神经网络，包括输入层、隐藏层和输出层： • <strong>输入层</strong>：目标词用one-hot向量表示。例如，词汇表大小为10,000，单词“learn”可能表示为<code>[0, 1, 0, ..., 0]</code>。 • <strong>隐藏层</strong>：通过词向量矩阵（Embedding Matrix）将输入的one-hot向量转换为低维词向量（通常是100～300维）。这个词向量就是隐藏层的输出。 • <strong>输出层</strong>：隐藏层向量乘以输出权重矩阵，得到输出向量。使用Softmax函数计算上下文词的概率分布。</p>
+<hr>
+<ol>
+<li>训练目标</li>
+</ol>
+<p>Skip-Gram模型的训练目标是最大化给定目标词时上下文词的条件概率，即最大化$P(w_{t+j} | w_t)$，其中$w_t$是目标词，$w_{t+j}$是上下文词。</p>
+<hr>
+<ol>
+<li>梯度下降</li>
+</ol>
+<p>使用梯度下降或其变种，通过反向传播算法调整嵌入层的权重，使得模型的预测更接近实际的上下文词。</p>
+<hr>
+<ol>
+<li>重复迭代</li>
+</ol>
+<p>重复以上步骤多次，直到模型收敛到一个合适的状态。每一轮迭代都遍历整个训练数据。</p>
+<hr>
+<p>具体例子</p>
+<p>假设语料为“I learn NLP everyday”，目标词为“learn”，上下文词为<code>[&quot;I&quot;, &quot;NLP&quot;, &quot;everyday&quot;]</code>：</p>
+<ol>
+<li>将目标词“learn”转换为one-hot向量。</li>
+<li>将one-hot向量乘以输入权重矩阵，得到词向量。</li>
+<li>将词向量乘以输出权重矩阵，得到输出向量。</li>
+<li>使用Softmax函数计算上下文词“I”、“NLP”、“everyday”的概率分布。</li>
+<li>通过损失函数（如负对数似然）计算预测误差，并使用梯度下降更新模型参数。</li>
+</ol>
+<hr>
+<p>Skip-Gram与CBOW的区别</p>
+<ul>
+<li><strong>CBOW</strong>：通过上下文词预测目标词，适合大规模数据，计算效率高，但对罕见词的学习效果较弱。 • <strong>Skip-Gram</strong>：通过目标词预测上下文词，适合小规模数据，对罕见词的学习效果更好，但计算复杂度较高。</li>
+</ul>
+<h3 id="Positional-Encoding"><a href="#Positional-Encoding" class="headerlink" title="Positional Encoding"></a>Positional Encoding</h3><blockquote>
+<p>词向量 → 含位置信息词向量</p>
+<p>加入位置信息（多个正弦函数）到词向量</p>
+<p>傅里叶级数思路</p>
+<p>绝对位置编码 ps: 注意力机制的矩阵A为相对位置编码</p>
+</blockquote>
+<script type="math/tex; mode=display">PE_{(pos,2i)}=sin(pos/10000^{2i/d_{model}})</script><script type="math/tex; mode=display">PE_{(pos,2i+1)}=cos(pos/10000^{2i/d_{model}})</script><h4 id="RoPE"><a href="#RoPE" class="headerlink" title="RoPE"></a>RoPE</h4><h3 id="Muti-Head-Attention"><a href="#Muti-Head-Attention" class="headerlink" title="Muti-Head Attention"></a>Muti-Head Attention</h3><h4 id="自注意力"><a href="#自注意力" class="headerlink" title="自注意力"></a>自注意力</h4><img src="/2025/03/19/LLM-Rela/image-20250404192612286.png" class="" title="image-20250404192612286">
+<img src="/2025/03/19/LLM-Rela/image-20250325195443397.png" class="" title="image-20250325195443397">
+<script type="math/tex; mode=display">
+\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^{\top}}{\sqrt{d}}\right)V</script><p>矩阵A 相当于计算 $token_i$ 与 $token_j$ 对应词向量的相似度</p>
+<p>$q_i$ 为 query化后 $token_i$ 的词向量</p>
+<p>$k_i$ 为 key化后 $token_i$ 的词向量</p>
+<p>矩阵A 与 矩阵V 相乘</p>
+<p>对每个词 value 化 词向量矩阵 进行相关性修正，得到注意力矩阵（包含其他相似词词向量加和的词向量）</p>
+<h4 id="交叉注意力"><a href="#交叉注意力" class="headerlink" title="交叉注意力"></a>交叉注意力</h4><img src="/2025/03/19/LLM-Rela/image-20250325195459862.png" class="" title="image-20250325195459862">
+<h4 id="多头注意力"><a href="#多头注意力" class="headerlink" title="多头注意力"></a>多头注意力</h4><p>1.拆分</p>
+<p>原始的单头注意力中，$W_K, W_Q, W_V \in \mathbb{R}^{d \times d}$（维度为 $d \times d$）。<br>在多头机制中，每个头的参数矩阵被水平拆分为更小的矩阵：</p>
+<ul>
+<li><p><strong>第 $h$ 个头的参数</strong>：</p>
+<p>  $W_K^{(h)}, W_Q^{(h)}, W_V^{(h)} \in \mathbb{R}^{d \times d_h}$，其中 $d_h = d/N_h$。例如，若总维度 $d=512$，头数 $N_h=8$，则每个头的维度 $d_h=64$。</p>
+</li>
+</ul>
+<p><strong>拆分方式</strong>：  </p>
+<ul>
+<li><strong>水平拆分</strong>：将原始矩阵按列切分（如 $W_K$ 被拆为 $[W_K^{(1)}, W_K^{(2)}, …, W_K^{(N_h)}]$），每个子矩阵对应一个头的参数。</li>
+</ul>
+<p>2.独立计算注意力</p>
+<p>每个头 $h$ 使用自己的参数矩阵独立计算注意力：</p>
+<ul>
+<li><p><strong>输入 $x$ 通过第 $h$ 个头</strong>：</p>
+<p> $K^{(h)} = x W_K^{(h)}$， </p>
+<p> $Q^{(h)} = x W_Q^{(h)}$， </p>
+<p>$V^{(h)} = x W_V^{(h)}$。  </p>
+<p>注意，当前步得到的 $K^{(h)}, Q^{(h)}, V^{(h)}$ 等价于直接从原始 $K, Q, V$ 中拆分</p>
+</li>
+<li><p><strong>计算注意力输出</strong>：<br> $\text{Attn}_h(x) = \text{softmax}\left(\frac{Q^{(h)} K^{(h)\top}}{\sqrt{d_h}}\right) V^{(h)}$。</p>
+</li>
+</ul>
+<p>3.整合</p>
+<p>所有头的输出通过<strong>拼接（Concatenate）</strong>整合：</p>
+<ul>
+<li><p><strong>拼接（标准Transformer）</strong>：</p>
+<p> $\text{MHA}(x) = Concat(\text{Attn}_1(x), \text{Attn}_2(x), …, \text{Attn}_{N_h}(x)) W_O$，其中 $W_O \in \mathbb{R}^{d \times d}$ 是输出投影矩阵。</p>
+</li>
+</ul>
+<p>测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">Wq = Wk = Wv = np.array([</span><br><span class="line">    [1, 0, 0, 0],</span><br><span class="line">    [0, 2, 0, 0],</span><br><span class="line">    [0, 0, 3, 0],</span><br><span class="line">    [0, 0, 0, 4]</span><br><span class="line">]) </span><br><span class="line"></span><br><span class="line">输入 X:</span><br><span class="line"> [[1 0 1 0]</span><br><span class="line"> [0 2 0 2]]</span><br><span class="line"></span><br><span class="line">--- 单头 Attention ---</span><br><span class="line">QK^T / sqrt(dk):</span><br><span class="line"> [[ 5.  0.]</span><br><span class="line"> [ 0. 40.]]</span><br><span class="line">Attention Weights:</span><br><span class="line"> [[9.93307149e-01 6.69285092e-03]</span><br><span class="line"> [4.24835426e-18 1.00000000e+00]]</span><br><span class="line">Single-Head Output:</span><br><span class="line"> [[9.93307149e-01 2.67714037e-02 2.97992145e+00 5.35428074e-02]</span><br><span class="line"> [4.24835426e-18 4.00000000e+00 1.27450628e-17 8.00000000e+00]]</span><br><span class="line"></span><br><span class="line">--- 多头 Attention（Head 1）---</span><br><span class="line">Q1K1^T / sqrt(dk):</span><br><span class="line"> [[ 0.70710678  0.        ]</span><br><span class="line"> [ 0.         11.3137085 ]]</span><br><span class="line">Attention Weights Head 1:</span><br><span class="line"> [[6.69761549e-01 3.30238451e-01]</span><br><span class="line"> [1.22043184e-05 9.99987796e-01]]</span><br><span class="line">Head 1 Output:</span><br><span class="line"> [[6.69761549e-01 1.32095380e+00]</span><br><span class="line"> [1.22043184e-05 3.99995118e+00]]</span><br><span class="line"></span><br><span class="line">--- 多头 Attention（Head 2）---</span><br><span class="line">Q2K2^T / sqrt(dk):</span><br><span class="line"> [[ 6.36396103  0.        ]</span><br><span class="line"> [ 0.         45.254834  ]]</span><br><span class="line">Attention Weights Head 2:</span><br><span class="line"> [[9.98280432e-01 1.71956818e-03]</span><br><span class="line"> [2.21858114e-20 1.00000000e+00]]</span><br><span class="line">Head 2 Output:</span><br><span class="line"> [[2.99484130e+00 1.37565454e-02]</span><br><span class="line"> [6.65574341e-20 8.00000000e+00]]</span><br><span class="line"></span><br><span class="line">Multi-Head Output:</span><br><span class="line"> [[6.69761549e-01 1.32095380e+00 2.99484130e+00 1.37565454e-02]</span><br><span class="line"> [1.22043184e-05 3.99995118e+00 6.65574341e-20 8.00000000e+00]]</span><br></pre></td></tr></table></figure>
+<h4 id="相关问题"><a href="#相关问题" class="headerlink" title="相关问题"></a>相关问题</h4><ol>
+<li><p>为什么 $A  = X <em> W_q </em> [X <em> W_k]^T$，而不是 $A = X </em> W_A$ ?</p>
+<p>第一种为二次型，第二种为线性，二次型可表达映射关系更复杂；</p>
+</li>
+<li><p>为什么Attenion公式中要除以 $\sqrt d$（d为Q, K矩阵的输出维度） ？</p>
+<ul>
+<li>当向量维度变大的时候，d变大， q 和 k 的点积的方差变大</li>
+<li>由于要对 q 和 k 的点积的每一行进行softmax，过大的方差将导致softmax极端化，得到类似于 $[1,0,0,…]$ 的one-hot分布</li>
+<li>当输出接近one-hot时，非最大值的梯度趋近于0，反向传播时，这些位置的参数无法得到更新</li>
+<li>因此，设置 softmax 的 temperature 来缓解这个问题，这里 temperature 被设置为了 $\sqrt d$ .</li>
+</ul>
+<p>如下图所示，假设随机向量 $X$ 满足均值为 0，协方差矩阵为单位矩阵（即各变量独立且方差为 1）的<strong>多元标准正态分布</strong>，可计算得到 $XY^T$ 满足均值为 0，协方差矩阵为 $D_{out} I$ 的<strong>多元正态分布</strong>，通过除以 $\sqrt d$ 将 $XY^T$ 的方差缩放为1</p>
+</li>
+</ol>
+<img src="/2025/03/19/LLM-Rela/image-20250404100511037.png" class="" title="image-20250404100511037">
+<ol>
+<li><p>为什么选择多头注意力？</p>
+<p>有说法认为，克服<strong>「模型在对当前位置的信息进行编码时，会过度的将注意力集中于自身的位置」</strong>，或者<strong>表达能力提升</strong>：多个低秩注意力头（$d_h &lt; d$）的集成，能捕捉更复杂的交互模式；</p>
+<p>ref: <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1905.10650">https://arxiv.org/pdf/1905.10650</a></p>
+<p>结论：</p>
+<img src="/2025/03/19/LLM-Rela/image-20250405101512560.png" class="" title="image-20250405101512560">
+</li>
+</ol>
+<h3 id="Layer-Norm"><a href="#Layer-Norm" class="headerlink" title="Layer Norm"></a>Layer Norm</h3><p>Batch Normalization 是对 <strong>所有样本的同一特征维度</strong> 分别做归一化（按列操作）</p>
+<p>Layer Normalization 是对 <strong>单个样本的所有特征维度</strong> 做归一化（按行操作）</p>
+<p>例如：BN是对特征 $i$ 进行归一，LN是对样本 $x_i$ 进行归一</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">样本</th>
+<th style="text-align:center">特征1</th>
+<th style="text-align:center">特征2</th>
+<th style="text-align:center">特征3</th>
+<th style="text-align:center">特征4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>x₁</strong></td>
+<td style="text-align:center">1.0</td>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">3.0</td>
+<td style="text-align:center">4.0</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>x₂</strong></td>
+<td style="text-align:center">5.0</td>
+<td style="text-align:center">6.0</td>
+<td style="text-align:center">7.0</td>
+<td style="text-align:center">8.0</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>x₃</strong></td>
+<td style="text-align:center">9.0</td>
+<td style="text-align:center">10.0</td>
+<td style="text-align:center">11.0</td>
+<td style="text-align:center">12.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>为什么BN在NLP中效果差</p>
+<ul>
+<li>BN计算特征的均值和方差是需要在batch_size维度，而这个维度表示一个特征，比如身高、体重、肤色等，如果将BN用于NLP中，其需要对每一个单词做处理，让每一个单词是对应到了MLP中的每一个特征明显是违背直觉得；</li>
+<li>BN是对单词做缩放，在NLP中，单词由词向量来表达，本质上是对词向量进行缩放。词向量是什么？是我们学习出来的参数来表示词语语义的参数，不是真实存在的。</li>
+</ul>
+<p>为什么LayerNorm单独对一个样本的所有单词做缩放可以起到效果</p>
+<ul>
+<li>layner-norm 针对每一个样本做特征的缩放。换句话讲，保留了N维度，在C/H/W维度上做缩放。</li>
+<li>layner-norm 也是在对同一个特征下的元素做归一化，只不过这里不再是对应N（或者说batch size），而是对应的文本长度。</li>
+</ul>
+<h3 id="ResNet"><a href="#ResNet" class="headerlink" title="ResNet"></a>ResNet</h3><h3 id="FFN"><a href="#FFN" class="headerlink" title="FFN"></a>FFN</h3><p><strong>Feed-Forward Network (FFN)</strong> FFN 的结构通常是一个简单的两层 MLP（多层感知机），其作用是对每个位置的特征进行进一步的处理和增强。</p>
+<script type="math/tex; mode=display">FFN(x) = max(0, xW_{1}+b_{1})W_{2}+b_{2}</script><h2 id="LLM-Train"><a href="#LLM-Train" class="headerlink" title="LLM-Train"></a>LLM-Train</h2><h3 id="Tensor-Parallelism"><a href="#Tensor-Parallelism" class="headerlink" title="Tensor Parallelism"></a>Tensor Parallelism</h3><h3 id="BF16-amp-FP16"><a href="#BF16-amp-FP16" class="headerlink" title="BF16&amp;FP16"></a>BF16&amp;FP16</h3><h2 id="LLM-Inference"><a href="#LLM-Inference" class="headerlink" title="LLM-Inference"></a>LLM-Inference</h2><h3 id="Temperature"><a href="#Temperature" class="headerlink" title="Temperature"></a>Temperature</h3><p><strong>温度参数控制的是分布的“尖锐程度”。</strong></p>
+<ul>
+<li><strong>低温度（如0.1）</strong>：趋近于贪婪（greedy）选择，概率最高的词更容易被选中，输出更<strong>确定</strong>、更<strong>重复</strong>。</li>
+<li><strong>高温度（如1.5）</strong>：让低概率词也有机会被采样，输出更<strong>随机</strong>、更<strong>有创意</strong>，但可能<strong>不连贯或出错</strong>。</li>
+</ul>
+<p>将模型输出的 logits（原始分数）除以温度值，然后再经过 softmax，计算出新的概率分布：</p>
+<script type="math/tex; mode=display">P_i = \frac{e^{\frac{logit_i}{T}}}{\sum_j e^{\frac{logit_j}{T}}}</script><ul>
+<li><strong>T &lt; 1</strong> → 增强高概率词，削弱低概率词</li>
+<li><strong>T &gt; 1</strong> → 扁平化分布，低概率词获得更多机会</li>
+</ul>
+<h3 id="Top-K-Sampling"><a href="#Top-K-Sampling" class="headerlink" title="Top-K Sampling"></a>Top-K Sampling</h3><p>Top-K控制的是“只在前K个最有可能的词中采样”。</p>
+<ul>
+<li><strong>K=1</strong> → 只选概率最大的词（等同于贪婪搜索）</li>
+<li><strong>K=10</strong> → 从概率前10的词中进行随机选择</li>
+<li><strong>K=100+</strong> → 越大，越接近全概率分布，输出更有创造性</li>
+</ul>
+<h2 id="Fine-Tuning"><a href="#Fine-Tuning" class="headerlink" title="Fine-Tuning"></a>Fine-Tuning</h2><p>高效微调技术分类：</p>
+<ul>
+<li>增加额外参数（A）<ul>
+<li>类适配器（Adapter-like）方法</li>
+<li>软提示（Soft prompts）</li>
+</ul>
+</li>
+<li>选取一部分参数更新（S）</li>
+<li>引入重参数化（R）</li>
+</ul>
+<img src="/2025/03/19/LLM-Rela/v2-eaaf1c00d0c4ea350cd3a79b47de26d3_1440w.jpg" class="" title="img">
+<h3 id="BitFit-Prefix-Tuning-amp-Prompt-Tuning"><a href="#BitFit-Prefix-Tuning-amp-Prompt-Tuning" class="headerlink" title="BitFit, Prefix Tuning &amp; Prompt Tuning"></a>BitFit, Prefix Tuning &amp; Prompt Tuning</h3><p>BitFit（论文：<strong>BitFit: Simple Parameter-efficient Fine-tuning or Transformer-based Masked Language-models</strong>）是一种稀疏的微调方法，它训练时只更新bias的参数或者部分bias参数。</p>
+<p>涉及到的bias参数有attention模块中计算query,key,value跟合并多个attention结果时涉及到的bias，MLP层中的bias，Layernormalization层的bias参数。</p>
+<p>Prefix Tuning（论文：<strong>Prefix-Tuning: Optimizing Continuous Prompts for Generation</strong>），在输入token之前构造一段任务相关的virtual tokens作为Prefix，然后训练的时候只更新Prefix部分的参数，而PLM(Pretrain LM)中的其他部分参数固定。</p>
+<p>Prompt Tuning（论文：<strong>The Power of Scale for Parameter-Efficient Prompt Tuning</strong>），该方法可以看作是Prefix Tuning的简化版本，它给每个任务定义了自己的Prompt，然后拼接到数据上作为输入，但<strong>只在输入层加入prompt tokens</strong>，并且不需要加入 MLP 进行调整来解决难训练的问题。</p>
+<h3 id="P-Tuning"><a href="#P-Tuning" class="headerlink" title="P-Tuning"></a>P-Tuning</h3><p>P-Tuning（论文：<strong>GPT Understands, Too</strong>），该方法将Prompt转换为可以学习的Embedding层，并用MLP+LSTM的方式来对Prompt Embedding进行一层处理。</p>
+<p>相比Prefix Tuning，P-Tuning加入的可微的virtual token，但仅限于输入层，没有在每一层都加；另外，virtual token的位置也不一定是前缀，插入的位置是可选的。这里的出发点实际是把传统人工设计模版中的真实token替换成可微的virtual token。</p>
+<p>P-Tuning v2（论文： <strong>P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks</strong>），该方法在每一层都加入了Prompts tokens作为输入，而不是仅仅加在输入层</p>
+<h3 id="Adapter-Tuning"><a href="#Adapter-Tuning" class="headerlink" title="Adapter Tuning"></a>Adapter Tuning</h3><p>Adapter Tuning（论文：<strong>Parameter-Efficient Transfer Learning for NLP</strong>），该方法设计了Adapter结构，并将其嵌入Transformer的结构里面，针对每一个Transformer层，增加了两个Adapter结构(分别是多头注意力的投影之后和第二个feed-forward层之后)，在训练时，固定住原来预训练模型的参数不变，只对新增的 Adapter 结构和 Layer Norm 层进行微调，从而保证了训练的高效性。</p>
+<p>Adapter Fusion（论文：<strong>AdapterFusion:Non-Destructive Task Composition for Transfer Learning</strong>），一种融合多任务信息的Adapter的变体，在 Adapter 的基础上进行优化，通过将学习过程分为两阶段来提升下游任务表现。</p>
+<p>AdapterDrop（论文：AdapterDrop: On the Efficiency of Adapters in Transformers），在不影响任务性能的情况下，对Adapter动态高效的移除，尽可能的减少模型的参数量，提高模型在反向传播（训练）和正向传播（推理）时的效率。</p>
+<h3 id="LoRA"><a href="#LoRA" class="headerlink" title="LoRA"></a>LoRA</h3><p>LoRA（论文：<strong>LoRA: LOW-RANK ADAPTATION OF LARGE LANGUAGE MODELS</strong>），该方法的核心思想就是通过低秩分解来模拟参数的改变量，从而以极小的参数量来实现大模型的间接训练。</p>
+<p>AdaLoRA（论文：<strong>ADAPTIVE BUDGET ALLOCATION FOR PARAMETEREFFICIENT FINE-TUNING</strong>），是对LoRA的一种改进，它根据重要性评分动态分配参数预算给权重矩阵。</p>
+<p>QLoRA（论文： <strong>QLORA: Efficient Finetuning of Quantized LLMs</strong>），使用一种新颖的高精度技术将预训练模型量化为 4 bit，然后添加一小组可学习的低秩适配器权重，这些权重通过量化权重的反向传播梯度进行微调。QLORA 有一种低精度存储数据类型（4 bit），还有一种计算数据类型（BFloat16）。实际上，这意味着无论何时使用 QLoRA 权重张量，我们都会将张量反量化为 BFloat16，然后执行 16 位矩阵乘法。QLoRA提出了两种技术实现高保真 4 bit微调——4 bit NormalFloat(NF4) 量化和双量化。此外，还引入了分页优化器，以防止梯度检查点期间的内存峰值，从而导致内存不足的错误，这些错误在过去使得大型模型难以在单台机器上进行微调。</p>
+<h3 id="MAM-Adapter-amp-UniPELT"><a href="#MAM-Adapter-amp-UniPELT" class="headerlink" title="MAM Adapter &amp; UniPELT"></a>MAM Adapter &amp; UniPELT</h3><p>MAM Adapter（论文：TOWARDS A UNIFIED VIEW OF PARAMETER-EFFICIENT TRANSFER LEARNING），一个在Adapter、Prefix Tuning和LoRA之间建立联系的统一方法。</p>
+<p>UniPELT（论文： UNIPELT: A Unified Framework for Parameter-Efficient Language Model Tuning）是 LoRA、Prefix Tuning和Adapter的门控组合。</p>
+<h2 id="LangChain"><a href="#LangChain" class="headerlink" title="LangChain"></a>LangChain</h2><p>LangChain 是一个用于构建由语言模型驱动的应用程序的框架。它的目标是让 LLM（大型语言模型）能够访问外部数据源、执行复杂任务链式逻辑，并具备决策能力。LangChain 支持多种模块组合，如提示模板、上下文管理、链式调用、文档问答、代理等。</p>
+<blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/harrymore/p/17547479.html">https://www.cnblogs.com/harrymore/p/17547479.html</a></p>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://docs.langchain.com/">https://docs.langchain.com/</a></p>
+</blockquote>
+<h3 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h3><h3 id="Prompt"><a href="#Prompt" class="headerlink" title="Prompt"></a>Prompt</h3><h4 id="PromptTemplate"><a href="#PromptTemplate" class="headerlink" title="PromptTemplate"></a>PromptTemplate</h4><p>LangChain 提供了 <code>PromptTemplate</code> 模块用于动态地构建提示词（Prompt）。它支持变量替换，让开发者能灵活构造提示语句。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line">template = PromptTemplate(</span><br><span class="line">    input_variables=[<span class="string">&quot;product&quot;</span>],</span><br><span class="line">    template=<span class="string">&quot;请为以下产品写一段广告文案：&#123;product&#125;&quot;</span></span><br><span class="line">)</span><br><span class="line">prompt = template.<span class="built_in">format</span>(product=<span class="string">&quot;智能手表&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="OutputParser"><a href="#OutputParser" class="headerlink" title="OutputParser"></a>OutputParser</h4><p>LangChain 提供了 <code>OutputParser</code> 用于从 LLM 的输出中提取结构化数据。例如提取 JSON、列表、关键字等。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.output_parsers <span class="keyword">import</span> StructuredOutputParser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例：定义一个输出结构的 parser，用于将结果变成结构化 JSON 数据</span></span><br></pre></td></tr></table></figure>
+<h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><p>常见 Memory 类型：</p>
+<ul>
+<li><code>ConversationBufferMemory</code>：记录整个对话内容</li>
+<li><code>ConversationSummaryMemory</code>：使用 LLM 总结对话历史</li>
+<li><code>ConversationTokenBufferMemory</code>：基于 token 限制记忆长度</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.memory <span class="keyword">import</span> ConversationBufferMemory</span><br><span class="line"></span><br><span class="line">memory = ConversationBufferMemory()</span><br></pre></td></tr></table></figure>
+<h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h3><p>Agent 是 LangChain 中实现 LLM 推理和决策的核心模块，支持动态选择工具（Tool）来完成多步任务。</p>
+<p>核心组件：</p>
+<ul>
+<li><strong>Agent</strong>：负责推理和调用工具</li>
+<li><strong>Tool</strong>：工具函数，如 Web 搜索、数据库查询、Python 计算等</li>
+<li><strong>LLM</strong>：驱动 Agent 的大脑</li>
+<li><strong>AgentExecutor</strong>：执行器，负责管理 Agent 的执行逻辑</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> load_tools, initialize_agent</span><br><span class="line"></span><br><span class="line">tools = load_tools([<span class="string">&quot;llm-math&quot;</span>, <span class="string">&quot;serpapi&quot;</span>], llm=llm)</span><br><span class="line">agent = initialize_agent(tools, llm, agent=<span class="string">&quot;zero-shot-react-description&quot;</span>, verbose=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">agent.run(<span class="string">&quot;明天下雨概率是多少？用数学工具帮我换算成百分比&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>常见 Agent 类型：</p>
+<ul>
+<li><strong>ZeroShotAgent</strong>：基于提示动态选择工具</li>
+<li><strong>ReActAgent</strong>：结合 reasoning + action 的提示策略</li>
+<li><strong>ChatAgent</strong>：用于多轮对话风格</li>
+</ul>
+<h3 id="Chain"><a href="#Chain" class="headerlink" title="Chain"></a>Chain</h3><p>Chain 是 LangChain 的核心概念之一，它表示一个或多个语言模型调用与其他组件的组合。</p>
+<p>类型：</p>
+<ol>
+<li><strong>SimpleChain</strong>：只有一个输入和输出</li>
+<li><strong>SequentialChain</strong>：多个步骤顺序执行，每个步骤的输出作为下一个步骤的输入</li>
+<li><strong>LLMChain</strong>：最常用的链类型，组合 PromptTemplate、LLM 和 OutputParser</li>
+<li><strong>RouterChain</strong>：根据输入内容选择不同子链进行处理</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> LLMChain</span><br><span class="line"><span class="keyword">from</span> langchain.llms <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line">llm = OpenAI()</span><br><span class="line">chain = LLMChain(llm=llm, prompt=template)</span><br><span class="line">response = chain.run(<span class="string">&quot;智能手表&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="QA-over-Documents"><a href="#QA-over-Documents" class="headerlink" title="QA over Documents"></a>QA over Documents</h3><p>LangChain 非常适合构建基于知识库的问答系统，其流程如下：</p>
+<h4 id="Chunking"><a href="#Chunking" class="headerlink" title="Chunking"></a>Chunking</h4><p>将长文档按段落或 token 限制拆分为小块（chunk），以避免输入超长。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> RecursiveCharacterTextSplitter</span><br><span class="line"></span><br><span class="line">splitter = RecursiveCharacterTextSplitter(chunk_size=<span class="number">500</span>, chunk_overlap=<span class="number">50</span>)</span><br><span class="line">chunks = splitter.split_text(document_text)</span><br></pre></td></tr></table></figure>
+<h4 id="Embedding-amp-Vector-Store"><a href="#Embedding-amp-Vector-Store" class="headerlink" title="Embedding &amp; Vector Store"></a>Embedding &amp; Vector Store</h4><p>使用 Embedding 模型（如 OpenAI、HuggingFace）将文本向量化，然后存入向量数据库（如 FAISS、Chroma、Pinecone）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.embeddings <span class="keyword">import</span> OpenAIEmbeddings</span><br><span class="line"><span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> FAISS</span><br><span class="line"></span><br><span class="line">embedding_model = OpenAIEmbeddings()</span><br><span class="line">db = FAISS.from_texts(chunks, embedding_model)</span><br></pre></td></tr></table></figure>
+<h4 id="Retrieval-QA-Chain"><a href="#Retrieval-QA-Chain" class="headerlink" title="Retrieval + QA Chain"></a>Retrieval + QA Chain</h4><p>使用向量检索获取相关 chunk，输入给 LLM，生成答案。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chains <span class="keyword">import</span> RetrievalQA</span><br><span class="line"></span><br><span class="line">retriever = db.as_retriever()</span><br><span class="line">qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)</span><br><span class="line">qa_chain.run(<span class="string">&quot;这篇文档主要讲了什么？&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="问答处理方式"><a href="#问答处理方式" class="headerlink" title="问答处理方式"></a>问答处理方式</h3><p>Stuff Method（塞入式）</p>
+<p>直接将所有相关文档的内容“塞”进 Prompt 里，适用于内容少、上下文短的场景。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># LLMChain + 文档组合直接生成 Prompt</span></span><br></pre></td></tr></table></figure>
+<p>MapReduce</p>
+<p>将所有 chunk 分别用 LLM 处理后，再用另一个 LLM 汇总（Reduce），类似 MapReduce 思维。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 文档切片 -&gt; 各片段生成回答（Map）-&gt; 汇总为最终答案（Reduce）</span></span><br></pre></td></tr></table></figure>
+<p>Refine</p>
+<p>初始文档回答一个粗略答案，接着逐步引入更多 chunk 来细化和完善答案。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初步回答 + 后续 refine，适合逐步深入处理</span></span><br></pre></td></tr></table></figure>
+<p>MapRerank</p>
+<p>类似 Map 方法，但最后不汇总所有回答，而是由 LLM 对每个回答打分，选择最优答案。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 多个回答 -&gt; 打分排序 -&gt; 返回最高分</span></span><br></pre></td></tr></table></figure>
+<h2 id="MCP"><a href="#MCP" class="headerlink" title="MCP"></a>MCP</h2><p>Model Context Protocol</p>
+<p>ref: <a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/introduction">https://modelcontextprotocol.io/introduction</a></p>
+<p>ref: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/29001189476">https://zhuanlan.zhihu.com/p/29001189476</a></p>
+<img src="/2025/03/19/LLM-Rela/v2-2bcd98f6541da0b6f14dc9082ee2dcda_1440w.jpg" class="" title="mcp">
+<p><a target="_blank" rel="noopener" href="https://github.com/modelcontextprotocol/python-sdk/tree/main/examples/clients/simple-chatbot/mcp_simple_chatbot">example</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># client </span></span><br><span class="line">   ... <span class="comment"># 省略了无关的代码</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">start</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="comment"># 初始化所有的 mcp server</span></span><br><span class="line">    <span class="keyword">for</span> server <span class="keyword">in</span> self.servers:</span><br><span class="line">        <span class="keyword">await</span> server.initialize()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取所有的 tools 命名为 all_tools</span></span><br><span class="line">    all_tools = []</span><br><span class="line">    <span class="keyword">for</span> server <span class="keyword">in</span> self.servers:</span><br><span class="line">        tools = <span class="keyword">await</span> server.list_tools()</span><br><span class="line">        all_tools.extend(tools)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将所有的 tools 的功能描述格式化成字符串供 LLM 使用</span></span><br><span class="line">    <span class="comment"># tool.format_for_llm() 我放到了这段代码最后，方便阅读。</span></span><br><span class="line">    tools_description = <span class="string">&quot;\n&quot;</span>.join(</span><br><span class="line">        [tool.format_for_llm() <span class="keyword">for</span> tool <span class="keyword">in</span> all_tools]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 这里就不简化了，以供参考，实际上就是基于 prompt 和当前所有工具的信息</span></span><br><span class="line">    <span class="comment"># 询问 LLM（Claude） 应该使用哪些工具。</span></span><br><span class="line">    system_message = (</span><br><span class="line">        <span class="string">&quot;You are a helpful assistant with access to these tools:\n\n&quot;</span></span><br><span class="line">        <span class="string">f&quot;<span class="subst">&#123;tools_description&#125;</span>\n&quot;</span></span><br><span class="line">        <span class="string">&quot;Choose the appropriate tool based on the user&#x27;s question. &quot;</span></span><br><span class="line">        <span class="string">&quot;If no tool is needed, reply directly.\n\n&quot;</span></span><br><span class="line">        <span class="string">&quot;IMPORTANT: When you need to use a tool, you must ONLY respond with &quot;</span></span><br><span class="line">        <span class="string">&quot;the exact JSON object format below, nothing else:\n&quot;</span></span><br><span class="line">        <span class="string">&quot;&#123;\n&quot;</span></span><br><span class="line">        <span class="string">&#x27;    &quot;tool&quot;: &quot;tool-name&quot;,\n&#x27;</span></span><br><span class="line">        <span class="string">&#x27;    &quot;arguments&quot;: &#123;\n&#x27;</span></span><br><span class="line">        <span class="string">&#x27;        &quot;argument-name&quot;: &quot;value&quot;\n&#x27;</span></span><br><span class="line">        <span class="string">&quot;    &#125;\n&quot;</span></span><br><span class="line">        <span class="string">&quot;&#125;\n\n&quot;</span></span><br><span class="line">        <span class="string">&quot;After receiving a tool&#x27;s response:\n&quot;</span></span><br><span class="line">        <span class="string">&quot;1. Transform the raw data into a natural, conversational response\n&quot;</span></span><br><span class="line">        <span class="string">&quot;2. Keep responses concise but informative\n&quot;</span></span><br><span class="line">        <span class="string">&quot;3. Focus on the most relevant information\n&quot;</span></span><br><span class="line">        <span class="string">&quot;4. Use appropriate context from the user&#x27;s question\n&quot;</span></span><br><span class="line">        <span class="string">&quot;5. Avoid simply repeating the raw data\n\n&quot;</span></span><br><span class="line">        <span class="string">&quot;Please use only the tools that are explicitly defined above.&quot;</span></span><br><span class="line">    )</span><br><span class="line">    messages = [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: system_message&#125;]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># Final... 假设这里已经处理了用户消息输入.</span></span><br><span class="line">        messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: user_input&#125;)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将 system_message 和用户消息输入一起发送给 LLM</span></span><br><span class="line">        llm_response = self.llm_client.get_response(messages)</span><br><span class="line"></span><br><span class="line">    ... <span class="comment"># 后面和确定使用哪些工具无关</span></span><br><span class="line">    </span><br><span class="line"><span class="comment"># server</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Tool</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Represents a tool with its properties and formatting.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self, name: <span class="built_in">str</span>, description: <span class="built_in">str</span>, input_schema: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]</span></span><br><span class="line"><span class="params">    </span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        self.name: <span class="built_in">str</span> = name</span><br><span class="line">        self.description: <span class="built_in">str</span> = description</span><br><span class="line">        self.input_schema: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>] = input_schema</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 把工具的名字 / 工具的用途（description）和工具所需要的参数（args_desc）转化为文本</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">format_for_llm</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Format tool information for LLM.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            A formatted string describing the tool.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        args_desc = []</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;properties&quot;</span> <span class="keyword">in</span> self.input_schema:</span><br><span class="line">            <span class="keyword">for</span> param_name, param_info <span class="keyword">in</span> self.input_schema[<span class="string">&quot;properties&quot;</span>].items():</span><br><span class="line">                arg_desc = (</span><br><span class="line">                    <span class="string">f&quot;- <span class="subst">&#123;param_name&#125;</span>: <span class="subst">&#123;param_info.get(<span class="string">&#x27;description&#x27;</span>, <span class="string">&#x27;No description&#x27;</span>)&#125;</span>&quot;</span></span><br><span class="line">                )</span><br><span class="line">                <span class="keyword">if</span> param_name <span class="keyword">in</span> self.input_schema.get(<span class="string">&quot;required&quot;</span>, []):</span><br><span class="line">                    arg_desc += <span class="string">&quot; (required)&quot;</span></span><br><span class="line">                args_desc.append(arg_desc)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Tool: <span class="subst">&#123;self.name&#125;</span></span></span><br><span class="line"><span class="string">Description: <span class="subst">&#123;self.description&#125;</span></span></span><br><span class="line"><span class="string">Arguments:</span></span><br><span class="line"><span class="string"><span class="subst">&#123;<span class="built_in">chr</span>(<span class="number">10</span>).join(args_desc)&#125;</span></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Reinforce-Learning"><a href="#Reinforce-Learning" class="headerlink" title="Reinforce Learning"></a>Reinforce Learning</h2><h3 id="LLM-PPO"><a href="#LLM-PPO" class="headerlink" title="LLM-PPO"></a>LLM-PPO</h3><p>状态空间：模型输入prompt</p>
+<p>动作空间：模型输出output</p>
+<p>Actor：SFT后的LLM网络，进行更新</p>
+<p>Critic：Value网络，进行更新</p>
+<blockquote>
+<p>Reward网络在RM过程中训练完成，基于SFT Model（移除最后一层softmax，替换为线性层），输出为scalar reward，表示<strong>对完整输出序列的整体评价</strong>；</p>
+<p>Reference网络为SFT Model；</p>
+<p>在RL-PPO过程中这两个网络不更新</p>
+</blockquote>
+<img src="/2025/03/19/LLM-Rela/image-20250325131654259.png" class="" title="image-20250325131654259">
+<p>SFT LLM</p>
+<p>train Reward Model</p>
+<img src="/2025/03/19/LLM-Rela/image-20250325151928459.png" class="" title="image-20250325151928459">
+<p>use LLM_sft to be the Actor(reference model)</p>
+<img src="/2025/03/19/LLM-Rela/image-20250325153214542.png" class="" title="image-20250325153214542">
+<img src="/2025/03/19/LLM-Rela/image-20250325153304648.png" class="" title="image-20250325153304648">
+<img src="/2025/03/19/LLM-Rela/image-20250325153337812.png" class="" title="image-20250325153337812">
+<blockquote>
+<p>广义优势A^t为多步时序差分的指数加权平均，详见reinforce-learning-record，参数含Value值和Reward值</p>
+</blockquote>
+<p><strong>为什么引入KL散度项？</strong></p>
+<p>This KL term serves two purposes. First, it acts as an entropy bonus, encouraging the policy to explore and deterring it from collapsing to a single mode. Second, it ensures the policy doesn’t learn to produce outputs that are too different from those that the reward model has seen during training.</p>
+<h3 id="LLM-GRPO"><a href="#LLM-GRPO" class="headerlink" title="LLM-GRPO"></a>LLM-GRPO</h3><img src="/2025/03/19/LLM-Rela/image-20250325195333997.png" class="" title="image-20250325195333997">
+<p>由于PPO算法中使用的价值函数通常是与策略模型规模相当的另一个模型，这会带来巨大的内存和计算负担。此外，在强化学习训练过程中，价值函数被作为计算优势函数（advantage）的基线以实现方差缩减。然而在大型语言模型（LLM）场景中，通常只有最后一个token会被奖励模型分配奖励分数，这可能导致对每个token都精确建模价值函数的训练变得复杂。为解决这一问题，如图4所示，我们提出了组相对策略优化（Group Relative Policy Optimization, GRPO）</p>
+<p>每一个 o_g 为策略模型对于输入 q 的输出，每一个 r_g 为 RM 对 每一个 o_g 的评分</p>
+<img src="/2025/03/19/LLM-Rela/image-20250325201341810.png" class="" title="image-20250325201341810">
+<p>不同点：</p>
+<ol>
+<li><p>优势函数：过程监督与结果监督</p>
+<img src="/2025/03/19/LLM-Rela/image-20250325202638658.png" class="" title="image-20250325202638658">
+</li>
+<li><p>超参数ε控制策略更新幅度，β调节KL散度约束</p>
+</li>
+</ol>
+<img src="/2025/03/19/LLM-Rela/image-20250325201533207.png" class="" title="image-20250325201533207">
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python-Pytorch/" rel="tag"># Python, Pytorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/02/19/Computer-Network/" rel="prev" title="Computer-Network">
+      <i class="fa fa-chevron-left"></i> Computer-Network
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/03/28/Netty/" rel="next" title="Netty">
+      Netty <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LLM-amp-Rela"><span class="nav-text">LLM&amp;Rela</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Prompt-Engineering"><span class="nav-text">Prompt Engineering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zero-Shot-Prompting"><span class="nav-text">Zero-Shot Prompting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Few-Shot-Prompting"><span class="nav-text">Few-Shot Prompting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Chain-of-Thought-CoT-Prompting"><span class="nav-text">Chain-of-Thought (CoT) Prompting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Self-Consistency-Prompting"><span class="nav-text">Self-Consistency Prompting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Retrieval-Augmented-Generation-RAG"><span class="nav-text">Retrieval-Augmented Generation (RAG)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-base"><span class="nav-text">LLM-base</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B%E4%B8%8E%E6%96%B9%E5%B7%AE"><span class="nav-text">期望与方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E6%96%B9%E5%B7%AE"><span class="nav-text">协方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-text">激活函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-text">优化算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">随机梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E6%89%B9%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">小批量梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Adam"><span class="nav-text">Adam</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1-amp-%E7%88%86%E7%82%B8"><span class="nav-text">梯度消失&amp;爆炸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96-amp-%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-text">正则化&amp;归一化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E9%81%93"><span class="nav-text">通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mask"><span class="nav-text">Mask</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LSTM"><span class="nav-text">LSTM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B"><span class="nav-text">自回归模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-struc"><span class="nav-text">LLM-struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoder-amp-Decoder"><span class="nav-text">Encoder&amp;Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tokenization"><span class="nav-text">Tokenization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Positional-Encoding"><span class="nav-text">Positional Encoding</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RoPE"><span class="nav-text">RoPE</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Muti-Head-Attention"><span class="nav-text">Muti-Head Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">自注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">交叉注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%A4%B4%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">多头注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="nav-text">相关问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Layer-Norm"><span class="nav-text">Layer Norm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ResNet"><span class="nav-text">ResNet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FFN"><span class="nav-text">FFN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-Train"><span class="nav-text">LLM-Train</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensor-Parallelism"><span class="nav-text">Tensor Parallelism</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BF16-amp-FP16"><span class="nav-text">BF16&amp;FP16</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-Inference"><span class="nav-text">LLM-Inference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Temperature"><span class="nav-text">Temperature</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Top-K-Sampling"><span class="nav-text">Top-K Sampling</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fine-Tuning"><span class="nav-text">Fine-Tuning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BitFit-Prefix-Tuning-amp-Prompt-Tuning"><span class="nav-text">BitFit, Prefix Tuning &amp; Prompt Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P-Tuning"><span class="nav-text">P-Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapter-Tuning"><span class="nav-text">Adapter Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LoRA"><span class="nav-text">LoRA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MAM-Adapter-amp-UniPELT"><span class="nav-text">MAM Adapter &amp; UniPELT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LangChain"><span class="nav-text">LangChain</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Model"><span class="nav-text">Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prompt"><span class="nav-text">Prompt</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PromptTemplate"><span class="nav-text">PromptTemplate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OutputParser"><span class="nav-text">OutputParser</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory"><span class="nav-text">Memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index"><span class="nav-text">Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Agent"><span class="nav-text">Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Chain"><span class="nav-text">Chain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QA-over-Documents"><span class="nav-text">QA over Documents</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Chunking"><span class="nav-text">Chunking</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Embedding-amp-Vector-Store"><span class="nav-text">Embedding &amp; Vector Store</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrieval-QA-Chain"><span class="nav-text">Retrieval + QA Chain</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E7%AD%94%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="nav-text">问答处理方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP"><span class="nav-text">MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reinforce-Learning"><span class="nav-text">Reinforce Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-PPO"><span class="nav-text">LLM-PPO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-GRPO"><span class="nav-text">LLM-GRPO</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="marigo1d"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">marigo1d</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/marigo1d" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marigo1d" rel="noopener" target="_blank">GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">marigo1d</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">413k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">12:30</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
