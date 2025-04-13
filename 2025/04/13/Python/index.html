@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"marigo1d.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python">
+<meta property="og:url" content="https://marigo1d.github.io/2025/04/13/Python/index.html">
+<meta property="og:site_name" content="Marigold">
+<meta property="og:description" content="Python">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-04-13T05:41:46.000Z">
+<meta property="article:modified_time" content="2025-04-13T07:03:24.815Z">
+<meta property="article:author" content="marigo1d">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://marigo1d.github.io/2025/04/13/Python/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Python | Marigold</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Marigold</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Salt, Pepper and Birds~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://marigo1d.github.io/2025/04/13/Python/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="marigo1d">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Marigold">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-04-13 13:41:46 / Modified: 15:03:24" itemprop="dateCreated datePublished" datetime="2025-04-13T13:41:46+08:00">2025-04-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>8.6k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>16 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Python</p>
+<span id="more"></span>
+<h1>Python</h1>
+<h2 id="关键字">关键字</h2>
+<h3 id="冒号">冒号</h3>
+<p><strong>切片操作（Slice）</strong></p>
+<p>冒号用于分隔切片参数的起始、结束和步长。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">&quot;Hello, Python&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 基本切片</span></span><br><span class="line"><span class="built_in">print</span>(s[<span class="number">2</span>:<span class="number">5</span>])   <span class="comment"># 输出 &quot;llo&quot;（索引 2 到 5-1）</span></span><br><span class="line"><span class="built_in">print</span>(s[:<span class="number">3</span>])    <span class="comment"># 输出 &quot;Hel&quot;（从开头到索引 3-1）</span></span><br><span class="line"><span class="built_in">print</span>(s[<span class="number">7</span>:])    <span class="comment"># 输出 &quot;Python&quot;（从索引 7 到末尾）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步长切片</span></span><br><span class="line"><span class="built_in">print</span>(s[::<span class="number">2</span>])   <span class="comment"># 输出 &quot;Hlo yhn&quot;（每隔一个字符取一次）</span></span><br><span class="line"><span class="built_in">print</span>(s[::-<span class="number">1</span>])  <span class="comment"># 输出 &quot;nohtyP ,olleH&quot;（逆序）</span></span><br></pre></td></tr></table></figure>
+<br>
+<p><strong>lambda 函数参数与主体分隔</strong></p>
+<p>冒号分隔 lambda 函数的参数和表达式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">square = <span class="keyword">lambda</span> x: x ** <span class="number">2</span>  <span class="comment"># 冒号前是参数，后是表达式</span></span><br><span class="line"><span class="built_in">print</span>(square(<span class="number">5</span>))  <span class="comment"># 输出 25</span></span><br></pre></td></tr></table></figure>
+<br>
+<p><strong>类型注解（Type Hints）</strong></p>
+<p>Python 3.5+ 中，冒号用于分隔变量名和类型注解。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">a: <span class="built_in">int</span>, b: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:  <span class="comment"># 参数后冒号分隔类型</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br></pre></td></tr></table></figure>
+<br>
+<h3 id="索引">索引</h3>
+<p>正索引从0开始，负索引从-1开始</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">my_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(my_list[<span class="number">0</span>])  <span class="comment"># 输出: &quot;a&quot;（第1个元素）</span></span><br><span class="line"><span class="built_in">print</span>(my_list[<span class="number">1</span>])  <span class="comment"># 输出: &quot;b&quot;（第2个元素）</span></span><br><span class="line"><span class="built_in">print</span>(my_list[-<span class="number">1</span>]) <span class="comment"># 输出: &quot;d&quot;（倒数第1个元素，负索引从-1开始）</span></span><br></pre></td></tr></table></figure>
+<br>
+<br>
+<h2 id="Pytorch">Pytorch</h2>
+<h3 id="常用函数">常用函数</h3>
+<br>
+<p><code>.view()</code> - 改变张量形状（不改变数据）</p>
+<p><strong>作用</strong>：重新排列张量的维度，类似于NumPy的<code>reshape</code></p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>
+<p>不改变原始数据，只改变&quot;视图&quot;</p>
+</li>
+<li>
+<p>内存中逐个元素的重排</p>
+</li>
+<li>
+<p>总元素数必须保持不变（各维度乘积相同）</p>
+</li>
+</ul>
+<p><strong>例子</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个1x6的张量</span></span><br><span class="line">x = torch.tensor([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line"><span class="built_in">print</span>(x.shape)  <span class="comment"># torch.Size([1, 6])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重塑为2x3</span></span><br><span class="line">y = x.view(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="built_in">print</span>(y)</span><br><span class="line"><span class="comment"># tensor([[1, 2, 3],</span></span><br><span class="line"><span class="comment">#         [4, 5, 6]])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重塑为3x2</span></span><br><span class="line">z = x.view(<span class="number">3</span>, <span class="number">2</span>)</span><br><span class="line"><span class="built_in">print</span>(z)</span><br><span class="line"><span class="comment"># tensor([[1, 2],</span></span><br><span class="line"><span class="comment">#         [3, 4],</span></span><br><span class="line"><span class="comment">#         [5, 6]])</span></span><br><span class="line">q = self.linear_q(x).view(batch_size, -<span class="number">1</span>, self.heads, self.d_k) </span><br><span class="line"><span class="comment">#  -1 是一个特殊值，表示自动推断该维度的大小，它的作用是让PyTorch根据张量的总元素数量和其他已知维度的大小，自动计算 -1 所在维度的具体值。</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：如果尝试<code>x.view(4, 2)</code>会报错，因为1×6 ≠ 4×2</p>
+<br>
+<p><code>.transpose()</code> - 交换两个维度</p>
+<p><strong>作用</strong>：交换指定的两个维度<br>
+<strong>特点</strong>：</p>
+<ul>
+<li>
+<p>常用于矩阵转置（交换最后两个维度）</p>
+</li>
+<li>
+<p>比<code>.permute()</code>更轻量（只能交换两个维度）</p>
+</li>
+</ul>
+<p><strong>例子</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个2x3的张量</span></span><br><span class="line">x = torch.tensor([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">                  [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line"><span class="built_in">print</span>(x.shape)  <span class="comment"># torch.Size([2, 3])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 转置为3x2</span></span><br><span class="line">y = x.transpose(<span class="number">0</span>, <span class="number">1</span>)  <span class="comment"># 交换第0和第1维度</span></span><br><span class="line"><span class="built_in">print</span>(y)</span><br><span class="line"><span class="comment"># tensor([[1, 4],</span></span><br><span class="line"><span class="comment">#         [2, 5],</span></span><br><span class="line"><span class="comment">#         [3, 6]])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在多头注意力中的典型用法</span></span><br><span class="line">q = torch.randn(<span class="number">2</span>, <span class="number">10</span>, <span class="number">4</span>, <span class="number">8</span>)  <span class="comment"># (batch, seq_len, heads, d_k)</span></span><br><span class="line">q = q.transpose(<span class="number">1</span>, <span class="number">2</span>)          <span class="comment"># 变为 (batch, heads, seq_len, d_k)</span></span><br></pre></td></tr></table></figure>
+<br>
+<p><code>.matmul()</code> - 矩阵乘法</p>
+<p><strong>作用</strong>：执行矩阵乘法（支持广播）<br>
+<strong>特点</strong>：</p>
+<ul>
+<li>比<code>torch.mm()</code>更通用（支持高维张量）</li>
+<li>自动处理批量维度（非常适合神经网络）</li>
+</ul>
+<p><strong>例子</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 矩阵乘法（2D）</span></span><br><span class="line">a = torch.tensor([[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>]])  <span class="comment"># 2x2</span></span><br><span class="line">b = torch.tensor([[<span class="number">5</span>, <span class="number">6</span>], [<span class="number">7</span>, <span class="number">8</span>]])  <span class="comment"># 2x2</span></span><br><span class="line">c = torch.matmul(a, b)</span><br><span class="line"><span class="built_in">print</span>(c)</span><br><span class="line"><span class="comment"># tensor([[19, 22],</span></span><br><span class="line"><span class="comment">#         [43, 50]])</span></span><br><span class="line"><span class="comment"># 计算过程：</span></span><br><span class="line"><span class="comment"># 1*5 + 2*7 = 19 | 1*6 + 2*8 = 22</span></span><br><span class="line"><span class="comment"># 3*5 + 4*7 = 43 | 3*6 + 4*8 = 50</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 批量矩阵乘法（3D）</span></span><br><span class="line">q = torch.randn(<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>)  <span class="comment"># 3个5x7矩阵</span></span><br><span class="line">k = torch.randn(<span class="number">3</span>, <span class="number">7</span>, <span class="number">2</span>)  <span class="comment"># 3个7x2矩阵</span></span><br><span class="line">out = torch.matmul(q, k)   <span class="comment"># 结果为3个5x2矩阵</span></span><br><span class="line"><span class="built_in">print</span>(out.shape)  <span class="comment"># torch.Size([3, 5, 2])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在注意力机制中的应用</span></span><br><span class="line">score = torch.matmul(q, k.transpose(-<span class="number">2</span>, -<span class="number">1</span>))  <span class="comment"># 计算Q和K的点积</span></span><br><span class="line"><span class="comment"># q形状: (batch, seq_len_q, d_k)</span></span><br><span class="line"><span class="comment"># k形状: (batch, seq_len_k, d_k)</span></span><br><span class="line"><span class="comment"># 结果: (batch, seq_len_q, seq_len_k)</span></span><br></pre></td></tr></table></figure>
+<br>
+<br>
+<h3 id="计算图">计算图</h3>
+<p>代码</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">x</span> = <span class="number">2.0</span></span><br><span class="line"><span class="attr">w</span> = <span class="number">3.0</span></span><br><span class="line"><span class="attr">b</span> = <span class="number">1.0</span></span><br><span class="line"></span><br><span class="line"><span class="attr">z</span> = w * x + b</span><br><span class="line"><span class="attr">a</span> = ReLU(z)</span><br><span class="line"><span class="attr">L</span> = (a - <span class="number">5</span>)^<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>完整的计算图如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">w (Tensor) --&gt; MulBackward0 (w*x)</span><br><span class="line">x (Tensor) --&gt; MulBackward0 (w*x)</span><br><span class="line">(w*x) --&gt; AddBackward0 (z = w*x + b)</span><br><span class="line">b (Tensor) --&gt; AddBackward0 (z = w*x + b)</span><br><span class="line">z --&gt; ReluBackward0 (a = relu(z))</span><br><span class="line">a --&gt; PowBackward0 (L = (a-5)^2)</span><br></pre></td></tr></table></figure>
+<br>
+<p>每一层参数（如权重 <code>w</code>, 偏置 <code>b</code>）的梯度会保存在对应的Tensor张量对象中的 <code>.grad</code> 属性里。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="comment"># 定义叶子节点（需要梯度）</span></span><br><span class="line">w = torch.tensor([<span class="number">3.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">1.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 前向传播（构建计算图）</span></span><br><span class="line">x = torch.tensor([<span class="number">2.0</span>])</span><br><span class="line">y = w * x + b      <span class="comment"># y.grad_fn = AddBackward0</span></span><br><span class="line">loss = (y - <span class="number">5</span>)**<span class="number">2</span>  <span class="comment"># loss.grad_fn = PowBackward0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义优化器（绑定需要更新的参数）</span></span><br><span class="line">optimizer = optim.SGD([w, b], lr=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 前向传播（构建计算图）</span></span><br><span class="line">y = w * x + b</span><br><span class="line">loss = (y - <span class="number">5</span>)**<span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看梯度</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n反向传播前：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;叶子节点：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;w.grad_fn = <span class="subst">&#123;w.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b.grad_fn = <span class="subst">&#123;b.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;w.grad = <span class="subst">&#123;w.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b.grad = <span class="subst">&#123;b.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n中间节点：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;y.grad_fn = <span class="subst">&#123;y.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;loss.grad_fn = <span class="subst">&#123;loss.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;y.grad = <span class="subst">&#123;y.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;loss.grad = <span class="subst">&#123;loss.grad&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 反向传播（计算梯度）</span></span><br><span class="line">loss.backward()  <span class="comment"># 计算 w.grad 和 b.grad</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看梯度</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n反向传播后：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;叶子节点：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;w.grad_fn = <span class="subst">&#123;w.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b.grad_fn = <span class="subst">&#123;b.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;w.grad = <span class="subst">&#123;w.grad&#125;</span>&quot;</span>)  <span class="comment"># tensor([4.])</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b.grad = <span class="subst">&#123;b.grad&#125;</span>&quot;</span>)  <span class="comment"># tensor([2.])</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n中间节点：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;y.grad_fn = <span class="subst">&#123;y.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;loss.grad_fn = <span class="subst">&#123;loss.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;y.grad = <span class="subst">&#123;y.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;loss.grad = <span class="subst">&#123;loss.grad&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 优化器更新参数</span></span><br><span class="line">optimizer.step()  <span class="comment"># w = w - lr * w.grad, b = b - lr * b.grad</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n优化器更新后：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;叶子节点：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;w.grad_fn = <span class="subst">&#123;w.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b.grad_fn = <span class="subst">&#123;b.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;w.grad = <span class="subst">&#123;w.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b.grad = <span class="subst">&#123;b.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n中间节点：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;y.grad_fn = <span class="subst">&#123;y.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;loss.grad_fn = <span class="subst">&#123;loss.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;y.grad = <span class="subst">&#123;y.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;loss.grad = <span class="subst">&#123;loss.grad&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清空梯度（避免下次迭代梯度累积）</span></span><br><span class="line">optimizer.zero_grad()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n清空梯度后：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;叶子节点：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;w.grad_fn = <span class="subst">&#123;w.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b.grad_fn = <span class="subst">&#123;b.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;w.grad = <span class="subst">&#123;w.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b.grad = <span class="subst">&#123;b.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n中间节点：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;y.grad_fn = <span class="subst">&#123;y.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;loss.grad_fn = <span class="subst">&#123;loss.grad_fn&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;y.grad = <span class="subst">&#123;y.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;loss.grad = <span class="subst">&#123;loss.grad&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n更新后参数：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;w = <span class="subst">&#123;w&#125;</span>&quot;</span>)  <span class="comment"># tensor([2.9600], requires_grad=True)</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b = <span class="subst">&#123;b&#125;</span>&quot;</span>)  <span class="comment"># tensor([0.9800], requires_grad=True)</span></span><br></pre></td></tr></table></figure>
+<p><code>next_functions</code> 是一个 tuple，里面的元素代表了 <code>MulBackward0</code> 的 <strong>输入函数</strong>（上游节点）</p>
+<p>PyTorch 中每个计算节点的 <code>grad_fn</code> 是计算图的一部分，它通过 <code>.next_functions</code> 连接上游节点，并在 <code>grad_fn.next_functions._saved_results</code> 中保存前向传播需要的中间变量，反向传播时依此自动计算梯度。</p>
+<blockquote>
+<p>在 PyTorch 中，<strong>计算图的清理（Graph Cleanup）</strong> 指的是在反向传播完成后，系统自动释放计算图占用的内存，以避免不必要的资源占用。这包括：</p>
+<ol>
+<li><strong>删除中间变量的梯度计算函数（<code>grad_fn</code>）</strong>
+<ul>
+<li>在反向传播完成后，PyTorch 会自动销毁计算图（除非显式指定 <code>retain_graph=True</code>）。</li>
+<li>这意味着所有中间变量（如 <code>z2</code>、<code>a</code>）的 <code>grad_fn</code> 会被置为 <code>None</code>，从而断开计算图的链接。</li>
+</ul>
+</li>
+<li><strong>释放梯度缓冲区（<code>.grad</code>）</strong>
+<ul>
+<li>叶子节点（如 <code>w</code>、<code>x</code>、<code>a</code>、<code>b</code>）的梯度（<code>.grad</code>）仍然会保留，除非手动调用 <code>optimizer.zero_grad()</code> 或 <code>tensor.grad = None</code>。</li>
+</ul>
+</li>
+<li><strong>计算图的内存回收</strong>
+<ul>
+<li>PyTorch 的自动微分引擎（Autograd）会释放计算图占用的内存，避免内存泄漏。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<h2 id="实例">实例</h2>
+<h3 id="手写Ttransformer">手写Ttransformer</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MultiHeadAttention</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_dim, num_heads, d_model, dropout=<span class="number">0.1</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            input_dim: 输入维度</span></span><br><span class="line"><span class="string">            num_heads: 注意力头的数量</span></span><br><span class="line"><span class="string">            d_model: 模型维度（必须能被num_heads整除）</span></span><br><span class="line"><span class="string">            dropout: dropout概率</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="keyword">assert</span> d_model % num_heads == <span class="number">0</span>, <span class="string">&quot;d_model must be divisible by num_heads&quot;</span></span><br><span class="line"></span><br><span class="line">        self.d_model = d_model</span><br><span class="line">        self.num_heads = num_heads</span><br><span class="line">        self.d_k = d_model // num_heads</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 定义Q、K、V的线性变换层</span></span><br><span class="line">        self.linear_q = nn.Linear(input_dim, d_model)</span><br><span class="line">        self.linear_k = nn.Linear(input_dim, d_model)</span><br><span class="line">        self.linear_v = nn.Linear(input_dim, d_model)</span><br><span class="line">        <span class="comment"># # 合并QKV的线性变换层，减少矩阵乘法次数</span></span><br><span class="line">        <span class="comment"># self.qkv_proj = nn.Linear(input_dim, 3 * d_model)</span></span><br><span class="line">        self.dropout = nn.Dropout(dropout)</span><br><span class="line">        self.scale = <span class="number">1.0</span> / math.sqrt(self.d_k)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 输出线性层</span></span><br><span class="line">        self.out = nn.Linear(d_model, d_model)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, mask=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        前向传播</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            x: 输入张量，形状为(batch_size, seq_len, input_dim)</span></span><br><span class="line"><span class="string">            mask: 可选掩码，形状为(batch_size, 1, seq_len, seq_len)或(1, 1, seq_len, seq_len)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            输出张量，形状与输入相同(batch_size, seq_len, d_model)</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        batch_size, seq_len, _ = x.shape</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 线性变换并分头处理</span></span><br><span class="line">        <span class="comment"># 形状变化: (batch, seq_len, input_dim) -&gt; (batch, seq_len, heads, d_k)</span></span><br><span class="line">        q = self.linear_q(x).view(batch_size, seq_len, self.num_heads, self.d_k)</span><br><span class="line">        k = self.linear_k(x).view(batch_size, seq_len, self.num_heads, self.d_k)</span><br><span class="line">        v = self.linear_v(x).view(batch_size, seq_len, self.num_heads, self.d_k)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 转置维度，使形状变为(batch, heads, seq_len, d_k)</span></span><br><span class="line">        q = q.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        k = k.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        v = v.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># # 一次性计算QKV</span></span><br><span class="line">        <span class="comment"># qkv = self.qkv_proj(x)</span></span><br><span class="line">        <span class="comment"># qkv = qkv.view(batch_size, seq_len, 3, self.num_heads, self.d_k)</span></span><br><span class="line">        <span class="comment"># q, k, v = qkv.unbind(2)  # 形状均为(batch_size, seq_len, num_heads, d_k), 表示沿着第3个维度（索引从0开始）拆分张量</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># # 转置维度 (batch_size, num_heads, seq_len, d_k)</span></span><br><span class="line">        <span class="comment"># q = q.transpose(1, 2)</span></span><br><span class="line">        <span class="comment"># k = k.transpose(1, 2)</span></span><br><span class="line">        <span class="comment"># v = v.transpose(1, 2)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算注意力分数 (batch_size, num_heads, seq_len, seq_len)</span></span><br><span class="line">        scores = torch.matmul(q, k.transpose(-<span class="number">2</span>, -<span class="number">1</span>)) * self.scale</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 应用掩码（如果有）</span></span><br><span class="line">        <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            scores = scores.masked_fill(mask == <span class="number">0</span>, <span class="built_in">float</span>(<span class="string">&#x27;-inf&#x27;</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算注意力权重</span></span><br><span class="line">        att = torch.softmax(scores, dim=-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">if</span> self.dropout <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            att = self.dropout(att)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 应用注意力权重到V上</span></span><br><span class="line">        output = torch.matmul(att, v)  <span class="comment"># (batch_size, num_heads, seq_len, d_k)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 拼接多头结果</span></span><br><span class="line">        output = output.transpose(<span class="number">1</span>, <span class="number">2</span>).contiguous()  <span class="comment"># (batch_size, seq_len, num_heads, d_k)</span></span><br><span class="line">        output = output.view(batch_size, seq_len, self.d_model)  <span class="comment"># (batch_size, seq_len, d_model)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 最终线性变换</span></span><br><span class="line">        output = self.out(output)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># 测试代码</span></span><br><span class="line">    batch = <span class="number">2</span></span><br><span class="line">    seq_len = <span class="number">5</span></span><br><span class="line">    input_dim = <span class="number">32</span></span><br><span class="line">    num_heads = <span class="number">2</span></span><br><span class="line">    d_model = <span class="number">32</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建随机输入</span></span><br><span class="line">    x = torch.randn(size=(batch, seq_len, input_dim))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 初始化多头注意力层</span></span><br><span class="line">    attention = MultiHeadAttention(input_dim, num_heads, d_model)</span><br><span class="line">    <span class="built_in">print</span>(attention(x).shape)  <span class="comment"># 输出形状应为(batch, seq_len, d_model)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建下三角掩码（用于解码器自注意力）</span></span><br><span class="line">    attention_mask = torch.tril(torch.ones(seq_len, seq_len)).view(<span class="number">1</span>, <span class="number">1</span>, seq_len, seq_len)</span><br><span class="line">    attention_mask = attention_mask.to(dtype=torch.float32)</span><br><span class="line">    attention_mask = (attention_mask == <span class="number">0</span>)  <span class="comment"># 转换为布尔掩码</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(attention_mask)  <span class="comment"># 打印掩码</span></span><br><span class="line">    <span class="built_in">print</span>(attention(x, attention_mask).shape)  <span class="comment"># 带掩码的输出形状</span></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/04/02/Paper-Reading-Record/" rel="prev" title="Paper-Reading-Record">
+      <i class="fa fa-chevron-left"></i> Paper-Reading-Record
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Python</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%92%E5%8F%B7"><span class="nav-text">冒号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch"><span class="nav-text">Pytorch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-text">常用函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%9B%BE"><span class="nav-text">计算图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%86%99Ttransformer"><span class="nav-text">手写Ttransformer</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="marigo1d"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">marigo1d</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/marigo1d" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marigo1d" rel="noopener" target="_blank">GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">marigo1d</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">419k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">12:41</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
