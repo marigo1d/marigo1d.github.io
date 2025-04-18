@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"marigo1d.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Search, Advertising, Recommendation与相关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SAR&amp;Rela">
+<meta property="og:url" content="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/index.html">
+<meta property="og:site_name" content="Marigold">
+<meta property="og:description" content="Search, Advertising, Recommendation与相关">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/1672042316018-1bf99117-9105-4290-9997-5fd589d5ba94.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/1672042315791-5bfc7658-6112-4537-8a28-4d1085472232.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/1672042316812-3bce2474-8eda-48cb-aa80-6f58bb78b238.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/1672042316930-512c4448-5964-4bf2-9309-419cd3a16db5.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/1672042317078-7e47cf8c-e659-4582-8ea5-4b131b39913f.png">
+<meta property="article:published_time" content="2025-04-16T06:30:30.000Z">
+<meta property="article:modified_time" content="2025-04-18T09:22:39.231Z">
+<meta property="article:author" content="marigo1d">
+<meta property="article:tag" content="Python, LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/1672042316018-1bf99117-9105-4290-9997-5fd589d5ba94.png">
+
+<link rel="canonical" href="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>SAR&Rela | Marigold</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Marigold</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Salt, Pepper and Birds~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="marigo1d">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Marigold">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SAR&Rela
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-04-16 14:30:30" itemprop="dateCreated datePublished" datetime="2025-04-16T14:30:30+08:00">2025-04-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-04-18 17:22:39" itemprop="dateModified" datetime="2025-04-18T17:22:39+08:00">2025-04-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SAR/" itemprop="url" rel="index"><span itemprop="name">SAR</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>3.9k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>7 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Search, Advertising, Recommendation与相关</p>
+<span id="more"></span>
+<h1>SAR&amp;Rela</h1>
+<br>
+<h2 id="离散特征处理">离散特征处理</h2>
+<h3 id="离散特征">离散特征</h3>
+<p>离散特征案例：</p>
+<ul>
+<li>性别：男、女两种类别</li>
+<li>国籍：中国、美国、印度等 200 个国家</li>
+<li>英文单词：常见的英文单词有几万个</li>
+</ul>
+<p>离散特征向量化</p>
+<ul>
+<li>one-hot：超高维稀疏 - 球面</li>
+<li>分词器：单维稠密 - 坐标轴</li>
+<li>embedding</li>
+</ul>
+<br>
+<h3 id="矩阵补充">矩阵补充</h3>
+<p>在实践中不使用！！</p>
+<p>用于实际物品数量庞大，可暴露给用户的物品量极少（绿色为暴露给用户的，灰色为没有曝光的），矩阵补充用于训练网络预测未暴露给用户的，用户对物品的兴趣度（格子中的值为兴趣度）</p>
+<img src="/2025/04/16/Search-Ads-Rec-Rela/1672042316018-1bf99117-9105-4290-9997-5fd589d5ba94.png" class="" title="img">
+<br>
+<h4 id="训练">训练</h4>
+<p>训练两个Embedding Layer，内积为预测的兴趣度</p>
+<img src="/2025/04/16/Search-Ads-Rec-Rela/1672042315791-5bfc7658-6112-4537-8a28-4d1085472232.png" class="" title="img">
+<p>数据集：</p>
+<ul>
+<li>
+<p>（用户 ID，物品 ID，真实兴趣分数）的集合，记作 $\Omega={(u,i,y) }$</p>
+</li>
+<li>
+<p>数据集中的兴趣分数是系统记录的，比如：</p>
+<ul>
+<li>曝光但是没有点击 → 0 分</li>
+<li>点击、点赞、收藏、转发 → 各算 1 分</li>
+<li>分数最低是 0，最高是 4</li>
+</ul>
+</li>
+<li>
+<p>训练的目的就是让模型的输出拟合真实兴趣分数</p>
+</li>
+</ul>
+<p>损失函数：</p>
+<p>$$<br>
+\min_{\bold{A},\bold{B}}\sum_{(u,i,y)\in\Omega}(y- \left\langle \bold{a}_u,\bold{b}_i \right\rangle)^2<br>
+$$</p>
+<br>
+<h2 id="召回">召回</h2>
+<h3 id="ItemCF">ItemCF</h3>
+<p><strong>Item-based Collaborative Filtering</strong> 基于物品的协同过滤</p>
+<h4 id="兴趣度">兴趣度</h4>
+<p>定义用户为 $u$，定义物品为 $i$， 用户对候选物品 $i_k$ 的兴趣表示为：<br>
+$$<br>
+\text{interes}(u, i_k) = \sum_{j}\text{like}(u, i_{j}) \times \text{sim}(i_{j},i_{k})<br>
+$$</p>
+<h4 id="物品相似度">物品相似度</h4>
+<p>相似度计算公式如下：</p>
+<p>定义喜欢物品 $i$ （与物品 $i$ 有交互）的用户群体为 $U(i)$，有物品相似度定义如下：<br>
+$$<br>
+\text{sim}(i, j) = \frac{|U(i) \cap U(j)|}{\sqrt{|U(i)|\cdot|U(j)|}}<br>
+$$<br>
+若引入用户对物品的喜爱程度衡量 $\text{like}(u, i)$，物品相似度定义如下：<br>
+$$<br>
+\text{sim}(i, j) = \frac{\sum_{v \in U(i) \cap U(j)}\text{like}(v, i)\cdot \text{like}(v, j)}{\sqrt{\sum_{u_{1} \in U(i)}\text{like}^{2}(u_{1}, i)} \cdot \sqrt{\sum_{u_{2} \in U(j)}\text{like}^{2}(u_{2}, j)}}<br>
+$$</p>
+<blockquote>
+<p>相似度公式1相当于公式2中的like为布尔值</p>
+</blockquote>
+<p>在实际使用中，使用向量计算相似度</p>
+<ul>
+<li>每个物品通过向量表示</li>
+<li>向量的每一位表示用户对该物品的喜欢度</li>
+<li>相似度为物品向量夹角余弦</li>
+</ul>
+<h4 id="流程">流程</h4>
+<p>建立表格</p>
+<ul>
+<li>用户 - 物品 - 喜欢度 ordered by 喜欢度</li>
+<li>物品 - 物品 - 相似度 ordered by 相似度</li>
+</ul>
+<p>通过表格1找到用户感兴趣的物品（last-n），基于last-n物品，查表2得到top-k相似物品，返回 $n \cdot k$ 中的最高100个</p>
+<br>
+<h3 id="Swing">Swing</h3>
+<p>物品相似度公式更新，其他与ItemCF相同</p>
+<p>需要注意的是，“Swing召回”主要用于推荐系统中，通过构造用户–物品二分图来衡量两个物品之间的相似度，其思想是既考虑了直接由同一用户触发的共现关系，也考虑了间接的关联（即“摇摆”效果）。不同的论文和实现可能在细节上有所差别，但基本思想是一致的。</p>
+<br>
+<h4 id="物品相似度-2">物品相似度</h4>
+<p>模型1</p>
+<p>在实践中常用的<strong>统一双重求和</strong>形式</p>
+<ul>
+<li>用户 $u_1$ 喜欢的物品记作集合 $\mathcal{J}_1$</li>
+<li>用户 $u_2$ 喜欢的物品记作集合 $\mathcal{J}_2$</li>
+<li>定义两个用户的重合度：<br>
+$overlap(u_1,u_2)=|\mathcal{J}_1\cap\mathcal{J}_2|$</li>
+<li>用户 $u_1$ 和 $u_2$ 的重合度高，则他们可能来自一个小圈子，要降低他们的权重</li>
+</ul>
+<p>相似度定义</p>
+<ul>
+<li>
+<p>喜欢物品 $i_1$ 的用户记作集合 $\mathcal{W}_1$</p>
+</li>
+<li>
+<p>喜欢物品 $i_2$ 的用户记作集合 $\mathcal{W}_2$</p>
+</li>
+<li>
+<p>定义交集 $\mathcal{V}=\mathcal{W}_1\cap\mathcal{W}_2$</p>
+</li>
+<li>
+<p>两个物品的相似度：$sim(i_1,i_2)=\sum_{u_1\in \mathcal{V}}\sum_{u_2\in \mathcal{V}}\frac{1}{α+overlap(u_1,u_2)}$</p>
+<ul>
+<li>
+<p>$α$ 是超参数，$overlap(u_1,u_2)$ 表示两个用户的重合度</p>
+</li>
+<li>
+<p>重合度高，说明两人是一个小圈子的，那么他两对物品相似度的贡献就比较小；重合度小，两人不是一个小圈子的，他两对物品相似度的贡献就比较大</p>
+</li>
+</ul>
+</li>
+</ul>
+<br>
+<p>模型2</p>
+<p>对于任意两个物品 $i$ 和 $j$，其 Swing 得分可以表示为两个部分的叠加，公式如下：<br>
+$$<br>
+Swing(i,j) = \underbrace{\sum_{u \in U(i) \cap U(j)} \frac{1}{|I(u)|-1}}<em>{\text{直接共现项}} + \underbrace{\sum</em>{\substack{u \in U(i) \ v \in U(j) \ u\neq v}} \frac{\delta \bigl( I(u) \cap I(v) \setminus {i,j} \bigr)}{(|I(u)|-1)(|I(v)|-1)}}_{\text{间接关联项}}<br>
+$$<br>
+其中：</p>
+<ul>
+<li>$U(i)$ 表示所有与物品 $i$ 有过交互（例如点击、购买、评分等）的用户集合。</li>
+<li>$I(u)$ 表示用户 $u$ 交互过的所有物品集合。</li>
+<li>第一项 $\sum_{u \in U(i) \cap U(j)} \frac{1}{|I(u)|-1}$ 即 <strong>直接共现项</strong>，统计了同时与 $i$ 和 $j$ 发生交互的用户贡献的相似度；分母 $|I(u)|-1$ 对那些交互较多（即偏好不够集中的）用户进行惩罚，使得贡献值降低。</li>
+<li>第二项 $\sum_{\substack{u \in U(i) \ v \in U(j) \ u\neq v}} \frac{\delta \bigl( I(u) \cap I(v) \setminus {i,j} \bigr)}{(|I(u)|-1)(|I(v)|-1)}$ 为 <strong>间接关联项</strong>，它考虑了不同用户 $u$ 和 $v$ 分别与物品 $i$ 和 $j$ 交互时，通过它们之间在其他物品上的共同交互行为建立的“摇摆”效应。函数 $\delta(\cdot)$ 为指示函数，当集合 $I(u) \cap I(v)$ 除去 $i$ 和 $j$ 后不为空时，$\delta$ 取值 1，否则为 0。</li>
+</ul>
+<br>
+<p><strong>直接共现项说明：</strong></p>
+<ul>
+<li>当某个用户 $u$ 同时与物品 $i$ 和 $j$ 发生过交互，这表明这两个物品在用户的兴趣中存在直接的关联。</li>
+<li>为防止一些“多面手”用户（即交互的物品数量较多的用户）对相似度贡献过大，采用分母 $|I(u)|-1$ 进行归一化，使得交互越集中的用户其贡献权重越高。</li>
+<li>这一部分衡量的是最直接的、由用户行为直接引起的物品共现关系。</li>
+</ul>
+<p><strong>间接关联项说明：</strong></p>
+<ul>
+<li>除了直接共现，不同用户之间也可能通过交互的重叠产生间接联系。例如：用户 $u$ 与物品 $i$ 发生交互，用户 $v$ 与物品 $u$ 发生交互，若 $u$ 和 $v$ 在其他物品上也存在交互重叠，则说明 $i$ 和 $j$ 间有一定的间接关联。</li>
+<li>指示函数 $\delta( I(u) \cap I(v) \setminus {i,j})$ 用于判断 $u$ 与 $v$ 是否在除 $i$ 和 $j$ 外还有共同交互。</li>
+<li>同样地，为防止过活跃的用户对相似度贡献过大，对每个用户均引入 $(|I(u)|-1)$ 的归一化因子，间接贡献则是两者归一化后的乘积。</li>
+</ul>
+<p><strong>综合说明：</strong></p>
+<ul>
+<li>将直接共现和间接关联两部分叠加后，得到的 $Swing(i,j)$ 分数就可以作为物品 $i$ 与物品 $j$ 之间的相似度度量，在召回阶段，通常会选取与用户历史交互物品相似度较高的候选物品作为推荐备选集。</li>
+<li>这种方法的优势在于不仅考虑了同一用户对多个物品的共现影响，还捕捉到了用户间跨物品的关联信息，有助于发现那些在稀疏数据环境下可能被遗漏的物品关联。</li>
+</ul>
+<p><strong>参数与变体：</strong></p>
+<ul>
+<li>实际应用中，不同场景可能需要对上述公式中的分母或者指示函数进行调整，甚至引入其他参数（如平滑因子、对数惩罚等）来更精准地控制因活跃用户带来的偏差。</li>
+<li>此外，也有的变体会采用对数函数来降低用户交互数量较多时带来的影响，例如将分母处理为 $1 + \log(1+|I(u)|)$ 等，这与实际业务的需求和数据分布有很大关系。</li>
+</ul>
+<br>
+<h3 id="UserCF">UserCF</h3>
+<p>基于用户的协同过滤</p>
+<h4 id="兴趣度-2">兴趣度</h4>
+<p>$$<br>
+\text{interes}(user, item) = \sum_jsim(user,user_j)×like(user_j,item)<br>
+$$</p>
+<h4 id="用户相似度">用户相似度</h4>
+<p>定义用户相似度为</p>
+<ul>
+<li>
+<p>用户 $u_1$ 喜欢的物品记作集合 $\mathcal{J}_1$</p>
+</li>
+<li>
+<p>用户 $u_2$ 喜欢的物品记作集合 $\mathcal{J}_2$</p>
+</li>
+<li>
+<p>定义交集 $I=\mathcal{J}_1\cap\mathcal{J}_2$</p>
+</li>
+<li>
+<p>两个用户的相似度：<br>
+$sim(u_1,u_2)=\frac{|I|}{\sqrt{|\mathcal{J}_1|·|\mathcal{J}_2|}}$</p>
+</li>
+</ul>
+<p>考虑降低热门物品的权重</p>
+<p>$$<br>
+sim(u_1,u_2)=\frac{\sum_{l\in{I}} \frac{1}{\log{(1+n_l)}}}{\sqrt{|\mathcal{J}_1|·|\mathcal{J}_2|}}<br>
+$$</p>
+<ul>
+<li>
+<p>$n_l$：喜欢物品 $l$ 的用户数量，反映物品的热门程度</p>
+</li>
+<li>
+<p>物品越热门，$\frac{1}{\log{(1+n_l)}}$ 越小，对相似度的贡献就越小</p>
+</li>
+</ul>
+<br>
+<h3 id="双塔模型：模型与训练">双塔模型：模型与训练</h3>
+<p>用户</p>
+<img src="/2025/04/16/Search-Ads-Rec-Rela/1672042316812-3bce2474-8eda-48cb-aa80-6f58bb78b238.png" class="" title="img">
+<p>物品</p>
+<img src="/2025/04/16/Search-Ads-Rec-Rela/1672042316930-512c4448-5964-4bf2-9309-419cd3a16db5.png" class="" title="img">
+<p>双塔模型</p>
+<img src="/2025/04/16/Search-Ads-Rec-Rela/1672042317078-7e47cf8c-e659-4582-8ea5-4b131b39913f.png" class="" title="img">
+<br>
+<h3 id="双塔模型：正负样本">双塔模型：正负样本</h3>
+<br>
+<h3 id="双塔模型：线上召回与更新">双塔模型：线上召回与更新</h3>
+<h3 id="其他召回模型">其他召回模型</h3>
+<br>
+<br>
+<h2 id="排序">排序</h2>
+<br>
+<br>
+<h2 id="特征交叉">特征交叉</h2>
+<br>
+<br>
+<h2 id="行为序列">行为序列</h2>
+<br>
+<br>
+<h2 id="重排">重排</h2>
+<br>
+<br>
+<h2 id="物品冷启动">物品冷启动</h2>
+<br>
+<br>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python-LLM/" rel="tag"># Python, LLM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/04/13/Python/" rel="prev" title="Python">
+      <i class="fa fa-chevron-left"></i> Python
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">SAR&amp;Rela</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E7%89%B9%E5%BE%81%E5%A4%84%E7%90%86"><span class="nav-text">离散特征处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E7%89%B9%E5%BE%81"><span class="nav-text">离散特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E8%A1%A5%E5%85%85"><span class="nav-text">矩阵补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-text">训练</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AC%E5%9B%9E"><span class="nav-text">召回</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ItemCF"><span class="nav-text">ItemCF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B4%E8%B6%A3%E5%BA%A6"><span class="nav-text">兴趣度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%A9%E5%93%81%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-text">物品相似度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Swing"><span class="nav-text">Swing</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%A9%E5%93%81%E7%9B%B8%E4%BC%BC%E5%BA%A6-2"><span class="nav-text">物品相似度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UserCF"><span class="nav-text">UserCF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B4%E8%B6%A3%E5%BA%A6-2"><span class="nav-text">兴趣度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-text">用户相似度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E5%A1%94%E6%A8%A1%E5%9E%8B%EF%BC%9A%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%AE%AD%E7%BB%83"><span class="nav-text">双塔模型：模型与训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E5%A1%94%E6%A8%A1%E5%9E%8B%EF%BC%9A%E6%AD%A3%E8%B4%9F%E6%A0%B7%E6%9C%AC"><span class="nav-text">双塔模型：正负样本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E5%A1%94%E6%A8%A1%E5%9E%8B%EF%BC%9A%E7%BA%BF%E4%B8%8A%E5%8F%AC%E5%9B%9E%E4%B8%8E%E6%9B%B4%E6%96%B0"><span class="nav-text">双塔模型：线上召回与更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%AC%E5%9B%9E%E6%A8%A1%E5%9E%8B"><span class="nav-text">其他召回模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-text">排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E4%BA%A4%E5%8F%89"><span class="nav-text">特征交叉</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E4%B8%BA%E5%BA%8F%E5%88%97"><span class="nav-text">行为序列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E6%8E%92"><span class="nav-text">重排</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E5%93%81%E5%86%B7%E5%90%AF%E5%8A%A8"><span class="nav-text">物品冷启动</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="marigo1d"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">marigo1d</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/marigo1d" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marigo1d" rel="noopener" target="_blank">GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">marigo1d</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">433k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">13:07</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
