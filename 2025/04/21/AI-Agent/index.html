@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"marigo1d.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="AI-Agent设计相关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI-Agent">
+<meta property="og:url" content="https://marigo1d.github.io/2025/04/21/AI-Agent/index.html">
+<meta property="og:site_name" content="Marigold">
+<meta property="og:description" content="AI-Agent设计相关">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/5.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/v2-2bcd98f6541da0b6f14dc9082ee2dcda_1440w.jpg">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/prompt_components.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/Medqa-comp.png">
+<meta property="article:published_time" content="2025-04-21T01:19:56.000Z">
+<meta property="article:modified_time" content="2025-04-21T01:43:47.879Z">
+<meta property="article:author" content="marigo1d">
+<meta property="article:tag" content="Python, Pytorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/5.png">
+
+<link rel="canonical" href="https://marigo1d.github.io/2025/04/21/AI-Agent/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>AI-Agent | Marigold</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Marigold</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Salt, Pepper and Birds~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://marigo1d.github.io/2025/04/21/AI-Agent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="marigo1d">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Marigold">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AI-Agent
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-04-21 09:19:56 / Modified: 09:43:47" itemprop="dateCreated datePublished" datetime="2025-04-21T09:19:56+08:00">2025-04-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LLM/" itemprop="url" rel="index"><span itemprop="name">LLM</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>14k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>25 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>AI-Agent设计相关</p>
+<span id="more"></span>
+<h1>AI-Agent</h1>
+<p>AI-Agent侧区分</p>
+<ul>
+<li>LLM部分，包含对基座LLM的特化，如SFT和RLHF</li>
+<li>Agent部分，包含执行链，如上下文管理，MCP（工具管理与使用）</li>
+<li>数据部分，包含训练数据和检索数据，如RAG检索数据，SFT训练数据</li>
+</ul>
+<blockquote>
+<p>LLM部分详见 LLM&amp;Rela</p>
+</blockquote>
+<br>
+<h2 id="LangChain-LangGraph">LangChain&amp;LangGraph</h2>
+<p>LangChain 是一个用于构建由语言模型驱动的应用程序的框架。它的目标是让 LLM（大型语言模型）能够访问外部数据源、执行复杂任务链式逻辑，并具备决策能力。LangChain 支持多种模块组合，如提示模板、上下文管理、链式调用、文档问答、代理等。</p>
+<blockquote>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://docs.langchain.com/">https://docs.langchain.com/</a></p>
+</blockquote>
+<br>
+<h3 id="Model">Model</h3>
+<br>
+<h3 id="Prompt">Prompt</h3>
+<h4 id="PromptTemplate">PromptTemplate</h4>
+<p>LangChain 提供了 <code>PromptTemplate</code> 模块用于动态地构建提示词（Prompt）。它支持变量替换，让开发者能灵活构造提示语句。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line">template = PromptTemplate(</span><br><span class="line">    input_variables=[<span class="string">&quot;product&quot;</span>],</span><br><span class="line">    template=<span class="string">&quot;请为以下产品写一段广告文案：&#123;product&#125;&quot;</span></span><br><span class="line">)</span><br><span class="line">prompt = template.<span class="built_in">format</span>(product=<span class="string">&quot;智能手表&quot;</span>)</span><br></pre></td></tr></table></figure>
+<br>
+<h4 id="OutputParser">OutputParser</h4>
+<p>LangChain 提供了 <code>OutputParser</code> 用于从 LLM 的输出中提取结构化数据。例如提取 JSON、列表、关键字等。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.output_parsers <span class="keyword">import</span> StructuredOutputParser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例：定义一个输出结构的 parser，用于将结果变成结构化 JSON 数据</span></span><br></pre></td></tr></table></figure>
+<br>
+<h3 id="Memory">Memory</h3>
+<p>常见 Memory 类型：</p>
+<ul>
+<li><code>ConversationBufferMemory</code>：记录整个对话内容</li>
+<li><code>ConversationSummaryMemory</code>：使用 LLM 总结对话历史</li>
+<li><code>ConversationTokenBufferMemory</code>：基于 token 限制记忆长度</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.memory <span class="keyword">import</span> ConversationBufferMemory</span><br><span class="line"></span><br><span class="line">memory = ConversationBufferMemory()</span><br></pre></td></tr></table></figure>
+<br>
+<h3 id="Index">Index</h3>
+<br>
+<h3 id="Agent">Agent</h3>
+<p>Agent 是 LangChain 中实现 LLM 推理和决策的核心模块，支持动态选择工具（Tool）来完成多步任务。</p>
+<p>核心组件：</p>
+<ul>
+<li><strong>Agent</strong>：负责推理和调用工具</li>
+<li><strong>Tool</strong>：工具函数，如 Web 搜索、数据库查询、Python 计算等</li>
+<li><strong>LLM</strong>：驱动 Agent 的大脑</li>
+<li><strong>AgentExecutor</strong>：执行器，负责管理 Agent 的执行逻辑</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> load_tools, initialize_agent</span><br><span class="line"></span><br><span class="line">tools = load_tools([<span class="string">&quot;llm-math&quot;</span>, <span class="string">&quot;serpapi&quot;</span>], llm=llm)</span><br><span class="line">agent = initialize_agent(tools, llm, agent=<span class="string">&quot;zero-shot-react-description&quot;</span>, verbose=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">agent.run(<span class="string">&quot;明天下雨概率是多少？用数学工具帮我换算成百分比&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>常见 Agent 类型：</p>
+<ul>
+<li><strong>ZeroShotAgent</strong>：基于提示动态选择工具</li>
+<li><strong>ReActAgent</strong>：结合 reasoning + action 的提示策略</li>
+<li><strong>ChatAgent</strong>：用于多轮对话风格</li>
+</ul>
+<br>
+<h3 id="Chain">Chain</h3>
+<p>Chain 是 LangChain 的核心概念之一，它表示一个或多个语言模型调用与其他组件的组合。</p>
+<p>类型：</p>
+<ol>
+<li><strong>SimpleChain</strong>：只有一个输入和输出</li>
+<li><strong>SequentialChain</strong>：多个步骤顺序执行，每个步骤的输出作为下一个步骤的输入</li>
+<li><strong>LLMChain</strong>：最常用的链类型，组合 PromptTemplate、LLM 和 OutputParser</li>
+<li><strong>RouterChain</strong>：根据输入内容选择不同子链进行处理</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> LLMChain</span><br><span class="line"><span class="keyword">from</span> langchain.llms <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line">llm = OpenAI()</span><br><span class="line">chain = LLMChain(llm=llm, prompt=template)</span><br><span class="line">response = chain.run(<span class="string">&quot;智能手表&quot;</span>)</span><br></pre></td></tr></table></figure>
+<br>
+<h3 id="QA-over-Documents">QA over Documents</h3>
+<p>LangChain 非常适合构建基于知识库的问答系统，其流程如下：</p>
+<h4 id="Chunking">Chunking</h4>
+<p>将长文档按段落或 token 限制拆分为小块（chunk），以避免输入超长。</p>
+<p><code>RecursiveCharacterTextSplitter</code> 通过<strong>递归尝试不同的分隔符层级</strong>，逐步将文本分割为语义连贯的块。它优先尝试更高级别的分隔符（如段落），如果分割后的块仍过大，则递归使用更低级别的分隔符（如句子、单词）进行二次分割。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> RecursiveCharacterTextSplitter</span><br><span class="line"></span><br><span class="line">splitter = RecursiveCharacterTextSplitter(chunk_size=<span class="number">500</span>, chunk_overlap=<span class="number">50</span>)</span><br><span class="line">chunks = splitter.split_text(document_text)</span><br></pre></td></tr></table></figure>
+<br>
+<h5 id="Better-Chunking">Better Chunking</h5>
+<p>ref: <a target="_blank" rel="noopener" href="https://github.com/ConardLi/easy-dataset">https://github.com/ConardLi/easy-dataset</a></p>
+<ol>
+<li>首先需要设定文本块的最小，最大分割长度</li>
+<li>自动对章节（Markdown文件中的 <code>#, ##, ###</code>）进行识别</li>
+<li>对已识别到的章节字数进行计数，在恰好位于 &gt; 最小分割长度 和 &lt; 最大分割长度的前提下进行分段</li>
+<li>遇到长段落（超出最大分割长度）时，执行递归分段算法 <code>RecursiveCharacterTextSplitter</code>；</li>
+</ol>
+<blockquote>
+<p>其实就是加了一个对章节的识别分割</p>
+</blockquote>
+<br>
+<h4 id="Embedding-Vector-Store">Embedding &amp; Vector Store</h4>
+<p>使用 Embedding 模型（如 OpenAI、HuggingFace）将文本向量化，然后存入向量数据库（如 FAISS、Chroma、Pinecone）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.embeddings <span class="keyword">import</span> OpenAIEmbeddings</span><br><span class="line"><span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> FAISS</span><br><span class="line"></span><br><span class="line">embedding_model = OpenAIEmbeddings()</span><br><span class="line">db = FAISS.from_texts(chunks, embedding_model)</span><br></pre></td></tr></table></figure>
+<br>
+<h4 id="Retrieval-QA-Chain">Retrieval + QA Chain</h4>
+<p>使用向量检索获取相关 chunk，输入给 LLM，生成答案。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chains <span class="keyword">import</span> RetrievalQA</span><br><span class="line"></span><br><span class="line">retriever = db.as_retriever()</span><br><span class="line">qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)</span><br><span class="line">qa_chain.run(<span class="string">&quot;这篇文档主要讲了什么？&quot;</span>)</span><br></pre></td></tr></table></figure>
+<br>
+<h3 id="QA-Processing-Method">QA Processing Method</h3>
+<p>Stuff Method（塞入式）</p>
+<p>直接将所有相关文档的内容“塞”进 Prompt 里，适用于内容少、上下文短的场景。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># LLMChain + 文档组合直接生成 Prompt</span></span><br></pre></td></tr></table></figure>
+<p>MapReduce</p>
+<p>将所有 chunk 分别用 LLM 处理后，再用另一个 LLM 汇总（Reduce），类似 MapReduce 思维。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 文档切片 -&gt; 各片段生成回答（Map）-&gt; 汇总为最终答案（Reduce）</span></span><br></pre></td></tr></table></figure>
+<p>Refine</p>
+<p>初始文档回答一个粗略答案，接着逐步引入更多 chunk 来细化和完善答案。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初步回答 + 后续 refine，适合逐步深入处理</span></span><br></pre></td></tr></table></figure>
+<p>MapRerank</p>
+<p>类似 Map 方法，但最后不汇总所有回答，而是由 LLM 对每个回答打分，选择最优答案。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 多个回答 -&gt; 打分排序 -&gt; 返回最高分</span></span><br></pre></td></tr></table></figure>
+<br>
+<h2 id="Agentic-Design-Patterns">Agentic Design Patterns</h2>
+<h3 id="Design-Pattern">Design Pattern</h3>
+<img src="/2025/04/21/AI-Agent/5.png" class="" title="alt text">
+<ul>
+<li>Short-term memory: 上下文Context</li>
+<li>Long-term memory: 外挂数据库，例如RAG技术</li>
+<li>Tool: MCP(function call…)</li>
+<li>Planning: Reflection，Self-critics…</li>
+</ul>
+<br>
+<h3 id="Reflection">Reflection</h3>
+<ul>
+<li>“[Self-Refine: Iterative Refinement with Self-Feedback](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2303.17651?utm_campaign=The">https://arxiv.org/abs/2303.17651?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz-9dHVnW1I1bA3sPBbsikjT165Qez3QiiAssknCERwgki818YHG7PyHOQSgg-nxKDa0BuE7B),” Madaan et al. (2023)</li>
+<li>“[Reflexion: Language Agents with Verbal Reinforcement Learning](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2303.11366?utm_campaign=The">https://arxiv.org/abs/2303.11366?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz-9dHVnW1I1bA3sPBbsikjT165Qez3QiiAssknCERwgki818YHG7PyHOQSgg-nxKDa0BuE7B),” Shinn et al. (2023)</li>
+<li>“[CRITIC: Large Language Models Can Self-Correct with Tool-Interactive Critiquing](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.11738?utm_campaign=The">https://arxiv.org/abs/2305.11738?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz-9dHVnW1I1bA3sPBbsikjT165Qez3QiiAssknCERwgki818YHG7PyHOQSgg-nxKDa0BuE7B),” Gou et al. (2024)</li>
+</ul>
+<br>
+<h3 id="Tool-Use">Tool Use</h3>
+<ul>
+<li>“[Gorilla: Large Language Model Connected with Massive APIs](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.15334?utm_campaign=The">https://arxiv.org/abs/2305.15334?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz–9ARMthd09q0ABUi-abo6BH62BLbcwPo13LrXs9hUezs-L050Ay7b_rHdWuRIqBVOD6k_S),” Patil et al. (2023)</li>
+<li>“[MM-REACT: Prompting ChatGPT for Multimodal Reasoning and Action](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2303.11381?utm_campaign=The">https://arxiv.org/abs/2303.11381?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz–9ARMthd09q0ABUi-abo6BH62BLbcwPo13LrXs9hUezs-L050Ay7b_rHdWuRIqBVOD6k_S),” Yang et al. (2023)</li>
+<li>“[Efficient Tool Use with Chain-of-Abstraction Reasoning](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2401.17464?utm_campaign=The">https://arxiv.org/abs/2401.17464?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz–9ARMthd09q0ABUi-abo6BH62BLbcwPo13LrXs9hUezs-L050Ay7b_rHdWuRIqBVOD6k_S),” Gao et al. (2024)</li>
+</ul>
+<br>
+<h3 id="Planning">Planning</h3>
+<ul>
+<li>“[Chain-of-Thought Prompting Elicits Reasoning in Large Language Models](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2201.11903?utm_campaign=The">https://arxiv.org/abs/2201.11903?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz-8Kh954rkXmE4vgpKvro3Klpjhn7IuT-Y_eXIYtgVIq9PTzwa5zFWX7FZZqv1tuDEEsTDuY),” Wei et al. (2022)</li>
+<li>“[HuggingGPT: Solving AI Tasks with ChatGPT and its Friends in Hugging Face](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2303.17580?utm_campaign=The">https://arxiv.org/abs/2303.17580?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz-8Kh954rkXmE4vgpKvro3Klpjhn7IuT-Y_eXIYtgVIq9PTzwa5zFWX7FZZqv1tuDEEsTDuY),” Shen et al. (2023)</li>
+<li>“[Understanding the planning of LLM agents: A survey](<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2402.02716.pdf?utm_campaign=The">https://arxiv.org/pdf/2402.02716.pdf?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz-8Kh954rkXmE4vgpKvro3Klpjhn7IuT-Y_eXIYtgVIq9PTzwa5zFWX7FZZqv1tuDEEsTDuY),” by Huang et al. (2024)</li>
+</ul>
+<br>
+<h3 id="Multi-Agent-Collaboration">Multi-Agent Collaboration</h3>
+<ul>
+<li>“[Communicative Agents for Software Development](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2307.07924?utm_campaign=The">https://arxiv.org/abs/2307.07924?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz-8TZzur2df1qdnGx09b-Fg94DTsc3-xXao4StKvKNU2HR51el3n8yOm0CPSw6GiAoLQNKua),” Qian et al. (2023) (the ChatDev paper)</li>
+<li>“[AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2308.08155?utm_campaign=The">https://arxiv.org/abs/2308.08155?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz-8TZzur2df1qdnGx09b-Fg94DTsc3-xXao4StKvKNU2HR51el3n8yOm0CPSw6GiAoLQNKua),” Wu et al. (2023)</li>
+<li>“[MetaGPT: Meta Programming for a Multi-Agent Collaborative Framework](<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2308.00352?utm_campaign=The">https://arxiv.org/abs/2308.00352?utm_campaign=The</a> Batch&amp;utm_source=hs_email&amp;utm_medium=email&amp;_hsenc=p2ANqtz-8TZzur2df1qdnGx09b-Fg94DTsc3-xXao4StKvKNU2HR51el3n8yOm0CPSw6GiAoLQNKua),” Hong et al. (2023)</li>
+</ul>
+<br>
+<h2 id="MCP">MCP</h2>
+<p>Model Context Protocol</p>
+<p>ref: <a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/introduction">https://modelcontextprotocol.io/introduction</a></p>
+<p>ref: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/29001189476">https://zhuanlan.zhihu.com/p/29001189476</a></p>
+<img src="/2025/04/21/AI-Agent/v2-2bcd98f6541da0b6f14dc9082ee2dcda_1440w.jpg" class="" title="mcp">
+<br>
+<p><a target="_blank" rel="noopener" href="https://github.com/modelcontextprotocol/python-sdk/tree/main/examples/clients/simple-chatbot/mcp_simple_chatbot">example</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># client </span></span><br><span class="line">   ... <span class="comment"># 省略了无关的代码</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">start</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="comment"># 初始化所有的 mcp server</span></span><br><span class="line">    <span class="keyword">for</span> server <span class="keyword">in</span> self.servers:</span><br><span class="line">        <span class="keyword">await</span> server.initialize()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取所有的 tools 命名为 all_tools</span></span><br><span class="line">    all_tools = []</span><br><span class="line">    <span class="keyword">for</span> server <span class="keyword">in</span> self.servers:</span><br><span class="line">        tools = <span class="keyword">await</span> server.list_tools()</span><br><span class="line">        all_tools.extend(tools)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将所有的 tools 的功能描述格式化成字符串供 LLM 使用</span></span><br><span class="line">    <span class="comment"># tool.format_for_llm() 我放到了这段代码最后，方便阅读。</span></span><br><span class="line">    tools_description = <span class="string">&quot;\n&quot;</span>.join(</span><br><span class="line">        [tool.format_for_llm() <span class="keyword">for</span> tool <span class="keyword">in</span> all_tools]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 这里就不简化了，以供参考，实际上就是基于 prompt 和当前所有工具的信息</span></span><br><span class="line">    <span class="comment"># 询问 LLM（Claude） 应该使用哪些工具。</span></span><br><span class="line">    system_message = (</span><br><span class="line">        <span class="string">&quot;You are a helpful assistant with access to these tools:\n\n&quot;</span></span><br><span class="line">        <span class="string">f&quot;<span class="subst">&#123;tools_description&#125;</span>\n&quot;</span></span><br><span class="line">        <span class="string">&quot;Choose the appropriate tool based on the user&#x27;s question. &quot;</span></span><br><span class="line">        <span class="string">&quot;If no tool is needed, reply directly.\n\n&quot;</span></span><br><span class="line">        <span class="string">&quot;IMPORTANT: When you need to use a tool, you must ONLY respond with &quot;</span></span><br><span class="line">        <span class="string">&quot;the exact JSON object format below, nothing else:\n&quot;</span></span><br><span class="line">        <span class="string">&quot;&#123;\n&quot;</span></span><br><span class="line">        <span class="string">&#x27;    &quot;tool&quot;: &quot;tool-name&quot;,\n&#x27;</span></span><br><span class="line">        <span class="string">&#x27;    &quot;arguments&quot;: &#123;\n&#x27;</span></span><br><span class="line">        <span class="string">&#x27;        &quot;argument-name&quot;: &quot;value&quot;\n&#x27;</span></span><br><span class="line">        <span class="string">&quot;    &#125;\n&quot;</span></span><br><span class="line">        <span class="string">&quot;&#125;\n\n&quot;</span></span><br><span class="line">        <span class="string">&quot;After receiving a tool&#x27;s response:\n&quot;</span></span><br><span class="line">        <span class="string">&quot;1. Transform the raw data into a natural, conversational response\n&quot;</span></span><br><span class="line">        <span class="string">&quot;2. Keep responses concise but informative\n&quot;</span></span><br><span class="line">        <span class="string">&quot;3. Focus on the most relevant information\n&quot;</span></span><br><span class="line">        <span class="string">&quot;4. Use appropriate context from the user&#x27;s question\n&quot;</span></span><br><span class="line">        <span class="string">&quot;5. Avoid simply repeating the raw data\n\n&quot;</span></span><br><span class="line">        <span class="string">&quot;Please use only the tools that are explicitly defined above.&quot;</span></span><br><span class="line">    )</span><br><span class="line">    messages = [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: system_message&#125;]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># Final... 假设这里已经处理了用户消息输入.</span></span><br><span class="line">        messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: user_input&#125;)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将 system_message 和用户消息输入一起发送给 LLM</span></span><br><span class="line">        llm_response = self.llm_client.get_response(messages)</span><br><span class="line"></span><br><span class="line">    ... <span class="comment"># 后面和确定使用哪些工具无关</span></span><br><span class="line">    </span><br><span class="line"><span class="comment"># server</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Tool</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Represents a tool with its properties and formatting.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self, name: <span class="built_in">str</span>, description: <span class="built_in">str</span>, input_schema: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]</span></span><br><span class="line"><span class="params">    </span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        self.name: <span class="built_in">str</span> = name</span><br><span class="line">        self.description: <span class="built_in">str</span> = description</span><br><span class="line">        self.input_schema: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>] = input_schema</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 把工具的名字 / 工具的用途（description）和工具所需要的参数（args_desc）转化为文本</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">format_for_llm</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Format tool information for LLM.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            A formatted string describing the tool.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        args_desc = []</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;properties&quot;</span> <span class="keyword">in</span> self.input_schema:</span><br><span class="line">            <span class="keyword">for</span> param_name, param_info <span class="keyword">in</span> self.input_schema[<span class="string">&quot;properties&quot;</span>].items():</span><br><span class="line">                arg_desc = (</span><br><span class="line">                    <span class="string">f&quot;- <span class="subst">&#123;param_name&#125;</span>: <span class="subst">&#123;param_info.get(<span class="string">&#x27;description&#x27;</span>, <span class="string">&#x27;No description&#x27;</span>)&#125;</span>&quot;</span></span><br><span class="line">                )</span><br><span class="line">                <span class="keyword">if</span> param_name <span class="keyword">in</span> self.input_schema.get(<span class="string">&quot;required&quot;</span>, []):</span><br><span class="line">                    arg_desc += <span class="string">&quot; (required)&quot;</span></span><br><span class="line">                args_desc.append(arg_desc)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Tool: <span class="subst">&#123;self.name&#125;</span></span></span><br><span class="line"><span class="string">Description: <span class="subst">&#123;self.description&#125;</span></span></span><br><span class="line"><span class="string">Arguments:</span></span><br><span class="line"><span class="string"><span class="subst">&#123;<span class="built_in">chr</span>(<span class="number">10</span>).join(args_desc)&#125;</span></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<br>
+<h2 id="微调数据集构建">微调数据集构建</h2>
+<h3 id="Chunking-2">Chunking</h3>
+<p>分块方案参考上文</p>
+<h3 id="问题创建-问题求解">问题创建&amp;问题求解</h3>
+<p>针对于分割好的文本块，通过LLM为其生成对应问题</p>
+<br>
+<h2 id="KBQA">KBQA</h2>
+<p>Knowledge Based Question Answering (KBQA) aims to answer factual questions based on the provided knowledge base (KB).</p>
+<p>ref: <a target="_blank" rel="noopener" href="https://github.com/RUCAIBox/Awesome-KBQA">https://github.com/RUCAIBox/Awesome-KBQA</a></p>
+<br>
+<h3 id="Semantic-Parsing-based-Methods">Semantic Parsing-based Methods</h3>
+<br>
+<h3 id="Information-retrieval-based-Methods">Information retrieval-based Methods</h3>
+<br>
+<h3 id="Other-Methods">Other Methods</h3>
+<br>
+<h2 id="Prompt-Engineering">Prompt Engineering</h2>
+<p>ref: <a target="_blank" rel="noopener" href="https://dannyzheng.me/2025/02/21/prompt-engineering/#the-prompt-engineering-lifecycle">https://dannyzheng.me/2025/02/21/prompt-engineering/#the-prompt-engineering-lifecycle</a></p>
+<img src="/2025/04/21/AI-Agent/prompt_components.png" class="" title="img">
+<h3 id="Base">Base</h3>
+<h4 id="Zero-Shot-Prompting">Zero-Shot Prompting</h4>
+<p>Zero-Shot Prompting 是指在不给模型任何示例的情况下，直接提出问题或任务。该方法依赖于模型的预训练知识，适用于模型已广泛学习相关领域信息的情况。例如：</p>
+<blockquote>
+<p><strong>Prompt</strong>：将下面这句话翻译成英文：我喜欢学习人工智能。<br>
+<strong>Output</strong>：I like studying artificial intelligence.</p>
+</blockquote>
+<p>该方法简单高效，适用于任务明确、模型已具备相关背景知识的场景。</p>
+<br>
+<h4 id="Few-Shot-Prompting">Few-Shot Prompting</h4>
+<p>Few-Shot Prompting 是在提示中提供少量（通常是1-5个）示例，以帮助模型理解任务格式或逻辑。这种方式可以显著提升模型在结构化任务中的表现。例如：</p>
+<blockquote>
+<p><strong>Prompt</strong>：<br>
+翻译下列句子：<br>
+例1：我爱编程。 → I love programming.<br>
+例2：天气很好。 → The weather is nice.<br>
+请翻译：我在看书。<br>
+<strong>Output</strong>：I am reading a book.</p>
+</blockquote>
+<p>Few-Shot Prompting 利用“类比”方式，帮助模型对任务形成更明确的理解。</p>
+<br>
+<h4 id="Chain-of-Thought-CoT-Prompting">Chain-of-Thought (CoT) Prompting</h4>
+<p>ref: <a target="_blank" rel="noopener" href="https://dannyzheng.me/2025/02/21/prompt-engineering/#the-prompt-engineering-lifecycle">https://dannyzheng.me/2025/02/21/prompt-engineering/#the-prompt-engineering-lifecycle</a></p>
+<blockquote>
+<p>CoT tip: Always have LLM output its thinking. Without outputting its thought process, no thinking occurs!</p>
+</blockquote>
+<ul>
+<li>
+<p>Basic prompt: Include “Think step-by-step” in your prompt.</p>
+<ul>
+<li>
+<p>Lacks guidance on how to think (which is especially not ideal if a task is very specific to your app, use case, or organization)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Draft personalized emails to donors asking for contributions to this year’s Care for Kids program.</span><br><span class="line"></span><br><span class="line">Program information:</span><br><span class="line">&lt;program&gt;&#123;&#123;PROGRAM_DETAILS&#125;&#125;</span><br><span class="line">&lt;/program&gt;</span><br><span class="line"></span><br><span class="line">Donor information:</span><br><span class="line">&lt;donor&gt;&#123;&#123;DONOR_DETAILS&#125;&#125;</span><br><span class="line">&lt;/donor&gt;</span><br><span class="line"></span><br><span class="line">Think step-by-step before you write the email.</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>Guided prompt: Outline specific steps for LLM to follow in its thinking process.</p>
+<ul>
+<li>
+<p>Lacks structuring to make it easy to strip out and separate the answer from the thinking.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Draft personalized emails to donors asking for contributions to this year’s Care for Kids program.</span><br><span class="line"></span><br><span class="line">Program information:</span><br><span class="line">&lt;program&gt;&#123;&#123;PROGRAM_DETAILS&#125;&#125;</span><br><span class="line">&lt;/program&gt;</span><br><span class="line"></span><br><span class="line">Donor information:</span><br><span class="line">&lt;donor&gt;&#123;&#123;DONOR_DETAILS&#125;&#125;</span><br><span class="line">&lt;/donor&gt;</span><br><span class="line"></span><br><span class="line">Think before you write the email. First, think through what messaging might appeal to this donor given their donation history and which campaigns they’ve supported in the past. Then, think through what aspects of the Care for Kids program would appeal to them, given their history. Finally, write the personalized donor email using your analysis.</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>Structured prompt: Use XML tags like &lt;think&gt; &lt;/think&gt; and &lt;answer&gt; &lt;/answer&gt; to separate reasoning from the final answer.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Draft personalized emails to donors asking for contributions to this year’s Care for Kids program.</span><br><span class="line"></span><br><span class="line">Program information:</span><br><span class="line">&lt;program&gt;&#123;&#123;PROGRAM_DETAILS&#125;&#125;</span><br><span class="line">&lt;/program&gt;</span><br><span class="line"></span><br><span class="line">Donor information:</span><br><span class="line">&lt;donor&gt;&#123;&#123;DONOR_DETAILS&#125;&#125;</span><br><span class="line">&lt;/donor&gt;</span><br><span class="line"></span><br><span class="line">Think before you write the email in &lt;thinking&gt; tags. First, think through what messaging might appeal to this donor given their donation history and which campaigns they’ve supported in the past. Then, think through what aspects of the Care for Kids program would appeal to them, given their history. Finally, write the personalized donor email in &lt;email&gt; tags, using your analysis.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Use code (e.g. extract from <code>&lt;answer&gt;</code> tags) to extract the desired answer from the LLM’s response</p>
+</blockquote>
+</li>
+</ul>
+<br>
+<h4 id="Self-Consistency-Prompting">Self-Consistency Prompting</h4>
+<p>Self-Consistency Prompting 是 Chain-of-Thought 的一种增强策略。其核心思想是：在面对复杂推理问题时，通过生成多个不同的推理路径（多次生成），然后对这些路径的最终结果进行投票或汇总，以提高答案的可靠性和稳定性。</p>
+<p>例如，对于一道数学题，模型可能在不同尝试中给出不同的思路或答案，但通过“多数投票”可以获得更一致、准确的结果。</p>
+<blockquote>
+<p><strong>应用示例</strong>：</p>
+<ul>
+<li>生成5条不同的推理路径</li>
+<li>汇总5个最终答案</li>
+<li>选择出现频率最高的一个作为最终输出</li>
+</ul>
+</blockquote>
+<p>这种方法特别适合对单次输出不够稳定的任务，比如复杂逻辑、数学题等场景。</p>
+<br>
+<h4 id="Retrieval-Augmented-Generation-RAG">Retrieval-Augmented Generation (RAG)</h4>
+<p>RAG 是将外部知识检索机制（如文档、数据库、搜索引擎）与语言模型生成能力结合起来的一种方法。模型在回答问题前，会先“检索”相关内容，再基于检索结果生成答案。</p>
+<p>这种方法克服了大模型“记忆有限”的问题，尤其在处理需要时效性或特定背景知识的任务时非常有效。</p>
+<blockquote>
+<p><strong>示例流程</strong>：</p>
+<ol>
+<li>用户提问：“请解释什么是量子纠缠？”</li>
+<li>模型调用检索模块，从知识库或网络中找到高相关资料</li>
+<li>基于资料，生成符合上下文、准确可靠的回答</li>
+</ol>
+</blockquote>
+<p>RAG 适用于问答系统、知识密集型对话系统、企业内部知识库应用等场景。</p>
+<br>
+<h3 id="Medprompt">Medprompt</h3>
+<p>MedPrompt is composed of the following prompting techniques:</p>
+<ul>
+<li>Dynamic few-shot selection: instead of using static few-shot examples, Medprompt selects few-shot examples dynamically based on the question.</li>
+<li>Self-generated chain of thought.</li>
+<li>Choice shuffle ensembling: performs choice shuffle and self-consistency prompting.</li>
+</ul>
+<img src="/2025/04/21/AI-Agent/Medqa-comp.png" class="" title="img">
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python-Pytorch/" rel="tag"># Python, Pytorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/04/16/Search-Ads-Rec-Rela/" rel="prev" title="SAR&Rela">
+      <i class="fa fa-chevron-left"></i> SAR&Rela
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">AI-Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LangChain-LangGraph"><span class="nav-text">LangChain&amp;LangGraph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Model"><span class="nav-text">Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prompt"><span class="nav-text">Prompt</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PromptTemplate"><span class="nav-text">PromptTemplate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OutputParser"><span class="nav-text">OutputParser</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory"><span class="nav-text">Memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index"><span class="nav-text">Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Agent"><span class="nav-text">Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Chain"><span class="nav-text">Chain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QA-over-Documents"><span class="nav-text">QA over Documents</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Chunking"><span class="nav-text">Chunking</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Better-Chunking"><span class="nav-text">Better Chunking</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Embedding-Vector-Store"><span class="nav-text">Embedding &amp; Vector Store</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrieval-QA-Chain"><span class="nav-text">Retrieval + QA Chain</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QA-Processing-Method"><span class="nav-text">QA Processing Method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Agentic-Design-Patterns"><span class="nav-text">Agentic Design Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-Pattern"><span class="nav-text">Design Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reflection"><span class="nav-text">Reflection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tool-Use"><span class="nav-text">Tool Use</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Planning"><span class="nav-text">Planning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-Agent-Collaboration"><span class="nav-text">Multi-Agent Collaboration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP"><span class="nav-text">MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83%E6%95%B0%E6%8D%AE%E9%9B%86%E6%9E%84%E5%BB%BA"><span class="nav-text">微调数据集构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Chunking-2"><span class="nav-text">Chunking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%88%9B%E5%BB%BA-%E9%97%AE%E9%A2%98%E6%B1%82%E8%A7%A3"><span class="nav-text">问题创建&amp;问题求解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KBQA"><span class="nav-text">KBQA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Semantic-Parsing-based-Methods"><span class="nav-text">Semantic Parsing-based Methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Information-retrieval-based-Methods"><span class="nav-text">Information retrieval-based Methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Other-Methods"><span class="nav-text">Other Methods</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prompt-Engineering"><span class="nav-text">Prompt Engineering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Zero-Shot-Prompting"><span class="nav-text">Zero-Shot Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Few-Shot-Prompting"><span class="nav-text">Few-Shot Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Chain-of-Thought-CoT-Prompting"><span class="nav-text">Chain-of-Thought (CoT) Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Self-Consistency-Prompting"><span class="nav-text">Self-Consistency Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrieval-Augmented-Generation-RAG"><span class="nav-text">Retrieval-Augmented Generation (RAG)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Medprompt"><span class="nav-text">Medprompt</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="marigo1d"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">marigo1d</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/marigo1d" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marigo1d" rel="noopener" target="_blank">GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">marigo1d</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">435k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">13:11</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
