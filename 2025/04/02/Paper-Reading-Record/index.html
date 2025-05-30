@@ -27,11 +27,15 @@
 <meta property="og:site_name" content="Marigold">
 <meta property="og:description" content="Paper阅读记录">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530104004180.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530112142071.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530110615396.png">
 <meta property="article:published_time" content="2025-04-02T07:21:11.000Z">
-<meta property="article:modified_time" content="2025-04-13T11:56:13.027Z">
+<meta property="article:modified_time" content="2025-05-30T03:34:13.438Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530104004180.png">
 
 <link rel="canonical" href="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/">
 
@@ -220,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-04-13 19:56:13" itemprop="dateModified" datetime="2025-04-13T19:56:13+08:00">2025-04-13</time>
+                <time title="Modified: 2025-05-30 11:34:13" itemprop="dateModified" datetime="2025-05-30T11:34:13+08:00">2025-05-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,14 +242,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>1.4k</span>
+              <span>11k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>3 mins.</span>
+              <span>20 mins.</span>
             </span>
 
         </div>
@@ -305,12 +309,293 @@ $$<br>
 <h4 id="Attention">Attention</h4>
 <p><strong>Attention is All You Need</strong></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></p>
+<h4 id="GPT">GPT</h4>
+<p>Improving Language Understanding by Generative Pre-Training</p>
+<ul>
+<li><strong>“生成式”</strong>：指的是预训练阶段的任务是语言模型任务，即预测下一个词，这本质上是一种生成文本的能力。</li>
+<li><strong>“预训练”</strong>：指的是模型在大量无标签文本数据上，通过上述生成任务进行训练，从而学习到通用的语言表示和能力，这些能力可以在后续的下游任务中进行迁移。</li>
+</ul>
+<h5 id="Two-Stage-Training">Two Stage Training</h5>
+<h6 id="Unsupervised-pre-training">Unsupervised pre-training</h6>
+<ul>
+<li>
+<p>“Given an unsupervised corpus of tokens $\mathcal{U} = {u_1, \ldots, u_n}$, we use a standard language modeling objective to maximize the following likelihood:”</p>
+<p>$L_1(\mathcal{U}) = \sum_i \log P(u_i|u_{i-k}, \ldots, u_{i-1}; \Theta)$</p>
+</li>
+<li>
+<p>“where $k$ is the size of the context window, and the conditional probability $P$ is modeled using a neural network with parameters $\Theta$. These parameters are trained using stochastic gradient descent [51].”</p>
+</li>
+<li>
+<p>“In our experiments, we use a multi-layer <strong>Transformer decoder</strong> [34] for the language model, which is a variant of the transformer [62]. This model applies a multi-headed self-attention operation over the input context tokens followed by position-wise feedforward layers to produce an output distribution over target tokens:”<br>
+$h_0 = UW_e + W_p$<br>
+$h_l = \text{transformer_block}(h_{l-1}) \forall i \in [1, n]$<br>
+$P(u) = \text{softmax}(h_n W_e^T)$</p>
+</li>
+<li>
+<p>“where $U = (u_{-k}, \ldots, u_{-1})$ is the context vector of tokens, $n$ is the number of layers, $W_e$ is the token embedding matrix, and $W_p$ is the position embedding matrix.”</p>
+</li>
+</ul>
+<blockquote>
+<p>根据GPT（Generative Pre-trained Transformer）的原始设计和语言模型的任务（预测下一个词），这里的“自注意力”<strong>是掩码自注意力（Masked Self-Attention）</strong>。</p>
+</blockquote>
+<h6 id="Supervised-fine-tuning">Supervised fine-tuning</h6>
+<ul>
+<li>
+<p>“After training the model with the objective in Eq. 1, we adapt the parameters to the supervised target task.”</p>
+</li>
+<li>
+<p>“We assume a labeled dataset $\mathcal{C}$, where each instance consists of a sequence of input tokens, $x^1, \ldots, x^m$, along with a label $y$.”<br>
+这里定义了用于微调的监督数据集 $\mathcal{C}$。数据集中的每个样本都包含一个输入序列（由 $m$ 个 token 组成，$x^1, \ldots, x^m$）以及一个对应的标签 $y$。</p>
+</li>
+<li>
+<p>“The inputs are passed through our pre-trained model to obtain the final transformer block’s activation $h_l^m$, which is then fed into an added linear output layer with parameters $W_y$ to predict $y$:”<br>
+这部分是微调的关键机制。</p>
+<ol>
+<li><strong>输入通过预训练模型：</strong> 将输入序列 $x^1, \ldots, x^m$ 传入预训练好的 Transformer 模型。</li>
+<li><strong>获取最终激活：</strong> 从模型中获取<strong>最后一个 Transformer block 的激活 $h_l^m$</strong>。这里的 $h_l^m$ 通常指的是整个输入序列经过最后一层 Transformer block 处理后，<strong>最后一个 token ($x^m$) 对应的隐藏状态（激活值）</strong>。在分类任务中，通常使用序列末尾的隐藏状态作为整个序列的表示。</li>
+<li><strong>连接线性输出层：</strong> 将 $h_l^m$ 输入到一个新添加的线性输出层。这个线性层的参数是 $W_y$。</li>
+<li><strong>预测标签 $y$：</strong> 通过这个线性层预测标签 $y$。</li>
+</ol>
+</li>
+<li>
+<p>$P(y|x^1, \ldots, x^m) = \text{softmax}(h_l^m W_y).$<br>
+这个公式描述了在给定输入序列 $x^1, \ldots, x^m$ 的情况下，预测标签 $y$ 的概率。</p>
+<ul>
+<li>$h_l^m W_y$ 是最后一个 token 的激活 $h_l^m$ 与线性层参数 $W_y$ 的矩阵乘法。这会得到一个与标签类别数量相同维度的向量。</li>
+<li><code>softmax</code> 函数将这个向量转换为概率分布，使得所有类别的概率之和为 1。</li>
+</ul>
+</li>
+<li>
+<p>“This gives us the following objective to maximize:”<br>
+$L_2(\mathcal{C}) = \sum_{(x,y)} \log P(y|x^1, \ldots, x^m).$ (4)<br>
+这是监督微调阶段的主要目标函数。</p>
+<ul>
+<li>它是一个对数似然函数（或交叉熵损失的负值）。</li>
+<li>目标是最大化在给定输入序列 $(x^1, \ldots, x^m)$ 的情况下，模型预测正确标签 $y$ 的对数概率之和。</li>
+<li>求和遍历了监督数据集 $\mathcal{C}$ 中的所有样本 $(x, y)$。</li>
+</ul>
+</li>
+<li>
+<p>“We additionally found that including language modeling as an auxiliary objective to the fine-tuning helped learning by (a) improving generalization of the supervised model, and (b) accelerating convergence. This is in line with prior work [50, 43], who also observed improved performance with such an auxiliary objective.”<br>
+这是一个重要的发现和优化策略。作者发现，在微调阶段除了使用监督任务的目标函数 $L_2(\mathcal{C})$，<strong>同时引入语言模型目标 $L_1(\mathcal{C})$ 作为辅助目标</strong>，能够：</p>
+<ul>
+<li>a) 提高监督模型的泛化能力。</li>
+<li>b) 加速收敛。</li>
+<li>这与之前的工作（[50, 43]）观察到的结果一致。</li>
+</ul>
+</li>
+<li>
+<p>“Specifically, we optimize the following objective (with weight $\lambda$):”<br>
+$L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
+这是最终用于微调的总目标函数。</p>
+<ul>
+<li>$L_3(\mathcal{C})$ 是 $L_2(\mathcal{C})$（监督任务目标）和 $L_1(\mathcal{C})$（语言模型目标）的加权和。</li>
+<li>$\lambda$ 是一个超参数，用于控制语言模型辅助目标的重要性。</li>
+<li>这里的 $L_1(\mathcal{C})$ 是在微调数据集 $\mathcal{C}$ 上计算的语言模型损失。这意味着在微调过程中，模型不仅要学习如何完成下游任务，还要继续保持其语言模型的生成能力。</li>
+</ul>
+</li>
+<li>
+<p>“Overall, the only extra parameters we require during fine-tuning are $W_y$, and embeddings for delimiter tokens (described below in Section 3.3).”<br>
+这句话指出了在微调阶段，除了预训练模型的所有参数外，唯一需要额外添加和训练的参数是：</p>
+<ul>
+<li>$W_y$：用于监督任务的线性输出层的参数。</li>
+<li><strong>分隔符 token 的嵌入</strong>：这在下一节 3.3 中会详细描述，这些特殊 token 用于将输入序列格式化以适应不同的下游任务（例如，分类任务可能需要在序列开头或结尾添加特殊 token）。</li>
+</ul>
+</li>
+</ul>
+<h5 id="Task-specific-input-transformations">Task-specific input transformations</h5>
+<img src="/2025/04/02/Paper-Reading-Record/image-20250530104004180.png" class="" title="image-20250530104004180">
+<ul>
+<li>
+<p>“For some tasks, like text classification, we can directly fine-tune our model as described above. Certain other tasks, like question answering or textual entailment, have structured inputs such as ordered sentence pairs, or triplets of document, question, and answers. Since our pre-trained model was trained on contiguous sequences of text, we require some modifications to apply it to these tasks.”</p>
+<ul>
+<li>对于简单的任务（如文本分类），可以直接按照 3.2 节描述的方式微调模型。</li>
+<li>但对于更复杂的任务（如问答或文本蕴涵），输入通常是结构化的，例如有序的句子对或文档、问题和答案的三元组。</li>
+<li>由于预训练模型是基于连续的文本序列进行训练的，为了适应这些结构化输入，需要进行一些修改。</li>
+</ul>
+</li>
+<li>
+<p>“Previous work proposed learning task specific architectures on top of transferred representations [44]. Such an approach re-introduces a significant amount of task-specific customization and does not use transfer learning for these additional architectural components.”</p>
+<ul>
+<li>以前的工作（如 [44]）通常会在迁移的表示之上构建任务特定的架构。</li>
+<li>这种方法会引入大量的任务特定定制，并且这些额外的架构组件无法享受到迁移学习的优势。</li>
+</ul>
+</li>
+<li>
+<p>“Instead, we use a traversal-style approach [52], where we convert structured inputs into an ordered sequence that our pre-trained model can process. These input transformations allow us to avoid making extensive changes to the architecture across tasks. We provide a brief description of these input transformations below and Figure 1 provides a visual illustration. All transformations include adding randomly initialized start and end tokens ($\langle s \rangle$, $\langle e \rangle$).”</p>
+<ul>
+<li>GPT 采用了“遍历式”方法（参考 [52]），即将结构化输入转换成一个有序的序列，使得预训练模型可以直接处理。</li>
+<li>这种输入转换避免了对模型架构进行大量的任务间修改，从而保持了架构的统一性。</li>
+<li>所有转换都包括添加随机初始化的<strong>开始 token ($\langle s \rangle$)</strong> 和<strong>结束 token ($\langle e \rangle$)</strong>。这些特殊 token 的嵌入在微调阶段也会被训练。</li>
+</ul>
+</li>
+</ul>
+<p><strong>Textual entailment (文本蕴涵):</strong><br>
+“For entailment tasks, we concatenate the premise $p$ and hypothesis $h$ token sequences, with a delimiter token ($ $$) in between.”</p>
+<ul>
+<li><strong>任务：</strong> 判断一个“假说（hypothesis）”是否可以从一个“前提（premise）”中推断出来。</li>
+<li><strong>输入转换：</strong> 将前提 $p$ 的 token 序列和假说 $h$ 的 token 序列<strong>连接起来</strong>，并在它们之间插入一个<strong>分隔符 token ($$$)</strong>。</li>
+<li><strong>格式：</strong> $\langle s \rangle \text{ premise } \text{ $ } \text{ hypothesis } \langle e \rangle$</li>
+</ul>
+<p><strong>Similarity (相似度):</strong><br>
+“For similarity tasks, there is no inherent ordering of the two sentences being compared. To reflect this, we modify the input sequence to contain both possible sentence orderings (with a delimiter in between) and process each independently to produce two sequence representations $h_l^m$ which are added element-wise before being fed into the linear output layer.”</p>
+<ul>
+<li><strong>任务：</strong> 判断两个句子之间的相似度。</li>
+<li><strong>挑战：</strong> 两个句子没有固有的顺序。</li>
+<li><strong>输入转换：</strong> 为了解决无序性，模型会生成<strong>两种可能的句子顺序</strong>的输入序列：
+<ol>
+<li><strong>顺序 1：</strong> 句子 A $\text{ $ }$ 句子 B</li>
+<li><strong>顺序 2：</strong> 句子 B $\text{ $ }$ 句子 A</li>
+</ol>
+</li>
+<li><strong>处理方式：</strong>
+<ul>
+<li>分别将这两个序列独立地传入预训练模型。</li>
+<li>得到两个序列的最终表示 $h_l^m$（即每个序列的最后一个 token 的隐藏状态）。</li>
+<li>将这两个 $h_l^m$ <strong>进行逐元素相加（element-wise add）</strong>。</li>
+<li>将相加后的结果输入到线性输出层进行预测。</li>
+</ul>
+</li>
+<li><strong>格式：</strong>
+<ul>
+<li>Sequence 1: $\langle s \rangle \text{ sentence}_1 \text{ $ } \text{ sentence}_2 \langle e \rangle$</li>
+<li>Sequence 2: $\langle s \rangle \text{ sentence}_2 \text{ $ } \text{ sentence}_1 \langle e \rangle$</li>
+<li>然后将两个序列的输出表示相加。</li>
+</ul>
+</li>
+</ul>
+<p><strong>Question Answering and Commonsense Reasoning (问答和常识推理):</strong><br>
+“For these tasks, we are given a context document $z$, a question $q$, and a set of possible answers ${a_k}$. We concatenate the document context and question with each possible answer, adding a delimiter token in between to get $[z; q; $; a_k]$. Each of these sequences are processed independently with our model and then normalized via a softmax layer to produce an output distribution over possible answers.”</p>
+<ul>
+<li><strong>任务：</strong> 给定一个文档 $z$、一个问题 $q$ 和一组可能的答案 ${a_k}$，选择正确答案。</li>
+<li><strong>输入转换：</strong> 对于每个可能的答案 $a_k$，构造一个独立的输入序列。
+<ul>
+<li>将<strong>文档上下文 $z$</strong>、<strong>问题 $q$</strong> 和<strong>当前可能的答案 $a_k$</strong> 连接起来。</li>
+<li>在文档上下文和问题之间，以及问题和答案之间，都插入一个<strong>分隔符 token ($$$)</strong>。</li>
+</ul>
+</li>
+<li><strong>格式：</strong> $\langle s \rangle \text{ document } \text{ $ } \text{ question } \text{ $ } \text{ answer}_k \langle e \rangle$</li>
+<li><strong>处理方式：</strong>
+<ul>
+<li>对于每个构造的序列（即每个可能的答案），都独立地通过模型进行处理。</li>
+<li>得到每个序列的最终表示后，通过 softmax 层归一化，得到每个答案的概率分布。</li>
+<li>模型最终选择概率最高的答案。</li>
+</ul>
+</li>
+</ul>
 <h4 id="BERT">BERT</h4>
 <p><strong>BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</strong></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1810.04805">https://arxiv.org/abs/1810.04805</a></p>
+<p>BERT arch</p>
+<p>denote input embedding as $E$, the final hidden vector of the special [CLS] token as $C \in \mathbb{R}^H$, and the final hidden vector for the $i^{\text{th}}$ input token as $T_i \in \mathbb{R}^H$.</p>
+<img src="/2025/04/02/Paper-Reading-Record/image-20250530112142071.png" class="" title="image-20250530112142071">
+<p>BERT token representation</p>
+<img src="/2025/04/02/Paper-Reading-Record/image-20250530110615396.png" class="" title="image-20250530110615396">
+<h5 id="pre-training">pre-training</h5>
+<p>$BERT_{BASE}$ was chosen to have the same model size as OpenAI GPT for comparison purposes. Critically, however, the BERT Transformer uses bidirectional self-attention, while the GPT Transformer uses constrained self-attention where every token can only attend to context to its left</p>
+<p>BERT使用双向模型，</p>
+<h6 id="MLM">MLM</h6>
+<p>“遮蔽语言模型”（MLM）方法</p>
+<p>MLM的核心思想是：</p>
+<ol>
+<li><strong>随机遮蔽（Mask）输入序列中的一部分词语。</strong> 就像在句子中挖空一样。</li>
+<li><strong>然后，模型的目标是预测这些被遮蔽的词语是什么。</strong></li>
+</ol>
+<p>这与传统的“完形填空”（Cloze task）非常相似，即给出一个句子，其中有一些缺失的词，要求填入正确的词。</p>
+<p>当模型处理完被遮蔽的输入序列后，对于每个 [MASK] 标记，BERT会输出一个对应的<strong>最终隐藏向量（final hidden vector）</strong>。这个隐藏向量包含了模型对该位置上下文信息的理解。</p>
+<p>然后，这个隐藏向量会被送入一个<strong>输出Softmax层</strong>。这个Softmax层的输出维度等于词汇表的大小（vocabulary size）。Softmax会为词汇表中的每个词分配一个概率，表示该词是 [MASK] 位置的正确词的概率。模型会选择概率最高的词作为预测结果。这个过程类似于标准语言模型的预测方式，只是这里只针对被遮蔽的词。</p>
+<ul>
+<li><strong>遮蔽比例：</strong> 在BERT的所有实验中，每个输入序列中**15%**的WordPiece tokens（BERT使用的子词分词单元）会被随机选中并遮蔽。</li>
+<li><strong>与去噪自编码器的区别：</strong> 传统的去噪自编码器（Denoising Auto-encoders）在输入中加入噪声（比如遮蔽），然后模型的目标是<strong>重构整个原始输入</strong>。而BERT的MLM不同，它<strong>只预测被遮蔽的词</strong>，而不是重构整个句子。这使得BERT能够更专注于理解上下文，并预测缺失的信息。</li>
+</ul>
+<p>MLM确实让BERT获得了双向的上下文理解能力，这是一个巨大的优势。然而，它也带来了一个问题：在预训练阶段，模型会看到特殊的 [MASK] 标记。但在<strong>微调（fine-tuning）阶段</strong>，实际的下游任务（如情感分析、问答、命名实体识别等）的输入数据中<strong>不会出现 [MASK] 标记</strong>。这导致了预训练和微调之间的<strong>不匹配（mismatch）</strong>：模型在预训练时学习了如何处理 [MASK]，但在实际应用中却从未遇到它。这可能会影响模型的性能。</p>
+<p>为了缓解上述预训练-微调不匹配问题，BERT引入了一个巧妙的策略：</p>
+<ol>
+<li><strong>首先，确定要被“遮蔽”的词：</strong> 仍然随机选择**15%**的token位置作为要被预测的“目标”词。假设第i个token被选中。</li>
+<li><strong>对这15%的选中词，采取三种不同的处理方式：</strong>
+<ul>
+<li><strong>80% 的情况：用 [MASK] 替换。</strong> 这是最常见的处理方式，和通常的MLM一样。模型学习了 [MASK] 的上下文表示。</li>
+<li><strong>10% 的情况：用一个随机词替换。</strong> 这是一个非常关键的技巧。
+<ul>
+<li><strong>目的：</strong> 强制模型不仅要依赖 [MASK] 标记来预测，还要学会处理“错误”的输入词。这意味着模型需要利用其<strong>双向上下文</strong>来判断当前词是否合理，并预测出它原来的正确词。这提高了模型的鲁棒性。</li>
+</ul>
+</li>
+<li><strong>10% 的情况：保持不变（不替换）。</strong>
+<ul>
+<li><strong>目的：</strong> 这迫使模型不仅仅是“填空”，它还需要识别出哪些词是它需要预测的（即使它们没有被替换），并且在没有 [MASK] 标记的情况下也能进行预测。这进一步减少了预训练和微调之间的差异，因为在微调时，模型总是看到“正常的”词，而没有 [MASK]。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>预测目标：</strong> 不论上述哪种情况，模型的目标<strong>始终是预测原始的、未被修改的token</strong>。损失函数是<strong>交叉熵损失（cross entropy loss）</strong>，用于衡量模型预测的概率分布与真实词的独热编码（one-hot encoding）之间的差异。</li>
+</ol>
+<blockquote>
+<p><strong>例子：</strong><br>
+原始句子：The quick brown fox jumps over the lazy dog.<br>
+假设 brown 被选中作为15%要预测的词之一。</p>
+<ul>
+<li><strong>情况1 (80%): [MASK] 替换</strong>
+<ul>
+<li>输入：The quick [MASK] fox jumps over the lazy dog.</li>
+<li>模型预测：brown</li>
+</ul>
+</li>
+<li><strong>情况2 (10%): 随机词替换</strong>
+<ul>
+<li>假设随机选择了词 apple。</li>
+<li>输入：The quick apple fox jumps over the lazy dog.</li>
+<li>模型预测：brown (虽然输入是 apple，但模型需要根据上下文 The quick ___ fox 判断出 apple 是不合理的，并预测原词 brown)</li>
+</ul>
+</li>
+<li><strong>情况3 (10%): 保持不变</strong>
+<ul>
+<li>输入：The quick brown fox jumps over the lazy dog.</li>
+<li>模型预测：brown (即使 brown 没有被遮蔽，模型也需要学会预测它。这有点像一个“自我纠正”机制，或者说，在没有 [MASK] 提示的情况下，模型依然能够识别出某些位置是它需要特别关注和预测的，因为它被标记为“目标预测词”之一。)</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h6 id="NSP">NSP</h6>
+<p>BERT的第一个预训练任务（MLM）主要关注的是<strong>词汇层面的理解和上下文表示</strong>。然而，许多重要的自然语言处理（NLP）下游任务，比如：</p>
+<ul>
+<li><strong>问答（Question Answering, QA）</strong>：模型需要判断一个句子（问题）和另一个句子（段落中的答案句）之间的关系。</li>
+<li><strong>自然语言推理（Natural Language Inference, NLI）</strong>：也称为蕴含识别，模型需要判断一个前提（premise）和一个假设（hypothesis）之间的关系（蕴含、矛盾、中立）。</li>
+</ul>
+<p>这些任务都要求模型能够理解<strong>两个句子之间的关系</strong>，而不仅仅是单个句子内部的词语关系。传统的语言模型（无论是从左到右还是MLM）并没有直接捕捉这种跨句子的关系。</p>
+<p>NSP任务的训练数据生成方式如下：<br>
+对于每个训练样本，模型会输入两个句子，我们称之为句子A和句子B。</p>
+<ol>
+<li><strong>50% 的情况：IsNext (是下一句)</strong>
+<ul>
+<li>句子B确实是语料库中紧跟在句子A后面的那句话。</li>
+<li>这个样本会被标记为 IsNext。</li>
+</ul>
+</li>
+<li><strong>50% 的情况：NotNext (不是下一句)</strong>
+<ul>
+<li>句子B是语料库中随机选择的另一句话，与句子A没有直接的连续关系。</li>
+<li>这个样本会被标记为 NotNext。</li>
+</ul>
+</li>
+</ol>
+<p>结构图中的“C”指的是BERT模型在处理多句输入时，用于表示整个输入序列的特殊标记 [CLS] 的最终隐藏向量。在BERT的输入格式中，两个句子A和B会被连接起来，中间用 [SEP] 分隔，开头有 [CLS] 标记。</p>
+<p>输入格式大致是：[CLS] Sentence A [SEP] Sentence B [SEP]</p>
+<ul>
+<li>[CLS] 标记的最终隐藏向量（通常称为 C 或 T_CLS）被认为是包含了整个输入序列（包括两个句子及其关系）的综合信息。</li>
+<li>这个 [CLS] 标记对应的隐藏向量会被送入一个简单的分类层（例如一个线性层接Softmax），进行二分类预测：IsNext 或 NotNext。</li>
+</ul>
+<blockquote>
+<p><strong>例子：</strong><br>
+对于输入 [CLS] The cat sat on the mat. [SEP] It was a fluffy cat. [SEP]</p>
+<ol>
+<li>BERT处理整个输入序列。</li>
+<li>提取 [CLS] 标记对应的输出向量。</li>
+<li>将该向量送入一个分类器。</li>
+<li>分类器输出概率：P(IsNext)=0.98, P(NotNext)=0.02。模型预测 IsNext。</li>
+</ol>
+</blockquote>
+<h5 id="Fine-tuning">Fine-tuning</h5>
 <h3 id="文本">文本</h3>
-<h4 id="GPT">GPT</h4>
-<p>Generative Pre-trained Transformer</p>
 <h4 id="LLaMa">LLaMa</h4>
 <h4 id="ChatGLM">ChatGLM</h4>
 <h3 id="CV">CV</h3>
@@ -404,7 +689,7 @@ $$<br>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Paper-Reading-Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Corpus"><span class="nav-text">Corpus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datasets"><span class="nav-text">Datasets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper"><span class="nav-text">Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BERT"><span class="nav-text">BERT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC"><span class="nav-text">文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT"><span class="nav-text">GPT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LLaMa"><span class="nav-text">LLaMa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ChatGLM"><span class="nav-text">ChatGLM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CV"><span class="nav-text">CV</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Stable-Diffusion"><span class="nav-text">Stable Diffusion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViT"><span class="nav-text">ViT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81"><span class="nav-text">多模态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Paper-Reading-Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Corpus"><span class="nav-text">Corpus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datasets"><span class="nav-text">Datasets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper"><span class="nav-text">Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT"><span class="nav-text">GPT</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Two-Stage-Training"><span class="nav-text">Two Stage Training</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Unsupervised-pre-training"><span class="nav-text">Unsupervised pre-training</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Supervised-fine-tuning"><span class="nav-text">Supervised fine-tuning</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Task-specific-input-transformations"><span class="nav-text">Task-specific input transformations</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BERT"><span class="nav-text">BERT</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#pre-training"><span class="nav-text">pre-training</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#MLM"><span class="nav-text">MLM</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#NSP"><span class="nav-text">NSP</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Fine-tuning"><span class="nav-text">Fine-tuning</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC"><span class="nav-text">文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LLaMa"><span class="nav-text">LLaMa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ChatGLM"><span class="nav-text">ChatGLM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CV"><span class="nav-text">CV</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Stable-Diffusion"><span class="nav-text">Stable Diffusion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViT"><span class="nav-text">ViT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81"><span class="nav-text">多模态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -472,12 +757,12 @@ $$<br>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">462k</span>
+    <span title="Symbols count total">472k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">14:01</span>
+    <span title="Reading time total">14:17</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

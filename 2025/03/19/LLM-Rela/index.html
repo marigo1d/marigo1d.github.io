@@ -52,7 +52,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325202638658.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325201533207.png">
 <meta property="article:published_time" content="2025-03-19T02:50:14.000Z">
-<meta property="article:modified_time" content="2025-05-29T06:53:27.740Z">
+<meta property="article:modified_time" content="2025-05-30T02:13:40.288Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python, Pytorch">
 <meta name="twitter:card" content="summary">
@@ -245,7 +245,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-29 14:53:27" itemprop="dateModified" datetime="2025-05-29T14:53:27+08:00">2025-05-29</time>
+                <time title="Modified: 2025-05-30 10:13:40" itemprop="dateModified" datetime="2025-05-30T10:13:40+08:00">2025-05-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -874,7 +874,7 @@ $\text{Attn}_h(x) = \text{softmax}\left(\frac{Q^{(h)} K^{(h)\top}}{\sqrt{d_h}}\r
 <p>第一种为二次型，第二种为线性，二次型可表达映射关系更复杂；</p>
 </li>
 <li>
-<p>为什么Attenion公式中要除以 $\sqrt d$（d为Q, K矩阵的输出维度） ？</p>
+<p>为什么Attenion公式中要除以 $\sqrt d$（d为Q, K矩阵的输出维度）？</p>
 <ul>
 <li>当向量维度变大的时候，d变大， q 和 k 的点积的方差变大</li>
 <li>由于要对 q 和 k 的点积的每一行进行softmax，过大的方差将导致softmax极端化，得到类似于 $[1,0,0,…]$ 的one-hot分布</li>
@@ -895,6 +895,7 @@ $\text{Attn}_h(x) = \text{softmax}\left(\frac{Q^{(h)} K^{(h)\top}}{\sqrt{d_h}}\r
 </li>
 <li>
 <p>Q，K，V为什么名为Query，Key，Value？注意力机制的注意力体现在哪里？</p>
+<p>在交叉注意力场景中，</p>
 <ol>
 <li>
 <p><strong>解码器的任务：</strong> 解码器的目标是根据编码器输出的源语句信息，并结合已经生成的词，来预测下一个词。</p>
@@ -909,20 +910,33 @@ $\text{Attn}_h(x) = \text{softmax}\left(\frac{Q^{(h)} K^{(h)\top}}{\sqrt{d_h}}\r
 <p><strong>K，V 来源于编码器：</strong> 编码器处理完整个源语句后，会输出一系列上下文向量。这些向量被用作 <strong>键向量 K</strong> 和 <strong>值向量 V</strong>。</p>
 <ul>
 <li><strong>K（键）</strong>：代表了源语句中每个词的“身份”或“特征”。当解码器的 Q 去查询时，它会与这些 K 进行匹配，以判断源语句中哪些词与当前的 Q 更相关。</li>
-<li><strong>V（值）</strong>：包含了源语句中每个词的实际“内容”或“信息”。一旦 Q 和 K 确定了相关性，V 就会提供这些相关词的实际信息，供解码器使用。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><strong>V（值）</strong>：包含了源语句中每个词的实际“内容”或“信息”。一旦 Q 和 K 确定了相关性，V 就会提供这些相关词的实际信息，供解码器使用。
+<ul>
 <li><strong>为什么 K 和 V 一样？</strong> 在标准的交叉注意力中，K 和 V 确实都来源于编码器的输出。编码器的每个输出向量同时扮演了“键”的角色（用于计算注意力权重）和“值”的角色（用于加权求和得到上下文向量）。</li>
 </ul>
 </li>
+</ul>
+<ol start="5">
 <li>
 <p><strong>交叉注意力的过程：</strong></p>
 <ul>
 <li>解码器的 Q（来自当前生成词的表示）与编码器的 K 矩阵进行点积，并通过 softmax 得到注意力权重。这些权重表明了当前解码器关注点在源语句中各个词上的分布。</li>
-<li>将这些权重应用于编码器的 V 矩阵，进行加权求和，得到一个 <strong>上下文向量</strong>。这个上下文向量浓缩了源语句中对当前生成词最重要的信息。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>
+<p>将这些权重应用于编码器的 V 矩阵，进行加权求和，得到一个 <strong>上下文向量</strong>。这个上下文向量浓缩了源语句中对当前生成词最重要的信息。</p>
+<ul>
 <li>解码器将这个上下文向量与自己的内部状态（例如，通过自注意力获得的已生成词的信息）结合起来，用于预测下一个词。</li>
 </ul>
 <p>“通过已经生成的词和源语句做自注意力，就是确定源语句中哪些词对接下来的词的生成更有作用”正是 <strong>交叉注意力</strong> 的功能。解码器的 Q（代表当前生成词的意图）去查询编码器的 K/V（源语句信息），找到源语句中最重要的部分。</p>
 </li>
-</ol>
+</ul>
 <p>对比：</p>
 <ul>
 <li><strong>LSTM Seq2Seq 的问题：</strong>
@@ -1569,12 +1583,12 @@ $$<br>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">462k</span>
+    <span title="Symbols count total">472k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">14:01</span>
+    <span title="Reading time total">14:17</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
