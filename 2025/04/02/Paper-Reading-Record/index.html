@@ -30,8 +30,9 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530104004180.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530112142071.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530110615396.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530145000198.png">
 <meta property="article:published_time" content="2025-04-02T07:21:11.000Z">
-<meta property="article:modified_time" content="2025-05-30T03:34:13.438Z">
+<meta property="article:modified_time" content="2025-05-30T07:22:17.497Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -224,7 +225,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-30 11:34:13" itemprop="dateModified" datetime="2025-05-30T11:34:13+08:00">2025-05-30</time>
+                <time title="Modified: 2025-05-30 15:22:17" itemprop="dateModified" datetime="2025-05-30T15:22:17+08:00">2025-05-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -242,14 +243,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>11k</span>
+              <span>17k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>20 mins.</span>
+              <span>31 mins.</span>
             </span>
 
         </div>
@@ -274,12 +275,14 @@
 <p>Generation and Retrieval 生成和检索</p>
 <p>SOTA  “State - Of - The - Art”</p>
 <p>lexicon 词汇表</p>
+<br>
 <p><strong>n-gram</strong>：指连续的 <em>n</em> 个词（或字符）组成的序列。例如：</p>
 <ul>
 <li><strong>Unigram (1-gram)</strong>: “the”, “cat”, “sat”</li>
 <li><strong>Bigram (2-gram)</strong>: “the cat”, “cat sat”</li>
 <li><strong>Trigram (3-gram)</strong>: “the cat sat”</li>
 </ul>
+<br>
 <p><strong>BLEU（Bilingual Evaluation Understudy）</strong></p>
 <ul>
 <li><strong>用途</strong>：机器翻译质量评估指标，通过对比生成文本与人工参考译文的n-gram匹配度计算得分（0-100，越高越好）。</li>
@@ -289,6 +292,7 @@
 <ul>
 <li><strong>用途</strong>：训练成本量化指标，表示模型训练所需浮点运算总量（数值越低，计算效率越高）</li>
 </ul>
+<br>
 <p><strong>Perplexity</strong></p>
 <p>困惑度（Perplexity）是评估语言模型性能的核心指标，用于衡量模型对未知数据的预测能力。困惑度反映了模型对测试数据中每个词的预测“不确定程度”。值越低，说明模型预测越准确（即更“不困惑”）。</p>
 <p>困惑度的数学表达式为：<br>
@@ -302,19 +306,24 @@ $$<br>
 <li><strong>$P(w_n = i | w_{1:n-1}, x)$</strong>：模型基于历史序列 $w_{1:n-1}$ 和额外信息 $x$，预测下一个词 $w_n$ 为 $i$ 的概率。</li>
 <li><strong>$N$</strong>：序列的总长度（或词数）。</li>
 </ul>
+<br>
 <h2 id="Datasets">Datasets</h2>
 <p>image-text descriptions: IAPR TC-12, Attributes Discovery, and the SBU datasets.</p>
+<br>
 <h2 id="Paper">Paper</h2>
 <h3 id="Base">Base</h3>
 <h4 id="Attention">Attention</h4>
 <p><strong>Attention is All You Need</strong></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></p>
+<br>
 <h4 id="GPT">GPT</h4>
 <p>Improving Language Understanding by Generative Pre-Training</p>
+<p>GPT是基于Transformer的<strong>Decoder</strong>部分，但移除了交叉注意力。</p>
 <ul>
 <li><strong>“生成式”</strong>：指的是预训练阶段的任务是语言模型任务，即预测下一个词，这本质上是一种生成文本的能力。</li>
 <li><strong>“预训练”</strong>：指的是模型在大量无标签文本数据上，通过上述生成任务进行训练，从而学习到通用的语言表示和能力，这些能力可以在后续的下游任务中进行迁移。</li>
 </ul>
+<br>
 <h5 id="Two-Stage-Training">Two Stage Training</h5>
 <h6 id="Unsupervised-pre-training">Unsupervised pre-training</h6>
 <ul>
@@ -335,9 +344,7 @@ $P(u) = \text{softmax}(h_n W_e^T)$</p>
 <p>“where $U = (u_{-k}, \ldots, u_{-1})$ is the context vector of tokens, $n$ is the number of layers, $W_e$ is the token embedding matrix, and $W_p$ is the position embedding matrix.”</p>
 </li>
 </ul>
-<blockquote>
-<p>根据GPT（Generative Pre-trained Transformer）的原始设计和语言模型的任务（预测下一个词），这里的“自注意力”<strong>是掩码自注意力（Masked Self-Attention）</strong>。</p>
-</blockquote>
+<br>
 <h6 id="Supervised-fine-tuning">Supervised fine-tuning</h6>
 <ul>
 <li>
@@ -403,6 +410,7 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 </ul>
 </li>
 </ul>
+<br>
 <h5 id="Task-specific-input-transformations">Task-specific input transformations</h5>
 <img src="/2025/04/02/Paper-Reading-Record/image-20250530104004180.png" class="" title="image-20250530104004180">
 <ul>
@@ -483,6 +491,8 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 </ul>
 </li>
 </ul>
+<br>
+<br>
 <h4 id="BERT">BERT</h4>
 <p><strong>BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</strong></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1810.04805">https://arxiv.org/abs/1810.04805</a></p>
@@ -491,9 +501,10 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 <img src="/2025/04/02/Paper-Reading-Record/image-20250530112142071.png" class="" title="image-20250530112142071">
 <p>BERT token representation</p>
 <img src="/2025/04/02/Paper-Reading-Record/image-20250530110615396.png" class="" title="image-20250530110615396">
+<br>
 <h5 id="pre-training">pre-training</h5>
 <p>$BERT_{BASE}$ was chosen to have the same model size as OpenAI GPT for comparison purposes. Critically, however, the BERT Transformer uses bidirectional self-attention, while the GPT Transformer uses constrained self-attention where every token can only attend to context to its left</p>
-<p>BERT使用双向模型，</p>
+<p>BERT是基于Transformer的<strong>Encoder</strong>部分</p>
 <h6 id="MLM">MLM</h6>
 <p>“遮蔽语言模型”（MLM）方法</p>
 <p>MLM的核心思想是：</p>
@@ -555,6 +566,7 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 </li>
 </ul>
 </blockquote>
+<br>
 <h6 id="NSP">NSP</h6>
 <p>BERT的第一个预训练任务（MLM）主要关注的是<strong>词汇层面的理解和上下文表示</strong>。然而，许多重要的自然语言处理（NLP）下游任务，比如：</p>
 <ul>
@@ -594,19 +606,280 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 <li>分类器输出概率：P(IsNext)=0.98, P(NotNext)=0.02。模型预测 IsNext。</li>
 </ol>
 </blockquote>
+<br>
 <h5 id="Fine-tuning">Fine-tuning</h5>
+<p>BERT直接把两段文本（例如，问题和文章）<strong>拼接</strong>在一起（用特殊分隔符[SEP]隔开），然后一起输入给BERT。BERT的<strong>自注意力机制</strong>神奇之处在于，当它处理这个拼接后的长文本时，它会自动地在问题和文章的词语之间建立起“双向交叉注意力”。也就是说，一个词在问题中，它也会关注文章中的所有词；一个词在文章中，它也会关注问题中的所有词。这一个步骤就完成了传统的“独立编码”和“交叉注意力”两个阶段的工作，简化了模型结构。</p>
+<p>对于每个不同的任务，我们只需要把任务对应的输入格式（如单句、句子对）和任务对应的输出要求（如分类结果、词级别标签）接入到预训练好的BERT模型上，然后从头到尾（end-to-end）地微调整个模型的所有参数。</p>
+<p>BERT在微调时，根据任务类型利用其输出的不同部分。</p>
+<ul>
+<li><strong>Token-level tasks (词级别任务)：</strong>
+<ul>
+<li><strong>用途：</strong> 对于需要对输入文本中的每个词进行判断或标记的任务。</li>
+<li><strong>取用输出：</strong> 使用BERT输出的<strong>每个词（token）对应的向量表示</strong>。</li>
+<li><strong>举例：</strong>
+<ul>
+<li><strong>序列标注 (Named Entity Recognition, NER)：</strong> 输入 “张三在纽约工作”。BERT会为&quot;张三&quot;、“在”、“纽约”、&quot;工作&quot;等每个词生成一个向量。然后，将这些向量输入一个线性层，分别预测&quot;张三&quot;是人名（PER）、&quot;纽约&quot;是地名（LOC）。</li>
+<li><strong>问答 (Question Answering, QA)：</strong> BERT为文章中的每个词生成向量。这些向量被用于预测答案的起始词和结束词。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Classification tasks (分类任务)：</strong>
+<ul>
+<li><strong>用途：</strong> 对于需要对整个输入文本（或文本对）进行分类的任务。</li>
+<li><strong>取用输出：</strong> 使用BERT输出的**[CLS] token对应的向量表示**。[CLS] token是一个特殊的标记，它的最终向量表示被设计成能够汇聚整个输入序列的语义信息。</li>
+<li><strong>举例：</strong>
+<ul>
+<li><strong>语义蕴含 (Entailment)：</strong> 输入[CLS] 狗在跑 [SEP] 动物在运动 [SEP]。取[CLS]的向量，输入一个分类层，判断属于“蕴含”、“矛盾”还是“中性”。</li>
+<li><strong>情感分析 (Sentiment Analysis)：</strong> 输入[CLS] 这部电影太棒了！ [SEP]。取[CLS]的向量，输入一个分类层，判断属于“正面”、“负面”或“中性”。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>原始BERT论文中提到的问答任务，特指<strong>问答抽取（Extractive QA）</strong>，而不是问答生成。</p>
+</blockquote>
+<br>
+<h5 id="学习目标">学习目标</h5>
+<ul>
+<li><strong>预训练阶段：</strong> BERT在预训练时学习了两种任务：MLM（Masked Language Model）和NSP（Next Sentence Prediction）。NSP任务的输入就是[CLS] Sentence A [SEP] Sentence B [SEP]，它需要判断Sentence B是否是Sentence A的下一句。这里的Sentence A和Sentence B是任意从语料中抽取的。</li>
+<li><strong>到下游任务的映射：</strong>
+<ol>
+<li><strong>Paraphrasing (复述判断)：</strong> 判断两句话是否表达相同的意思。
+<ul>
+<li>对应：[CLS] 句子A [SEP] 句子B [SEP]</li>
+<li>例如：[CLS] 他买了一辆新车 [SEP] 他购入了一台新轿车 [SEP]</li>
+</ul>
+</li>
+<li><strong>Entailment (语义蕴含)：</strong> 判断一个“假设句”是否能从一个“前提句”中推导出来。
+<ul>
+<li>对应：[CLS] 假设句 [SEP] 前提句 [SEP]</li>
+<li>例如：[CLS] 狗在跑 [SEP] 动物在运动 [SEP] (假设句：狗在跑，前提句：动物在运动。狗在跑蕴含动物在运动)</li>
+</ul>
+</li>
+<li><strong>Question Answering (问答)：</strong>
+<ul>
+<li>对应：[CLS] 问题 [SEP] 段落 [SEP]</li>
+<li>例如：[CLS] 谁是美国第一位总统？ [SEP] 乔治·华盛顿是美国的第一位总统… [SEP]</li>
+</ul>
+</li>
+<li><strong>Degenerate text-∅ pair in text classification or sequence tagging (文本分类或序列标注中的“退化”文本-空对)：</strong> 这句话的意思是，对于只涉及单句的任务，可以把“空”视为第二段文本。
+<ul>
+<li>对应：[CLS] 句子A [SEP] [SEP] (注意，这里Sentence B实际上是空的，只用了一个[SEP]标记)</li>
+<li>例如（情感分析）：[CLS] 这部电影太棒了！ [SEP] (严格来说是[CLS] 这部电影太棒了！ [SEP] [SEP])</li>
+<li>例如（命名实体识别）：[CLS] 张三在纽约工作 [SEP]</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<br>
+<h5 id="inference">inference</h5>
+<p>BERT的输出一般为<strong>分类任务 (情感分析、语义蕴含)</strong>，**序列标注任务 (命名实体识别)**等</p>
+<p>假设我们有一个输入序列：<code>&quot;The dog [MASK] at the cat.&quot;</code><br>
+BERT的目标是预测 <code>[MASK]</code> 位置应该填入什么词。</p>
+<p><strong>步骤分解：</strong></p>
+<ol>
+<li>
+<p><strong>输入预处理与嵌入：</strong></p>
+<ul>
+<li>输入序列被标记化为：<code>[&quot;The&quot;, &quot;dog&quot;, &quot;[MASK]&quot;, &quot;at&quot;, &quot;the&quot;, &quot;cat&quot;, &quot;[SEP]&quot;]</code> (通常还会加上 <code>[CLS]</code> 在开头，这里为了简化关注点暂不提)。</li>
+<li>每个token（包括 <code>[MASK]</code> token本身）被转换为其对应的词嵌入和位置编码，并相加。</li>
+<li>得到一个输入张量，维度为 <code>(1, L, D)</code> (batch_size=1, L=7, D=隐藏层维度，例如768)。</li>
+</ul>
+</li>
+<li>
+<p><strong>通过Transformer Encoder层：</strong></p>
+<ul>
+<li>这个 <code>(1, L, D)</code> 的张量会通过BERT的多个Transformer Encoder层（例如BERT-base有12层，BERT-large有24层）。</li>
+<li><strong>关键点在于：</strong> BERT的Encoder层中的自注意力是<strong>双向的</strong>。这意味着当模型处理 <code>[MASK]</code> token时，它<strong>可以同时关注到 <code>[MASK]</code> 前后的所有词</strong>（“The”, “dog”, “at”, “the”, “cat”, “[SEP]”）。</li>
+<li>每一层都会对token的表示进行细化和更新，融入更深层次的上下文信息。</li>
+</ul>
+</li>
+<li>
+<p><strong>获取 <code>[MASK]</code> token 的最终隐藏状态：</strong></p>
+<ul>
+<li>经过所有Encoder层后，我们得到一个最终的隐藏状态张量，维度仍然是 <code>(1, L, D)</code>。</li>
+<li>我们现在需要从这个张量中，<strong>提取对应 <code>[MASK]</code> token 位置的隐藏状态</strong>。</li>
+<li>假设 <code>[MASK]</code> token 在序列中的索引是2。那么我们取出 <code>output_tensor[0, 2, :]</code>，这将得到一个维度为 <code>(D,)</code> 的向量（例如 <code>(768,)</code>）。</li>
+<li>这个向量是 <code>[MASK]</code> token 在**充分利用了整个序列（包括其上下文）**信息后所形成的上下文感知表示。</li>
+</ul>
+</li>
+<li>
+<p><strong>语言模型头（MLM Head / Decoder Head）：</strong></p>
+<ul>
+<li>这个 <code>(D,)</code> 向量被送入一个专门用于预测被遮盖词的“语言模型头”。这个头通常包含：
+<ul>
+<li><strong>一个线性层：</strong> 将 <code>(D,)</code> 向量投影到一个中间维度，例如 <code>(D,) -&gt; (D,)</code>。这层通常是一个非线性激活函数（如 GELU）和一个 Layer Normalization。</li>
+<li><strong>另一个线性层：</strong> 将中间维度投影到词汇表大小的维度：<code>(D,) -&gt; (V,)</code>。这个输出就是<strong>逻辑值（logits）</strong>。</li>
+</ul>
+</li>
+<li>这个线性层的权重矩阵维度是 <code>(D, V)</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>Softmax 与预测：</strong></p>
+<ul>
+<li>对 <code>(V,)</code> 维度的 logits 应用 Softmax 激活函数。这将得到一个概率分布，表示词汇表中每个词是 <code>[MASK]</code> token 的概率。</li>
+<li><code>P(word | context) = softmax(logits)</code></li>
+<li>模型会选择概率最高的词作为预测结果。</li>
+</ul>
+</li>
+</ol>
+<p><strong>举例说明：</strong></p>
+<p>输入：<code>&quot;The dog [MASK] at the cat.&quot;</code></p>
+<ol>
+<li>
+<p><strong>输入和嵌入：</strong><br>
+<code>[CLS] The dog [MASK] at the cat [SEP]</code><br>
+假设 <code>[MASK]</code> 的索引是 3。<br>
+<code>E_CLS</code>, <code>E_The</code>, <code>E_dog</code>, <code>E_MASK</code>, <code>E_at</code>, <code>E_the</code>, <code>E_cat</code>, <code>E_SEP</code> (初始嵌入)</p>
+</li>
+<li>
+<p><strong>通过12层BERT Encoder：</strong><br>
+每个 token 的表示都会通过多层 Transformer Layer 进行更新。<br>
+例如，在第一层，<code>E_MASK</code> 就可以通过双向注意力看到 <code>E_The</code>, <code>E_dog</code>, <code>E_at</code>, <code>E_the</code>, <code>E_cat</code> 等所有其他词的信息。<br>
+经过所有层后，我们得到最终的隐藏状态 <code>H</code>：<br>
+<code>H = [h_CLS, h_The, h_dog, h_MASK, h_at, h_the, h_cat, h_SEP]</code><br>
+其中 <code>h_MASK</code> 此时是一个非常丰富的向量，它已经吸收了 <code>The dog</code> 和 <code>at the cat</code> 的所有上下文信息。</p>
+</li>
+<li>
+<p><strong>提取 <code>h_MASK</code>：</strong><br>
+我们取出 <code>h_MASK</code>，其维度是 <code>(D,)</code> (例如 768)。</p>
+</li>
+<li>
+<p><strong>语言模型头：</strong><br>
+<code>h_MASK</code> 经过一个 <code>(D, D)</code> 的线性层和一个 <code>(D, V)</code> 的线性层。<br>
+<code>logits = h_MASK @ W_linear</code> (这里的 <code>W_linear</code> 是两个线性层的组合权重，或者分步计算)<br>
+<code>logits</code> 的维度是 <code>(V,)</code> (例如 50257)。</p>
+</li>
+<li>
+<p><strong>Softmax 预测：</strong><br>
+<code>softmax(logits)</code> 得到一个概率分布。<br>
+在这个概率分布中，<code>barked</code>、<code>looked</code>、<code>ran</code> 等词的概率会很高，而 <code>car</code>、<code>apple</code> 等词的概率会很低。<br>
+模型最终选择概率最高的词，例如 <code>barked</code>。</p>
+</li>
+</ol>
+<p><strong>为什么与GPT不同？</strong></p>
+<ul>
+<li><strong>BERT的 <code>[MASK]</code> 位置：</strong> BERT能够直接在 <code>[MASK]</code> 位置进行预测，因为它的注意力是双向的。当它计算 <code>[MASK]</code> 的表示时，它能看到整个句子的上下文，包括 <code>[MASK]</code> 之后的词。这意味着它能从两边推断出 <code>[MASK]</code> 应该是什么。</li>
+<li><strong>GPT的下一个词预测：</strong> GPT的注意力是单向的。如果它要预测 <code>[MASK]</code>，它必须假装 <code>[MASK]</code> 是序列的最后一个词，并且不能看到 <code>[MASK]</code> 之后的任何词。这使得它在训练时无法像BERT那样充分利用左右上下文来理解一个词的含义。GPT擅长的是给定前缀，自回归地续写。</li>
+</ul>
+<p>因此，BERT的MLM任务和双向注意力使其能够有效地预测被遮盖的词，这是它在理解句子内部关系方面表现出色的关键。</p>
+<br>
 <h3 id="文本">文本</h3>
+<br>
 <h4 id="LLaMa">LLaMa</h4>
+<br>
 <h4 id="ChatGLM">ChatGLM</h4>
+<br>
 <h3 id="CV">CV</h3>
 <h4 id="Stable-Diffusion">Stable Diffusion</h4>
 <p>2112.10752 High-Resolution Image Synthesis with Latent Diffusion Models (<a target="_blank" rel="noopener" href="http://arxiv.org">arxiv.org</a>)</p>
+<br>
 <h4 id="ViT">ViT</h4>
 <p><strong>An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale(ViT)</strong></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2010.11929">https://arxiv.org/abs/2010.11929</a></p>
+<img src="/2025/04/02/Paper-Reading-Record/image-20250530145000198.png" class="" title="image-20250530145000198">
+<p><strong>核心思想：</strong> ViT将图像视为一系列的图像块（patches），然后将这些图像块的线性嵌入加上位置编码，送入标准的Transformer Encoder。</p>
+<br>
+<p><strong>ViT 在预训练阶段（或作为特征提取器）的输出</strong></p>
+<p>在图像分类任务中，ViT通常会模仿BERT，引入一个特殊的**<code>[CLS]</code> token**（分类标记）。</p>
+<ul>
+<li>
+<p><strong>输入处理：</strong></p>
+<ol>
+<li>图像被分割成固定大小的图像块（e.g., 16x16 像素）。</li>
+<li>每个图像块被线性投影（embedding）成一个向量。</li>
+<li>一个可学习的 <code>[CLS]</code> token 嵌入（与图像块嵌入维度相同）被添加到序列的<strong>开头</strong>。</li>
+<li>位置编码被添加到这些嵌入中，以保留空间信息。</li>
+<li>所有这些嵌入（<code>[CLS]</code> token嵌入 + 图像块嵌入 + 位置编码）形成一个序列，作为Transformer Encoder的输入。</li>
+</ol>
+</li>
+<li>
+<p><strong>Transformer Encoder 处理：</strong></p>
+<ul>
+<li>这个序列（例如 <code>[CLS]</code> + 256个图像块，如果图像是 224x224 且块大小是 16x16）会通过多个标准的Transformer Encoder层。</li>
+<li><strong>关键点：</strong> Transformer Encoder中的自注意力是<strong>双向的</strong>。这意味着 <code>[CLS]</code> token可以关注到所有图像块的信息，反之亦然，所有图像块也可以关注到彼此以及 <code>[CLS]</code> token。</li>
+<li>经过所有Encoder层后，每个token（包括 <code>[CLS]</code> token和所有图像块）都会得到一个上下文感知的最终隐藏向量。</li>
+</ul>
+</li>
+<li>
+<p><strong>ViT 最终输出的张量维度 (作为特征提取器)：</strong></p>
+<ol>
+<li>
+<p><strong><code>[CLS]</code> token 的最终隐藏向量：</strong></p>
+<ul>
+<li>这个是<strong>最常被用来表示整个图像信息</strong>的输出。</li>
+<li>维度：<code>(batch_size, d_model)</code></li>
+<li>例如：如果 <code>batch_size = 3</code>，<code>d_model = 768</code> (ViT-Base)，那么输出是 <code>(3, 768)</code>。</li>
+<li>这个向量包含了整个图像的全局特征，因为它通过双向注意力整合了所有图像块的信息。</li>
+</ul>
+</li>
+<li>
+<p><strong>所有 token 的最终隐藏向量序列：</strong></p>
+<ul>
+<li>如果你需要每个图像块的细粒度特征，或者用于其他下游任务（如目标检测、语义分割，但通常需要额外的解码器），你可以使用所有token的输出。</li>
+<li>维度：<code>(batch_size, num_tokens, d_model)</code></li>
+<li><code>num_tokens</code> = <code>1</code> (for <code>[CLS]</code>) + <code>num_patches</code>。</li>
+<li>例如：如果 <code>batch_size = 3</code>，<code>num_patches = 256</code>，<code>d_model = 768</code>，那么输出是 <code>(3, 257, 768)</code>。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<br>
+<p><strong>ViT 用于图像分类任务时的最终输出</strong></p>
+<p>当ViT被用于图像分类任务时，它会在上述 <code>[CLS]</code> token 的输出之上，添加一个分类头。</p>
+<ul>
+<li>
+<p><strong>分类头：</strong></p>
+<ul>
+<li>通常是一个简单的<strong>线性层（Linear Layer）</strong>，它接收 <code>[CLS]</code> token 的最终隐藏向量 <code>(batch_size, d_model)</code> 作为输入。</li>
+<li>线性层将这个向量投影到**类别数量（num_classes）**的维度。</li>
+<li>线性层的权重矩阵维度是 <code>(d_model, num_classes)</code>。</li>
+<li>进行矩阵乘法：<code>(batch_size, d_model) @ (d_model, num_classes) = (batch_size, num_classes)</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>最终输出维度 (用于分类任务的 logits)：</strong></p>
+<ul>
+<li><code>(batch_size, num_classes)</code></li>
+<li>这些是每个图像在所有类别上的<strong>逻辑值（logits）</strong>。</li>
+<li>在推理时，通常会再对这些 logits 应用 Softmax 激活函数，以得到每个类别的概率分布。</li>
+<li><code>P(class | image) = softmax(logits)</code></li>
+<li>然后选择概率最高的类别作为最终的分类结果。</li>
+</ul>
+</li>
+</ul>
+<p><strong>举例说明 (ViT-Base 用于 ImageNet 分类)：</strong></p>
+<ul>
+<li><code>batch_size = 4</code></li>
+<li><code>d_model = 768</code></li>
+<li><code>num_classes = 1000</code> (ImageNet 的类别数)</li>
+</ul>
+<ol>
+<li>
+<p><strong>ViT Encoder 的输出 (特征提取):</strong></p>
+<ul>
+<li><code>[CLS]</code> token 的隐藏向量: <code>(4, 768)</code></li>
+<li>所有 token 的隐藏向量: <code>(4, 257, 768)</code> (假设图像块数量是 256)</li>
+</ul>
+</li>
+<li>
+<p><strong>分类任务的最终输出 (logits):</strong></p>
+<ul>
+<li><code>(4, 1000)</code></li>
+</ul>
+</li>
+</ol>
+<p>ViT的输出是其核心Transformer Encoder层处理后的<strong>上下文感知的特征表示</strong>。对于图像分类，最直接的输出通常是**<code>[CLS]</code> token对应的隐藏向量**，因为它被设计用来聚合整个图像的全局信息。这个 <code>[CLS]</code> token的向量随后会经过一个线性分类头，最终输出<strong>每个类别的logits</strong>，其维度为 <code>(batch_size, num_classes)</code>。</p>
+<br>
 <h3 id="多模态">多模态</h3>
+<br>
 <h2 id="参考">参考</h2>
-
+<br>
     </div>
 
     
@@ -689,7 +962,7 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Paper-Reading-Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Corpus"><span class="nav-text">Corpus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datasets"><span class="nav-text">Datasets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper"><span class="nav-text">Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT"><span class="nav-text">GPT</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Two-Stage-Training"><span class="nav-text">Two Stage Training</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Unsupervised-pre-training"><span class="nav-text">Unsupervised pre-training</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Supervised-fine-tuning"><span class="nav-text">Supervised fine-tuning</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Task-specific-input-transformations"><span class="nav-text">Task-specific input transformations</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BERT"><span class="nav-text">BERT</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#pre-training"><span class="nav-text">pre-training</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#MLM"><span class="nav-text">MLM</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#NSP"><span class="nav-text">NSP</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Fine-tuning"><span class="nav-text">Fine-tuning</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC"><span class="nav-text">文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LLaMa"><span class="nav-text">LLaMa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ChatGLM"><span class="nav-text">ChatGLM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CV"><span class="nav-text">CV</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Stable-Diffusion"><span class="nav-text">Stable Diffusion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViT"><span class="nav-text">ViT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81"><span class="nav-text">多模态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Paper-Reading-Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Corpus"><span class="nav-text">Corpus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datasets"><span class="nav-text">Datasets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper"><span class="nav-text">Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT"><span class="nav-text">GPT</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Two-Stage-Training"><span class="nav-text">Two Stage Training</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Unsupervised-pre-training"><span class="nav-text">Unsupervised pre-training</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Supervised-fine-tuning"><span class="nav-text">Supervised fine-tuning</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Task-specific-input-transformations"><span class="nav-text">Task-specific input transformations</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BERT"><span class="nav-text">BERT</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#pre-training"><span class="nav-text">pre-training</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#MLM"><span class="nav-text">MLM</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#NSP"><span class="nav-text">NSP</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Fine-tuning"><span class="nav-text">Fine-tuning</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87"><span class="nav-text">学习目标</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#inference"><span class="nav-text">inference</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC"><span class="nav-text">文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LLaMa"><span class="nav-text">LLaMa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ChatGLM"><span class="nav-text">ChatGLM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CV"><span class="nav-text">CV</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Stable-Diffusion"><span class="nav-text">Stable Diffusion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViT"><span class="nav-text">ViT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81"><span class="nav-text">多模态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -757,12 +1030,12 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">472k</span>
+    <span title="Symbols count total">483k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">14:17</span>
+    <span title="Reading time total">14:38</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
