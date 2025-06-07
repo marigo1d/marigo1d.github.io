@@ -39,7 +39,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/1672042317453-2e6860cf-79ad-492a-b350-5f8115174edf.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/16/Search-Ads-Rec-Rela/1672042317852-e1721f7f-f1cb-4910-af2f-0847eaf52b1b.png">
 <meta property="article:published_time" content="2025-04-16T06:30:30.000Z">
-<meta property="article:modified_time" content="2025-04-22T06:27:33.746Z">
+<meta property="article:modified_time" content="2025-06-04T07:36:30.187Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python, LLM">
 <meta name="twitter:card" content="summary">
@@ -232,7 +232,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-04-22 14:27:33" itemprop="dateModified" datetime="2025-04-22T14:27:33+08:00">2025-04-22</time>
+                <time title="Modified: 2025-06-04 15:36:30" itemprop="dateModified" datetime="2025-06-04T15:36:30+08:00">2025-06-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -250,14 +250,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>5.5k</span>
+              <span>14k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>10 mins.</span>
+              <span>26 mins.</span>
             </span>
 
         </div>
@@ -665,6 +665,193 @@ $$</p>
 <h6 id="模型更新">模型更新</h6>
 <br>
 <h3 id="其他召回模型">其他召回模型</h3>
+<h4 id="BM25召回">BM25召回</h4>
+<blockquote>
+<p>langchain的BM25 retriever默认使用的preprocessing_func是通过whitespace分割string的，适用于英文句子，不适用于中文</p>
+</blockquote>
+<p>BM25（Best Match 25）是一种<strong>基于词频统计</strong>的文本相关性计算模型，广泛应用于信息检索领域，尤其在早期阶段的召回（Retrieval）环节中扮演重要角色。它的目标是根据查询（query）和文档（document）中的词语匹配程度，给文档打分，从而找出与查询最相关的文档集合。</p>
+<p>输入 查询词list，返回每个文档与 查询词list 的匹配性分数，分数越高匹配度越高</p>
+<br>
+<p><strong>BM25 的核心思想</strong></p>
+<p>BM25 的核心思想是：</p>
+<ol>
+<li><strong>词频（TF）的重要性：</strong> 一个词在文档中出现的次数越多，该词对于文档的重要性越高。</li>
+<li><strong>逆文档频率（IDF）的重要性：</strong> 一个词在整个语料库中出现的文档越少，该词对于区分文档的重要性越高。</li>
+<li><strong>文档长度的标准化：</strong> 短文档出现某个词的频率可能很高，但不一定比长文档更相关。BM25 会对文档长度进行标准化，避免长文档天然获得更高的分数。</li>
+<li><strong>词频饱和度：</strong> 20 个“猫”字不一定比 10 个“猫”字更重要两倍。当词频达到一定程度后，其对分数的贡献会逐渐减小。</li>
+</ol>
+<br>
+<p><strong>BM25 的计算公式</strong></p>
+<p>BM25 的打分公式如下：</p>
+<p>$$Score(D, Q) = \sum_{i=1}^{n} IDF(q_i) \cdot \frac{f(q_i, D) \cdot (k_1 + 1)}{f(q_i, D) + k_1 \cdot (1 - b + b \cdot \frac{|D|}{avgDL})}$$</p>
+<p>其中：</p>
+<ul>
+<li>
+<p>$D$：文档（Document）</p>
+</li>
+<li>
+<p>$Q$：查询（Query），由 $n$ 个词 $q_1, q_2, …, q_n$ 组成</p>
+</li>
+<li>
+<p>$f(q_i, D)$：查询词 $q_i$ 在文档 $D$ 中出现的频率（Term Frequency, TF）</p>
+</li>
+<li>
+<p>$|D|$：文档 $D$ 的长度（词数）</p>
+</li>
+<li>
+<p>$avgDL$：语料库中所有文档的平均长度</p>
+</li>
+<li>
+<p><strong>$k_1$（词频饱和度参数）：</strong></p>
+<ul>
+<li>通常取值范围在 $1.2$ 到 $2.0$ 之间。</li>
+<li>$k_1$ 越大，词频对分数的影响越大，直到词频非常高。</li>
+<li>$k_1$ 越小，词频对分数的贡献越快达到饱和。</li>
+<li>$k_1 = 0$ 时，完全不考虑词频。</li>
+</ul>
+</li>
+<li>
+<p><strong>$b$（文档长度归一化参数）：</strong></p>
+<ul>
+<li>通常取值范围在 $0$ 到 $1$ 之间。</li>
+<li>$b = 1$ 时，完全根据文档长度进行归一化（短文档会得到相对更高的分数）。</li>
+<li>$b = 0$ 时，不进行文档长度归一化。</li>
+</ul>
+</li>
+<li>
+<p>$IDF(q_i)$：查询词 $q_i$ 的逆文档频率（Inverse Document Frequency）。通常使用以下公式计算：<br>
+$$IDF(q_i) = \log \frac{N - n(q_i) + 0.5}{n(q_i) + 0.5} + 1$$<br>
+或者更简单的：<br>
+$$IDF(q_i) = \log \frac{N}{n(q_i)}$$<br>
+这里我们使用前者，因为它在实践中表现更好，避免了当 $n(q_i)=0$ 时的对数无穷大问题。</p>
+<ul>
+<li>$N$：语料库中的文档总数</li>
+<li>$n(q_i)$：包含查询词 $q_i$ 的文档数量（Document Frequency, DF）</li>
+</ul>
+<p>包含查询词 $q_i$ 的文档数量越多，$IDF(q_i)$ 的值越小</p>
+</li>
+</ul>
+<p>对于公式的各部分</p>
+<ul>
+<li>$IDF(q_i)$ 旨在 赋予稀有词更高的权重，因为稀有词比常见词更能区分文档。
+<ul>
+<li><strong>原理：</strong>
+<ul>
+<li><strong>逆文档频率 (IDF)：</strong> 这是信息检索中的核心思想。一个词在语料库中出现的文档越多（$n(q_i)$ 越大），它作为查询词时，其区分文档的能力就越弱，因此权重应该越低。反之，一个词在少量文档中出现，它就更具独特性，更能指示文档的主题，所以权重应该更高。</li>
+<li><strong>对数 (log)：</strong> 使用对数是为了平滑 IDF 的值。词的文档频率分布往往是长尾的，直接使用 $N/n(q_i)$ 会导致一些极端稀有词的 IDF 值过大，对总分产生过大的影响。对数函数能有效缩小高 IDF 值的差距，使其更加稳定。</li>
+<li><strong>平滑项 $0.5$：</strong>
+<ul>
+<li>在分子和分母中都加上 $0.5$ (或其它小常数)。这被称为<strong>平滑处理</strong>。</li>
+<li><strong>解决问题1 (Zero Frequency Problem):</strong> 如果一个查询词 $q_i$ 从未在语料库中出现过，那么 $n(q_i)$ 会是 $0$。如果直接用 $\log(N/n(q_i))$，就会出现除以零的问题。加上 $0.5$ 可以避免这个问题。</li>
+<li><strong>解决问题2 (High Frequency Problem):</strong> 如果一个词在所有文档中都出现 ($n(q_i) = N$)，那么原始的 $\log(N/N) = \log(1) = 0$。而加上平滑项后，分子 $N - N + 0.5 = 0.5$，分母 $N + 0.5$，IDF 会是一个很小的负值或接近于0的数。这样，对于极其常见的词（如停用词），其 IDF 贡献会变得非常小，符合其区分度低的特性。</li>
+<li><strong>额外的 $+1$：</strong> 确保 IDF 值不会是负数，并且对于非常常见的词，其 IDF 仍然是一个正数（尽管非常小），避免了对数结果为零或负数导致的问题。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分数部分 $\frac{f(q_i, D) \cdot (k_1 + 1)}{f(q_i, D) + k_1 \cdot (1 - b + b \cdot \frac{|D|}{avgDL})}$ 结合了词频、词频饱和度、文档长度和文档长度归一化
+<ul>
+<li>
+<p><strong>分子 $f(q_i, D) \cdot (k_1 + 1)$：</strong></p>
+<ul>
+<li><strong>$f(q_i, D)$ (Term Frequency, TF)：</strong> 查询词 $q_i$ 在文档 $D$ 中出现的频率。直观上，一个词在文档中出现的次数越多，文档与该词的相关性就越强。</li>
+<li><strong>$(k_1 + 1)$：</strong> 这是一个常数因子，它确保当 $f(q_i, D)$ 增加时，分子也能以线性方式增加，为后面的饱和度函数提供一个比例因子。它不是一个可调参数，只是一个常数。</li>
+</ul>
+</li>
+<li>
+<p><strong>分母 $f(q_i, D) + k_1 \cdot (1 - b + b \cdot \frac{|D|}{avgDL})$：</strong><br>
+这是整个 BM25 设计的精髓所在，它包含了两个关键的 BM25 改进点：<strong>词频饱和度</strong> 和 <strong>文档长度归一化</strong>。</p>
+<ul>
+<li>
+<p><strong>$f(q_i, D)$：</strong> 再次出现词频，在分母中，它的存在使得整个分式表现出“饱和”特性。</p>
+</li>
+<li>
+<p><strong>$k_1$（词频饱和度参数）：</strong></p>
+<ul>
+<li><strong>设计目的：</strong> 解决传统 TF（如线性增长）的不足。BM25 认为，词频对相关性的贡献不是线性增长的。当一个词出现一两次时，每次增加其出现频率会显著提高相关性；但当该词出现几十次后，再增加其出现频率，对相关性的额外提升效果会递减，最终趋于饱和。</li>
+<li><strong>原理：</strong>
+<ul>
+<li>当 $f(q_i, D)$ 很小时，分母主要由 $k_1 \cdot (\dots)$ 项主导，此时 TF-Component 接近于 $\frac{f(q_i, D) \cdot (k_1 + 1)}{k_1 \cdot (\dots)}$，表现出近似线性的增长。</li>
+<li>当 $f(q_i, D)$ 很大时，分母中的 $f(q_i, D)$ 会变得占主导地位，此时 TF-Component 接近于 $\frac{f(q_i, D) \cdot (k_1 + 1)}{f(q_i, D)} = k_1 + 1$。这意味着，无论词频多高，其对分数的贡献都不会超过一个上限值 $(k_1 + 1)$。</li>
+<li>$k_1$ 的值控制了饱和的速度。$k_1$ 越小，饱和速度越快（即词频对分数的贡献越早达到上限）；$k_1$ 越大，饱和速度越慢（词频对分数的贡献可以持续更久）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>$(1 - b + b \cdot \frac{|D|}{avgDL})$（文档长度归一化项）：</strong></p>
+<ul>
+<li><strong>设计目的：</strong> 解决长文档在 TF-IDF 中可能天然获得更高分数的偏见。在没有长度归一化的情况下，一个长文档因为词汇量大，更容易包含某个查询词，而且即便某个词只出现一次，但由于文档总词数多，其 TF 值也可能被稀释。更重要的是，长文档更容易出现查询词，但并不意味着它就比短文档更相关。</li>
+<li><strong>原理：</strong>
+<ul>
+<li><strong>$|D|$：</strong> 当前文档的长度（词数）。</li>
+<li><strong>$avgDL$：</strong> 语料库中所有文档的平均长度。</li>
+<li><strong>$\frac{|D|}{avgDL}$：</strong> 这个比值衡量了当前文档相对于平均文档是长还是短。
+<ul>
+<li>如果 $|D| &gt; avgDL$，则 $\frac{|D|}{avgDL} &gt; 1$。</li>
+<li>如果 $|D| &lt; avgDL$，则 $\frac{|D|}{avgDL} &lt; 1$。</li>
+</ul>
+</li>
+<li><strong>$b$（文档长度归一化参数）：</strong>
+<ul>
+<li><strong>设计作用：</strong> 控制文档长度归一化的程度。</li>
+<li>当 $b=0$ 时：整个项变为 $(1 - 0 + 0 \cdot \frac{|D|}{avgDL}) = 1$。此时分母中的 $k_1 \cdot (\dots)$ 项简化为 $k_1$，完全不考虑文档长度。</li>
+<li>当 $b=1$ 时：整个项变为 $(1 - 1 + 1 \cdot \frac{|D|}{avgDL}) = \frac{|D|}{avgDL}$。此时分母中的 $k_1 \cdot (\dots)$ 项变为 $k_1 \cdot \frac{|D|}{avgDL}$。这意味着，如果一个文档比平均文档长，那么分母会变大，导致整个 TF-Component 变小，从而降低该文档的分数。反之，如果文档比平均文档短，分母会变小，分数会升高。</li>
+<li>通常 $b$ 取 $0.75$，这意味着长度归一化是适度的，而不是完全的。</li>
+</ul>
+</li>
+<li><strong>整体效果：</strong> 这个长度归一化项会影响分母的大小。
+<ul>
+<li>对于<strong>长文档</strong>（$|D| &gt; avgDL$），这个项会大于 1，使得分母变大，从而<strong>降低</strong>整个 TF-Component 的值。</li>
+<li>对于<strong>短文档</strong>（$|D| &lt; avgDL$），这个项会小于 1，使得分母变小，从而<strong>提高</strong>整个 TF-Component 的值。</li>
+</ul>
+</li>
+<li><strong>优势：</strong> 这种设计使得短文档在包含查询词时，其相关性分数不会被长文档的“词汇量优势”所掩盖，更公平地评估其相关性。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<br>
+<p><strong>BM25 召回的步骤</strong></p>
+<ol>
+<li><strong>文本预处理：</strong> 对所有文档和查询进行分词、去除停用词、词干化/词形还原等操作。</li>
+<li><strong>构建倒排索引：</strong> 为了高效计算 $f(q_i, D)$ 和 $n(q_i)$，通常需要构建倒排索引。倒排索引会存储每个词出现在哪些文档中，以及在该文档中出现的频率。</li>
+<li><strong>计算所有词的 IDF 值：</strong> 遍历整个语料库，统计每个词的文档频率，然后计算其 IDF 值。</li>
+<li><strong>计算平均文档长度：</strong> 遍历所有文档，计算其长度，然后求平均值。</li>
+<li><strong>处理查询：</strong>
+<ul>
+<li>对查询进行预处理。</li>
+<li>对于查询中的每个词 $q_i$，查找其在每个文档 $D$ 中的频率 $f(q_i, D)$。</li>
+<li>使用上述 BM25 公式，计算查询与每个文档之间的分数。</li>
+</ul>
+</li>
+<li><strong>排序并返回：</strong> 根据计算出的分数，对文档进行降序排序，返回得分最高的 K 个文档。</li>
+</ol>
+<br>
+<p><strong>举例详解 BM25 召回（Python 实现）</strong></p>
+<p>我们用一个简单的例子来演示 BM25 召回。</p>
+<p><strong>语料库 (Corpus):</strong></p>
+<ol>
+<li>“The quick brown fox jumps over the lazy dog.”</li>
+<li>“A dog is a man’s best friend.”</li>
+<li>“Foxes are clever animals.”</li>
+<li>“The quick brown fox.”</li>
+</ol>
+<p><strong>查询 (Query):</strong> “quick fox”</p>
+<br>
+<p><strong>Python 实现</strong></p>
+<p>我们将使用 <code>nltk</code> 进行分词，并手动实现 BM25 算法。在实际生产环境中，你可能会使用 <code>gensim</code> 库，它内置了 BM25 实现，更加高效。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</span><br><span class="line"><span class="keyword">from</span> nltk.tokenize <span class="keyword">import</span> word_tokenize</span><br><span class="line"><span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> stopwords</span><br><span class="line"><span class="keyword">import</span> nltk</span><br><span class="line"></span><br><span class="line">nltk.download(<span class="string">&#x27;punkt_tab&#x27;</span>)</span><br><span class="line">nltk.download(<span class="string">&#x27;stopwords&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 文本预处理函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">preprocess_text</span>(<span class="params">text</span>):</span><br><span class="line">    <span class="comment"># 转为小写</span></span><br><span class="line">    text = text.lower()</span><br><span class="line">    <span class="comment"># 分词</span></span><br><span class="line">    tokens = word_tokenize(text)</span><br><span class="line">    <span class="comment"># 移除标点符号和数字 (可选，根据需求)</span></span><br><span class="line">    tokens = [word <span class="keyword">for</span> word <span class="keyword">in</span> tokens <span class="keyword">if</span> word.isalpha()]</span><br><span class="line">    <span class="comment"># 移除停用词 (可选，根据需求)</span></span><br><span class="line">    stop_words = <span class="built_in">set</span>(stopwords.words(<span class="string">&#x27;english&#x27;</span>))</span><br><span class="line">    tokens = [word <span class="keyword">for</span> word <span class="keyword">in</span> tokens <span class="keyword">if</span> word <span class="keyword">not</span> <span class="keyword">in</span> stop_words]</span><br><span class="line">    <span class="keyword">return</span> tokens</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 构建语料库和词汇表</span></span><br><span class="line">corpus = [</span><br><span class="line">    <span class="string">&quot;The quick brown fox jumps over the lazy dog.&quot;</span>,</span><br><span class="line">    <span class="string">&quot;A dog is a man&#x27;s best friend.&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Foxes are clever animals.&quot;</span>,</span><br><span class="line">    <span class="string">&quot;The quick brown fox.&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 预处理所有文档</span></span><br><span class="line">processed_corpus = [preprocess_text(doc) <span class="keyword">for</span> doc <span class="keyword">in</span> corpus]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;--- 预处理后的文档 ---&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i, doc <span class="keyword">in</span> <span class="built_in">enumerate</span>(processed_corpus):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Doc <span class="subst">&#123;i+<span class="number">1</span>&#125;</span>: <span class="subst">&#123;doc&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;-&quot;</span> * <span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 计算文档频率 (DF) 和 词频 (TF)</span></span><br><span class="line"><span class="comment"># doc_freq: 存储每个词在多少个文档中出现</span></span><br><span class="line">doc_freq = defaultdict(<span class="built_in">int</span>)</span><br><span class="line"><span class="comment"># term_freqs: 存储每个文档中每个词的频率 &#123;doc_id: &#123;word: count&#125;&#125;</span></span><br><span class="line">term_freqs = []</span><br><span class="line"><span class="comment"># doc_lengths: 存储每个文档的长度</span></span><br><span class="line">doc_lengths = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i, doc_tokens <span class="keyword">in</span> <span class="built_in">enumerate</span>(processed_corpus):</span><br><span class="line">    doc_len = <span class="built_in">len</span>(doc_tokens)</span><br><span class="line">    doc_lengths.append(doc_len)</span><br><span class="line"></span><br><span class="line">    current_doc_tf = defaultdict(<span class="built_in">int</span>)</span><br><span class="line">    unique_words_in_doc = <span class="built_in">set</span>() <span class="comment"># 用于统计doc_freq</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> token <span class="keyword">in</span> doc_tokens:</span><br><span class="line">        current_doc_tf[token] += <span class="number">1</span></span><br><span class="line">        unique_words_in_doc.add(token)</span><br><span class="line"></span><br><span class="line">    term_freqs.append(current_doc_tf)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> unique_words_in_doc:</span><br><span class="line">        doc_freq[word] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">N = <span class="built_in">len</span>(corpus) <span class="comment"># 文档总数</span></span><br><span class="line">avgDL = <span class="built_in">sum</span>(doc_lengths) / N <span class="comment"># 平均文档长度</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;文档总数 (N): <span class="subst">&#123;N&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;平均文档长度 (avgDL): <span class="subst">&#123;avgDL:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;--- 词的文档频率 (DF) ---&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> word, df <span class="keyword">in</span> doc_freq.items():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;&#x27;<span class="subst">&#123;word&#125;</span>&#x27;: <span class="subst">&#123;df&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;-&quot;</span> * <span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 计算 IDF (Inverse Document Frequency)</span></span><br><span class="line"><span class="comment"># IDF(q_i) = log((N - n(q_i) + 0.5) / (n(q_i) + 0.5)) + 1</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">calculate_idf</span>(<span class="params">word, N, doc_freq</span>):</span><br><span class="line">    n_qi = doc_freq.get(word, <span class="number">0</span>) <span class="comment"># 包含词的文档数量</span></span><br><span class="line">    <span class="keyword">return</span> math.log((N - n_qi + <span class="number">0.5</span>) / (n_qi + <span class="number">0.5</span>)) + <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 实现 BM25 评分函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bm25_score</span>(<span class="params">query_tokens, doc_id, k1, b, N, avgDL, term_freqs, doc_freq, doc_lengths</span>):</span><br><span class="line">    score = <span class="number">0.0</span></span><br><span class="line">    current_doc_tf = term_freqs[doc_id]</span><br><span class="line">    doc_len = doc_lengths[doc_id]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> q_i <span class="keyword">in</span> query_tokens:</span><br><span class="line">        <span class="comment"># 如果查询词不在文档中，跳过</span></span><br><span class="line">        <span class="keyword">if</span> q_i <span class="keyword">not</span> <span class="keyword">in</span> current_doc_tf:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        f_qi_D = current_doc_tf[q_i] <span class="comment"># 词 q_i 在文档 D 中的频率</span></span><br><span class="line">        idf_qi = calculate_idf(q_i, N, doc_freq)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算 BM25 的 TF 部分</span></span><br><span class="line">        tf_component = (f_qi_D * (k1 + <span class="number">1</span>)) / (f_qi_D + k1 * (<span class="number">1</span> - b + b * (doc_len / avgDL)))</span><br><span class="line">        </span><br><span class="line">        score += idf_qi * tf_component</span><br><span class="line">    <span class="keyword">return</span> score</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 定义参数</span></span><br><span class="line">k1 = <span class="number">1.5</span> <span class="comment"># 词频饱和度参数，常用范围 1.2 - 2.0</span></span><br><span class="line">b = <span class="number">0.75</span> <span class="comment"># 文档长度归一化参数，常用范围 0 - 1.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 7. 执行查询</span></span><br><span class="line">query = <span class="string">&quot;quick fox&quot;</span></span><br><span class="line">processed_query = preprocess_text(query)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;查询 (Query): &#x27;<span class="subst">&#123;query&#125;</span>&#x27;&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;预处理后的查询: <span class="subst">&#123;processed_query&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;-&quot;</span> * <span class="number">30</span>)</span><br><span class="line"></span><br><span class="line">results = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">    score = bm25_score(processed_query, i, k1, b, N, avgDL, term_freqs, doc_freq, doc_lengths)</span><br><span class="line">    results.append((score, i, corpus[i]))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 8. 排序并输出结果</span></span><br><span class="line">results.sort(key=<span class="keyword">lambda</span> x: x[<span class="number">0</span>], reverse=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;--- BM25 召回结果 ---&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> score, doc_id, original_doc <span class="keyword">in</span> results:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;文档 ID: <span class="subst">&#123;doc_id+<span class="number">1</span>&#125;</span>, 分数: <span class="subst">&#123;score:<span class="number">.4</span>f&#125;</span>, 文档内容: &#x27;<span class="subst">&#123;original_doc&#125;</span>&#x27;&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>运行结果和分析</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">--- 预处理后的文档 ---</span><br><span class="line">Doc 1: [&#x27;quick&#x27;, &#x27;brown&#x27;, &#x27;fox&#x27;, &#x27;jumps&#x27;, &#x27;lazy&#x27;, &#x27;dog&#x27;]</span><br><span class="line">Doc 2: [&#x27;dog&#x27;, &#x27;man&#x27;, &#x27;best&#x27;, &#x27;friend&#x27;]</span><br><span class="line">Doc 3: [&#x27;foxes&#x27;, &#x27;clever&#x27;, &#x27;animals&#x27;]</span><br><span class="line">Doc 4: [&#x27;quick&#x27;, &#x27;brown&#x27;, &#x27;fox&#x27;]</span><br><span class="line">------------------------------</span><br><span class="line">文档总数 (N): 4</span><br><span class="line">平均文档长度 (avgDL): 4.00</span><br><span class="line">--- 词的文档频率 (DF) ---</span><br><span class="line">&#x27;brown&#x27;: 2</span><br><span class="line">&#x27;jumps&#x27;: 1</span><br><span class="line">&#x27;dog&#x27;: 2</span><br><span class="line">&#x27;fox&#x27;: 2</span><br><span class="line">&#x27;lazy&#x27;: 1</span><br><span class="line">&#x27;quick&#x27;: 2</span><br><span class="line">&#x27;best&#x27;: 1</span><br><span class="line">&#x27;man&#x27;: 1</span><br><span class="line">&#x27;friend&#x27;: 1</span><br><span class="line">&#x27;foxes&#x27;: 1</span><br><span class="line">&#x27;clever&#x27;: 1</span><br><span class="line">&#x27;animals&#x27;: 1</span><br><span class="line">------------------------------</span><br><span class="line">查询 (Query): &#x27;quick fox&#x27;</span><br><span class="line">预处理后的查询: [&#x27;quick&#x27;, &#x27;fox&#x27;]</span><br><span class="line">------------------------------</span><br><span class="line">--- BM25 召回结果 ---</span><br><span class="line">文档 ID: 4, 分数: 2.2535, 文档内容: &#x27;The quick brown fox.&#x27;</span><br><span class="line">文档 ID: 1, 分数: 1.6327, 文档内容: &#x27;The quick brown fox jumps over the lazy dog.&#x27;</span><br><span class="line">文档 ID: 2, 分数: 0.0000, 文档内容: &#x27;A dog is a man&#x27;s best friend.&#x27;</span><br><span class="line">文档 ID: 3, 分数: 0.0000, 文档内容: &#x27;Foxes are clever animals.&#x27;</span><br></pre></td></tr></table></figure>
+<br>
 <h4 id="地理位置召回">地理位置召回</h4>
 <br>
 <h4 id="关注者召回">关注者召回</h4>
@@ -685,6 +872,8 @@ $$</p>
 <br>
 <h2 id="重排">重排</h2>
 <br>
+<h3 id="RRF算法">RRF算法</h3>
+<p>RRF算法的目的是生成一个 <strong>有序且受到限制的重排序列</strong>。它不是一个通用的随机排列算法，而是针对 <strong>排名信息</strong> 和 <strong>限制条件</strong> 进行重排列的。可以理解为：在一个已排序的基础上，进行<strong>局部调整</strong>，以达到某种优化目标。</p>
 <br>
 <h2 id="物品冷启动">物品冷启动</h2>
 <br>
@@ -771,7 +960,7 @@ $$</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">SAR&amp;Rela</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%A6%81"><span class="nav-text">概要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF"><span class="nav-text">链路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E7%89%B9%E5%BE%81%E5%A4%84%E7%90%86"><span class="nav-text">离散特征处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E7%89%B9%E5%BE%81"><span class="nav-text">离散特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E8%A1%A5%E5%85%85"><span class="nav-text">矩阵补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-text">训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E6%9C%80%E8%BF%91%E9%82%BB%E6%90%9C%E7%B4%A2"><span class="nav-text">近似最近邻搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A1%A1%E9%87%8F%E8%BF%91%E9%82%BB%E6%8C%87%E6%A0%87"><span class="nav-text">衡量近邻指标</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AC%E5%9B%9E"><span class="nav-text">召回</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4%E7%9A%84%E5%8F%AC%E5%9B%9E"><span class="nav-text">基于协同过滤的召回</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ItemCF"><span class="nav-text">ItemCF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AF%84%E5%88%86"><span class="nav-text">评分</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%89%A9%E5%93%81%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-text">物品相似度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B-2"><span class="nav-text">流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UserCF"><span class="nav-text">UserCF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AF%84%E5%88%86-2"><span class="nav-text">评分</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-text">用户相似度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B-3"><span class="nav-text">流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Swing"><span class="nav-text">Swing</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-text">相似度</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3"><span class="nav-text">矩阵分解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%90%91%E9%87%8F%E7%9A%84%E5%8F%AC%E5%9B%9E"><span class="nav-text">基于向量的召回</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#FM%E5%8F%AC%E5%9B%9E"><span class="nav-text">FM召回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#item2vec%E5%8F%AC%E5%9B%9E"><span class="nav-text">item2vec召回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8C%E5%A1%94%E6%A8%A1%E5%9E%8B"><span class="nav-text">双塔模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%AE%AD%E7%BB%83"><span class="nav-text">模型与训练</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B"><span class="nav-text">模型</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83-2"><span class="nav-text">训练</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AD%A3%E8%B4%9F%E6%A0%B7%E6%9C%AC"><span class="nav-text">正负样本</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A0%B7%E6%9C%AC"><span class="nav-text">样本</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%AD%A3%E6%A0%B7%E6%9C%AC"><span class="nav-text">正样本</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E8%B4%9F%E6%A0%B7%E6%9C%AC"><span class="nav-text">简单负样本</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%9B%B0%E9%9A%BE%E8%B4%9F%E6%A0%B7%E6%9C%AC"><span class="nav-text">困难负样本</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BA%BF%E4%B8%8A%E5%8F%AC%E5%9B%9E%E4%B8%8E%E6%9B%B4%E6%96%B0"><span class="nav-text">线上召回与更新</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%BA%BF%E4%B8%8A%E5%8F%AC%E5%9B%9E"><span class="nav-text">线上召回</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0"><span class="nav-text">模型更新</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%AC%E5%9B%9E%E6%A8%A1%E5%9E%8B"><span class="nav-text">其他召回模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE%E5%8F%AC%E5%9B%9E"><span class="nav-text">地理位置召回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E6%B3%A8%E8%80%85%E5%8F%AC%E5%9B%9E"><span class="nav-text">关注者召回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AC%E5%9B%9E"><span class="nav-text">缓存召回</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GBDT-LR"><span class="nav-text">GBDT+LR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E4%BA%A4%E5%8F%89"><span class="nav-text">特征交叉</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B"><span class="nav-text">序列模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%AD%A6%E4%B9%A0"><span class="nav-text">多任务学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E6%8E%92"><span class="nav-text">重排</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E5%93%81%E5%86%B7%E5%90%AF%E5%8A%A8"><span class="nav-text">物品冷启动</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">SAR&amp;Rela</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%A6%81"><span class="nav-text">概要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF"><span class="nav-text">链路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E7%89%B9%E5%BE%81%E5%A4%84%E7%90%86"><span class="nav-text">离散特征处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E7%89%B9%E5%BE%81"><span class="nav-text">离散特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E8%A1%A5%E5%85%85"><span class="nav-text">矩阵补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-text">训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E6%9C%80%E8%BF%91%E9%82%BB%E6%90%9C%E7%B4%A2"><span class="nav-text">近似最近邻搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A1%A1%E9%87%8F%E8%BF%91%E9%82%BB%E6%8C%87%E6%A0%87"><span class="nav-text">衡量近邻指标</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AC%E5%9B%9E"><span class="nav-text">召回</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4%E7%9A%84%E5%8F%AC%E5%9B%9E"><span class="nav-text">基于协同过滤的召回</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ItemCF"><span class="nav-text">ItemCF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AF%84%E5%88%86"><span class="nav-text">评分</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%89%A9%E5%93%81%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-text">物品相似度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B-2"><span class="nav-text">流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UserCF"><span class="nav-text">UserCF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AF%84%E5%88%86-2"><span class="nav-text">评分</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-text">用户相似度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B-3"><span class="nav-text">流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Swing"><span class="nav-text">Swing</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-text">相似度</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3"><span class="nav-text">矩阵分解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%90%91%E9%87%8F%E7%9A%84%E5%8F%AC%E5%9B%9E"><span class="nav-text">基于向量的召回</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#FM%E5%8F%AC%E5%9B%9E"><span class="nav-text">FM召回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#item2vec%E5%8F%AC%E5%9B%9E"><span class="nav-text">item2vec召回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8C%E5%A1%94%E6%A8%A1%E5%9E%8B"><span class="nav-text">双塔模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%AE%AD%E7%BB%83"><span class="nav-text">模型与训练</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B"><span class="nav-text">模型</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83-2"><span class="nav-text">训练</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AD%A3%E8%B4%9F%E6%A0%B7%E6%9C%AC"><span class="nav-text">正负样本</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A0%B7%E6%9C%AC"><span class="nav-text">样本</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%AD%A3%E6%A0%B7%E6%9C%AC"><span class="nav-text">正样本</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E8%B4%9F%E6%A0%B7%E6%9C%AC"><span class="nav-text">简单负样本</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%9B%B0%E9%9A%BE%E8%B4%9F%E6%A0%B7%E6%9C%AC"><span class="nav-text">困难负样本</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BA%BF%E4%B8%8A%E5%8F%AC%E5%9B%9E%E4%B8%8E%E6%9B%B4%E6%96%B0"><span class="nav-text">线上召回与更新</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%BA%BF%E4%B8%8A%E5%8F%AC%E5%9B%9E"><span class="nav-text">线上召回</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0"><span class="nav-text">模型更新</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%AC%E5%9B%9E%E6%A8%A1%E5%9E%8B"><span class="nav-text">其他召回模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#BM25%E5%8F%AC%E5%9B%9E"><span class="nav-text">BM25召回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE%E5%8F%AC%E5%9B%9E"><span class="nav-text">地理位置召回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E6%B3%A8%E8%80%85%E5%8F%AC%E5%9B%9E"><span class="nav-text">关注者召回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AC%E5%9B%9E"><span class="nav-text">缓存召回</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GBDT-LR"><span class="nav-text">GBDT+LR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E4%BA%A4%E5%8F%89"><span class="nav-text">特征交叉</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B"><span class="nav-text">序列模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%AD%A6%E4%B9%A0"><span class="nav-text">多任务学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E6%8E%92"><span class="nav-text">重排</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RRF%E7%AE%97%E6%B3%95"><span class="nav-text">RRF算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E5%93%81%E5%86%B7%E5%90%AF%E5%8A%A8"><span class="nav-text">物品冷启动</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -839,12 +1028,12 @@ $$</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">486k</span>
+    <span title="Symbols count total">499k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">14:44</span>
+    <span title="Reading time total">15:08</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

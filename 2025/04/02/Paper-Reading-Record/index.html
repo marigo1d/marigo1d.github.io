@@ -32,11 +32,16 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530112142071.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530110615396.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250530145000198.png">
-<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250601135610999.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250603133711303.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/20250410155409605.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/20250410214653107.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/20250421211315671.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250604100042926.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250601135610999.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250605114032032.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250605114141206.png">
 <meta property="article:published_time" content="2025-04-02T07:21:11.000Z">
-<meta property="article:modified_time" content="2025-06-02T05:34:13.851Z">
+<meta property="article:modified_time" content="2025-06-05T03:41:42.027Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -229,7 +234,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-02 13:34:13" itemprop="dateModified" datetime="2025-06-02T13:34:13+08:00">2025-06-02</time>
+                <time title="Modified: 2025-06-05 11:41:42" itemprop="dateModified" datetime="2025-06-05T11:41:42+08:00">2025-06-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,14 +252,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>19k</span>
+              <span>22k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>35 mins.</span>
+              <span>40 mins.</span>
             </span>
 
         </div>
@@ -268,7 +273,7 @@
       
         <p>Paper阅读记录</p>
 <span id="more"></span>
-<h1>LLM-Paper-Reading-Record</h1>
+<h1>Paper-Reading-Record</h1>
 <img src="/2025/04/02/Paper-Reading-Record/v2-ee9b5d4a0761d2d1d10acb37cebefba3_1440w.jpg" class="" title="img">
 <h2 id="Corpus">Corpus</h2>
 <p>corpus 语料库</p>
@@ -316,12 +321,35 @@ $$<br>
 <p>image-text descriptions: IAPR TC-12, Attributes Discovery, and the SBU datasets.</p>
 <br>
 <h2 id="Paper">Paper</h2>
-<h3 id="Base">Base</h3>
+<h3 id="Distribution-Base">Distribution-Base</h3>
+<h4 id="CAP">CAP</h4>
+<p>CAP twelve years later: How the “rules” have changed</p>
+<p><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/abstract/document/6133253">https://ieeexplore.ieee.org/abstract/document/6133253</a></p>
+<p><strong>一致性 (Consistency, C)：</strong></p>
+<ul>
+<li><strong>含义：</strong> 在分布式系统中，对数据进行读取操作时，所有客户端（或者说从任何节点读取）都能看到相同且最新的数据。就好比系统里只有一份数据，而且这份数据总是最新的。</li>
+</ul>
+<p><strong>高可用性 (High Availability, A)：</strong></p>
+<ul>
+<li><strong>含义：</strong> 系统在非故障情况下，应该能够处理所有请求并返回响应（无论是成功还是失败）。换句话说，系统的大部分或全部节点应该始终保持运行状态，并且能够响应来自客户端的请求。特别是对于写入操作，客户端应该总是能够成功地将数据写入系统。</li>
+</ul>
+<p><strong>网络分区容忍性 (Tolerance to Network Partitions, P)：</strong></p>
+<ul>
+<li><strong>含义：</strong> 当分布式系统中的节点之间发生网络通信故障时（即网络分区，导致部分节点无法与另一部分节点通信），系统仍然能够正常运行。</li>
+</ul>
+<p><strong>核心概念总结：</strong></p>
+<p>当网络出现分区（P）时，不可能同时拥有完美的“一致性”（C）和完美的“可用性”（A）。你必须在这两者之间做出权衡：</p>
+<ul>
+<li><strong>CP 系统：</strong> 优先保证一致性，在分区时牺牲可用性。</li>
+<li><strong>AP 系统：</strong> 优先保证可用性，在分区时牺牲一致性（意味着可能需要后期处理数据冲突）。</li>
+</ul>
+<h3 id="LLM-Base">LLM-Base</h3>
 <h4 id="Attention">Attention</h4>
 <p><strong>Attention is All You Need</strong></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></p>
 <br>
 <h4 id="GPT">GPT</h4>
+<p><a target="_blank" rel="noopener" href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf">https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf</a></p>
 <p>Improving Language Understanding by Generative Pre-Training</p>
 <p>GPT是基于Transformer的<strong>Decoder</strong>部分，但移除了交叉注意力。</p>
 <ul>
@@ -329,8 +357,8 @@ $$<br>
 <li><strong>“预训练”</strong>：指的是模型在大量无标签文本数据上，通过上述生成任务进行训练，从而学习到通用的语言表示和能力，这些能力可以在后续的下游任务中进行迁移。</li>
 </ul>
 <br>
-<h5 id="Two-Stage-Training">Two Stage Training</h5>
-<h6 id="Unsupervised-pre-training">Unsupervised pre-training</h6>
+<p><strong>Two Stage Training</strong></p>
+<p><strong>Unsupervised pre-training</strong></p>
 <ul>
 <li>
 <p>“Given an unsupervised corpus of tokens $\mathcal{U} = {u_1, \ldots, u_n}$, we use a standard language modeling objective to maximize the following likelihood:”</p>
@@ -350,7 +378,7 @@ $P(u) = \text{softmax}(h_n W_e^T)$</p>
 </li>
 </ul>
 <br>
-<h6 id="Supervised-fine-tuning">Supervised fine-tuning</h6>
+<p><strong>Supervised fine-tuning</strong></p>
 <ul>
 <li>
 <p>“After training the model with the objective in Eq. 1, we adapt the parameters to the supervised target task.”</p>
@@ -416,7 +444,7 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 </li>
 </ul>
 <br>
-<h5 id="Task-specific-input-transformations">Task-specific input transformations</h5>
+<p><strong>Task-specific input transformations</strong></p>
 <img src="/2025/04/02/Paper-Reading-Record/image-20250530104004180.png" class="" title="image-20250530104004180">
 <ul>
 <li>
@@ -507,10 +535,10 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 <p>BERT token representation</p>
 <img src="/2025/04/02/Paper-Reading-Record/image-20250530110615396.png" class="" title="image-20250530110615396">
 <br>
-<h5 id="pre-training">pre-training</h5>
+<p><strong>pre-training</strong></p>
 <p>$BERT_{BASE}$ was chosen to have the same model size as OpenAI GPT for comparison purposes. Critically, however, the BERT Transformer uses bidirectional self-attention, while the GPT Transformer uses constrained self-attention where every token can only attend to context to its left</p>
 <p>BERT是基于Transformer的<strong>Encoder</strong>部分</p>
-<h6 id="MLM">MLM</h6>
+<p><strong>MLM</strong></p>
 <p>“遮蔽语言模型”（MLM）方法</p>
 <p>MLM的核心思想是：</p>
 <ol>
@@ -570,9 +598,45 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 </ul>
 </li>
 </ul>
+<p>以 <code>quick</code> 这个词为例：</p>
+<ul>
+<li><strong>真实标签 (Target):</strong> <code>quick</code>。在one-hot编码中，只有 <code>quick</code> 对应的维度是1，其他都是0。</li>
+<li><strong>BERT模型预测概率 (Prediction):</strong> BERT模型对于 <code>[MASK]</code> 位置的输出，经过softmax后，会得到一个关于整个词汇表的概率分布，例如：
+<ul>
+<li>$P(\text{quick}) = 0.9$</li>
+<li>$P(\text{slow}) = 0.05$</li>
+<li>$P(\text{brown}) = 0.01$</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+<p>交叉熵损失计算将是：<br>
+$Loss_{quick} = - (1 \cdot \log(P(\text{quick})) + 0 \cdot \log(P(\text{slow})) + …)$</p>
+<p><strong>同理，对 <code>fox</code> 和 <code>lazy</code> 进行计算：</strong></p>
+<ul>
+<li>
+<p><strong>对于 <code>fox</code> (被替换为 <code>apple</code> 的位置):</strong></p>
+<ul>
+<li>真实标签: <code>fox</code></li>
+<li>BERT模型预测概率: $P(\text{fox})$</li>
+<li>$Loss_{fox} = - \log(P(\text{fox}))$</li>
+</ul>
+</li>
+<li>
+<p><strong>对于 <code>lazy</code> (保持不变的位置):</strong></p>
+<ul>
+<li>真实标签: <code>lazy</code></li>
+<li>BERT模型预测概率: $P(\text{lazy})$</li>
+<li>$Loss_{lazy} = - \log(P(\text{lazy}))$</li>
+</ul>
+</li>
+</ul>
+<p><strong>总损失：</strong></p>
+<p>最终的MLM任务的总损失是所有被预测词的交叉熵损失的<strong>平均值</strong>（或求和，然后除以被预测词的数量）。</p>
+<p>$Total Loss = (Loss_{quick} + Loss_{fox} + Loss_{lazy}) / 3$ (假设只有这三个词被预测)</p>
 </blockquote>
 <br>
-<h6 id="NSP">NSP</h6>
+<p><strong>NSP</strong></p>
 <p>BERT的第一个预训练任务（MLM）主要关注的是<strong>词汇层面的理解和上下文表示</strong>。然而，许多重要的自然语言处理（NLP）下游任务，比如：</p>
 <ul>
 <li><strong>问答（Question Answering, QA）</strong>：模型需要判断一个句子（问题）和另一个句子（段落中的答案句）之间的关系。</li>
@@ -612,7 +676,7 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 </ol>
 </blockquote>
 <br>
-<h5 id="Fine-tuning">Fine-tuning</h5>
+<p><strong>Fine-tuning</strong></p>
 <p>BERT直接把两段文本（例如，问题和文章）<strong>拼接</strong>在一起（用特殊分隔符[SEP]隔开），然后一起输入给BERT。BERT的<strong>自注意力机制</strong>神奇之处在于，当它处理这个拼接后的长文本时，它会自动地在问题和文章的词语之间建立起“双向交叉注意力”。也就是说，一个词在问题中，它也会关注文章中的所有词；一个词在文章中，它也会关注问题中的所有词。这一个步骤就完成了传统的“独立编码”和“交叉注意力”两个阶段的工作，简化了模型结构。</p>
 <p>对于每个不同的任务，我们只需要把任务对应的输入格式（如单句、句子对）和任务对应的输出要求（如分类结果、词级别标签）接入到预训练好的BERT模型上，然后从头到尾（end-to-end）地微调整个模型的所有参数。</p>
 <p>BERT在微调时，根据任务类型利用其输出的不同部分。</p>
@@ -646,7 +710,7 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 <p>原始BERT论文中提到的问答任务，特指<strong>问答抽取（Extractive QA）</strong>，而不是问答生成。</p>
 </blockquote>
 <br>
-<h5 id="Training-Objectives">Training Objectives</h5>
+<p><strong>Training Objectives</strong></p>
 <ul>
 <li><strong>预训练阶段：</strong> BERT在预训练时学习了两种任务：MLM（Masked Language Model）和NSP（Next Sentence Prediction）。NSP任务的输入就是[CLS] Sentence A [SEP] Sentence B [SEP]，它需要判断Sentence B是否是Sentence A的下一句。这里的Sentence A和Sentence B是任意从语料中抽取的。</li>
 <li><strong>到下游任务的映射：</strong>
@@ -680,7 +744,7 @@ $L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda * L_1(\mathcal{C})$<br>
 </li>
 </ul>
 <br>
-<h5 id="Inference">Inference</h5>
+<p><strong>Inference</strong></p>
 <p>BERT的输出一般为<strong>分类任务 (情感分析、语义蕴含)</strong>，**序列标注任务 (命名实体识别)**等</p>
 <p>假设我们有一个输入序列：<code>&quot;The dog [MASK] at the cat.&quot;</code><br>
 BERT的目标是预测 <code>[MASK]</code> 位置应该填入什么词。</p>
@@ -900,6 +964,55 @@ BERT的目标是预测 <code>[MASK]</code> 位置应该填入什么词。</p>
 </ol>
 <p>ViT的输出是其核心Transformer Encoder层处理后的<strong>上下文感知的特征表示</strong>。对于图像分类，最直接的输出通常是**<code>[CLS]</code> token对应的隐藏向量**，因为它被设计用来聚合整个图像的全局信息。这个 <code>[CLS]</code> token的向量随后会经过一个线性分类头，最终输出<strong>每个类别的logits</strong>，其维度为 <code>(batch_size, num_classes)</code>。</p>
 <br>
+<h3 id="图像-文本">图像-文本</h3>
+<h4 id="UNITER">UNITER</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1909.11740">https://arxiv.org/abs/1909.11740</a></p>
+<img src="/2025/04/02/Paper-Reading-Record/image-20250603133711303.png" class="" title="image-20250603133711303">
+<p>four main tasks to pre-train our model:</p>
+<ul>
+<li>Masked Language Modeling conditioned on image regions (MLM),</li>
+<li>Masked Region Modeling conditioned on input text (with three variants) (MRM),</li>
+<li>Image-Text Matching (ITM),</li>
+<li>Word-Region Alignment (WRA).</li>
+</ul>
+<p>方法：</p>
+<ul>
+<li>对于MLM和MRM，randomly mask some words or regions from the input and learn to recover the words or regions as the output of Transformer. Specifically, word masking is realized by replacing the token with a special token [MASK], and region masking is implemented by replacing the visual feature vector with all zeros. 仅mask单模态，自监督学习</li>
+<li>对于ITM，sample both positive and negative imagesentence pairs and learn their matching scores. 模型输出 true or false判定图片文本是否匹配（监督学习）并计算交叉熵优化</li>
+<li>对于WAR，通过训练模型旨在最小化 $\sum_{i,j} T_{ij}.c(w_i, v_j)$, where $c(w_i, v_j)$ 为衡量 $w_i$ 和 $v_j$ 相关性的成本函数（文中为cosine distance）
+<ul>
+<li><strong>Optimal Transport (OT) 和传输计划 T 本身不是 UNITER 模型的参数。</strong></li>
+<li>最小化的$\sum_{i,j} T_{ij}.c(w_i, v_j)$为损失函数的一部分；当该值最小化时，当前模型中的 词向量 和 图向量的对齐程度最高</li>
+</ul>
+</li>
+</ul>
+<br>
+<h4 id="ViLT">ViLT</h4>
+<p><a target="_blank" rel="noopener" href="http://proceedings.mlr.press/v139/kim21k/kim21k.pdf">http://proceedings.mlr.press/v139/kim21k/kim21k.pdf</a></p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.gnn.club/?p=2910">https://www.gnn.club/?p=2910</a></p>
+<p>对比其他架构</p>
+<img src="/2025/04/02/Paper-Reading-Record/20250410155409605.png" class="" title="img">
+<p>文章架构</p>
+<img src="/2025/04/02/Paper-Reading-Record/20250410214653107.png" class="" title="img">
+<p>We train ViLT with two objectives commonly used to train VLP models: image text matching (ITM) and masked language modeling (MLM).</p>
+<br>
+<h4 id="ALBEF">ALBEF</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2107.07651">https://arxiv.org/abs/2107.07651</a></p>
+<p>参考：<a target="_blank" rel="noopener" href="https://gnn.club/?p=2989">https://gnn.club/?p=2989</a></p>
+<img src="/2025/04/02/Paper-Reading-Record/20250421211315671.png" class="" title="img">
+<p><strong>训练</strong></p>
+<ul>
+<li>Image－Text Contrastive Loss，ITC</li>
+<li>Image－Text Matching Loss，ITM</li>
+<li>Masked Language Modeling Loss，MLM</li>
+</ul>
+<br>
+<h3 id="MoE">MoE</h3>
+<h4 id="Switch-Transformers">Switch Transformers</h4>
+<p>Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2101.03961">https://arxiv.org/abs/2101.03961</a></p>
+<img src="/2025/04/02/Paper-Reading-Record/image-20250604100042926.png" class="" title="image-20250604100042926">
+<br>
 <h3 id="多模态">多模态</h3>
 <h4 id="CLIP">CLIP</h4>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2103.00020">https://arxiv.org/abs/2103.00020</a></p>
@@ -912,14 +1025,15 @@ BERT的目标是预测 <code>[MASK]</code> 位置应该填入什么词。</p>
 <p>We consider two different architectures for the image encoder. For the first, we use ResNet-50 (He et al., 2016a) as the base architecture for the image encoder due to its widespread adoption and proven performance. We make several modifications to the original version using the ResNetD improvements from He et al. (2019) and the antialiased rect-2 blur pooling from Zhang (2019). We also replace the global average pooling layer with an attention pooling mechanism. The attention pooling is implemented as a single layer of “transformer-style” multi-head QKV attention where the query is conditioned on the global average-pooled representation of the image. For the second architecture, we experiment with the recently introduced Vision Transformer (ViT) (Dosovitskiy et al., 2020). We closely follow their implementation with only the minor modification of adding an additional layer normalization to the combined patch and position embeddings before the transformer and use a slightly different initialization scheme.</p>
 <p>The text encoder is a Transformer (Vaswani et al., 2017) with the architecture modifications described in Radford et al. (2019). As a base size we use a 63M-parameter 12- layer 512-wide model with 8 attention heads. The transformer operates on a lower-cased byte pair encoding (BPE) representation of the text with a 49,152 vocab size (Sennrich et al., 2015). For computational efficiency, the max sequence length was capped at 76. The text sequence is bracketed with [SOS] and [EOS] tokens and the activations of the highest layer of the transformer at the [EOS] token are treated as the feature representation of the text which is layer normalized and then linearly projected into the multi-modal embedding space. Masked self-attention was used in the text encoder to preserve the ability to initialize with a pre-trained language model or add language modeling as an auxiliary objective, though exploration of this is left as future work.</p>
 <br>
-<h4 id="ViLT-视觉与语言多模态框架">ViLT: 视觉与语言多模态框架</h4>
-<p><a target="_blank" rel="noopener" href="http://proceedings.mlr.press/v139/kim21k/kim21k.pdf">http://proceedings.mlr.press/v139/kim21k/kim21k.pdf</a></p>
-<p>参考：<a target="_blank" rel="noopener" href="https://www.gnn.club/?p=2910">https://www.gnn.club/?p=2910</a></p>
-<p>对比其他架构</p>
-<img src="/2025/04/02/Paper-Reading-Record/20250410155409605.png" class="" title="img">
-<p>文章架构</p>
-<img src="/2025/04/02/Paper-Reading-Record/20250410214653107.png" class="" title="img">
-<p>We train ViLT with two objectives commonly used to train VLP models: image text matching (ITM) and masked language modeling (MLM).</p>
+<h4 id="Flamingo">Flamingo</h4>
+<p>Flamingo: a Visual Language Model for Few-Shot Learning</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2204.14198">https://arxiv.org/abs/2204.14198</a></p>
+<img src="/2025/04/02/Paper-Reading-Record/image-20250605114032032.png" class="" title="image-20250605114032032">
+<img src="/2025/04/02/Paper-Reading-Record/image-20250605114141206.png" class="" title="image-20250605114141206">
+<br>
+<h4 id="BLIP-2">BLIP-2</h4>
+<p>BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2301.12597">https://arxiv.org/abs/2301.12597</a></p>
 <br>
 <h2 id="参考">参考</h2>
 <br>
@@ -1005,7 +1119,7 @@ BERT的目标是预测 <code>[MASK]</code> 位置应该填入什么词。</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">LLM-Paper-Reading-Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Corpus"><span class="nav-text">Corpus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datasets"><span class="nav-text">Datasets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper"><span class="nav-text">Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT"><span class="nav-text">GPT</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Two-Stage-Training"><span class="nav-text">Two Stage Training</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Unsupervised-pre-training"><span class="nav-text">Unsupervised pre-training</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Supervised-fine-tuning"><span class="nav-text">Supervised fine-tuning</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Task-specific-input-transformations"><span class="nav-text">Task-specific input transformations</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BERT"><span class="nav-text">BERT</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#pre-training"><span class="nav-text">pre-training</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#MLM"><span class="nav-text">MLM</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#NSP"><span class="nav-text">NSP</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Fine-tuning"><span class="nav-text">Fine-tuning</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Training-Objectives"><span class="nav-text">Training Objectives</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Inference"><span class="nav-text">Inference</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC"><span class="nav-text">文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT2"><span class="nav-text">GPT2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT3"><span class="nav-text">GPT3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LLaMa"><span class="nav-text">LLaMa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ChatGLM"><span class="nav-text">ChatGLM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CV"><span class="nav-text">CV</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Stable-Diffusion"><span class="nav-text">Stable Diffusion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViT"><span class="nav-text">ViT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81"><span class="nav-text">多模态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CLIP"><span class="nav-text">CLIP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViLT-%E8%A7%86%E8%A7%89%E4%B8%8E%E8%AF%AD%E8%A8%80%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A1%86%E6%9E%B6"><span class="nav-text">ViLT: 视觉与语言多模态框架</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Paper-Reading-Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Corpus"><span class="nav-text">Corpus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datasets"><span class="nav-text">Datasets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper"><span class="nav-text">Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Distribution-Base"><span class="nav-text">Distribution-Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAP"><span class="nav-text">CAP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-Base"><span class="nav-text">LLM-Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT"><span class="nav-text">GPT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BERT"><span class="nav-text">BERT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC"><span class="nav-text">文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT2"><span class="nav-text">GPT2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT3"><span class="nav-text">GPT3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LLaMa"><span class="nav-text">LLaMa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ChatGLM"><span class="nav-text">ChatGLM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CV"><span class="nav-text">CV</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Stable-Diffusion"><span class="nav-text">Stable Diffusion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViT"><span class="nav-text">ViT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F-%E6%96%87%E6%9C%AC"><span class="nav-text">图像-文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UNITER"><span class="nav-text">UNITER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViLT"><span class="nav-text">ViLT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ALBEF"><span class="nav-text">ALBEF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MoE"><span class="nav-text">MoE</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Switch-Transformers"><span class="nav-text">Switch Transformers</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81"><span class="nav-text">多模态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CLIP"><span class="nav-text">CLIP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Flamingo"><span class="nav-text">Flamingo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BLIP-2"><span class="nav-text">BLIP-2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1073,12 +1187,12 @@ BERT的目标是预测 <code>[MASK]</code> 位置应该填入什么词。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">486k</span>
+    <span title="Symbols count total">499k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">14:44</span>
+    <span title="Reading time total">15:08</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
