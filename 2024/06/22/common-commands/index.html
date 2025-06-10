@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/22/common-commands/image-20240823160319940.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/22/common-commands/image-20240823160406360.png">
 <meta property="article:published_time" content="2024-06-22T08:07:03.000Z">
-<meta property="article:modified_time" content="2025-03-28T02:22:25.605Z">
+<meta property="article:modified_time" content="2025-06-10T07:34:11.525Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python, Bash, C">
 <meta name="twitter:card" content="summary">
@@ -223,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-28 10:22:25" itemprop="dateModified" datetime="2025-03-28T10:22:25+08:00">2025-03-28</time>
+                <time title="Modified: 2025-06-10 15:34:11" itemprop="dateModified" datetime="2025-06-10T15:34:11+08:00">2025-06-10</time>
               </span>
 
           <br>
@@ -232,7 +232,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>9.5k</span>
+              <span>9.6k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -276,25 +276,12 @@
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/419955374">https://zhuanlan.zhihu.com/p/419955374</a></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">say_hi</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment">#规定函数传入参数为str类型，返回值为str类型</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Hello <span class="subst">&#123;name&#125;</span>!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mix</span>(<span class="params">scores: <span class="built_in">list</span>[<span class="built_in">int</span>], ages: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]</span>) -&gt; <span class="built_in">tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>]:</span><br><span class="line">    <span class="comment">#容器注解</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">seq: Seq1[<span class="built_in">str</span>]</span>):</span><br><span class="line">    <span class="comment">#传入参数为（列表+元组）的泛化：序列Seq</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> seq:</span><br><span class="line">        <span class="built_in">print</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">a: <span class="built_in">int</span> = <span class="number">0</span></span>) -&gt; <span class="type">Optional</span>[<span class="built_in">str</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为None或为str</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Yeah&#x27;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>() -&gt; <span class="type">Union</span>[<span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>]:</span><br><span class="line">    <span class="comment">#可选返回值：为str，int，float 三选一</span></span><br><span class="line">    <span class="comment">#Optional[int] 和 Union[int, None] 是等价的。</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#T为泛型，T必须为str或int</span></span><br><span class="line">T = TypeVar(<span class="string">&#x27;T&#x27;</span>, <span class="built_in">str</span>, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">a: T, b: T</span>) -&gt; <span class="type">List</span>[T]:</span><br><span class="line">    <span class="keyword">return</span> [a, b]</span><br><span class="line"></span><br><span class="line"><span class="comment"># K的具体类型没有限制</span></span><br><span class="line">K = TypeVar(<span class="string">&quot;K&quot;</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="python-环境">python 环境</h2>
-<p>sudo apt-get update  # 更新包管理器</p>
-<p>sudo apt-get install python3-venv  # 安装Python虚拟环境工具</p>
-<p>cd /path/to/your/project</p>
-<p>python3 -m venv venv</p>
-<p>source venv/bin/activate</p>
-<p>pip install -r requirements.txt</p>
-<p>deactivate</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update  <span class="comment"># 更新包管理器</span></span><br><span class="line"></span><br><span class="line">sudo apt-get install python3-venv  <span class="comment"># 安装Python虚拟环境工具</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /path/to/your/project</span><br><span class="line"></span><br><span class="line">python3 -m venv venv</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> venv/bin/activate</span><br><span class="line"></span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line">deactivate</span><br></pre></td></tr></table></figure>
 <p>conda指令</p>
-<p>conda env list</p>
-<p>conda create --name your_env_name python=3.5 numpy scipy</p>
-<p>conda remove –<em>name</em> <em>your_env_name</em> --all</p>
-<p>conda install</p>
-<p>​	conda install numpy=1.9.3</p>
-<p>activate your_env_name</p>
-<p>deactivate</p>
-<p>conda clean --all</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">conda <span class="built_in">env</span> list</span><br><span class="line"></span><br><span class="line">conda create --name your_env_name python=3.5 numpy scipy</span><br><span class="line"></span><br><span class="line">conda remove --name your_env_name --all</span><br><span class="line"></span><br><span class="line">conda install</span><br><span class="line"></span><br><span class="line">conda install numpy=1.9.3</span><br><span class="line"></span><br><span class="line">activate your_env_name</span><br><span class="line"></span><br><span class="line">deactivate</span><br><span class="line"></span><br><span class="line">conda clean --all</span><br></pre></td></tr></table></figure>
 <p>当前conda虚拟环境中存在pip时，使用pip指令将优先使用环境中pip而非全局pip，可通过pip list（当前环境必须已安装pip）和 conda list 查看当前环境包列表</p>
 <p>出现报错</p>
-<p>PackagesNotFoundError: The following packages are not available from current channels</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PackagesNotFoundError: The following packages are not available from current channels</span><br></pre></td></tr></table></figure>
 <p>尝试在<a target="_blank" rel="noopener" href="https://anaconda.xn--org-us9ds1a2eq8vn4srgggrku8b9tcdqf8an48pgtee4b666aphkt3ki53cqmo">https://anaconda.org直接搜索该包并使用网站所提供的指令安装</a></p>
 <h2 id="Docker">Docker</h2>
 <ol>
