@@ -29,7 +29,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/22/Machine-Learning/knn-1-movie.png">
 <meta property="article:published_time" content="2025-04-22T06:27:11.000Z">
-<meta property="article:modified_time" content="2025-04-22T08:20:52.676Z">
+<meta property="article:modified_time" content="2025-06-10T12:48:54.119Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -214,10 +214,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-04-22 14:27:11 / Modified: 16:20:52" itemprop="dateCreated datePublished" datetime="2025-04-22T14:27:11+08:00">2025-04-22</time>
+              <time title="Created: 2025-04-22 14:27:11" itemprop="dateCreated datePublished" datetime="2025-04-22T14:27:11+08:00">2025-04-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-06-10 20:48:54" itemprop="dateModified" datetime="2025-06-10T20:48:54+08:00">2025-06-10</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -234,14 +240,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>3.2k</span>
+              <span>4.3k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>6 mins.</span>
+              <span>8 mins.</span>
             </span>
 
         </div>
@@ -424,6 +430,69 @@ $$<br>
 <li>$(x,y) \in D$ 是包含多个有标签样本的数据集，这些样本为 $(x,y)$ 对。</li>
 <li>$y$ 是有标签样本中的标签。由于这是逻辑回归， $y$ 的每个值都必须为 0 或 1。</li>
 <li>$y′$ 是模型的预测结果（介于 0 和 1 之间），给定集合 $x$ 中的功能。</li>
+</ul>
+<br>
+<p>补充</p>
+<hr>
+<p><strong>逻辑回归模型的本质</strong>可以概括为：</p>
+<p>逻辑回归假设的是因变量的“对数几率（log odds）”与自变量之间存在线性关系。</p>
+<hr>
+<p><strong>逻辑回归要解决什么问题？</strong></p>
+<p>逻辑回归主要用于<strong>分类问题</strong>，特别是<strong>二分类问题</strong>，比如预测某人是否患病、某封邮件是否是垃圾邮件等。</p>
+<ul>
+<li>因变量 $y$ 只能取两个值，通常设为 0 和 1。</li>
+<li>输入的是一个或多个自变量（特征） $x_1, x_2, \dots, x_n$。</li>
+</ul>
+<p>我们希望建一个模型，输出：</p>
+<p>$P(y = 1 \mid \mathbf{x})$</p>
+<p>也就是，给定自变量 $\mathbf{x}$，预测 $y = 1$ 的概率。</p>
+<hr>
+<p><strong>为什么不能直接用线性模型？</strong></p>
+<p>最初的想法可能是用线性回归：</p>
+<p>$P(y = 1 \mid \mathbf{x}) = \beta_0 + \beta_1 x_1 + \dots + \beta_n x_n$</p>
+<p><strong>但这不合理</strong>，因为：</p>
+<ul>
+<li>概率值必须在 $[0,1]$ 区间；</li>
+<li>而线性函数的值可以任意大或任意小。</li>
+</ul>
+<p>所以我们需要一种变换，既能处理线性组合，又能保证输出落在 $[0,1]$ 区间。</p>
+<p><strong>引入几率（Odds）和对数几率（Log Odds）</strong></p>
+<ul>
+<li>
+<p>几率定义为：</p>
+<p>$\text{Odds} = \frac{P(y=1)}{P(y=0)} = \frac{p}{1-p}$</p>
+</li>
+<li>
+<p>对数几率（log odds）：</p>
+<p>$\log\left(\frac{p}{1-p}\right)$</p>
+</li>
+</ul>
+<p>对数几率是从概率空间映射到 $(-\infty, +\infty)$，适合做线性建模。</p>
+<p><strong>逻辑回归模型的核心假设</strong></p>
+<p>逻辑回归的核心假设是：</p>
+<p>$\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 x_1 + \dots + \beta_n x_n$</p>
+<p>也就是说：</p>
+<blockquote>
+<p><strong>自变量的线性组合影响的是“对数几率”，而不是概率本身。</strong></p>
+</blockquote>
+<p><strong>通过变换得到 Sigmoid 函数（逻辑函数）</strong></p>
+<p>从上面的等式出发，解出 $p$（即 $P(y=1)$）：</p>
+<p>$$\frac{p}{1-p} = e^{\beta_0 + \beta_1 x_1 + \dots + \beta_n x_n} \Rightarrow p = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_1 + \dots + \beta_n x_n)}}$$</p>
+<p>这个形式就是著名的 <strong>Sigmoid 函数</strong>：</p>
+<p>$p = \sigma(z) = \frac{1}{1 + e^{-z}}, \quad z = \beta_0 + \beta_1 x_1 + \dots + \beta_n x_n$</p>
+<p>逻辑回归不是对“概率”建模，而是对“对数几率”建模。</p>
+<ul>
+<li>
+<p><strong>本质假设：</strong></p>
+<p>$\log\left(\frac{p}{1-p}\right) = \text{线性函数}$</p>
+</li>
+<li>
+<p>这样做的好处：</p>
+<ul>
+<li>保证概率值在 $[0,1]$</li>
+<li>模型保持线性模型的优雅（便于解释、训练）</li>
+</ul>
+</li>
 </ul>
 <br>
 <h4 id="K近邻">K近邻</h4>
@@ -671,12 +740,12 @@ $$</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">500k</span>
+    <span title="Symbols count total">511k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:09</span>
+    <span title="Reading time total">15:30</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

@@ -84,13 +84,14 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250322150502092.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250322151444000.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250322151537751.png">
+<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250611134637079.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250322162045699.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250325154631583.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250322211023368.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250325200037093.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250323105541258.png">
 <meta property="article:published_time" content="2024-06-10T12:29:05.000Z">
-<meta property="article:modified_time" content="2025-03-28T02:25:54.588Z">
+<meta property="article:modified_time" content="2025-06-11T07:35:10.277Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -283,7 +284,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-28 10:25:54" itemprop="dateModified" datetime="2025-03-28T10:25:54+08:00">2025-03-28</time>
+                <time title="Modified: 2025-06-11 15:35:10" itemprop="dateModified" datetime="2025-06-11T15:35:10+08:00">2025-06-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -301,14 +302,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>14k</span>
+              <span>23k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>26 mins.</span>
+              <span>42 mins.</span>
             </span>
 
         </div>
@@ -394,10 +395,14 @@
 <p>策略表示在状态s下采取动作a的<strong>概率</strong>，为<strong>概率</strong>，可能为1</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240610204522539.png" class="" title="image-20240610204522539">
 <h3 id="状态价值函数">状态价值函数</h3>
-<p>在 MDP 中基于策略Π的状态价值函数（state-value function），定义为从状态s出发遵循策略Π能获得的期望回报</p>
+<p>在 MDP 中基于策略 $\pi$ 的状态价值函数（state-value function），定义为从状态s出发遵循策略Π能获得的期望回报</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240610204014373.png" class="" title="image-20240610204014373">
 <blockquote>
 <p>价值是回报的期望</p>
+<p>下标 π 用来<strong>指明这个期望是在什么概率分布下计算的</strong>。</p>
+<ul>
+<li>在概率论和统计中，期望算子的下标通常用来表示期望是关于哪个随机变量的分布，或者是在哪个参数（定义了分布）的条件下计算的。例如，$E_X[f(X)]$ 表示对随机变量 $X$ 的函数 $f(X)$ 求期望，其中 $X$ 的分布是已知的。</li>
+</ul>
 </blockquote>
 <h3 id="动作价值函数">动作价值函数</h3>
 <p>在 MDP 中，由于动作的存在，我们额外定义一个<strong>动作价值函数</strong>（action-value function）。表示在 MDP 遵循策略Π时，对当前状态s执行动作a得到的期望回报</p>
@@ -541,6 +546,28 @@
 <p>算法</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240612100452913.png" class="" title="image-20240612100452913">
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">td_error = r + self.gamma * self.Q_table[s1, a1] - self.Q_table[s0, a0]</span><br><span class="line">self.Q_table[s0, a0] += self.alpha * td_error</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Q表的变化其实是从后向前蔓延的</p>
+<p>一个全0的Q表，当某一步产生奖励后，该步对应的Q值出现了值，然后在每一轮的更新中，值向前扩散</p>
+<p>我们可以把这个过程形象地比喻成：</p>
+<ul>
+<li>
+<p><strong>“宝藏”被发现：</strong> 当智能体在某一步 <code>(s, a)</code> 执行后，到达 <code>s'</code> 并获得了奖励 <code>r</code> (尤其是正奖励，可以看作找到了“宝藏”的第一丝线索)，那么 <code>Q(s, a)</code> 会首先直接受到这个 <code>r</code> 的影响而更新。如果这是第一次获得奖励，那么这个 <code>Q(s, a)</code> 就从0变成了非0值。</p>
+</li>
+<li>
+<p><strong>“消息”向前传递：</strong></p>
+<ul>
+<li>在<strong>下一轮</strong>的训练中，如果智能体再次访问到状态 <code>s_prev</code>，并且它采取的动作 <code>a_prev</code> 能够引导它到达之前那个状态 <code>s</code>（也就是宝藏线索更近一步的状态），那么在更新 <code>Q(s_prev, a_prev)</code> 时，会使用到 <code>Q(s, a_selected_in_s)</code>（对于SARSA）或 <code>max_a' Q(s, a')</code>（对于Q-learning）。</li>
+<li>因为 <code>Q(s, ...)</code> 已经因为上一轮的奖励而有了一个非零值，这个值就会通过折扣因子 <code>γ</code> “打折”后，贡献给 <code>Q(s_prev, a_prev)</code> 的更新。</li>
+<li>这就好比，状态 <code>s</code> 告诉了状态 <code>s_prev</code>：“嘿，从你这里走某条路到我这里，我这里有点好东西（或者预示着好东西）！”</li>
+</ul>
+</li>
+<li>
+<p><strong>逐层蔓延/扩散：</strong> 这个过程会不断重复。状态 <code>s_prev</code> 的更新值又会影响到更早访问它的状态 <code>s_prev_prev</code>，以此类推。就像水波一样，从奖励产生的地方（或目标状态附近）开始，价值信息逐渐向起始状态或远离目标的状态扩散。</p>
+</li>
+</ul>
+</blockquote>
+<br>
 <h3 id="Q-learning算法">Q-learning算法</h3>
 <p>Value-based + offline</p>
 <p>对动作价值进行更新，目标是估计 <strong>最优策略的动作价值函数</strong></p>
@@ -551,7 +578,60 @@
 <blockquote>
 <p>对比Sarsa和Q-learning</p>
 <p>实际上，$r_t$和$R_t$在各自的算法中都表示在时间步$t$时环境反馈的即时奖励，但在更新公式中的使用方式略有不同。Sarsa算法使用下一个动作$a_{t+1}$的动作价值$Q(s_{t+1}, a_{t+1})$，而Q-learning算法使用下一状态$s_{t+1}$下最优动作的动作价值$\max_{a’} Q(s’, a’)$。</p>
-<p>Sarsa 是<strong>在线策略</strong>（on-policy）算法， Q-learning 是<strong>离线策略</strong>（off-policy）算法</p>
+<p>Sarsa 是<strong>在线策略</strong>（on-policy）算法， Q-learning 是<strong>离线策略</strong>（off-policy）算法，因为目标策略和行为策略分离，Q-learning 可以采用非常具有探索性的行为策略（甚至是完全随机的策略），同时仍然学习最优的Q值。这使得它在探索未知环境时可能更有效率。SARSA 学习的价值函数直接受到其探索行为的影响。如果探索策略包含了一些“愚蠢”的动作，SARSA计算出的Q值会反映这些“愚蠢”动作的后果。</p>
+<p>说人话就是，Q-learning在实际行动中“大胆尝试”，但在学习和评估时则“以最优为目标”。</p>
+</blockquote>
+<blockquote>
+<p>Q: 为什么Q-leanring中的Q表的值是从：一个全0的Q表，当某一步产生奖励后，该步对应的Q值出现了值，然后在每一轮的更新中，值向前扩散；为什么我们不直接从终点出发（从有reward的地方出发），反向向前推进，直接一次遍历得到Q表呢？这不是更快吗？</p>
+<p>A: 你提出的想法非常好，也非常有洞察力！你所描述的“从终点出发，反向向前推进，直接一次遍历得到Q表”的方法，其实非常接近甚至就是一种经典的**动态规划（Dynamic Programming, DP）<strong>方法，比如</strong>价值迭代（Value Iteration）<strong>或</strong>策略迭代（Policy Iteration）**中的一部分。</p>
+<p>那么，为什么Q-learning不直接这么做呢？主要原因在于它们解决问题的<strong>前提假设和适用场景</strong>不同：</p>
+<ol>
+<li>
+<p><strong>模型未知 vs. 模型已知 (Model-Free vs. Model-Based)</strong></p>
+<ul>
+<li><strong>你描述的方法 (类似DP)：</strong> 这种方法通常需要我们<strong>已知环境的模型 (Model-Based)</strong>。也就是说，你需要知道：
+<ul>
+<li><strong>状态转移概率 P(s’ | s, a):</strong> 在状态s执行动作a后，转移到状态s’的概率。</li>
+<li><strong>奖励函数 R(s, a, s’):</strong> 在状态s执行动作a并转移到状态s’后能获得的奖励。</li>
+<li>有了这些信息，你才能从终点（或有奖励的地方）准确地反向推算出前一个状态采取什么动作能达到这个奖励状态，以及这个动作的价值。例如，在价值迭代中，我们会用贝尔曼最优方程 <code>V*(s) = max_a Σ_&#123;s'&#125; P(s'|s,a) [R(s,a,s') + γV*(s')]</code> 来更新所有状态的价值，这确实是从“结果”倒推。</li>
+</ul>
+</li>
+<li><strong>Q-learning：</strong> Q-learning是一种<strong>模型无关 (Model-Free)</strong> 的强化学习算法。它<strong>不需要事先知道环境的模型</strong>。智能体就像一个在未知迷宫中探索的人，它只能通过与环境交互（尝试动作、观察结果和奖励）来学习。它不知道“墙的另一边是什么”，也不知道“走这条路一定能拿到奶酪”。</li>
+</ul>
+</li>
+<li>
+<p><strong>学习方式：通过经验学习 vs. 通过规划学习</strong></p>
+<ul>
+<li><strong>你描述的方法 (类似DP)：</strong> 这是在<strong>规划 (Planning)</strong>。你拥有了完整的地图（模型），然后你可以在脑海中或纸上进行推演，计算出最优路径。</li>
+<li><strong>Q-learning：</strong> 这是在<strong>学习 (Learning)</strong>。智能体通过一次次的<strong>试错 (trial-and-error)</strong> 来积累经验。
+<ul>
+<li>初始Q表为0，表示对环境一无所知。</li>
+<li>当某一步产生奖励时，Q-learning会更新该<code>(状态, 动作)</code>对的Q值。这个Q值代表了“在那个状态下执行那个动作，期望未来能获得的总回报（包括即时奖励）”。</li>
+<li>“值向前扩散”（实际上是奖励信息通过贝尔曼方程反向传播）的过程，是智能体逐渐认识到“哦，原来这个动作最终能导向那个有奖励的状态，所以这个动作的价值也应该高一些”。这个“扩散”是基于实际探索到的路径和奖励。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>适用场景</strong></p>
+<ul>
+<li><strong>你描述的方法 (类似DP)：</strong> 非常适合于模型已知且状态空间不至于过大的问题，例如棋盘游戏（规则已知）、最短路径问题（地图已知）。它的计算效率在模型已知时通常更高。</li>
+<li><strong>Q-learning：</strong> 非常适合于模型未知或模型非常复杂难以精确描述的环境，例如机器人控制（物理模型复杂）、很多现实世界的交互问题。它可以通过与真实环境或模拟环境交互来学习。</li>
+</ul>
+</li>
+</ol>
+<p><strong>为什么Q-learning的“扩散”看起来慢？</strong></p>
+<ul>
+<li><strong>探索的必要性：</strong> 因为模型未知，Q-learning需要通过探索（比如ε-greedy策略）来发现新的路径和潜在的奖励。如果它只走已知的“好路”，可能永远发现不了更好的路径。</li>
+<li><strong>采样效率：</strong> Q-learning是基于采样的，它只更新实际经历过的<code>(状态, 动作)</code>对。如果一个状态很少被访问，或者某个通往奖励的路径很长，那么奖励信息就需要很多轮迭代才能慢慢“传播”回去。</li>
+<li><strong>在线学习：</strong> Q-learning可以进行在线学习，即在与环境交互的过程中不断更新Q表，适应环境的变化。而DP通常是离线进行的，假设环境模型固定。</li>
+</ul>
+<p><strong>总结一下：</strong></p>
+<ul>
+<li>如果你<strong>有完整的环境模型</strong>（知道所有状态转移和奖励），那么你描述的从终点反向传播的方法（如价值迭代）确实是更直接和高效的，能够一次性（或经过几次迭代）计算出Q表。</li>
+<li>Q-learning的设计初衷是为了解决<strong>模型未知</strong>的问题。它通过与环境交互、逐步探索和利用贝尔曼方程来学习Q值，这个过程看起来像是“奖励向前扩散”，但本质上是奖励信息通过经验逐步反向传播更新先前状态的价值。</li>
+</ul>
+<p>所以，不是Q-learning“傻”，而是它被设计用来解决一类更普遍（模型未知）的问题，为此它采用了通过经验学习的方式，这种方式的特性就是逐步更新和信息传播。</p>
 </blockquote>
 <h3 id="DQN-DDQN">DQN/DDQN</h3>
 <p>Value-based + offline</p>
@@ -623,6 +703,9 @@
 <h3 id="TRPO">TRPO</h3>
 <p>策略函数</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20250324145210312.png" class="" title="image-20250324145210312">
+<blockquote>
+<p>E 的下标 $s_0$ 表示期望是“关于”初始状态 s_0 的分布来计算的, 这个公式中的 $E_{s_0}$ <strong>明确地表示初始状态 $s_0$ 是一个随机变量，它遵循某个初始状态分布 (initial state distribution)。</strong></p>
+</blockquote>
 <p>在AC的，优化目标为最大化 <code>J(θ)</code>，通过梯度更新 ；</p>
 <p>在TRPO中，优化目标为最大化 新策略与旧策略的价值差 <code>J(θ')- J(θ) </code> ，通过近似方法（相似策略下状态分布函数不变假设与<strong>重要性采样</strong>）将原目标  <code>J(θ')- J(θ) </code>  近似为下图，且满足<strong>KL散度</strong>约束（<strong>约束</strong>策略为相似策略）</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20250324141848364.png" class="" title="image-20250324141848364">
@@ -630,7 +713,8 @@
 <h4 id="整体流程">整体流程</h4>
 <img src="/2024/06/10/reinforce-learning-record/image-20250322150349844.png" class="" title="image-20250322150349844">
 <img src="/2024/06/10/reinforce-learning-record/image-20250322150502092.png" class="" title="image-20250322150502092">
-<h4 id="近似">近似</h4>
+<br>
+<h4 id="近似处理">近似处理</h4>
 <p>在策略优化中，我们希望找到新策略，使其期望回报最大化。但是，由于计算新策略的状态部分困难，有如下假设：</p>
 <p>TRPO假设：<strong>当新旧策略非常接近时，状态分布的变化可以忽略</strong>，即<strong>新策略的状态分布和旧策略的状态分布一致</strong></p>
 <blockquote>
@@ -640,17 +724,47 @@
 <p>最后，状态分布使用旧策略的，动作选择使用旧策略的，加权计算新策略的改进量。</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20250322151444000.png" class="" title="image-20250322151444000">
 <img src="/2024/06/10/reinforce-learning-record/image-20250322151537751.png" class="" title="image-20250322151537751">
+<blockquote>
+<p>重要性采样是什么?</p>
+<img src="/2024/06/10/reinforce-learning-record/image-20250611134637079.png" class="" title="image-20250611134637079">
+</blockquote>
+<br>
 <h4 id="近似约束与求解">近似约束与求解</h4>
 <p>由于这里使用了近似，所以需要引入约束，使近似可行。因此，为了保证新旧策略足够接近，TRPO 使用了<strong>库尔贝克-莱布勒</strong>（Kullback-Leibler，KL）散度来衡量策略之间的距离。</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20250322162045699.png" class="" title="image-20250322162045699">
+<br>
 <h4 id="广义优势">广义优势</h4>
 <p>多步时序差分的指数加权平均</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20250325154631583.png" class="" title="image-20250325154631583">
+<blockquote>
+<p>广义优势是干嘛的？</p>
+<p>优势是优化目标里的那个 $A^{\pi_{\theta}}(s_{t}, a_{t})$，定义是： $A^{\pi_{\theta}}(s_t, a_t) = Q^{\pi_{\theta}}(s_t, a_t) - V^{\pi_{\theta}}(s_t) = \left( r(s,a) + \gamma E_{s’ \sim P(\cdot|s,a)}[V^{\pi}(s’)] \right) - V^{\pi}(s)$，优势函数告诉我们：在状态 <code>s</code> 下，选择动作 <code>a</code> <strong>相比于遵循当前策略 <code>π</code> 的平均表现</strong>，是更好还是更差。</p>
+<p>广义优势其实就是将单步优势变成了多步优势，使得优势更加平均；</p>
+<p>单步TD误差（$\lambda=0$）：方差相对较低，但如果值函数估计 $V^{\pi_{\theta}}$ 不准，会有较高的偏差。<br>
+蒙特卡洛（MC）优势估计（相当于GAE中 $\lambda=1$）：使用从当前时刻到回合结束的完整回报来估计 $Q^{\pi_{\theta}}(s_t, a_t)$，然后减去 $V^{\pi_{\theta}}(s_t)$。这种方法偏差低（因为它不依赖于后续的值函数估计，只依赖于当前的 $V^{\pi_{\theta}}(s_t)$），但方差非常高，因为它累积了多个时间步的随机性。</p>
+</blockquote>
+<blockquote>
+<p>Critic网络和Actor网络在哪里？</p>
+<p><strong>广义优势的计算依赖于 Critic</strong>，Critic网络的核心任务是学习一个值函数 <code>V(s)</code>，用于评估在某个状态 <code>s</code> 下的期望累积回报。在GAE的计算中，<code>V(s_t)</code> 和 <code>V(s_&#123;t+1&#125;)</code> 这两个关键的组成部分<strong>直接由Critic网络输出</strong>。因此，GAE的准确性直接受到Critic网络估计准确性的影响。如果Critic估计不准，那么计算出的GAE也会不准确。</p>
+<ul>
+<li><strong>Critic网络</strong>：直接参与GAE的计算，提供状态值 <code>V(s)</code>，是计算TD误差 <code>δ_t</code> 和进而计算 <code>A_t^GAE</code> 的基础。</li>
+<li><strong>Actor网络</strong>：
+<ul>
+<li>生成用于计算GAE的经验数据（状态、动作、奖励），Actor网络根据当前策略与环境进行交互，生成一系列的轨迹 (episodes)，即 <code>(s_0, a_0, r_0, s_1, a_1, r_1, ..., s_T, a_T, r_T)</code>。这些收集到的状态 <code>s_t</code>、<code>s_&#123;t+1&#125;</code> 和奖励 <code>r_t</code> 是计算GAE所必需的原始数据。</li>
+<li>是GAE最终服务的对象。GAE计算出来后，用于指导Actor网络参数的更新，使其学习到更好的策略。GAE计算出来的优势 <code>A_t^GAE</code> 用于评估在状态 <code>s_t</code> 下采取动作 <code>a_t</code> 相对于平均动作的好坏程度。这个优势值随后被用于构建TRPO的目标函数（或其替代目标函数）的梯度，以更新Actor网络的参数 <code>θ</code>。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<br>
 <h4 id="算法-2">算法</h4>
 <img src="/2024/06/10/reinforce-learning-record/image-20250322211023368.png" class="" title="image-20250322211023368">
 <h3 id="PPO-clip">PPO-clip</h3>
 <p>基于AC和TRPO的，替换<strong>KL散度约束</strong>实现近似为<strong>惩罚优化/裁剪目标优化</strong>实现近似</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20250325200037093.png" class="" title="image-20250325200037093">
+<blockquote>
+<p>说白了就是把约束去掉变成无约束问题，更加易于求解</p>
+</blockquote>
 <h3 id="DDPG">DDPG</h3>
 <p>确定性策略</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20250323105541258.png" class="" title="image-20250323105541258">
@@ -660,12 +774,217 @@
 <p>策略网络使用？（证明好复杂</p>
 <p>价值目标网络和策略目标网络使用软更新</p>
 <h2 id="部分心得">部分心得</h2>
+<h3 id="AC分离">AC分离</h3>
+<p><strong>关于DQN算法中网络的构成</strong></p>
+<ul>
+<li><strong>Deep Q-Network (DQN):</strong> 当状态空间或动作空间变得非常大时，我们使用神经网络来近似Q函数，这就是DQN。
+<ul>
+<li>DQN的核心是一个<strong>Q网络 (Q-Network)</strong>。这个网络输入状态 <code>s</code>，输出对应状态下所有可能动作的Q值。例如，如果环境有3个离散动作，输入状态 <code>s</code>，网络会输出 <code>[Q(s, a1), Q(s, a2), Q(s, a3)]</code>。</li>
+<li><strong>动作选择 (Policy Derivation):</strong> 在DQN中，策略（如何选择动作）是根据Q网络输出的Q值<strong>派生</strong>出来的，通常使用ε-greedy策略：
+<ul>
+<li>以 <code>1-ε</code> 的概率选择具有最大Q值的动作：<code>a = argmax_a' Q(s, a')</code></li>
+<li>以 <code>ε</code> 的概率随机选择一个动作（用于探索）。</li>
+</ul>
+</li>
+<li><strong>所以，DQN中并没有一个独立的、参数化的“Actor网络”来直接输出策略 <code>π(a|s)</code> 或确定性动作 <code>a = μ(s)</code>。</strong> 它的“行为” (acting) 是由Q网络的结果驱动的。Q网络本身是一个<strong>价值网络 (Value Network)</strong>。</li>
+</ul>
+</li>
+</ul>
+<p>因此，Q-learning及其深度版本DQN本质上是<strong>基于值 (Value-based)</strong> 的方法，它们学习一个值函数（Q函数），然后从这个值函数中隐式地或显式地导出策略。它们没有像Actor-Critic方法那样显式地学习一个独立的策略网络（Actor）。</p>
+<br>
+<p><strong>为什么会出现Actor-Critic网络的分离？</strong></p>
+<p>Actor-Critic (AC) 架构将策略学习和价值学习分离开来，由两个独立的（或部分共享参数的）网络（或函数逼近器）来承担：</p>
+<ol>
+<li>
+<p><strong>Actor (策略网络 <code>π_θ(a|s)</code>)</strong>:</p>
+<ul>
+<li>负责学习策略，即在给定状态 <code>s</code> 下应该采取什么动作 <code>a</code>（或动作的概率分布）。</li>
+<li>它的目标是最大化期望累积回报。</li>
+<li>参数为 <code>θ</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>Critic (价值网络 <code>V_φ(s)</code> 或 <code>Q_φ(s,a)</code>)</strong>:</p>
+<ul>
+<li>负责评估Actor所选择的策略的好坏。它学习一个值函数，这个值函数可以是对当前策略下状态 <code>s</code> 的价值 <code>V(s)</code>（状态值函数），或者是状态-动作对 <code>(s,a)</code> 的价值 <code>Q(s,a)</code>（动作值函数）。</li>
+<li>它的目标是尽可能准确地估计价值。</li>
+<li>参数为 <code>φ</code>。</li>
+</ul>
+</li>
+</ol>
+<p><strong>分离的主要原因和优势如下：</strong></p>
+<ol>
+<li>
+<p><strong>降低策略梯度的方差 (Variance Reduction) - 这是最核心的原因：</strong></p>
+<ul>
+<li>纯粹的策略梯度方法（如REINFORCE）直接使用蒙特卡洛回报 <code>G_t</code> 来估计策略梯度。这种回报的方差通常非常大，因为一个好的动作可能因为后续一系列坏的随机事件而导致低回报，反之亦然。高方差使得学习过程不稳定且收敛缓慢。</li>
+<li>Critic通过学习一个值函数（如 <code>V(s)</code>）提供了一个<strong>基线 (baseline)</strong>。策略梯度可以使用<strong>优势函数 (Advantage Function)</strong> <code>A(s, a) = Q(s, a) - V(s)</code> 或者 <code>A(s, a) = r_t + γV(s_&#123;t+1&#125;) - V(s_t)</code> (TD误差) 来更新。</li>
+<li>优势函数衡量了在状态 <code>s</code> 下采取动作 <code>a</code> 相对于在该状态下采取平均动作的好坏程度。使用优势函数代替原始回报 <code>G_t</code> 可以显著降低梯度的方差，因为我们减去了一个与当前状态相关的期望值，使得梯度信号更集中于动作本身的好坏，而不是状态本身的好坏或后续轨迹的随机性。</li>
+<li><strong>更稳定的学习信号：</strong> Critic为Actor提供了一个更稳定、方差更低的学习信号，指导Actor如何调整其策略。</li>
+</ul>
+</li>
+<li>
+<p><strong>处理连续动作空间的能力：</strong></p>
+<ul>
+<li><strong>Value-based方法 (如DQN)</strong> 在处理高维或连续动作空间时会遇到困难。如果动作是连续的，<code>argmax_a Q(s, a)</code> 变成了一个在每个时间步都需要解决的复杂优化问题。</li>
+<li><strong>Actor-Critic方法</strong> 中的Actor可以直接输出连续动作（例如，输出高斯分布的均值和方差），或者直接输出确定性动作，这使得它们非常适合连续动作空间。</li>
+</ul>
+</li>
+<li>
+<p><strong>学习随机策略的能力：</strong></p>
+<ul>
+<li>Actor可以直接参数化一个随机策略 <code>π(a|s)</code>，这在某些情况下是必要的（例如，部分可观察环境，或者为了更好的探索）。</li>
+<li>虽然可以通过ε-greedy从Q值导出随机性，但Actor可以直接学习更复杂的随机策略。</li>
+</ul>
+</li>
+<li>
+<p><strong>更快的收敛（有时）：</strong></p>
+<ul>
+<li>由于方差降低和更有效的信用分配，AC方法有时可以比纯策略梯度方法或某些纯价值方法收敛更快。Critic的引导可以帮助Actor更快地找到好的策略方向。</li>
+</ul>
+</li>
+<li>
+<p><strong>模块化和灵活性：</strong></p>
+<ul>
+<li>Actor和Critic可以有不同的网络结构、学习率，甚至可以使用不同的优化算法。这种模块化设计提供了更大的灵活性。</li>
+<li>例如，在A2C/A3C中，Actor和Critic可以共享底层的特征提取层，然后在顶部分别有各自的输出头。</li>
+</ul>
+</li>
+</ol>
+<p><strong>总结一下Actor-Critic分离的动机：</strong></p>
+<ul>
+<li><strong>核心：</strong> Critic帮助Actor进行更有效的学习，主要是通过<strong>降低策略梯度的方差</strong>。</li>
+<li><strong>适用性：</strong> 使强化学习算法能更好地应用于<strong>连续动作空间</strong>。</li>
+<li><strong>策略表达：</strong> 方便学习<strong>随机策略</strong>。</li>
+</ul>
+<p>所以，Actor-Critic的分离是一种权衡和结合：Actor负责“做什么”，Critic负责“做得怎么样”，两者协同工作，使得算法在具有挑战性的环境中表现更好，学习更稳定。</p>
+<br>
+<p><strong>说明案例</strong></p>
+<p>好的，我们来举一个具体的例子来说明蒙特卡洛回报 <code>G_t</code> 的高方差问题，以及为什么它会导致学习不稳定。</p>
+<p><strong>场景设定：</strong></p>
+<p>假设我们有一个简单的环境，智能体从一个起始状态 <code>S_0</code> 开始，可以采取两个动作：<code>A_left</code> 或 <code>A_right</code>。</p>
+<ul>
+<li><strong>动作效果：</strong>
+<ul>
+<li><code>A_left</code>：有 70% 的概率立即获得 +10 的奖励并结束回合 (win)；有 30% 的概率立即获得 -5 的奖励并结束回合 (lose)。</li>
+<li><code>A_right</code>：进入一个中间状态 <code>S_intermediate</code>。</li>
+</ul>
+</li>
+<li><strong>中间状态 <code>S_intermediate</code>：</strong>
+<ul>
+<li>从 <code>S_intermediate</code> 开始，无论采取什么后续动作（假设只有一个默认动作），有 50% 的概率获得 +100 的巨大奖励并结束回合 (big win)；有 50% 的概率获得 -100 的巨大惩罚并结束回合 (big loss)。</li>
+</ul>
+</li>
+</ul>
+<p><strong>智能体的策略：</strong></p>
+<p>假设智能体的策略网络 <code>π_θ(a|S_0)</code> 在起始状态 <code>S_0</code> 对两个动作的输出概率是可调整的。我们的目标是学习到在 <code>S_0</code> 时应该选择哪个动作。</p>
+<p><strong>纯粹的策略梯度 (REINFORCE) 如何工作：</strong></p>
+<p>REINFORCE算法的策略梯度更新规则大致如下：<br>
+<code>∇_θ J(θ) ≈ E [ Σ_t ∇_θ log π_θ(a_t|s_t) * G_t ]</code></p>
+<p>其中 <code>G_t</code> 是从时间步 <code>t</code> 开始到回合结束的累积折扣回报。为了简化，我们假设折扣因子 <code>γ = 1</code>，并且我们只关注在 <code>S_0</code> 处做的第一个决策。所以，<code>G_0</code> 就是整个回合的总回报。</p>
+<p><strong>分析高方差问题：</strong></p>
+<p>我们来分析在 <code>S_0</code> 采取不同动作时 <code>G_0</code> 的情况：</p>
+<ol>
+<li>
+<p><strong>如果智能体在 <code>S_0</code> 选择 <code>A_left</code>：</strong></p>
+<ul>
+<li>有 70% 的概率，<code>G_0 = +10</code>。</li>
+<li>有 30% 的概率，<code>G_0 = -5</code>。</li>
+<li><code>A_left</code> 的期望回报 = <code>0.7 * 10 + 0.3 * (-5) = 7 - 1.5 = 5.5</code>。这是一个相当不错的稳定正回报。</li>
+</ul>
+</li>
+<li>
+<p><strong>如果智能体在 <code>S_0</code> 选择 <code>A_right</code>：</strong></p>
+<ul>
+<li>智能体进入 <code>S_intermediate</code>。</li>
+<li>然后，有 50% 的概率，<code>G_0 = +100</code>。</li>
+<li>有 50% 的概率，<code>G_0 = -100</code>。</li>
+<li><code>A_right</code> 的期望回报 = <code>0.5 * 100 + 0.5 * (-100) = 50 - 50 = 0</code>。从期望上看，这个动作并不好。</li>
+</ul>
+</li>
+</ol>
+<p><strong>高方差如何影响学习：</strong></p>
+<p>假设智能体通过多次试验来学习。</p>
+<ul>
+<li>
+<p><strong>考虑 <code>A_left</code>：</strong></p>
+<ul>
+<li>大部分情况下，智能体采取 <code>A_left</code> 会得到 <code>+10</code> 的回报。<code>log π_θ(A_left|S_0)</code> 这一项会乘以一个正数，使得策略更倾向于 <code>A_left</code>。</li>
+<li>少数情况下，得到 <code>-5</code>。<code>log π_θ(A_left|S_0)</code> 会乘以一个负数，略微抑制 <code>A_left</code>。</li>
+<li>回报的方差相对较小（值在 -5 到 10 之间波动）。</li>
+</ul>
+</li>
+<li>
+<p><strong>考虑 <code>A_right</code>：</strong></p>
+<ul>
+<li>一半情况下，智能体采取 <code>A_right</code> 会得到 <code>+100</code> 的巨大回报。<code>log π_θ(A_right|S_0)</code> 会乘以一个非常大的正数。这会<strong>极大地</strong>增强选择 <code>A_right</code> 的倾向。</li>
+<li>另一半情况下，智能体采取 <code>A_right</code> 会得到 <code>-100</code> 的巨大惩罚。<code>log π_θ(A_right|S_0)</code> 会乘以一个非常大的负数。这会<strong>极大地</strong>抑制选择 <code>A_right</code> 的倾向。</li>
+<li>回报的方差非常大（在 -100 和 +100 之间剧烈波动）。</li>
+</ul>
+</li>
+</ul>
+<p><strong>学习过程中的问题：</strong></p>
+<ol>
+<li>
+<p><strong>不稳定的梯度估计：</strong> 假设智能体当前策略对 <code>A_left</code> 和 <code>A_right</code> 的概率相近。</p>
+<ul>
+<li>如果某一批次的经验中，恰好多次采取 <code>A_right</code> 都碰上了 <code>+100</code> 的好运气，那么梯度更新会强烈地让智能体未来更倾向于选择 <code>A_right</code>，尽管 <code>A_right</code> 的期望回报是0，不如 <code>A_left</code> 的期望回报5.5。</li>
+<li>反之，如果多次采取 <code>A_right</code> 都碰上了 <code>-100</code> 的坏运气，梯度更新会强烈地让智能体避开 <code>A_right</code>。</li>
+<li>这种基于少数样本的剧烈波动使得梯度的方向非常不稳定。</li>
+</ul>
+</li>
+<li>
+<p><strong>“好的动作可能因为后续一系列坏的随机事件而导致低回报”：</strong><br>
+在这个例子中，<code>A_left</code> 本身是一个期望回报为正 (5.5) 的好动作。但如果智能体尝试 <code>A_left</code>，有 30% 的几率得到 <code>-5</code>。如果此时它也尝试了 <code>A_right</code> 并且碰巧得到了 <code>+100</code>，那么算法可能会错误地认为 <code>A_right</code> 比 <code>A_left</code> 好得多，尽管只是因为 <code>A_right</code> 后续的随机性导致了一个偶然的高回报。</p>
+</li>
+<li>
+<p><strong>“坏的动作可能因为后续一系列好的随机事件而导致高回报”：</strong><br>
+<code>A_right</code> 本身是一个期望回报为零的动作（不如 <code>A_left</code>）。但是，如果智能体尝试 <code>A_right</code>，有 50% 的概率得到 <code>+100</code> 的高回报。如果它恰好在少数几个样本中都经历了这种情况，算法会错误地强化这个“坏”动作。</p>
+</li>
+<li>
+<p><strong>缓慢收敛：</strong> 为了克服这种高方差，算法需要收集大量的样本，才能让 <code>G_t</code> 的平均效果逐渐接近其真实期望。如果方差很大，就需要更多的样本来获得一个可靠的梯度估计，这导致收敛缓慢。智能体的策略可能会在好坏之间来回摆动很长时间。</p>
+</li>
+</ol>
+<p><strong>Actor-Critic如何帮助：</strong></p>
+<p>如果使用Actor-Critic：</p>
+<ul>
+<li>
+<p>Critic会学习状态值函数 <code>V(s)</code>。</p>
+<ul>
+<li>理想情况下，<code>V(S_0)</code> 会学习到接近 <code>5.5</code>（如果最优策略是选 <code>A_left</code>）。</li>
+<li><code>V(S_intermediate)</code> 会学习到接近 <code>0</code>。</li>
+</ul>
+</li>
+<li>
+<p>当计算优势 <code>A(s, a)</code> 时：</p>
+<ul>
+<li>对于 <code>A_left</code> 得到 <code>+10</code>：<code>A(S_0, A_left) = r + γV(end) - V(S_0) = 10 + 0 - V(S_0)</code>。如果 <code>V(S_0)</code> 接近 <code>5.5</code>，优势就是 <code>4.5</code>。</li>
+<li>对于 <code>A_left</code> 得到 <code>-5</code>：<code>A(S_0, A_left) = -5 + 0 - V(S_0)</code>。如果 <code>V(S_0)</code> 接近 <code>5.5</code>，优势就是 <code>-10.5</code>。</li>
+<li>对于 <code>A_right</code> 得到 <code>+100</code>：智能体先到达 <code>S_intermediate</code>（假设这里没有立即奖励），然后得到 <code>+100</code>。<br>
+优势的计算会更像是 <code>δ_0 = r_0 + γV(S_intermediate) - V(S_0)</code>。如果 <code>r_0=0</code>（立即奖励为0），<code>δ_0 = γV(S_intermediate) - V(S_0)</code>。如果 <code>V(S_intermediate)</code> 接近0，<code>V(S_0)</code> 接近5.5，那么这个初始TD误差是负的。后续的TD误差 <code>δ_1 = 100 + γV(end) - V(S_intermediate) = 100 - V(S_intermediate)</code> 会是大的正值。GAE会将这些TD误差组合起来。<br>
+更简单地看，如果Critic已经比较准确，<code>A(S_0, A_right) = Q(S_0, A_right) - V(S_0)</code>。<code>Q(S_0, A_right)</code> 的期望是0。如果 <code>V(S_0)</code> 是基于当前混合策略的平均值，那么优势值会更好地反映 <code>A_right</code> 相对于当前平均表现的好坏，而不是其绝对回报的剧烈波动。</li>
+</ul>
+</li>
+</ul>
+<p>通过引入基线 <code>V(S_0)</code>，优势函数 <code>A(S_0, a)</code> 的波动幅度会减小。例如，即使 <code>A_right</code> 得到了 <code>+100</code>，如果 <code>V(S_0)</code> 已经学到了一个比较高的值（比如因为当前策略有时会选 <code>A_left</code>），那么 <code>+100 - V(S_0)</code> 相比于直接使用 <code>+100</code> 作为权重，其绝对值可能更小，或者其相对其他动作的优势更合理。</p>
+<p>这个例子清晰地展示了：</p>
+<ul>
+<li>蒙特卡洛回报 <code>G_t</code> 的值可以有很大的波动范围。</li>
+<li>这种波动不是由动作本身的好坏唯一决定的，而是受到了后续大量随机事件的强烈影响。</li>
+<li>使用这种高方差的回报来指导策略更新，会导致梯度估计非常嘈杂，使得学习不稳定且效率低下。</li>
+</ul>
+<p>而引入Critic和优势函数，就是为了从回报中剥离掉那些与当前状态价值相关但与当前动作选择无关的部分，从而得到一个更纯粹、更低方差的信号来指导Actor的学习。</p>
+<br>
+<h3 id="心得">心得</h3>
 <p>控制状态空间大小，尽量选择有限状态空间</p>
 <p>eg: 将state中的一些值int化</p>
+<br>
 <p>状态空间的表示值尽量接近</p>
 <p>采用标准化技术将state内的值均一化</p>
 <p>eg: [1, 200, 9999] -&gt; [0.001, 0.99, 0.9999]</p>
+<br>
 <p>更好的初始化</p>
+<br>
 <p>reward设置</p>
 <p>惩罚和奖励设置插值不要过大, 防止惩罚拟合过快</p>
 <p>+2, -200 -&gt; +2, 0</p>
@@ -752,7 +1071,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">reinforce learning record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-text">数学基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B"><span class="nav-text">机器学习模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRP"><span class="nav-text">MRP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%8A%A5"><span class="nav-text">回报</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">价值函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MDP"><span class="nav-text">MDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5"><span class="nav-text">策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">状态价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">动作价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E4%B8%8E%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E5%85%B3%E7%B3%BB"><span class="nav-text">状态价值函数与动作价值函数关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-text">最优策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%9F%E6%9C%9B%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼期望方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼最优方程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">策略迭代算法&#x2F;基于策略函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">价值迭代算法&#x2F;基于价值函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3-%E4%BB%B7%E5%80%BC%E8%BF%AD%E4%BB%A3%E5%AF%B9%E6%AF%94"><span class="nav-text">策略迭代&amp;价值迭代对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E6%A8%A1%E5%9E%8B-%E6%97%A0%E6%A8%A1%E5%9E%8B-%E5%9C%A8%E7%BA%BF%E7%AD%96%E7%95%A5-%E7%A6%BB%E7%BA%BF%E7%AD%96%E7%95%A5"><span class="nav-text">有模型&amp;无模型+在线策略&amp;离线策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95"><span class="nav-text">蒙特卡洛方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%E7%AE%97%E6%B3%95"><span class="nav-text">时序差分算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sarsa%E7%AE%97%E6%B3%95"><span class="nav-text">Sarsa算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning%E7%AE%97%E6%B3%95"><span class="nav-text">Q-learning算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DQN-DDQN"><span class="nav-text">DQN&#x2F;DDQN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E7%AE%97%E6%B3%95-REINFORCE"><span class="nav-text">策略梯度算法(REINFORCE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor-Critic"><span class="nav-text">Actor-Critic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TRPO"><span class="nav-text">TRPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-text">整体流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC"><span class="nav-text">近似</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E7%BA%A6%E6%9D%9F%E4%B8%8E%E6%B1%82%E8%A7%A3"><span class="nav-text">近似约束与求解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%BF%E4%B9%89%E4%BC%98%E5%8A%BF"><span class="nav-text">广义优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%B3%95-2"><span class="nav-text">算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PPO-clip"><span class="nav-text">PPO-clip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDPG"><span class="nav-text">DDPG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E5%88%86%E5%BF%83%E5%BE%97"><span class="nav-text">部分心得</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">reinforce learning record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-text">数学基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B"><span class="nav-text">机器学习模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRP"><span class="nav-text">MRP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%8A%A5"><span class="nav-text">回报</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">价值函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MDP"><span class="nav-text">MDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5"><span class="nav-text">策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">状态价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">动作价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E4%B8%8E%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E5%85%B3%E7%B3%BB"><span class="nav-text">状态价值函数与动作价值函数关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-text">最优策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%9F%E6%9C%9B%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼期望方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼最优方程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">策略迭代算法&#x2F;基于策略函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">价值迭代算法&#x2F;基于价值函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3-%E4%BB%B7%E5%80%BC%E8%BF%AD%E4%BB%A3%E5%AF%B9%E6%AF%94"><span class="nav-text">策略迭代&amp;价值迭代对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E6%A8%A1%E5%9E%8B-%E6%97%A0%E6%A8%A1%E5%9E%8B-%E5%9C%A8%E7%BA%BF%E7%AD%96%E7%95%A5-%E7%A6%BB%E7%BA%BF%E7%AD%96%E7%95%A5"><span class="nav-text">有模型&amp;无模型+在线策略&amp;离线策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95"><span class="nav-text">蒙特卡洛方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%E7%AE%97%E6%B3%95"><span class="nav-text">时序差分算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sarsa%E7%AE%97%E6%B3%95"><span class="nav-text">Sarsa算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning%E7%AE%97%E6%B3%95"><span class="nav-text">Q-learning算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DQN-DDQN"><span class="nav-text">DQN&#x2F;DDQN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E7%AE%97%E6%B3%95-REINFORCE"><span class="nav-text">策略梯度算法(REINFORCE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor-Critic"><span class="nav-text">Actor-Critic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TRPO"><span class="nav-text">TRPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-text">整体流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E5%A4%84%E7%90%86"><span class="nav-text">近似处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E7%BA%A6%E6%9D%9F%E4%B8%8E%E6%B1%82%E8%A7%A3"><span class="nav-text">近似约束与求解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%BF%E4%B9%89%E4%BC%98%E5%8A%BF"><span class="nav-text">广义优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%B3%95-2"><span class="nav-text">算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PPO-clip"><span class="nav-text">PPO-clip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDPG"><span class="nav-text">DDPG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E5%88%86%E5%BF%83%E5%BE%97"><span class="nav-text">部分心得</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AC%E5%88%86%E7%A6%BB"><span class="nav-text">AC分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -820,12 +1139,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">500k</span>
+    <span title="Symbols count total">511k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:09</span>
+    <span title="Reading time total">15:30</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
