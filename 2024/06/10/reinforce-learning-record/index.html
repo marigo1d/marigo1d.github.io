@@ -91,7 +91,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250325200037093.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250323105541258.png">
 <meta property="article:published_time" content="2024-06-10T12:29:05.000Z">
-<meta property="article:modified_time" content="2025-06-11T07:35:10.277Z">
+<meta property="article:modified_time" content="2025-06-11T08:17:20.244Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -284,7 +284,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-11 15:35:10" itemprop="dateModified" datetime="2025-06-11T15:35:10+08:00">2025-06-11</time>
+                <time title="Modified: 2025-06-11 16:17:20" itemprop="dateModified" datetime="2025-06-11T16:17:20+08:00">2025-06-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -302,14 +302,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>23k</span>
+              <span>27k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>42 mins.</span>
+              <span>48 mins.</span>
             </span>
 
         </div>
@@ -759,12 +759,123 @@
 <br>
 <h4 id="算法-2">算法</h4>
 <img src="/2024/06/10/reinforce-learning-record/image-20250322211023368.png" class="" title="image-20250322211023368">
+<br>
 <h3 id="PPO-clip">PPO-clip</h3>
 <p>基于AC和TRPO的，替换<strong>KL散度约束</strong>实现近似为<strong>惩罚优化/裁剪目标优化</strong>实现近似</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20250325200037093.png" class="" title="image-20250325200037093">
 <blockquote>
 <p>说白了就是把约束去掉变成无约束问题，更加易于求解</p>
 </blockquote>
+<br>
+<p>在 Proximal Policy Optimization (PPO) 算法中，Actor 网络和 Critic 网络都使用神经网络来参数化，并通过收集的经验数据进行更新。它们各自有不同的目标和更新方式。</p>
+<p>PPO 的核心思想是在尝试最大化期望回报的同时，限制新旧策略之间的差异，以保证学习的稳定性。</p>
+<p><strong>1. Actor 网络 (策略网络 <code>π_θ(a|s)</code>) 参数 <code>θ</code> 更新</strong></p>
+<p>Actor 网络的目标是学习一个策略，使其能够选择在给定状态下获得更高累积回报的动作。PPO 通过优化一个<strong>替代目标函数 (surrogate objective)</strong> 来更新 Actor 网络的参数 <code>θ</code>，这个目标函数引入了<strong>裁剪 (clipping)</strong> 机制。</p>
+<p><strong>A. 计算优势函数 (Advantage Function <code>Â_t</code>)</strong><br>
+在更新 Actor 之前，我们首先需要估计优势函数 <code>Â_t</code>。优势函数衡量在状态 <code>s_t</code>下采取动作 <code>a_t</code> 相对于平均动作的好坏。通常使用广义优势估计 (Generalized Advantage Estimation, GAE) 计算：<br>
+<code>Â_t = Σ_&#123;l=0&#125;^&#123;T-t-1&#125; (γλ)^l δ_&#123;t+l&#125;</code><br>
+其中：</p>
+<ul>
+<li><code>δ_t = r_t + γV_φ(s_&#123;t+1&#125;) - V_φ(s_t)</code> 是 TD 残差 (TD error)，<code>V_φ</code> 是 Critic 网络。</li>
+<li><code>γ</code> 是折扣因子。</li>
+<li><code>λ</code> 是 GAE 的平滑参数 (通常接近 1，如 0.95)。<br>
+如果 <code>λ=1</code>，GAE 就变成了蒙特卡洛优势估计 <code>Â_t = R_t - V_φ(s_t)</code>，其中 <code>R_t</code> 是从 <code>s_t</code> 开始的累积折扣回报。</li>
+</ul>
+<p><strong>B. 构建 PPO 的裁剪替代目标函数</strong><br>
+PPO 的核心是其裁剪替代目标函数 <code>L^&#123;CLIP&#125;(θ)</code>。对于每一个时间步 <code>t</code> 的数据 <code>(s_t, a_t, Â_t)</code>：</p>
+<ol>
+<li>
+<p><strong>计算概率比率 (Probability Ratio):</strong><br>
+<code>r_t(θ) = π_θ(a_t|s_t) / π_&#123;θ_old&#125;(a_t|s_t)</code><br>
+这里 <code>π_θ(a_t|s_t)</code> 是当前 Actor 网络输出的在状态 <code>s_t</code> 下采取动作 <code>a_t</code> 的概率。<br>
+<code>π_&#123;θ_old&#125;(a_t|s_t)</code> 是收集这批数据时所用的旧 Actor 网络（在当前优化迭代开始前）输出的概率。</p>
+</li>
+<li>
+<p><strong>裁剪目标函数:</strong><br>
+<code>L^&#123;CLIP&#125;(θ) = E_t [ min( r_t(θ)Â_t, clip(r_t(θ), 1-ε, 1+ε)Â_t ) ]</code></p>
+<ul>
+<li><code>ε</code> (epsilon) 是一个小的超参数，用于定义裁剪范围 (例如 0.1 或 0.2)。</li>
+<li><code>clip(r_t(θ), 1-ε, 1+ε)</code> 会将 <code>r_t(θ)</code> 限制在 <code>[1-ε, 1+ε]</code> 区间内。</li>
+<li><code>min(...)</code> 操作：
+<ul>
+<li>如果 <code>Â_t &gt; 0</code> (动作比平均好): 目标是 <code>min(r_t(θ)Â_t, (1+ε)Â_t)</code>。这鼓励增加 <code>r_t(θ)</code> (即增加 <code>π_θ(a_t|s_t)</code>), 但如果 <code>r_t(θ)</code> 变得太大 (超过 <code>1+ε</code>)，则增长会被限制，防止策略更新过快。</li>
+<li>如果 <code>Â_t &lt; 0</code> (动作比平均差): 目标是 <code>min(r_t(θ)Â_t, (1-ε)Â_t)</code>。由于 <code>Â_t</code> 是负数，这实际上是 <code>max(r_t(θ)Â_t, (1-ε)Â_t)</code>。这鼓励减小 <code>r_t(θ)</code> (即减小 <code>π_θ(a_t|s_t)</code>), 但如果 <code>r_t(θ)</code> 变得太小 (小于 <code>1-ε</code>)，则减小会被限制，同样防止策略更新过快。</li>
+</ul>
+</li>
+<li><code>E_t[...]</code> 表示对一个批次 (batch) 中所有样本取平均。</li>
+</ul>
+</li>
+</ol>
+<p><strong>C. (可选) 熵奖励 (Entropy Bonus)</strong><br>
+为了鼓励探索，通常会向目标函数中添加一个熵项：<br>
+<code>S(π_θ) = E_t [ - Σ_a π_θ(a|s_t) log π_θ(a|s_t) ]</code> (对于离散动作)<br>
+或者 <code>S(π_θ) = E_t [ - log π_θ(a_t|s_t) ]</code> (对于连续动作，通常是高斯策略的熵的近似)</p>
+<p><strong>D. Actor 总目标函数与更新</strong><br>
+Actor 的最终目标函数 (需要最大化) 是：<br>
+<code>J_&#123;Actor&#125;(θ) = L^&#123;CLIP&#125;(θ) + c_&#123;entropy&#125; * S(π_θ)</code><br>
+其中 <code>c_&#123;entropy&#125;</code> 是熵奖励的系数。</p>
+<p>参数更新通过对 <code>-J_&#123;Actor&#125;(θ)</code> (因为优化器通常是最小化损失) 进行梯度下降来完成：<br>
+<code>θ ← θ - α_&#123;actor&#125; * ∇_θ (-J_&#123;Actor&#125;(θ))</code><br>
+或者等价地，对 <code>J_&#123;Actor&#125;(θ)</code> 进行梯度上升：<br>
+<code>θ ← θ + α_&#123;actor&#125; * ∇_θ J_&#123;Actor&#125;(θ)</code><br>
+其中 <code>α_&#123;actor&#125;</code> 是 Actor 网络的学习率。</p>
+<p>PPO 通常会对同一批数据进行多次 (K epochs) 梯度更新。</p>
+<br>
+<p><strong>2. Critic 网络 (价值网络 <code>V_φ(s)</code>) 参数 <code>φ</code> 更新</strong></p>
+<p>Critic 网络的目标是学习一个状态价值函数 <code>V_φ(s)</code>，用于准确估计在给定状态 <code>s</code> 下，遵循当前策略所能获得的期望累积回报。</p>
+<p><strong>A. 计算目标价值 (Target Value)</strong><br>
+对于每个状态 <code>s_t</code>，Critic 的目标价值 <code>V_&#123;target,t&#125;</code> 通常是该状态下观察到的实际累积折扣回报 <code>R_t</code> (也称为 Returns-to-go)。<br>
+<code>R_t = Σ_&#123;k=0&#125;^&#123;T-t-1&#125; γ^k r_&#123;t+k&#125;</code></p>
+<p><strong>B. Critic 损失函数</strong><br>
+Critic 网络的损失函数通常是均方误差 (Mean Squared Error, MSE)：<br>
+<code>L_&#123;Critic&#125;(φ) = E_t [ (V_φ(s_t) - R_t)^2 ]</code><br>
+或者，有些实现中，<code>R_t</code> 也可以是 <code>Â_t + V_&#123;φ_&#123;old&#125;&#125;(s_t)</code>，其中 <code>V_&#123;φ_&#123;old&#125;&#125;(s_t)</code> 是用于计算优势函数时的 Critic 网络值。但直接使用蒙特卡洛回报 <code>R_t</code> 作为目标更常见，因为它不依赖于旧的 Critic 值。</p>
+<p><strong>C. Critic 参数更新</strong><br>
+通过对 <code>L_&#123;Critic&#125;(φ)</code> 进行梯度下降来更新 Critic 网络的参数 <code>φ</code>：<br>
+<code>φ ← φ - α_&#123;critic&#125; * ∇_φ L_&#123;Critic&#125;(φ)</code><br>
+其中 <code>α_&#123;critic&#125;</code> 是 Critic 网络的学习率。</p>
+<p>与 Actor 类似，Critic 网络也会在同一批数据上进行多次梯度更新。</p>
+<br>
+<p><strong>共享网络 (Optional)</strong></p>
+<p>在某些 PPO 实现中，Actor 和 Critic 网络可能会共享一部分底层参数（例如，卷积层或部分全连接层），只有输出层不同。在这种情况下，总的损失函数是 Actor 损失和 Critic 损失的加权和：<br>
+<code>L_&#123;Total&#125;(θ, φ_&#123;shared&#125;) = -J_&#123;Actor&#125;(θ) + c_&#123;value&#125; * L_&#123;Critic&#125;(φ_&#123;shared&#125;)</code><br>
+其中 <code>φ_&#123;shared&#125;</code> 代表共享的参数，<code>θ</code> 也包含共享参数以及 Actor 的特定参数。<code>c_&#123;value&#125;</code> 是 Critic 损失的权重系数 (例如 0.5)。然后对这个总损失进行梯度下降。</p>
+<p><strong>总结更新流程 (在一个迭代内)：</strong></p>
+<ol>
+<li><strong>数据收集</strong>: 使用当前 Actor 策略 <code>π_&#123;θ_old&#125;</code> 与环境交互，收集一批经验数据 <code>(s_t, a_t, r_t, s_&#123;t+1&#125;)</code>。</li>
+<li><strong>优势估计</strong>:
+<ul>
+<li>使用当前 Critic 网络 <code>V_φ</code> 计算 TD 残差 <code>δ_t</code>。</li>
+<li>使用 TD 残差计算 GAE 优势 <code>Â_t</code>。</li>
+<li>计算实际回报 <code>R_t</code> (用于 Critic 更新的目标)。</li>
+</ul>
+</li>
+<li><strong>多次优化迭代 (K epochs)</strong>:
+<ul>
+<li>对于每个 epoch:
+<ul>
+<li>从收集的数据中采样一个 mini-batch。</li>
+<li><strong>Actor 更新</strong>:
+<ul>
+<li>计算概率比率 <code>r_t(θ)</code>。</li>
+<li>计算裁剪替代目标 <code>L^&#123;CLIP&#125;(θ)</code> 和熵 <code>S(π_θ)</code>。</li>
+<li>根据 <code>- (L^&#123;CLIP&#125;(θ) + c_&#123;entropy&#125; * S(π_θ))</code> 计算梯度并更新 <code>θ</code>。</li>
+</ul>
+</li>
+<li><strong>Critic 更新</strong>:
+<ul>
+<li>计算 Critic 损失 <code>L_&#123;Critic&#125;(φ) = (V_φ(s_t) - R_t)^2</code>。</li>
+<li>根据 <code>L_&#123;Critic&#125;(φ)</code> 计算梯度并更新 <code>φ</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>更新 <code>θ_old ← θ</code>，为下一次数据收集做准备。</li>
+</ol>
+<p>这种方式通过裁剪目标函数来约束策略更新的幅度，使得 PPO 相比于传统策略梯度方法更加稳定和高效。</p>
+<br>
 <h3 id="DDPG">DDPG</h3>
 <p>确定性策略</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20250323105541258.png" class="" title="image-20250323105541258">
@@ -1139,12 +1250,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">511k</span>
+    <span title="Symbols count total">515k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:30</span>
+    <span title="Reading time total">15:36</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
