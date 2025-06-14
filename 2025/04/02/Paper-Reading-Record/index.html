@@ -36,12 +36,14 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/20250410155409605.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/20250410214653107.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/20250421211315671.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250613211803671.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250604100042926.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250613211948220.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250601135610999.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250605114032032.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/02/Paper-Reading-Record/image-20250605114141206.png">
 <meta property="article:published_time" content="2025-04-02T07:21:11.000Z">
-<meta property="article:modified_time" content="2025-06-11T11:33:14.729Z">
+<meta property="article:modified_time" content="2025-06-13T13:26:25.786Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -234,7 +236,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-11 19:33:14" itemprop="dateModified" datetime="2025-06-11T19:33:14+08:00">2025-06-11</time>
+                <time title="Modified: 2025-06-13 21:26:25" itemprop="dateModified" datetime="2025-06-13T21:26:25+08:00">2025-06-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,7 +261,7 @@
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>41 mins.</span>
+              <span>42 mins.</span>
             </span>
 
         </div>
@@ -884,6 +886,69 @@ BERT的目标是预测 <code>[MASK]</code> 位置应该填入什么词。</p>
 <h4 id="DeepSeek-R1-Zero-DeepSeek-R1">DeepSeek-R1-Zero&amp;DeepSeek-R1</h4>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2501.12948">https://arxiv.org/abs/2501.12948</a></p>
 <br>
+<h4 id="Qwen3">Qwen3</h4>
+<p><a target="_blank" rel="noopener" href="https://github.com/QwenLM/Qwen3/blob/main/Qwen3_Technical_Report.pdf">https://github.com/QwenLM/Qwen3/blob/main/Qwen3_Technical_Report.pdf</a></p>
+<p>使用技术：GQA SwiGLU RoPE RMSNorm QK-Norm BBPE embedding</p>
+<p><strong>概述</strong></p>
+<p>训练数据通过多模型获取</p>
+<ul>
+<li>Qwen2.5-VL 提取PDF文件内容</li>
+<li>Qwen2.5-Math 生成数学内容</li>
+<li>Qwen2.5-Coder 生成代码内容</li>
+</ul>
+<p>三阶段 pre-training</p>
+<ul>
+<li>通用知识 train on 30 trillion tokens</li>
+<li>STEM&amp;coding 知识</li>
+<li>长上下文数据</li>
+</ul>
+<p>多阶段 post-training: fisrt two stages</p>
+<ul>
+<li>CoT cold-start finetuning</li>
+<li>RL on math&amp;coding</li>
+</ul>
+<p>多阶段 post-training: final two stages</p>
+<ul>
+<li>混合 reasoning path data finetuning</li>
+<li>general-domain RL</li>
+</ul>
+<br>
+<p><strong>架构</strong></p>
+<p><strong>embedding</strong></p>
+<p><strong>layer</strong></p>
+<p>begin</p>
+<ul>
+<li>
+<p>输入 -&gt; RMSNorm</p>
+</li>
+<li>
+<p>transformer</p>
+<ul>
+<li>GQA 头 &amp; 移除QKV-bias</li>
+<li>对 Q，K 进行RMSNorm</li>
+<li>RoPE 添加于norm后 Q，K</li>
+<li>注意力计算</li>
+</ul>
+</li>
+<li>
+<p>残差</p>
+</li>
+</ul>
+<p>end</p>
+<p>begin</p>
+<ul>
+<li>输入 -&gt; RMSNorm</li>
+<li>MLP</li>
+<li>残差</li>
+</ul>
+<p>end</p>
+<br>
+<p><strong>MoE</strong></p>
+<ul>
+<li>sparse MoE，没有shared MoE</li>
+<li>load balancing loss 专家被选的越多惩罚项越大</li>
+</ul>
+<br>
 <h3 id="CV">CV</h3>
 <h4 id="Stable-Diffusion">Stable Diffusion</h4>
 <p>2112.10752 High-Resolution Image Synthesis with Latent Diffusion Models (<a target="_blank" rel="noopener" href="http://arxiv.org">arxiv.org</a>)</p>
@@ -1030,10 +1095,21 @@ BERT的目标是预测 <code>[MASK]</code> 位置应该填入什么词。</p>
 </ul>
 <br>
 <h3 id="MoE">MoE</h3>
+<h4 id="A-survey-on-MoE">A survey on MoE</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2407.06204">https://arxiv.org/pdf/2407.06204</a></p>
+<img src="/2025/04/02/Paper-Reading-Record/image-20250613211803671.png" class="" title="image-20250613211803671">
+<br>
 <h4 id="Switch-Transformers">Switch Transformers</h4>
 <p>Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity</p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2101.03961">https://arxiv.org/abs/2101.03961</a></p>
 <img src="/2025/04/02/Paper-Reading-Record/image-20250604100042926.png" class="" title="image-20250604100042926">
+<br>
+<h4 id="MoE-in-DS-v3">MoE in DS-v3</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/html/2412.19437v1">https://arxiv.org/html/2412.19437v1</a></p>
+<img src="/2025/04/02/Paper-Reading-Record/image-20250613211948220.png" class="" title="image-20250613211948220">
+<blockquote>
+<p>混合 sparse &amp; dense MoE</p>
+</blockquote>
 <br>
 <h3 id="多模态">多模态</h3>
 <h4 id="CLIP">CLIP</h4>
@@ -1141,7 +1217,7 @@ BERT的目标是预测 <code>[MASK]</code> 位置应该填入什么词。</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Paper-Reading-Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Corpus"><span class="nav-text">Corpus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datasets"><span class="nav-text">Datasets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper"><span class="nav-text">Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Distribution-Base"><span class="nav-text">Distribution-Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAP"><span class="nav-text">CAP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-Base"><span class="nav-text">LLM-Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT"><span class="nav-text">GPT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BERT"><span class="nav-text">BERT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC"><span class="nav-text">文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT2"><span class="nav-text">GPT2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT3"><span class="nav-text">GPT3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#InstructGPT"><span class="nav-text">InstructGPT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LLaMa-1"><span class="nav-text">LLaMa-1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LLaMA-2"><span class="nav-text">LLaMA-2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeepSeek-V1"><span class="nav-text">DeepSeek-V1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeepSeek-V2"><span class="nav-text">DeepSeek-V2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeepSeek-V3"><span class="nav-text">DeepSeek-V3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeepSeek-R1-Zero-DeepSeek-R1"><span class="nav-text">DeepSeek-R1-Zero&amp;DeepSeek-R1</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CV"><span class="nav-text">CV</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Stable-Diffusion"><span class="nav-text">Stable Diffusion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViT"><span class="nav-text">ViT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F-%E6%96%87%E6%9C%AC"><span class="nav-text">图像-文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UNITER"><span class="nav-text">UNITER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViLT"><span class="nav-text">ViLT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ALBEF"><span class="nav-text">ALBEF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MoE"><span class="nav-text">MoE</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Switch-Transformers"><span class="nav-text">Switch Transformers</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81"><span class="nav-text">多模态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CLIP"><span class="nav-text">CLIP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Flamingo"><span class="nav-text">Flamingo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BLIP-2"><span class="nav-text">BLIP-2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Paper-Reading-Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Corpus"><span class="nav-text">Corpus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datasets"><span class="nav-text">Datasets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper"><span class="nav-text">Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Distribution-Base"><span class="nav-text">Distribution-Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAP"><span class="nav-text">CAP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-Base"><span class="nav-text">LLM-Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT"><span class="nav-text">GPT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BERT"><span class="nav-text">BERT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC"><span class="nav-text">文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT2"><span class="nav-text">GPT2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPT3"><span class="nav-text">GPT3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#InstructGPT"><span class="nav-text">InstructGPT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LLaMa-1"><span class="nav-text">LLaMa-1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LLaMA-2"><span class="nav-text">LLaMA-2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeepSeek-V1"><span class="nav-text">DeepSeek-V1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeepSeek-V2"><span class="nav-text">DeepSeek-V2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeepSeek-V3"><span class="nav-text">DeepSeek-V3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeepSeek-R1-Zero-DeepSeek-R1"><span class="nav-text">DeepSeek-R1-Zero&amp;DeepSeek-R1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Qwen3"><span class="nav-text">Qwen3</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CV"><span class="nav-text">CV</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Stable-Diffusion"><span class="nav-text">Stable Diffusion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViT"><span class="nav-text">ViT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F-%E6%96%87%E6%9C%AC"><span class="nav-text">图像-文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UNITER"><span class="nav-text">UNITER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViLT"><span class="nav-text">ViLT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ALBEF"><span class="nav-text">ALBEF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MoE"><span class="nav-text">MoE</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-survey-on-MoE"><span class="nav-text">A survey on MoE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Switch-Transformers"><span class="nav-text">Switch Transformers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MoE-in-DS-v3"><span class="nav-text">MoE in DS-v3</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81"><span class="nav-text">多模态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CLIP"><span class="nav-text">CLIP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Flamingo"><span class="nav-text">Flamingo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BLIP-2"><span class="nav-text">BLIP-2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1209,12 +1285,12 @@ BERT的目标是预测 <code>[MASK]</code> 位置应该填入什么词。</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">516k</span>
+    <span title="Symbols count total">520k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:38</span>
+    <span title="Reading time total">15:45</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

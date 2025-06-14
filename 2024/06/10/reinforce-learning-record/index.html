@@ -71,7 +71,6 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240610213003398.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612100732404.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612102026769.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612102256431.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240611200059062.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612110026419.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612110241521.png">
@@ -91,7 +90,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250325200037093.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250323105541258.png">
 <meta property="article:published_time" content="2024-06-10T12:29:05.000Z">
-<meta property="article:modified_time" content="2025-06-11T08:17:20.244Z">
+<meta property="article:modified_time" content="2025-06-12T09:19:31.417Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -284,7 +283,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-11 16:17:20" itemprop="dateModified" datetime="2025-06-11T16:17:20+08:00">2025-06-11</time>
+                <time title="Modified: 2025-06-12 17:19:31" itemprop="dateModified" datetime="2025-06-12T17:19:31+08:00">2025-06-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -302,14 +301,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>27k</span>
+              <span>29k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>48 mins.</span>
+              <span>53 mins.</span>
             </span>
 
         </div>
@@ -664,19 +663,57 @@
 <p>Policy-based + online</p>
 <p>定义策略学习的目标函数为，s0为初始状态</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240612100629893.png" class="" title="image-20240612100629893">
+<blockquote>
+<p>期望是关于 $s_0$ 的期望，这意味着 $s_0$ 的初始化存在相应的分布</p>
+</blockquote>
 <p>目标是修改参数θ，使J(θ)取最大；即对θ求导</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
 <img src="/2024/06/10/reinforce-learning-record/image-20240612100732404.png" class="" title="image-20240612100732404">
-<p>where 第一行第一个求和符号后的对象为 策略的<strong>状态访问分布</strong></p>
+<p>推导：<br>
+$$<br>
+\begin{align*}<br>
+\nabla_\theta V^{\pi_\theta} (s) &amp;= \nabla_\theta \left(\sum_{a \in A} \pi_\theta (a|s) Q^{\pi_\theta} (s, a)\right) \<br>
+&amp;= \sum_{a \in A} \left(\nabla_\theta \pi_\theta (a|s) Q^{\pi_\theta} (s, a) + \pi_\theta (a|s) \nabla_\theta Q^{\pi_\theta} (s, a)\right) \<br>
+&amp;= \sum_{a \in A} \left(\nabla_\theta \pi_\theta (a|s) Q^{\pi_\theta} (s, a) + \pi_\theta (a|s) \nabla_\theta \sum_{s’,r} p(s’,r|s,a) (r + \gamma V^{\pi_\theta} (s’))\right) \<br>
+&amp;= \sum_{a \in A} \left(\nabla_\theta \pi_\theta (a|s) Q^{\pi_\theta} (s, a) + \gamma \pi_\theta (a|s) \sum_{s’,r} p(s’,r|s,a) \nabla_\theta V^{\pi_\theta} (s’)\right) \<br>
+&amp;= \sum_{a \in A} \left(\nabla_\theta \pi_\theta (a|s) Q^{\pi_\theta} (s, a) + \gamma \pi_\theta (a|s) \sum_{s’} p(s’|s,a) \nabla_\theta V^{\pi_\theta} (s’)\right)<br>
+\end{align*}<br>
+$$<br>
+3行 -&gt; 4行：第二项的第一项与策略参数无关，约去；</p>
+<p>为了简化表示，我们让 $\phi(s) = \sum_{a\in A} \nabla_{\theta}\pi_{\theta}(a|s)Q^{\pi\theta}(s,a)$，定义 $d^{\pi\theta}(s \to x, k)$ 为 策略 $\pi$ 从状态 $s$ 出发 $k$ 步后到达状态 $x$ 的概率。我们继续推导：<br>
+$$<br>
+\begin{align*}<br>
+\nabla_\theta V^{\pi_\theta}(s) &amp;= \phi(s) + \gamma \sum_a \pi_\theta(a|s) \sum_{s’} P(s’|s,a) \nabla_\theta V^{\pi_\theta}(s’) \<br>
+&amp;= \phi(s) + \gamma \sum_a \sum_{s’} \pi_\theta(a|s) P(s’|s,a) \nabla_\theta V^{\pi_\theta}(s’) \<br>
+&amp;= \phi(s) + \gamma \sum_{s’} d^{\pi_\theta}(s \to s’, 1) \nabla_\theta V^{\pi_\theta}(s’) \<br>
+&amp;= \phi(s) + \gamma \sum_{s’} d^{\pi_\theta}(s \to s’, 1) \left[\phi(s’) + \gamma \sum_{s’‘} d^{\pi_\theta}(s’ \to s’‘, 1) \nabla_\theta V^{\pi_\theta}(s’‘)\right] \<br>
+&amp;= \phi(s) + \gamma \sum_{s’} d^{\pi_\theta}(s \to s’, 1) \phi(s’) + \gamma^2 \sum_{s’‘} d^{\pi_\theta}(s \to s’‘, 2) \nabla_\theta V^{\pi_\theta}(s’‘) \<br>
+&amp;= \phi(s) + \gamma \sum_{s’} d^{\pi_\theta}(s \to s’, 1) \phi(s’) + \gamma^2 \sum_{s’‘} d^{\pi_\theta}(s \to s’‘, 2) \phi(s’‘) \<br>
+&amp;\quad + \gamma^3 \sum_{s’‘’} d^{\pi_\theta}(s \to s’‘’, 3) \nabla_\theta V^{\pi_\theta}(s’‘’) \<br>
+&amp;= \cdots \<br>
+&amp;= \sum_{x \in S} \sum_{k=0}^\infty \gamma^k d^{\pi_\theta}(s \to x, k) \phi(x)<br>
+\end{align*}<br>
+$$<br>
+3行 -&gt; 4行：对贝尔曼期望方程 $V^π(s) = Σ_{a∈A} π(a|s) (r(s, a) + γ Σ_{s’∈S} p(s’|s, a)V^π(s’))$ 求导得到（其实就是第一步的套娃</p>
+<p>定义$\eta(s) = \mathbb{E}<em>{s_0}[\sum</em>{k=0}^{\infty} \gamma^k d^{\pi_\theta}(s_0 \to s, k)]$。至此，回到目标函数：<br>
+$$<br>
+\begin{align*}<br>
+\nabla_\theta J(\theta) &amp;= \nabla_\theta \mathbb{E}<em>{s_0}[V^{\pi</em>\theta}(s_0)] \<br>
+&amp;= \sum_s \mathbb{E}<em>{s_0}\left[\sum</em>{k=0}^{\infty} \gamma^k d^{\pi_\theta}(s_0 \to s, k)\right]\phi(s) \<br>
+&amp;= \sum_s \eta(s)\phi(s) \<br>
+&amp;= \left(\sum_s \eta(s)\right)\sum_s \frac{\eta(s)}{\sum_s \eta(s)}\phi(s) \<br>
+&amp;\propto \sum_s \frac{\eta(s)}{\sum_s \eta(s)}\phi(s) \<br>
+&amp;= \sum_s \nu^{\pi_\theta}(s)\sum_a Q^{\pi_\theta}(s, a)\nabla_\theta \pi_\theta(a|s)<br>
+\end{align*}<br>
+$$</p>
 <blockquote>
-<p>下图中的 (1-γ) 为归一化参数，原因为几何级数的求和公式为这个</p>
-</blockquote>
+<p>下图中的 (1-γ) 为归一化参数，几何级数的求和公式得到</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240612102026769.png" class="" title="image-20240612102026769">
-<p>策略的状态访问分布表示该策略和在环境中会访问到的状态的分布情况(即到达每个状态的概率)</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20240612102256431.png" class="" title="image-20240612102256431">
+<p>策略的状态访问分布 $\nu$ 表示该策略和在环境中会访问到的状态的分布情况(即到达每个状态的概率)</p>
+<p>![image-20240612102256431](file://D:/github/blog/source/_posts/reinforce-learning-record/image-20240612102256431.png?lastModify=1749717919)</p>
 <p>故该求导表示 <strong>对于每个状态，我们有一定的概率在该状态，从该状态出发，策略决定了我们能获得的价值的期望</strong></p>
-<p>目标：</p>
-<p>​	最大化函数J(θ)</p>
+</blockquote>
+<p>目标：最大化函数J(θ)</p>
 <p>算法</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240611200059062.png" class="" title="image-20240611200059062">
 <p>时刻t向后的回报即为(动作)价值</p>
@@ -1250,12 +1287,12 @@ Critic 网络的损失函数通常是均方误差 (Mean Squared Error, MSE)：<b
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">516k</span>
+    <span title="Symbols count total">520k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:38</span>
+    <span title="Reading time total">15:45</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
