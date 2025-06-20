@@ -55,7 +55,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325202638658.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325201533207.png">
 <meta property="article:published_time" content="2025-03-19T02:50:14.000Z">
-<meta property="article:modified_time" content="2025-06-13T13:39:46.361Z">
+<meta property="article:modified_time" content="2025-06-20T09:08:15.647Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python, Pytorch">
 <meta name="twitter:card" content="summary">
@@ -248,7 +248,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-13 21:39:46" itemprop="dateModified" datetime="2025-06-13T21:39:46+08:00">2025-06-13</time>
+                <time title="Modified: 2025-06-20 17:08:15" itemprop="dateModified" datetime="2025-06-20T17:08:15+08:00">2025-06-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -266,14 +266,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>33k</span>
+              <span>36k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1:01</span>
+              <span>1:06</span>
             </span>
 
         </div>
@@ -1654,79 +1654,110 @@ $$<br>
 <h2 id="Reinforce-Learning-on-LLM">Reinforce Learning on LLM</h2>
 <h3 id="LLM-PPO">LLM-PPO</h3>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.02155">https://arxiv.org/abs/2203.02155</a></p>
-<p>状态空间：模型输入prompt</p>
-<p>动作空间：模型输出output</p>
-<p>Actor：SFT后的LLM网络，进行更新</p>
-<p>Critic：Value网络，进行更新</p>
-<blockquote>
-<p>Reward网络在RM过程中训练完成，基于SFT Model（移除最后一层softmax，替换为线性层），输出为scalar reward，表示<strong>对完整输出序列的整体评价</strong>；</p>
-<p>Reference网络为SFT Model；</p>
-<p>在RL-PPO过程中这两个网络不更新</p>
-</blockquote>
 <img src="/2025/03/19/LLM-Rela/image-20250325131654259.png" class="" title="image-20250325131654259">
 <br>
-<p><strong>流程</strong></p>
-<p>假设当前模型已经生成了部分序列，我们处于状态 <code>s_t</code> (即 <code>prompt + token_1 + ... + token_&#123;t-1&#125;</code> )。</p>
+<h4 id="流程"><strong>流程</strong></h4>
+<p>我们可以将整个流程更清晰地划分为**“角色定义”<strong>、</strong>“数据生成（Rollout）”<strong>和</strong>“模型学习（Learning）”**三个阶段。</p>
+<h5 id="第一阶段：定义参与者（四大模型）"><strong>第一阶段：定义参与者（四大模型）</strong></h5>
+<p>在PPO训练循环开始前，我们有四个关键的模型，其中三个是神经网络：</p>
 <ol>
 <li>
-<p><strong>Actor 网络 (即我们要微调的LLM Policy):</strong></p>
+<p><strong>Actor (策略模型 / Policy):</strong></p>
 <ul>
-<li><strong>输入:</strong> 当前状态 <code>s_t</code> (当前的token序列)。</li>
-<li><strong>处理:</strong> Actor网络计算在当前状态 <code>s_t</code> 下，词汇表中每个token作为下一个token的概率分布 <code>π(a | s_t)</code>。</li>
-<li><strong>输出/动作 <code>a_t</code>:</strong> 从这个概率分布中<strong>采样</strong>得到下一个token，这个token就是动作 <code>a_t</code>。例如，如果采样到 “the”，那么 <code>a_t = &quot;the&quot;</code>。</li>
-<li><strong>新的状态 <code>s_&#123;t+1&#125;</code>:</strong> <code>s_t + a_t</code> (即 <code>prompt + token_1 + ... + token_&#123;t-1&#125; + token_t</code>)。</li>
+<li><strong>角色:</strong> 主角，即我们正在微调的语言模型。</li>
+<li><strong>来源:</strong> 经过第一步SFT（监督式微调）训练后的模型副本。</li>
+<li><strong>任务:</strong> 根据当前状态 <code>s_t</code>（已生成的文本），生成下一个token <code>a_t</code>。</li>
 </ul>
 </li>
 <li>
-<p><strong>Value 网络 (Critic):</strong></p>
+<p><strong>Reference Model (参考模型):</strong></p>
 <ul>
-<li><strong>输入:</strong> <strong>当前状态 <code>s_t</code></strong> (在Actor采取动作 <em>之前</em> 的状态，或者有时是采取动作 <em>之后</em> 的状态 <code>s_&#123;t+1&#125;</code>，取决于具体的PPO实现和优势计算方式，但更常见的是评估 <code>s_t</code> 或 <code>s_&#123;t+1&#125;</code> 的整体价值)。</li>
-<li><strong>输出:</strong> 一个标量值 <code>V(s_t)</code> (或 <code>V(s_&#123;t+1&#125;)</code>)。这个值代表了从状态 <code>s_t</code> (或 <code>s_&#123;t+1&#125;</code>) 出发，继续遵循当前Actor策略，预期能够获得的未来累积奖励的总和的估计。</li>
-<li><strong>关键点:</strong> Value网络评估的是<strong>状态的好坏程度</strong>，而不是Actor输出的那个具体token的好坏。它是在说：“处于当前这个文本序列下，未来期望能得到多少奖励？”</li>
+<li><strong>角色:</strong> “锚点”或“约束器”。</li>
+<li><strong>来源:</strong> 同样是第一步SFT模型的<strong>一个固定、不更新的副本</strong>。</li>
+<li><strong>任务:</strong> 提供一个基准的概率分布 <code>π_ref(a|s_t)</code>，用于计算KL散度，防止Actor为了追求奖励而“走火入魔”，生成不自然或语法混乱的文本。</li>
 </ul>
 </li>
 <li>
-<p><strong>Reward 模型 (RM):</strong></p>
+<p><strong>Critic (价值模型 / Value Network):</strong></p>
 <ul>
-<li><strong>输入:</strong> 通常是<strong>一个完整的生成序列</strong> (<code>prompt + 生成的完整回答</code>)，或者至少是一个有意义的、可以独立评估的<strong>文本片段</strong>。</li>
-<li><strong>输出:</strong> 一个标量奖励分数 <code>R</code>。这个分数代表了这个生成序列的质量（例如，有用性、无害性、真实性等）。</li>
-<li><strong>PPO中的每一步奖励 <code>r_t</code>:</strong>
-<ul>
-<li>RM给出的通常是针对整个序列的奖励。在PPO的每一步（即每生成一个token），我们需要一个即时奖励 <code>r_t</code>。</li>
-<li><strong>主要来源:</strong>
-<ul>
-<li><strong>KL惩罚项:</strong> 为了防止Actor策略偏离其原始的、经过SFT（监督微调）的基础模型太远，通常会计算当前Actor在状态 <code>s_t</code> 输出动作 <code>a_t</code> 的概率与一个参考模型（通常是SFT模型）输出该动作的概率之间的KL散度。这个KL散度会作为一个负奖励（惩罚）项。<br>
-<code>r_&#123;KL&#125; = - β * KL(π_&#123;actor&#125;(·|s_t) || π_&#123;ref&#125;(·|s_t))</code> (β是超参数)</li>
-<li><strong>RM奖励的分配:</strong> RM对整个序列的打分 <code>R_final</code> 通常在序列生成结束时才计算。这个 <code>R_final</code> 需要以某种方式影响到序列中每一步的决策。
-<ul>
-<li>一种简单的方式是，在序列结束前的所有步骤 <code>t</code>，<code>r_t = r_&#123;KL&#125;</code>。</li>
-<li>在序列结束的最后一步 <code>T</code>，<code>r_T = R_&#123;final&#125; + r_&#123;KL&#125;</code> (或者 <code>R_&#123;final&#125;</code> 减去一个基线，比如Value网络对初始状态的估计)。</li>
-<li>更复杂的方法会尝试将 <code>R_final</code> 更平滑地分配到序列的各个步骤中，或者使用RM对中间生成的片段进行打分（但这计算成本较高）。</li>
+<li><strong>角色:</strong> “评估员”或“裁判”。</li>
+<li><strong>来源:</strong> 通常用RM的头部或SFT模型的头部初始化，然后与Actor一起在PPO阶段训练。</li>
+<li><strong>任务:</strong> 评估当前状态 <code>s_t</code> 的<strong>潜在价值</strong> <code>V(s_t)</code>，即从这个状态开始，预期未来能获得多少总奖励。它的存在是为了减少策略梯度更新的方差（通过计算优势函数）。</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>所以，在PPO的每一步中，即时奖励 <code>r_t</code> 通常是 <code>RM对当前（部分或完整）序列的评估贡献 + KL惩罚项</code>。</li>
-</ul>
-</li>
+<li>
+<p><strong>Reward Model (奖励模型 / RM):</strong></p>
+<ul>
+<li><strong>角色:</strong> “最终裁判”，定义了优化的最终目标。</li>
+<li><strong>来源:</strong> 第二步训练好的人类偏好模型，在PPO阶段<strong>保持固定，不更新</strong>。</li>
+<li><strong>任务:</strong> 对一个<strong>完整的</strong>生成序列（prompt + response）给出一个标量分数 <code>R_final</code>，代表人类对这个回答的偏好程度。</li>
 </ul>
 </li>
 </ol>
-<p><strong>总结流程和信息流向（以GAE为例）：</strong></p>
-<p>在一次完整的序列生成（rollout）过程中，对于每一步 <code>t</code> (生成一个token <code>a_t</code> 从状态 <code>s_t</code> 转移到 <code>s_&#123;t+1&#125;</code>):</p>
+<hr>
+<h5 id="第二阶段：数据生成（Rollout-Phase）"><strong>第二阶段：数据生成（Rollout Phase）</strong></h5>
+<p>对于一个从数据集中采样的 <code>prompt</code>，我们执行一次完整的序列生成来收集训练数据。</p>
 <ol>
-<li><strong>Actor</strong> (LLM Policy) 在 <code>s_t</code> 采取动作 <code>a_t</code> (生成 <code>token_t</code>)，得到 <code>s_&#123;t+1&#125;</code>。同时记录 <code>log_prob(a_t | s_t)</code>。</li>
-<li><strong>Value Network</strong> (Critic) 预测 <code>V(s_t)</code>。</li>
-<li><strong>计算即时奖励 <code>r_t</code>:</strong>
+<li>
+<p><strong>初始化:</strong> 从一个 <code>prompt</code> 开始，得到初始状态 <code>s_0</code>。</p>
+</li>
+<li>
+<p><strong>逐Token生成循环 (For t = 0, 1, …, T-1):</strong></p>
 <ul>
-<li>主要部分来自KL散度惩罚。</li>
-<li>如果 <code>s_&#123;t+1&#125;</code> 是终止状态（例如生成了结束符EOS），则将完整的序列 <code>s_&#123;t+1&#125;</code> 输入<strong>Reward Model (RM)</strong> 得到最终的奖励分数 <code>R_final</code>，这个 <code>R_final</code> 会贡献给 <code>r_t</code> (或 <code>r_T</code>)。</li>
+<li><strong>动作 (Action):</strong> Actor模型接收当前状态 <code>s_t</code>，输出概率分布 <code>π_actor(·|s_t)</code>，并从中<strong>采样</strong>一个token <code>a_t</code>。</li>
+<li><strong>记录 (Log):</strong> 记录Actor输出该token的对数概率 <code>log π_actor(a_t|s_t)</code>。</li>
+<li><strong>价值评估 (Value Estimation):</strong> Critic模型评估当前状态的价值 <code>V(s_t)</code>。</li>
+<li><strong>计算即时奖励 (Immediate Reward):</strong> 这里的奖励<strong>主要不是来自RM</strong>。
+<ul>
+<li><strong>KL惩罚:</strong> 计算Actor策略与Reference策略在当前步的KL散度，作为惩罚项。<br>
+<code>r_t = -β * log(π_actor(a_t|s_t) / π_ref(a_t|s_t))</code></li>
+<li><code>β</code> 是一个控制KL惩罚力度的超参数。这个 <code>r_t</code> 是每一步都会计算的。</li>
 </ul>
 </li>
-<li>当一个完整的序列生成完毕后，我们就有了一系列的 <code>(s_t, a_t, r_t, s_&#123;t+1&#125;, V(s_t))</code>。</li>
-<li>使用这些信息计算<strong>优势函数 <code>A_t</code></strong>，通常使用GAE：</li>
+<li><strong>状态转移:</strong> 将新生成的token <code>a_t</code> 添加到序列中，得到新状态 <code>s_&#123;t+1&#125;</code>。</li>
+<li><strong>存储经验:</strong> 将元组 <code>(s_t, a_t, r_t, V(s_t), log π_actor(a_t|s_t))</code> 存储起来。</li>
+</ul>
+</li>
+<li>
+<p><strong>最终奖励计算 (Final Reward):</strong></p>
+<ul>
+<li>当生成结束（例如遇到EOS token或达到最大长度）时，我们得到了一个完整的回答。</li>
+<li>将完整的（<code>prompt</code>, <code>response</code>）输入到<strong>Reward Model (RM)</strong> 中，获得最终的标量奖励 <code>R_final</code>。</li>
+<li>将这个最终奖励 <strong>加到最后一步的即时奖励 <code>r_T</code> 上</strong>。所以，<code>r_T</code> 变为 <code>r_T (KL惩罚) + R_final</code>。</li>
+<li><strong>关键点:</strong> 只有在序列结束时，RM才提供一次性的、整体的奖励信号。而KL惩罚是贯穿于每一步的。</li>
+</ul>
+</li>
+</ol>
+<p>至此，我们收集到了一条完整的轨迹（trajectory）。</p>
+<hr>
+<h5 id="第三阶段：模型学习（Learning-Phase）"><strong>第三阶段：模型学习（Learning Phase）</strong></h5>
+<p>利用收集到的轨迹数据，我们来更新Actor和Critic模型。</p>
+<ol>
+<li>
+<p><strong>计算优势函数 (Advantage Estimation):</strong></p>
+<ul>
+<li>使用收集到的奖励 <code>r_t</code> 和价值估计 <code>V(s_t)</code>，通过**广义优势估计（GAE）**算法计算每一步的优势 <code>A_t</code>。</li>
+<li>GAE能有效平衡偏差和方差，稳定训练过程。<code>A_t</code> 直观地表示了在状态 <code>s_t</code> 选择动作 <code>a_t</code> 相对于平均水平有多好。</li>
+</ul>
+</li>
+<li>
+<p><strong>更新Actor (策略模型):</strong></p>
+<ul>
+<li>使用计算出的优势 <code>A_t</code> 和之前记录的 <code>log π_actor(a_t|s_t)</code>，构造PPO的<strong>裁剪代理目标函数（Clipped Surrogate Objective）</strong>。</li>
+<li>通过梯度上升（最大化目标函数）来更新Actor模型的参数。PPO的裁剪机制确保了每次更新的步子不会太大，从而保证了训练的稳定性。</li>
+</ul>
+</li>
+<li>
+<p><strong>更新Critic (价值模型):</strong></p>
+<ul>
+<li>Critic的目标是更准确地预测未来的回报。</li>
+<li>构造一个损失函数，通常是<strong>均方误差（MSE）</strong>，使其预测的价值 <code>V(s_t)</code> 尽可能接近于在该步之后实际观察到的累积回报（也称为Returns）。</li>
+<li>通过梯度下降来更新Critic模型的参数。</li>
+</ul>
+</li>
 </ol>
 <br>
+<h4 id="相关内容">相关内容</h4>
 <p><strong>SFT LLM</strong></p>
 <p>train Reward Model</p>
 <img src="/2025/03/19/LLM-Rela/image-20250325151928459.png" class="" title="image-20250325151928459">
@@ -1734,7 +1765,7 @@ $$<br>
 <img src="/2025/03/19/LLM-Rela/image-20250325153214542.png" class="" title="image-20250325153214542">
 <img src="/2025/03/19/LLM-Rela/image-20250325153304648.png" class="" title="image-20250325153304648">
 <br>
-<p><strong>PPO</strong></p>
+<p><strong>PPO架构</strong></p>
 <img src="/2025/03/19/LLM-Rela/image-20250325153337812.png" class="" title="image-20250325153337812">
 <blockquote>
 <p>广义优势GAE为多步时序差分的指数加权平均，详见reinforce-learning-record，参数含Value值和Reward值</p>
@@ -1745,10 +1776,198 @@ $$<br>
 <li>在 RLHF 中，PPO 策略在优化过程中可能会偏离初始 SFT 模型太远，导致“灾难性遗忘” (catastrophic forgetting)，即模型忘记了 SFT 阶段学到的通用语言能力或指令遵循能力，过度追求奖励信号。PPO 通常会加入一个 KL 散度惩罚项来约束当前策略与 SFT 模型的距离。</li>
 </ul>
 <br>
+<h3 id="LLM-DPO">LLM-DPO</h3>
+<p>Direct Preference Optimization</p>
+<p>DPO的核心思想是：<strong>跳过显式奖励建模和复杂的强化学习步骤，直接通过一个简单的分类损失函数来优化语言模型，使其符合人类偏好。</strong></p>
+<p>它将“让模型生成高奖励的回答”这个目标，等价地转换为了“直接增大模型对‘更优回答’的生成概率，同时减小对‘较差回答’的生成概率”。</p>
+<p>整个训练流程比PPO更简洁，通常只有两步：</p>
+<ol>
+<li><strong>监督式微调（SFT）：</strong> 与PPO的第一步完全相同。训练一个基础模型来理解指令和生成基本回答。</li>
+<li><strong>直接偏好优化（DPO）：</strong> 这一步直接取代了PPO流程中的“奖励模型训练”和“PPO强化学习”两个阶段。</li>
+</ol>
+<hr>
+<h4 id="DPO训练阶段的详细流程"><strong>DPO训练阶段的详细流程</strong></h4>
+<p>在DPO阶段，我们不再需要Critic模型，也不需要在线采样生成数据。我们使用的是一个<strong>静态的偏好数据集</strong>。</p>
+<h5 id="第一阶段：定义参与者（两大模型）"><strong>第一阶段：定义参与者（两大模型）</strong></h5>
+<p>在DPO训练开始前，我们只需要两个模型：</p>
+<ol>
+<li>
+<p><strong>策略模型（Policy Model, <code>π_θ</code>）：</strong></p>
+<ul>
+<li><strong>角色:</strong> 主角，即我们正在微调的语言模型。</li>
+<li><strong>来源:</strong> 经过第一步SFT训练后的模型副本。</li>
+<li><strong>任务:</strong> 在DPO训练中，它的参数<code>θ</code>会被更新。</li>
+</ul>
+</li>
+<li>
+<p><strong>参考模型（Reference Model, <code>π_ref</code>）：</strong></p>
+<ul>
+<li><strong>角色:</strong> “锚点”或“基准”。</li>
+<li><strong>来源:</strong> 同样是第一步SFT模型的<strong>一个固定、不更新的副本</strong>。</li>
+<li><strong>任务:</strong> 提供一个基准概率。它的作用与PPO中的参考模型完全相同：防止策略模型<code>π_θ</code>为了迎合偏好数据而偏离其原始的语言能力太远，这是一种隐式的KL散度约束。</li>
+</ul>
+</li>
+</ol>
+<h5 id="第二阶段：准备数据集"><strong>第二阶段：准备数据集</strong></h5>
+<p>DPO使用的数据集格式非常关键。它不是单个的“好回答”，而是一个偏好对的集合。每一条数据包含：</p>
+<ul>
+<li><strong>提示（Prompt, <code>x</code>）</strong></li>
+<li><strong>更优的回答（Chosen Response, <code>y_w</code>）</strong></li>
+<li><strong>较差的回答（Rejected Response, <code>y_l</code>）</strong></li>
+</ul>
+<p>这个数据集 <code>D = &#123; (x, y_w, y_l) &#125;</code> 通常就是用来训练PPO流程中奖励模型的那个数据集。</p>
+<h5 id="第三阶段：DPO训练循环"><strong>第三阶段：DPO训练循环</strong></h5>
+<p>DPO的训练过程更像一个标准的监督学习循环，而不是RL的“生成-评估-更新”循环。</p>
+<p>对于从偏好数据集中采样的每一个<code>(x, y_w, y_l)</code>三元组：</p>
+<ol>
+<li>
+<p><strong>计算策略模型概率：</strong></p>
+<ul>
+<li>将 <code>(x, y_w)</code> 输入到<strong>策略模型 <code>π_θ</code></strong> 中，计算模型生成 <code>y_w</code> 的总对数概率：<code>log π_θ(y_w | x)</code>。</li>
+<li>将 <code>(x, y_l)</code> 输入到<strong>策略模型 <code>π_θ</code></strong> 中，计算模型生成 <code>y_l</code> 的总对数概率：<code>log π_θ(y_l | x)</code>。</li>
+<li><em>（这是通过对回答中的每个token的条件概率取对数再求和得到的）</em></li>
+</ul>
+</li>
+<li>
+<p><strong>计算参考模型概率：</strong></p>
+<ul>
+<li>将 <code>(x, y_w)</code> 输入到<strong>固定的参考模型 <code>π_ref</code></strong> 中，计算其生成 <code>y_w</code> 的总对数概率：<code>log π_ref(y_w | x)</code>。</li>
+<li>将 <code>(x, y_l)</code> 输入到<strong>固定的参考模型 <code>π_ref</code></strong> 中，计算其生成 <code>y_l</code> 的总对数概率：<code>log π_ref(y_l | x)</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算隐式奖励的差异：</strong></p>
+<ul>
+<li>DPO理论证明，模型的对数概率与参考模型的对数概率之差，正比于一个隐式的奖励函数。</li>
+<li>计算<code>y_w</code>的隐式奖励（或称为“偏好得分”）:<br>
+<code>r_θ(x, y_w) = β * (log π_θ(y_w | x) - log π_ref(y_w | x))</code></li>
+<li>计算<code>y_l</code>的隐式奖励:<br>
+<code>r_θ(x, y_l) = β * (log π_θ(y_l | x) - log π_ref(y_l | x))</code></li>
+<li><code>β</code> 是一个超参数，通常设为0.1到0.5之间，它控制着模型对参考模型的偏离程度。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算DPO损失函数：</strong></p>
+<ul>
+<li>DPO的目标是让 <code>y_w</code> 的奖励远高于 <code>y_l</code> 的奖励。它使用一个类似于<strong>二元分类的逻辑损失（Logistic Loss）</strong> 来实现这个目标。</li>
+<li><code>Loss_DPO = -log(σ(r_θ(x, y_w) - r_θ(x, y_l)))</code></li>
+<li>其中 <code>σ</code> 是 Sigmoid 函数。</li>
+<li><strong>直观理解：</strong> 这个损失函数的目标是最大化 <code>r_θ(x, y_w)</code> 和 <code>r_θ(x, y_l)</code> 之间的差值。当策略模型赋予<code>y_w</code>的相对概率（相对于参考模型）远高于<code>y_l</code>时，损失就会变小。</li>
+</ul>
+</li>
+<li>
+<p><strong>反向传播与优化：</strong></p>
+<ul>
+<li>计算 <code>Loss_DPO</code> 相对于<strong>策略模型 <code>π_θ</code></strong> 参数的梯度。</li>
+<li>使用AdamW等优化器更新<strong>策略模型 <code>π_θ</code></strong> 的参数。</li>
+<li><strong>注意：参考模型 <code>π_ref</code> 的参数始终不更新。</strong></li>
+</ul>
+</li>
+</ol>
+<p>通过在整个偏好数据集上重复这个过程，策略模型 <code>π_θ</code> 会被直接优化，使其倾向于生成更符合人类偏好的回答。</p>
+<br>
 <h3 id="LLM-GRPO">LLM-GRPO</h3>
+<p>DPO和PPO都试图训练一个模型来满足一个“平均”的人类偏好。但如果一部分标注者喜欢简洁的回答，另一部分喜欢详细的回答，那么DPO/PPO训练出的模型可能会变得“中庸”，两边都讨好不了。</p>
+<p>GRPO的核心思想是：<strong>让语言模型意识到并学会模仿不同用户群（Grouper）的特定偏好</strong>。它通过在DPO的框架中引入一个“群体标识（Grouper ID）”，训练出一个单一的、但可以在推理时被<strong>引导</strong>以满足特定偏好风格的模型。</p>
+<p>整个流程与DPO非常相似，主要区别在于<strong>数据集的准备</strong>和<strong>模型输入</strong>。</p>
+<ol>
+<li><strong>监督式微调（SFT）：</strong> 与PPO/DPO相同，训练一个基础模型。</li>
+<li><strong>群体感知偏好优化（GRPO）：</strong> 这一步取代了DPO的微调过程，通过一个稍微修改的损失函数来同时学习多种偏好。</li>
+</ol>
+<hr>
+<h4 id="GRPO训练阶段的详细流程"><strong>GRPO训练阶段的详细流程</strong></h4>
+<h5 id="第一阶段：定义参与者（两大模型，但输入有变）"><strong>第一阶段：定义参与者（两大模型，但输入有变）</strong></h5>
+<p>与DPO一样，我们只需要两个模型：</p>
+<ol>
+<li>
+<p><strong>策略模型（Policy Model, <code>π_θ</code>）：</strong></p>
+<ul>
+<li><strong>角色:</strong> 主角，即我们正在微调的语言模型。</li>
+<li><strong>来源:</strong> SFT模型副本。</li>
+<li><strong>关键变化:</strong> 它的输入现在不仅包括提示 <code>x</code>，还包括一个<strong>群体标识 <code>g</code></strong>。其任务是根据 <code>(x, g)</code> 生成回答 <code>y</code>。因此，其概率表示为 <code>π_θ(y | x, g)</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>参考模型（Reference Model, <code>π_ref</code>）：</strong></p>
+<ul>
+<li><strong>角色:</strong> “锚点”或“基准”。</li>
+<li><strong>来源:</strong> 固定的SFT模型副本。</li>
+<li><strong>关键变化:</strong> 为了与策略模型保持一致，参考模型也需要能够处理群体标识 <code>g</code>。其概率表示为 <code>π_ref(y | x, g)</code>。</li>
+</ul>
+</li>
+</ol>
+<h5 id="第二阶段：准备数据集（核心区别）"><strong>第二阶段：准备数据集（核心区别）</strong></h5>
+<p>GRPO的数据集是其成功的关键。它需要在DPO的偏好三元组基础上，增加一个维度：</p>
+<ul>
+<li><strong>群体标识（Grouper ID, <code>g</code>）</strong></li>
+<li><strong>提示（Prompt, <code>x</code>）</strong></li>
+<li><strong>更优的回答（Chosen Response, <code>y_w</code>）</strong></li>
+<li><strong>较差的回答（Rejected Response, <code>y_l</code>）</strong></li>
+</ul>
+<p>这个数据集 <code>D = &#123; (g, x, y_w, y_l) &#125;</code> 的每一条数据都明确关联到了一个特定的偏好群体。</p>
+<ul>
+<li><strong><code>g</code> 是什么？</strong>
+<ul>
+<li>它可以是一个简单的<strong>类别ID</strong>（如 <code>group_1</code>, <code>group_2</code>），通过对标注者的标注行为进行聚类分析得出。</li>
+<li>也可以是更具描述性的<strong>自然语言指令</strong>（如 “请以简洁的风格回答” 或 “请像一个专业的软件工程师一样回答”）。</li>
+</ul>
+</li>
+</ul>
+<h5 id="第三阶段：GRPO训练循环"><strong>第三阶段：GRPO训练循环</strong></h5>
+<p>GRPO的训练循环几乎与DPO完全相同，只是在每一步都把群体标识 <code>g</code> 传递给模型。</p>
+<p>对于从偏好数据集中采样的每一个<code>(g, x, y_w, y_l)</code>四元组：</p>
+<ol>
+<li>
+<p><strong>计算策略模型概率：</strong></p>
+<ul>
+<li>将 <code>(x, y_w, g)</code> 输入到<strong>策略模型 <code>π_θ</code></strong> 中，计算模型生成 <code>y_w</code> 的总对数概率：<code>log π_θ(y_w | x, g)</code>。</li>
+<li>将 <code>(x, y_l, g)</code> 输入到<strong>策略模型 <code>π_θ</code></strong> 中，计算模型生成 <code>y_l</code> 的总对数概率：<code>log π_θ(y_l | x, g)</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算参考模型概率：</strong></p>
+<ul>
+<li>将 <code>(x, y_w, g)</code> 输入到<strong>固定的参考模型 <code>π_ref</code></strong> 中，计算其生成 <code>y_w</code> 的总对数概率：<code>log π_ref(y_w | x, g)</code>。</li>
+<li>将 <code>(x, y_l, g)</code> 输入到<strong>固定的参考模型 <code>π_ref</code></strong> 中，计算其生成 <code>y_l</code> 的总对数概率：<code>log π_ref(y_l | x, g)</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算隐式奖励的差异（群体感知）：</strong></p>
+<ul>
+<li>公式与DPO完全相同，但所有项现在都以 <code>g</code> 为条件。</li>
+<li>计算<code>y_w</code>的隐式奖励:<br>
+<code>r_θ(x, y_w, g) = β * (log π_θ(y_w | x, g) - log π_ref(y_w | x, g))</code></li>
+<li>计算<code>y_l</code>的隐式奖励:<br>
+<code>r_θ(x, y_l, g) = β * (log π_θ(y_l | x, g) - log π_ref(y_l | x, g))</code></li>
+</ul>
+</li>
+<li>
+<p><strong>计算GRPO损失函数：</strong></p>
+<ul>
+<li>损失函数的形式与DPO<strong>完全相同</strong>。</li>
+<li><code>Loss_GRPO = -log(σ(r_θ(x, y_w, g) - r_θ(x, y_l, g)))</code></li>
+<li><strong>直观理解：</strong> 对于来自群体 <code>g</code> 的偏好数据，模型被训练去拉大“好”回答和“坏”回答在该群体标准下的得分差距。由于不同 <code>g</code> 对应不同的偏好，模型学会了将 <code>g</code> 作为一个“开关”或“指令”，来切换其内部的偏好判断标准。</li>
+</ul>
+</li>
+<li>
+<p><strong>反向传播与优化：</strong></p>
+<ul>
+<li>与DPO完全相同。计算损失梯度，并只更新<strong>策略模型 <code>π_θ</code></strong> 的参数。</li>
+</ul>
+</li>
+</ol>
+<h5 id="第四阶段：推理时的应用（GRPO的价值体现）"><strong>第四阶段：推理时的应用（GRPO的价值体现）</strong></h5>
+<p>训练完成后，GRPO模型的强大之处在于其<strong>可控性</strong>。</p>
+<ol>
+<li>用户提供一个提示 <code>x</code>。</li>
+<li>用户<strong>同时提供一个群体标识 <code>g</code></strong> 来指定想要的回答风格（例如，通过一个下拉菜单选择“简洁风格”，或在系统提示中加入“你是一个幽默的助手”）。</li>
+<li>模型 <code>π_θ</code> 接收 <code>(x, g)</code> 并生成一个符合该群体 <code>g</code> 偏好的回答。</li>
+</ol>
+<br>
+<h4 id="相关内容-2">相关内容</h4>
 <img src="/2025/03/19/LLM-Rela/image-20250325195333997.png" class="" title="image-20250325195333997">
 <p>由于PPO算法中使用的价值函数通常是与策略模型规模相当的另一个模型，这会带来巨大的内存和计算负担。此外，在强化学习训练过程中，价值函数被作为计算优势函数（advantage）的基线以实现方差缩减。然而在大型语言模型（LLM）场景中，通常只有最后一个token会被奖励模型分配奖励分数，这可能导致对每个token都精确建模价值函数的训练变得复杂。为解决这一问题，如图4所示，我们提出了组相对策略优化（Group Relative Policy Optimization, GRPO）</p>
-<p>每一个 o_g 为策略模型对于输入 q 的输出，每一个 r_g 为 RM 对 每一个 o_g 的评分</p>
+<p>每一个 $o_g $为策略模型对于输入 $q$ 的输出，每一个 $r_g$ 为 RM 对 每一个 $o_g$ 的评分</p>
 <img src="/2025/03/19/LLM-Rela/image-20250325201341810.png" class="" title="image-20250325201341810">
 <p>不同点：</p>
 <ol>
@@ -1845,7 +2064,7 @@ $$<br>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">LLM&amp;Rela</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-base"><span class="nav-text">LLM-base</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B%E4%B8%8E%E6%96%B9%E5%B7%AE"><span class="nav-text">期望与方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E6%96%B9%E5%B7%AE"><span class="nav-text">协方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-text">激活函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-text">优化算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">随机梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E6%89%B9%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">小批量梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Adam"><span class="nav-text">Adam</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1-%E7%88%86%E7%82%B8"><span class="nav-text">梯度消失&amp;爆炸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96-%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-text">正则化&amp;归一化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#batch"><span class="nav-text">batch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E9%81%93"><span class="nav-text">通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN-LSTM"><span class="nav-text">RNN&amp;LSTM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-struc"><span class="nav-text">LLM-struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoder-Decoder"><span class="nav-text">Encoder&amp;Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tokenizer"><span class="nav-text">Tokenizer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Positional-Encoding"><span class="nav-text">Positional Encoding</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#base"><span class="nav-text">base</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RoPE"><span class="nav-text">RoPE</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">自注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">交叉注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%A4%B4%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">多头注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A9%E7%A0%81%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">掩码注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MHA%E3%80%81MQA%E3%80%81GQA-MLA"><span class="nav-text">MHA、MQA、GQA&amp;MLA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="nav-text">相关问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Layer-Norm-Residual-Network"><span class="nav-text">Layer Norm &amp; Residual Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MLP-FFN"><span class="nav-text">MLP&amp;FFN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-rela"><span class="nav-text">output&amp;rela</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-Train"><span class="nav-text">LLM-Train</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Parallelism"><span class="nav-text">Parallelism</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DataParallel"><span class="nav-text">DataParallel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TensorParallel"><span class="nav-text">TensorParallel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PipelineParallel"><span class="nav-text">PipelineParallel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deepspeed"><span class="nav-text">Deepspeed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FSDP"><span class="nav-text">FSDP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-Inference"><span class="nav-text">LLM-Inference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Parameters"><span class="nav-text">Parameters</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Temperature"><span class="nav-text">Temperature</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sampling"><span class="nav-text">Sampling</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fine-Tuning"><span class="nav-text">Fine-Tuning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BitFit-Prefix-Tuning-Prompt-Tuning"><span class="nav-text">BitFit, Prefix Tuning &amp; Prompt Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P-Tuning"><span class="nav-text">P-Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapter-Tuning"><span class="nav-text">Adapter Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LoRA"><span class="nav-text">LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E4%B8%8E%E4%BD%8E%E7%A7%A9%E5%88%86%E8%A7%A3"><span class="nav-text">奇异值分解与低秩分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E5%BA%94%E7%94%A8%E4%BD%8D%E7%BD%AE"><span class="nav-text">LoRA应用位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E6%94%B9%E8%BF%9B"><span class="nav-text">LoRA改进</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#LoRA-2"><span class="nav-text">LoRA+</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DoRA"><span class="nav-text">DoRA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rsLoRA"><span class="nav-text">rsLoRA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#PiSSA"><span class="nav-text">PiSSA</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E7%9B%B8%E5%85%B3%E8%AE%BA%E6%96%87"><span class="nav-text">LoRA相关论文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%83%E5%8F%82%E6%8A%80%E5%B7%A7"><span class="nav-text">调参技巧</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MAM-Adapter-UniPELT"><span class="nav-text">MAM Adapter &amp; UniPELT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reinforce-Learning-on-LLM"><span class="nav-text">Reinforce Learning on LLM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-PPO"><span class="nav-text">LLM-PPO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-GRPO"><span class="nav-text">LLM-GRPO</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">LLM&amp;Rela</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-base"><span class="nav-text">LLM-base</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B%E4%B8%8E%E6%96%B9%E5%B7%AE"><span class="nav-text">期望与方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E6%96%B9%E5%B7%AE"><span class="nav-text">协方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-text">激活函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-text">优化算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">随机梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E6%89%B9%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">小批量梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Adam"><span class="nav-text">Adam</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1-%E7%88%86%E7%82%B8"><span class="nav-text">梯度消失&amp;爆炸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96-%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-text">正则化&amp;归一化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#batch"><span class="nav-text">batch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E9%81%93"><span class="nav-text">通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN-LSTM"><span class="nav-text">RNN&amp;LSTM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-struc"><span class="nav-text">LLM-struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoder-Decoder"><span class="nav-text">Encoder&amp;Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tokenizer"><span class="nav-text">Tokenizer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Positional-Encoding"><span class="nav-text">Positional Encoding</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#base"><span class="nav-text">base</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RoPE"><span class="nav-text">RoPE</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">自注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">交叉注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%A4%B4%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">多头注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A9%E7%A0%81%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">掩码注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MHA%E3%80%81MQA%E3%80%81GQA-MLA"><span class="nav-text">MHA、MQA、GQA&amp;MLA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="nav-text">相关问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Layer-Norm-Residual-Network"><span class="nav-text">Layer Norm &amp; Residual Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MLP-FFN"><span class="nav-text">MLP&amp;FFN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-rela"><span class="nav-text">output&amp;rela</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-Train"><span class="nav-text">LLM-Train</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Parallelism"><span class="nav-text">Parallelism</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DataParallel"><span class="nav-text">DataParallel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TensorParallel"><span class="nav-text">TensorParallel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PipelineParallel"><span class="nav-text">PipelineParallel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deepspeed"><span class="nav-text">Deepspeed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FSDP"><span class="nav-text">FSDP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-Inference"><span class="nav-text">LLM-Inference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Parameters"><span class="nav-text">Parameters</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Temperature"><span class="nav-text">Temperature</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sampling"><span class="nav-text">Sampling</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fine-Tuning"><span class="nav-text">Fine-Tuning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BitFit-Prefix-Tuning-Prompt-Tuning"><span class="nav-text">BitFit, Prefix Tuning &amp; Prompt Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P-Tuning"><span class="nav-text">P-Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapter-Tuning"><span class="nav-text">Adapter Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LoRA"><span class="nav-text">LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E4%B8%8E%E4%BD%8E%E7%A7%A9%E5%88%86%E8%A7%A3"><span class="nav-text">奇异值分解与低秩分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E5%BA%94%E7%94%A8%E4%BD%8D%E7%BD%AE"><span class="nav-text">LoRA应用位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E6%94%B9%E8%BF%9B"><span class="nav-text">LoRA改进</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#LoRA-2"><span class="nav-text">LoRA+</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DoRA"><span class="nav-text">DoRA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rsLoRA"><span class="nav-text">rsLoRA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#PiSSA"><span class="nav-text">PiSSA</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E7%9B%B8%E5%85%B3%E8%AE%BA%E6%96%87"><span class="nav-text">LoRA相关论文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%83%E5%8F%82%E6%8A%80%E5%B7%A7"><span class="nav-text">调参技巧</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MAM-Adapter-UniPELT"><span class="nav-text">MAM Adapter &amp; UniPELT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reinforce-Learning-on-LLM"><span class="nav-text">Reinforce Learning on LLM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-PPO"><span class="nav-text">LLM-PPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%8F%82%E4%B8%8E%E8%80%85%EF%BC%88%E5%9B%9B%E5%A4%A7%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="nav-text">第一阶段：定义参与者（四大模型）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%EF%BC%88Rollout-Phase%EF%BC%89"><span class="nav-text">第二阶段：数据生成（Rollout Phase）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0%EF%BC%88Learning-Phase%EF%BC%89"><span class="nav-text">第三阶段：模型学习（Learning Phase）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9"><span class="nav-text">相关内容</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-DPO"><span class="nav-text">LLM-DPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DPO%E8%AE%AD%E7%BB%83%E9%98%B6%E6%AE%B5%E7%9A%84%E8%AF%A6%E7%BB%86%E6%B5%81%E7%A8%8B"><span class="nav-text">DPO训练阶段的详细流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%8F%82%E4%B8%8E%E8%80%85%EF%BC%88%E4%B8%A4%E5%A4%A7%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="nav-text">第一阶段：定义参与者（两大模型）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">第二阶段：准备数据集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9ADPO%E8%AE%AD%E7%BB%83%E5%BE%AA%E7%8E%AF"><span class="nav-text">第三阶段：DPO训练循环</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-GRPO"><span class="nav-text">LLM-GRPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GRPO%E8%AE%AD%E7%BB%83%E9%98%B6%E6%AE%B5%E7%9A%84%E8%AF%A6%E7%BB%86%E6%B5%81%E7%A8%8B"><span class="nav-text">GRPO训练阶段的详细流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%8F%82%E4%B8%8E%E8%80%85%EF%BC%88%E4%B8%A4%E5%A4%A7%E6%A8%A1%E5%9E%8B%EF%BC%8C%E4%BD%86%E8%BE%93%E5%85%A5%E6%9C%89%E5%8F%98%EF%BC%89"><span class="nav-text">第一阶段：定义参与者（两大模型，但输入有变）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE%E9%9B%86%EF%BC%88%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB%EF%BC%89"><span class="nav-text">第二阶段：准备数据集（核心区别）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9AGRPO%E8%AE%AD%E7%BB%83%E5%BE%AA%E7%8E%AF"><span class="nav-text">第三阶段：GRPO训练循环</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%8E%A8%E7%90%86%E6%97%B6%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88GRPO%E7%9A%84%E4%BB%B7%E5%80%BC%E4%BD%93%E7%8E%B0%EF%BC%89"><span class="nav-text">第四阶段：推理时的应用（GRPO的价值体现）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9-2"><span class="nav-text">相关内容</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1913,12 +2132,12 @@ $$<br>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">520k</span>
+    <span title="Symbols count total">526k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:45</span>
+    <span title="Reading time total">15:57</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

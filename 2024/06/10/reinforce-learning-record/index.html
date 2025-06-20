@@ -77,10 +77,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612110951796.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612111022161.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20240612110750284.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250324145210312.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250324141848364.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250322150349844.png">
-<meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250322150502092.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250322151444000.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250322151537751.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250611134637079.png">
@@ -90,7 +87,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250325200037093.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250323105541258.png">
 <meta property="article:published_time" content="2024-06-10T12:29:05.000Z">
-<meta property="article:modified_time" content="2025-06-12T09:19:31.417Z">
+<meta property="article:modified_time" content="2025-06-20T08:53:45.549Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -283,7 +280,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-12 17:19:31" itemprop="dateModified" datetime="2025-06-12T17:19:31+08:00">2025-06-12</time>
+                <time title="Modified: 2025-06-20 16:53:45" itemprop="dateModified" datetime="2025-06-20T16:53:45+08:00">2025-06-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -301,14 +298,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>29k</span>
+              <span>33k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>53 mins.</span>
+              <span>59 mins.</span>
             </span>
 
         </div>
@@ -669,7 +666,11 @@
 <p>目标是修改参数θ，使J(θ)取最大；即对θ求导</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240610213003398.png" class="" title="image-20240610213003398">
 <img src="/2024/06/10/reinforce-learning-record/image-20240612100732404.png" class="" title="image-20240612100732404">
-<p>推导：<br>
+<p>上述公式还可以表示为：<br>
+$$<br>
+\nabla_{\theta} J(\theta) = \mathbb{E}<em>{s \sim \nu^{\pi</em>{\theta}}, a \sim \pi_{\theta}(\cdot | s)} \left[ A^{\pi_{\theta}}(s, a) \nabla_{\theta} \log \pi_{\theta}(a | s) \right]<br>
+$$</p>
+<p>公式推导：<br>
 $$<br>
 \begin{align*}<br>
 \nabla_\theta V^{\pi_\theta} (s) &amp;= \nabla_\theta \left(\sum_{a \in A} \pi_\theta (a|s) Q^{\pi_\theta} (s, a)\right) \<br>
@@ -737,19 +738,71 @@ $$</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240612110750284.png" class="" title="image-20240612110750284">
 <p>价值网络使用时序差分(TD)更新，策略网络使用</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">states = torch.tensor(transition_dict[<span class="string">&#x27;states&#x27;</span>],</span><br><span class="line">                              dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">actions = torch.tensor(transition_dict[<span class="string">&#x27;actions&#x27;</span>]).view(-<span class="number">1</span>, <span class="number">1</span>).to(</span><br><span class="line">            self.device)</span><br><span class="line">rewards = torch.tensor(transition_dict[<span class="string">&#x27;rewards&#x27;</span>],</span><br><span class="line">                               dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line">next_states = torch.tensor(transition_dict[<span class="string">&#x27;next_states&#x27;</span>],</span><br><span class="line">                                   dtype=torch.<span class="built_in">float</span>).to(self.device)</span><br><span class="line">dones = torch.tensor(transition_dict[<span class="string">&#x27;dones&#x27;</span>],</span><br><span class="line">                             dtype=torch.<span class="built_in">float</span>).view(-<span class="number">1</span>, <span class="number">1</span>).to(self.device)</span><br><span class="line"><span class="comment"># 当前状态，动作、奖励、下一个状态和结束标志</span></span><br><span class="line"></span><br><span class="line">td_target = rewards + self.gamma * self.critic(next_states) * (<span class="number">1</span> - dones)</span><br><span class="line"><span class="comment"># 价值网络(critic)</span></span><br><span class="line"><span class="comment"># self.critic(next_states) 使用价值网络(critic)预测下一个状态的价值。</span></span><br><span class="line"><span class="comment"># (1 - dones) 用于处理 episode 结束的情况，如果 dones 为 1 (True)，则表示 episode 结束，此时不需要考虑未来的奖励。</span></span><br><span class="line">td_delta = td_target - self.critic(states)  </span><br><span class="line"><span class="comment"># 计算时序差分误差，即目标值与当前状态价值的差。</span></span><br><span class="line"></span><br><span class="line">log_probs = torch.log(self.actor(states).gather(<span class="number">1</span>, actions))</span><br><span class="line"><span class="comment"># 策略网络(actor)</span></span><br><span class="line"><span class="comment"># self.actor(states) 使用策略网络预测每个动作的概率。</span></span><br><span class="line"><span class="comment"># .gather(1, actions) 从预测的概率分布中选择实际采取的动作对应的概率。torch.log 计算对数概率。</span></span><br><span class="line"></span><br><span class="line">critic_loss = torch.mean(</span><br><span class="line">	F.mse_loss(self.critic(states), td_target.detach()))</span><br><span class="line"><span class="comment"># 计算价值网络的损失函数。(价值网络给出的当前状态价值)和(r+价值网络给出的下一状态的状态价值)的均方误差，即((a-b)^2)/2</span></span><br><span class="line"><span class="comment"># 使用 td_target.detach() 阻止梯度通过 td_target 向策略网络回传。</span></span><br><span class="line">actor_loss = torch.mean(-log_probs * td_delta.detach())</span><br><span class="line"><span class="comment"># 计算策略网络的损失函数。策略函数梯度</span></span><br><span class="line"><span class="comment"># 使用 td_delta.detach() 阻止梯度通过 td_delta 向价值网络回传。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">self.actor_optimizer.zero_grad()</span><br><span class="line">self.critic_optimizer.zero_grad()</span><br><span class="line">actor_loss.backward()  <span class="comment"># 计算策略网络的梯度</span></span><br><span class="line">critic_loss.backward()  <span class="comment"># 计算价值网络的梯度</span></span><br><span class="line">self.actor_optimizer.step()  <span class="comment"># 更新策略网络的参数</span></span><br><span class="line">self.critic_optimizer.step()  <span class="comment"># 更新价值网络的参数</span></span><br></pre></td></tr></table></figure>
+<br>
 <h3 id="TRPO">TRPO</h3>
-<p>策略函数</p>
-<img src="/2024/06/10/reinforce-learning-record/image-20250324145210312.png" class="" title="image-20250324145210312">
-<blockquote>
-<p>E 的下标 $s_0$ 表示期望是“关于”初始状态 s_0 的分布来计算的, 这个公式中的 $E_{s_0}$ <strong>明确地表示初始状态 $s_0$ 是一个随机变量，它遵循某个初始状态分布 (initial state distribution)。</strong></p>
-</blockquote>
-<p>在AC的，优化目标为最大化 <code>J(θ)</code>，通过梯度更新 ；</p>
-<p>在TRPO中，优化目标为最大化 新策略与旧策略的价值差 <code>J(θ')- J(θ) </code> ，通过近似方法（相似策略下状态分布函数不变假设与<strong>重要性采样</strong>）将原目标  <code>J(θ')- J(θ) </code>  近似为下图，且满足<strong>KL散度</strong>约束（<strong>约束</strong>策略为相似策略）</p>
+<p>在TRPO中，优化目标为最大化 新策略与旧策略的价值差 $J(θ’)- J(θ) $ ，通过近似方法（相似策略下状态分布函数不变假设与<strong>重要性采样</strong>）将原目标  $J(θ’)- J(θ) $  近似为下图，且满足<strong>KL散度</strong>约束（<strong>约束</strong>策略为相似策略）</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20250324141848364.png" class="" title="image-20250324141848364">
-<p>TRPO与AC的Critic相同；</p>
 <h4 id="整体流程">整体流程</h4>
-<img src="/2024/06/10/reinforce-learning-record/image-20250322150349844.png" class="" title="image-20250322150349844">
-<img src="/2024/06/10/reinforce-learning-record/image-20250322150502092.png" class="" title="image-20250322150502092">
+<p><strong>策略性能差异 (Policy Performance Difference)</strong></p>
+<p>我们的目标是找到一个新策略 $π_θ’$，使其性能  $J(θ’)$ 优于或等于当前策略 $π_θ$ 的性能 $J(θ)$。策略性能的差异可以被精确地表示为与优势函数 $A$ 相关的期望：</p>
+<p>$$<br>
+J(\theta’) - J(\theta) = \mathbb{E}<em>{s_0, a_0, … \sim \pi</em>{\theta’}} \left[ \sum_{t=0}^{\infty} \gamma^t A^{\pi_{\theta}}(s_t, a_t) \right]<br>
+$$</p>
+<p>其中，$A^{\pi_{\theta}}(s, a) = Q^{\pi_{\theta}}(s, a) - V^{\pi_{\theta}}(s)$ 是旧策略 $π_θ$ 的优势函数。这个等式是策略梯度理论中的一个基本恒等式。它表明，<strong>新策略带来的性能提升，等于在新策略的轨迹上，累积旧策略优势函数的期望</strong>。</p>
+<blockquote>
+<p>$$<br>
+\begin{aligned}<br>
+J(\theta) &amp;= \mathbb{E}<em>{\tau \sim \pi</em>{\theta}} \left[ \sum_{t=0}^{\infty} \gamma^t r_t \right] \<br>
+&amp;= \mathbb{E}<em>{s_0 \sim \rho_0} \left[ \mathbb{E}</em>{\tau \sim \pi_{\theta} | s_0} \left[ \sum_{t=0}^{\infty} \gamma^t r_t \right] \right] \quad \text{(根据全期望定律分解)} \<br>
+&amp;= \mathbb{E}<em>{s_0 \sim \rho_0} \left[ V^{\pi</em>{\theta}}(s_0) \right] \quad \text{(根据 } V^{\pi} \text{ 的定义)}<br>
+\end{aligned}<br>
+$$<br>
+$$<br>
+\nabla_{\theta} J(\theta) = \mathbb{E}<em>{s \sim \nu^{\pi</em>{\theta}}, a \sim \pi_{\theta}(\cdot | s)} \left[ A^{\pi_{\theta}}(s, a) \nabla_{\theta} \log \pi_{\theta}(a | s) \right]<br>
+$$</p>
+</blockquote>
+<p><strong>引入状态访问分布 (State-Visitation Distribution)</strong></p>
+<p>上述公式中的期望是基于新策略 $π_θ’$ 的轨迹采样的，这在优化时非常不便，因为 $θ’$ 是我们正在求解的变量。为了解决这个问题，我们将期望拆解，并引入状态访问分布 $ν^{\pi_{\theta’}}(s)$：</p>
+<p>$$<br>
+J(\theta’) - J(\theta) = \sum_{s} \nu^{\pi_{\theta’}}(s) \sum_{a} \pi_{\theta’}(a|s) A^{\pi_{\theta}}(s, a)<br>
+$$</p>
+<p>其中 $\nu^{\pi_{\theta’}}(s) = \sum_{t=0}^\infty \gamma^t P(s_t=s | \pi_{\theta’})$ 是新策略下的折扣状态访问频率。这个公式仍然依赖于新策略的访问分布 $ν^{\pi_{\theta’}}$，问题依然存在。</p>
+<p><strong>构造代理目标函数 (Surrogate Objective)</strong></p>
+<p>由于 $ν^{\pi_{\theta’}}$ 依赖于 $θ’$，导致目标函数难以优化。TRPO提出，如果新旧策略足够接近，那么它们的状态访问分布也应该很相似。因此，我们可以用旧策略的状态访问分布 $ν^{\pi_{\theta}}(s)$ 来近似 $ν^{\pi_{\theta’}}(s)$。</p>
+<p>基于这个近似，我们构造一个<strong>代理目标函数 (Surrogate Objective)</strong> $L_{\theta}(\theta’)$：</p>
+<p>$$<br>
+L_{\theta}(\theta’) = \sum_{s} \nu^{\pi_{\theta}}(s) \sum_{a} \pi_{\theta’}(a|s) A^{\pi_{\theta}}(s, a)<br>
+$$</p>
+<p>这个代理目标函数 $L_{\theta}(\theta’)$ 有两个很好的性质：</p>
+<ol>
+<li>$L_{\theta}(\theta) = 0$。</li>
+<li>$\nabla_{\theta’} L_{\theta}(\theta’)|<em>{\theta’=\theta} = \nabla</em>{\theta’} J(\theta’)|_{\theta’=\theta}$。<br>
+这意味着 $L$ 在 $θ’ = θ$ 处的梯度和真实目标 $J$ 的梯度完全一样，优化 $L$ 的初始方向是正确的。</li>
+</ol>
+<p><strong>应用重要性采样 (Importance Sampling)</strong></p>
+<p>代理目标 $L_{\theta}(\theta’)$ 仍然需要在每个状态 $s$ 下，根据新策略 $π_{\theta’}$ 采样动作 $a$。为了能够在完全使用旧策略 $π_{\theta}$ 产生的数据上进行计算，我们引入<strong>重要性采样 (Importance Sampling)</strong>：</p>
+<p>$$<br>
+\sum_{a} \pi_{\theta’}(a|s) A^{\pi_{\theta}}(s, a) = \mathbb{E}<em>{a \sim \pi</em>{\theta’}}[A^{\pi_{\theta}}(s, a)] = \mathbb{E}<em>{a \sim \pi</em>{\theta}} \left[ \frac{\pi_{\theta’}(a|s)}{\pi_{\theta}(a|s)} A^{\pi_{\theta}}(s, a) \right]<br>
+$$</p>
+<p>将此式带入 $L_{\theta}(\theta’)$，我们得到最终可以用样本来估计的代理目标：</p>
+<p>$$<br>
+L_{\theta}(\theta’) = \mathbb{E}<em>{s \sim \nu^{\pi</em>{\theta}}, a \sim \pi_{\theta}} \left[ \frac{\pi_{\theta’}(a|s)}{\pi_{\theta}(a|s)} A^{\pi_{\theta}}(s, a) \right]<br>
+$$</p>
+<p><strong>引入信赖域约束 (Trust Region Constraint)</strong></p>
+<p>直接最大化 $L_{\theta}(\theta’)$ 是危险的，因为我们的推导基于一个核心假设：$π_{\theta’}$ 与 $π_{\theta}$ 足够接近。如果一次更新步长太大，导致 $π_{\theta’}$ 偏离 $π_{\theta}$ 太远，那么 $ν^{\pi_{\theta’}} \approx \nu^{\pi_{\theta}}$ 的近似就会失效，$L$ 的提升将不再保证 $J$ 的提升，可能导致策略崩溃。</p>
+<p>为了确保这个近似的有效性，TRPO引入了一个<strong>信赖域 (Trust Region)</strong>，通过约束新旧策略的**KL散度 (KL Divergence)**来限制策略更新的幅度。</p>
+<p>$$<br>
+\mathbb{E}<em>{s \sim \nu^{\pi</em>{\theta}}} \left[ D_{KL}(\pi_{\theta}(\cdot|s) || \pi_{\theta’}(\cdot|s)) \right] \leq \delta<br>
+$$</p>
+<p>其中 $\delta$ 是一个超参数，代表了我们信任该近似的“半径”。</p>
+<p>综上所述，TRPO的每一步更新实际上是在求解一个带约束的优化问题：</p>
+<p>$$<br>
+\begin{aligned}<br>
+\text{maximize}<em>{\theta’} \quad &amp; L</em>{\theta}(\theta’) = \mathbb{E}<em>{s \sim \nu^{\pi</em>{\theta}}, a \sim \pi_{\theta}} \left[ \frac{\pi_{\theta’}(a|s)}{\pi_{\theta}(a|s)} A^{\pi_{\theta}}(s, a) \right] \<br>
+\text{subject to} \quad &amp; \mathbb{E}<em>{s \sim \nu^{\pi</em>{\theta}}} \left[ D_{KL}(\pi_{\theta}(\cdot|s) || \pi_{\theta’}(\cdot|s)) \right] \leq \delta<br>
+\end{aligned}<br>
+$$</p>
+<p>这个公式完整地描述了TRPO的核心思想：<strong>在确保新策略不会与旧策略偏离太远（信赖域约束）的前提下，最大化一个能够近似真实性能提升的代理目标函数</strong>。这就是TRPO能够实现稳定单调策略提升的理论保障。</p>
 <br>
 <h4 id="近似处理">近似处理</h4>
 <p>在策略优化中，我们希望找到新策略，使其期望回报最大化。但是，由于计算新策略的状态部分困难，有如下假设：</p>
@@ -1287,12 +1340,12 @@ Critic 网络的损失函数通常是均方误差 (Mean Squared Error, MSE)：<b
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">520k</span>
+    <span title="Symbols count total">526k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:45</span>
+    <span title="Reading time total">15:57</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
