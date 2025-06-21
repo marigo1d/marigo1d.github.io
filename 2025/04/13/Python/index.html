@@ -28,7 +28,7 @@
 <meta property="og:description" content="Python">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-04-13T05:41:46.000Z">
-<meta property="article:modified_time" content="2025-05-30T06:06:12.276Z">
+<meta property="article:modified_time" content="2025-06-20T12:25:42.735Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-30 14:06:12" itemprop="dateModified" datetime="2025-05-30T14:06:12+08:00">2025-05-30</time>
+                <time title="Modified: 2025-06-20 20:25:42" itemprop="dateModified" datetime="2025-06-20T20:25:42+08:00">2025-06-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,14 +238,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>8.9k</span>
+              <span>9.5k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>16 mins.</span>
+              <span>17 mins.</span>
             </span>
 
         </div>
@@ -280,6 +280,18 @@
 <br>
 <br>
 <h2 id="Pytorch">Pytorch</h2>
+<h3 id="维度">维度</h3>
+<p>张量是有多个“维度”的，每个维度对应一个“方向”：</p>
+<ul>
+<li><strong>维度 0：</strong> 最外层（最左边的括号）—— 行的个数 → <strong>竖着方向</strong></li>
+<li><strong>维度 1：</strong> 每一行里的列数 → <strong>横着方向</strong></li>
+<li><strong>维度 2：</strong> 通常是更深一层，比如 RGB 通道、高度、时间帧等</li>
+</ul>
+<blockquote>
+<p>维度的大小 -&gt; 从括号最外层向内增加</p>
+<p>在 PyTorch 中，每多一层括号，维度 +1。</p>
+</blockquote>
+<br>
 <h3 id="常用函数">常用函数</h3>
 <br>
 <p><code>.view()</code> - 改变张量形状（不改变数据）</p>
@@ -299,6 +311,30 @@
 <p><strong>例子</strong>：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个1x6的张量</span></span><br><span class="line">x = torch.tensor([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line"><span class="built_in">print</span>(x.shape)  <span class="comment"># torch.Size([1, 6])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重塑为2x3</span></span><br><span class="line">y = x.view(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="built_in">print</span>(y)</span><br><span class="line"><span class="comment"># tensor([[1, 2, 3],</span></span><br><span class="line"><span class="comment">#         [4, 5, 6]])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重塑为3x2</span></span><br><span class="line">z = x.view(<span class="number">3</span>, <span class="number">2</span>)</span><br><span class="line"><span class="built_in">print</span>(z)</span><br><span class="line"><span class="comment"># tensor([[1, 2],</span></span><br><span class="line"><span class="comment">#         [3, 4],</span></span><br><span class="line"><span class="comment">#         [5, 6]])</span></span><br><span class="line">q = self.linear_q(x).view(batch_size, -<span class="number">1</span>, self.heads, self.d_k) </span><br><span class="line"><span class="comment">#  -1 是一个特殊值，表示自动推断该维度的大小，它的作用是让PyTorch根据张量的总元素数量和其他已知维度的大小，自动计算 -1 所在维度的具体值。</span></span><br></pre></td></tr></table></figure>
 <p><strong>注意</strong>：如果尝试<code>x.view(4, 2)</code>会报错，因为1×6 ≠ 4×2</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>含义</th>
+<th>用途场景</th>
+<th>记忆技巧</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.view()</code></td>
+<td>快速 reshape，但要求内存连续</td>
+<td>高性能操作（如模型推理中）</td>
+<td>“原地换角度”</td>
+</tr>
+<tr>
+<td><code>.reshape()</code></td>
+<td>通用 reshape，底层自动处理</td>
+<td>安全首选，尤其是复杂场景</td>
+<td>“随便你换，我来兜底”</td>
+</tr>
+</tbody>
+</table>
 <br>
 <p><code>.transpose()</code> - 交换两个维度</p>
 <p><strong>作用</strong>：交换指定的两个维度<br>
@@ -324,6 +360,20 @@
 <p><strong>例子</strong>：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 矩阵乘法（2D）</span></span><br><span class="line">a = torch.tensor([[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>]])  <span class="comment"># 2x2</span></span><br><span class="line">b = torch.tensor([[<span class="number">5</span>, <span class="number">6</span>], [<span class="number">7</span>, <span class="number">8</span>]])  <span class="comment"># 2x2</span></span><br><span class="line">c = torch.matmul(a, b)</span><br><span class="line"><span class="built_in">print</span>(c)</span><br><span class="line"><span class="comment"># tensor([[19, 22],</span></span><br><span class="line"><span class="comment">#         [43, 50]])</span></span><br><span class="line"><span class="comment"># 计算过程：</span></span><br><span class="line"><span class="comment"># 1*5 + 2*7 = 19 | 1*6 + 2*8 = 22</span></span><br><span class="line"><span class="comment"># 3*5 + 4*7 = 43 | 3*6 + 4*8 = 50</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 批量矩阵乘法（3D）</span></span><br><span class="line">q = torch.randn(<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>)  <span class="comment"># 3个5x7矩阵</span></span><br><span class="line">k = torch.randn(<span class="number">3</span>, <span class="number">7</span>, <span class="number">2</span>)  <span class="comment"># 3个7x2矩阵</span></span><br><span class="line">out = torch.matmul(q, k)   <span class="comment"># 结果为3个5x2矩阵</span></span><br><span class="line"><span class="built_in">print</span>(out.shape)  <span class="comment"># torch.Size([3, 5, 2])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在注意力机制中的应用</span></span><br><span class="line">score = torch.matmul(q, k.transpose(-<span class="number">2</span>, -<span class="number">1</span>))  <span class="comment"># 计算Q和K的点积</span></span><br><span class="line"><span class="comment"># q形状: (batch, seq_len_q, d_k)</span></span><br><span class="line"><span class="comment"># k形状: (batch, seq_len_k, d_k)</span></span><br><span class="line"><span class="comment"># 结果: (batch, seq_len_q, seq_len_k)</span></span><br></pre></td></tr></table></figure>
 <br>
+<p><code>torch.gather</code></p>
+<p><strong>作用：</strong><br>
+按照指定的索引，从输入张量中<strong>收集（gather）数据</strong>。</p>
+<p><strong>语法：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CopyEdit</span><br><span class="line">torch.gather(input, dim, index)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>input</code>: 原始张量</li>
+<li><code>dim</code>: 沿哪个维度索引</li>
+<li><code>index</code>: 索引张量（大小与返回值一致）</li>
+</ul>
+<p><strong>示例：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pythonCopyEditx = torch.tensor([[10, 20], [30, 40]])</span><br><span class="line">index = torch.tensor([[0, 0], [1, 0]])</span><br><span class="line">out = torch.gather(x, 1, index)</span><br><span class="line"># out: tensor([[10, 10],</span><br><span class="line">#              [40, 30]])</span><br></pre></td></tr></table></figure>
+<p><strong>记忆方法：</strong><br>
+“<strong>gather</strong>” = 收集：像是用 index 张量告诉你：<strong>从哪里把值收集过来</strong>。</p>
 <br>
 <h3 id="计算图">计算图</h3>
 <p>代码</p>
@@ -470,7 +520,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Python</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Keyword"><span class="nav-text">Keyword</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Colon"><span class="nav-text">Colon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index"><span class="nav-text">Index</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch"><span class="nav-text">Pytorch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-text">常用函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%9B%BE"><span class="nav-text">计算图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensor%E8%AE%A1%E7%AE%97"><span class="nav-text">Tensor计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%86%99Ttransformer"><span class="nav-text">手写Ttransformer</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Python</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Keyword"><span class="nav-text">Keyword</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Colon"><span class="nav-text">Colon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index"><span class="nav-text">Index</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch"><span class="nav-text">Pytorch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%B4%E5%BA%A6"><span class="nav-text">维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-text">常用函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%9B%BE"><span class="nav-text">计算图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensor%E8%AE%A1%E7%AE%97"><span class="nav-text">Tensor计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%86%99Ttransformer"><span class="nav-text">手写Ttransformer</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -538,12 +588,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">523k</span>
+    <span title="Symbols count total">524k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:50</span>
+    <span title="Reading time total">15:53</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
