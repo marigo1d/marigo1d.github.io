@@ -27,6 +27,7 @@
 <meta property="og:site_name" content="Marigold">
 <meta property="og:description" content="AI-Agent设计相关 施工中…">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/Gu-NqzLb0AAG0lX">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/tool_calling_components-bef9d2bcb9d3706c2fe58b57bf8ccb60.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/structured_output-2c42953cee807dedd6e96f3e1db17f69.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/short-vs-long.png">
@@ -48,11 +49,11 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/GsmyMNLasAQ_DY6">
 <meta property="og:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/GsmySEdaQAACdBZ">
 <meta property="article:published_time" content="2025-04-21T01:19:56.000Z">
-<meta property="article:modified_time" content="2025-06-09T06:22:47.812Z">
+<meta property="article:modified_time" content="2025-07-05T08:40:00.624Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python, Pytorch">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/tool_calling_components-bef9d2bcb9d3706c2fe58b57bf8ccb60.png">
+<meta name="twitter:image" content="https://marigo1d.github.io/2025/04/21/AI-Agent/Gu-NqzLb0AAG0lX">
 
 <link rel="canonical" href="https://marigo1d.github.io/2025/04/21/AI-Agent/">
 
@@ -241,7 +242,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-09 14:22:47" itemprop="dateModified" datetime="2025-06-09T14:22:47+08:00">2025-06-09</time>
+                <time title="Modified: 2025-07-05 16:40:00" itemprop="dateModified" datetime="2025-07-05T16:40:00+08:00">2025-07-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,14 +260,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>41k</span>
+              <span>44k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1:14</span>
+              <span>1:20</span>
             </span>
 
         </div>
@@ -282,6 +283,7 @@
 <p>施工中…</p>
 <span id="more"></span>
 <h1>AI-Agent</h1>
+<img src="/2025/04/21/AI-Agent/Gu-NqzLb0AAG0lX" class="" title="Agent_workflow">
 <p>AI-Agent侧区分</p>
 <ul>
 <li>LLM部分，包含对基座LLM的特化，如SFT和RLHF</li>
@@ -618,6 +620,124 @@
 <p><a target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding">https://github.com/FlagOpen/FlagEmbedding</a></p>
 <h3 id="Reranker">Reranker</h3>
 <p><a target="_blank" rel="noopener" href="https://www.pinecone.io/learn/series/rag/rerankers/">https://www.pinecone.io/learn/series/rag/rerankers/</a></p>
+<p>好的，我们来完成这三项关于 RAG (Retrieval-Augmented Generation) 扩展方法的详细说明。</p>
+<hr>
+<h3 id="Extended-Method">Extended Method</h3>
+<h4 id="假设性文档嵌入-Hypothetical-Document-Embedding-HDE">假设性文档嵌入 (Hypothetical Document Embedding - HDE)</h4>
+<p><strong>核心思想：</strong><br>
+与其直接对用户的简短、模糊的查询（Query）进行嵌入，不如先让一个大型语言模型 (LLM) 根据该查询生成一个它认为最理想、最完整的“假设性答案”或“假设性文档”，然后对这个内容更丰富、语义更明确的假设性文档进行嵌入，再用其生成的向量去知识库中进行向量检索。</p>
+<p><strong>解决的问题：</strong><br>
+它主要解决“<strong>查询与文档之间的语义鸿沟 (Semantic Gap)</strong>”问题。用户的查询通常很短（如“什么是光合作用？”），而知识库中的文档通常很长，包含详细的解释、背景和例子。这两种不同形式的文本在嵌入空间中的向量可能相距甚远，导致检索效果不佳。HDE通过生成一个与目标文档在格式、长度和内容上都更相似的“中间文档”，极大地缩小了这一鸿沟。</p>
+<p><strong>工作原理：</strong></p>
+<ol>
+<li>
+<p><strong>接收查询 (Receive Query):</strong> 用户输入一个查询，例如：“如何为我的初创公司进行种子轮融资？”</p>
+</li>
+<li>
+<p><strong>生成假设性文档 (Generate Hypothetical Document):</strong> 系统将该查询发送给一个 LLM，并提示它：“请生成一份详细回答‘如何为我的初创公司进行种子轮融资？’这个问题的文档。”</p>
+</li>
+<li>
+<p><strong>LLM 输出:</strong> LLM 可能会生成如下的假设性文档：</p>
+<blockquote>
+<p>“为初创公司进行种子轮融资通常涉及几个关键步骤。首先，你需要一个清晰的商业计划书、一个最小可行产品（MVP）和一个有说服力的演讲稿。其次，建立你的投资人网络至关重要，可以从天使投资人和早期风险投资机构开始。在接触投资人时，要清晰地阐述你的市场机会、团队优势和财务预测…”</p>
+</blockquote>
+</li>
+<li>
+<p><strong>嵌入假设性文档 (Embed Hypothetical Document):</strong> 系统将这个由 LLM 生成的、内容丰富的假设性文档通过嵌入模型（Embedding Model）转换成一个向量。</p>
+</li>
+<li>
+<p><strong>执行检索 (Perform Retrieval):</strong> 使用这个新生成的向量，在文档/知识库的向量索引中进行相似性搜索，找出与这个“理想答案”最匹配的实际文档。</p>
+</li>
+<li>
+<p><strong>生成最终答案 (Generate Final Answer):</strong> 将检索到的文档和原始查询一起提供给 LLM，生成最终的、有事实依据的答案。</p>
+</li>
+</ol>
+<p><strong>优势：</strong></p>
+<ul>
+<li><strong>提高检索精度：</strong> 显著改善了查询和文档之间的语义匹配度，能找到更相关的内容。</li>
+<li><strong>处理模糊查询：</strong> 对于意图不明确或过于简短的查询，效果提升尤为明显。</li>
+</ul>
+<p><strong>挑战与考量：</strong></p>
+<ul>
+<li><strong>增加延迟：</strong> 在检索前增加了一次 LLM 调用，导致整体响应时间变长。</li>
+<li><strong>增加成本：</strong> 额外的 LLM 调用会产生额外费用。</li>
+<li><strong>依赖生成质量：</strong> 假设性文档的质量直接决定了检索效果的好坏。</li>
+</ul>
+<hr>
+<h4 id="迭代式检索生成-Iterative-Retrieval-Generation-IRG">迭代式检索生成 (Iterative Retrieval Generation - IRG)</h4>
+<p><strong>核心思想：</strong><br>
+将检索和生成过程从“一次性完成”的线性流程，转变为一个循环、迭代、逐步求精的过程。系统会根据初步生成的答案或中间思考，主动发现知识缺口，并生成新的查询以获取更多信息，直到能够形成一个完整、准确的答案为止。</p>
+<p><strong>解决的问题：</strong><br>
+它主要解决<strong>复杂、多步骤或需要整合多方面知识的查询 (Complex, Multi-hop Questions)</strong>。对于这类问题，单次检索往往无法获取所有必要的信息。例如，“比较一下《指环王》和《冰与火之歌》在世界构建和角色塑造上的异同？”</p>
+<p><strong>工作原理：</strong></p>
+<ol>
+<li><strong>初始检索 (Initial Retrieval):</strong> 系统接收初始查询，并进行第一次检索，获取一批相关文档。</li>
+<li><strong>初步生成与分析 (Initial Generation &amp; Analysis):</strong> LLM 基于第一次检索到的文档，尝试生成答案。在生成过程中，它会识别出当前信息中的不足之处。例如，它可能找到了关于《指环王》世界构建的资料，但缺少《冰与火之歌》角色塑造的细节。</li>
+<li><strong>生成新查询 (Generate New Queries):</strong> 基于识别出的知识缺口，系统（或 LLM 本身）会生成一个或多个新的、更具针对性的查询。例如：“《冰与火之歌》中的主要角色塑造技巧”、“《指环王》的魔法系统设定”。</li>
+<li><strong>迭代检索 (Iterative Retrieval):</strong> 系统使用这些新查询去知识库中进行新一轮的检索，获取补充信息。</li>
+<li><strong>整合与精炼 (Integration &amp; Refinement):</strong> 将所有轮次检索到的文档进行整合，并交由 LLM 进行最终的综合性回答。</li>
+<li><strong>循环终止：</strong> 当 LLM 判断信息已经足够全面，或者达到预设的迭代次数时，循环结束。</li>
+</ol>
+<p><strong>优势：</strong></p>
+<ul>
+<li><strong>处理复杂问题：</strong> 能够像人类研究员一样，逐步深入，解决需要多方面信息支持的复杂问题。</li>
+<li><strong>提高答案的全面性和深度：</strong> 通过补充检索，确保答案覆盖了问题的所有方面。</li>
+</ul>
+<p><strong>挑战与考量：</strong></p>
+<ul>
+<li><strong>高延迟和高成本：</strong> 多次检索和生成步骤显著增加了响应时间和计算成本。</li>
+<li><strong>逻辑复杂性：</strong> 实现一个有效的迭代循环、判断何时停止以及如何生成有效的后续查询，技术上更具挑战性。</li>
+<li><strong>可能陷入无效循环：</strong> 如果后续查询生成得不好，可能会导致检索不到有用信息，陷入低效循环。</li>
+</ul>
+<hr>
+<h4 id="优化稠密加稀疏检索-Optimized-Dense-Sparse-Retrieval">优化稠密加稀疏检索 (Optimized Dense + Sparse Retrieval)</h4>
+<p><strong>核心思想：</strong><br>
+这是一种混合检索（Hybrid Retrieval）策略，它结合了两种主流检索技术的优点：<strong>稠密检索 (Dense Retrieval)</strong> 和 <strong>稀疏检索 (Sparse Retrieval)</strong>，以实现比单一技术更强大、更鲁棒的检索效果。</p>
+<ul>
+<li>
+<p><strong>稠密检索 (Dense Retrieval):</strong></p>
+<ul>
+<li><strong>技术:</strong> 基于向量嵌入（Embeddings）和向量相似性搜索（如余弦相似度）。</li>
+<li><strong>优点:</strong> 擅长理解<strong>语义和上下文</strong>。能够匹配意思相近但用词不同的查询和文档（例如，查询“美国总统官邸”能匹配到包含“白宫”的文档）。</li>
+<li><strong>缺点:</strong> 对于<strong>关键词、专业术语、ID 或缩写</strong>的精确匹配能力较弱。</li>
+</ul>
+</li>
+<li>
+<p><strong>稀疏检索 (Sparse Retrieval):</strong></p>
+<ul>
+<li><strong>技术:</strong> 基于关键词频率和分布的传统信息检索方法（如 BM25、TF-IDF）。</li>
+<li><strong>优点:</strong> 擅长<strong>精确匹配关键词</strong>。对于包含特定术语、产品型号（如“iPhone 15 Pro”）或代码标识符的查询，效果极佳。计算速度快，资源消耗低。</li>
+<li><strong>缺点:</strong> 无法理解语义。无法匹配同义词或近义词（查询“汽车”无法匹配到包含“automobile”的文档）。</li>
+</ul>
+</li>
+</ul>
+<p><strong>工作原理 (优化结合):</strong></p>
+<ol>
+<li><strong>并行检索 (Parallel Retrieval):</strong> 当用户输入查询时，系统会<strong>同时</strong>使用两种方法进行检索：
+<ul>
+<li><strong>稠密路径：</strong> 将查询嵌入为向量，在向量数据库中搜索最相似的文档。</li>
+<li><strong>稀疏路径：</strong> 对查询进行分词，在倒排索引（如 Elasticsearch）中使用 BM25 算法搜索最相关的文档。</li>
+</ul>
+</li>
+<li><strong>结果融合 (Result Fusion):</strong> 系统会得到两个独立的、按相关性排序的文档列表。下一步是智能地将这两个列表融合成一个最终列表。最常用的融合算法是 <strong>“倒数排序融合” (Reciprocal Rank Fusion - RRF)</strong>。
+<ul>
+<li><strong>RRF 算法：</strong> 该算法不关心每个检索系统的原始分数（因为它们的量纲不同），只关心文档在各自列表中的<strong>排名 (Rank)</strong>。一个文档的最终分数是它在每个列表中排名的倒数之和。排名越靠前，倒数越大，最终分数也越高。</li>
+<li><strong>公式:</strong> <code>RRF_Score(doc) = Σ (1 / (k + rank_i(doc)))</code>，其中 <code>rank_i(doc)</code> 是文档在第 <code>i</code> 个检索结果列表中的排名，<code>k</code> 是一个常数（通常设为60），用于降低低排名文档的影响。</li>
+</ul>
+</li>
+<li><strong>最终排序与截断 (Final Ranking &amp; Truncation):</strong> 根据 RRF 分数对所有文档进行重新排序，并选取排名最高的 Top-K 个文档，用于后续的生成环节。</li>
+</ol>
+<p><strong>优势：</strong></p>
+<ul>
+<li><strong>取长补短：</strong> 结合了语义理解和关键词匹配的能力，是目前最有效的通用检索策略之一。</li>
+<li><strong>鲁棒性强：</strong> 即使一种检索方法效果不佳，另一种方法仍可能召回相关的文档，大大降低了检索失败的风险。</li>
+<li><strong>显著提升相关性：</strong> 在多数场景下，混合检索召回的文档质量远高于任何单一检索方法。</li>
+</ul>
+<p><strong>挑战与考量：</strong></p>
+<ul>
+<li><strong>系统复杂性：</strong> 需要同时维护向量数据库和关键词索引两种基础设施。</li>
+<li><strong>调优挑战：</strong> 融合策略（如 RRF中的 <code>k</code> 值）或不同检索结果的权重需要进行实验和调优，以达到最佳效果。</li>
+</ul>
 <h3 id="Improved-RAG">Improved RAG</h3>
 <h4 id="GraphRAG">GraphRAG</h4>
 <p><a target="_blank" rel="noopener" href="https://microsoft.github.io/graphrag/">https://microsoft.github.io/graphrag/</a></p>
@@ -746,6 +866,8 @@
 </ul>
 <img src="/2025/04/21/AI-Agent/Medqa-comp.png" class="" title="img">
 <h2 id="其他">其他</h2>
+<h3 id="RAG总结">RAG总结</h3>
+<p><a target="_blank" rel="noopener" href="https://holistic-authority-5c2.notion.site/RAG-1e3f66b636ba80f1b425dc15d7fae04c">https://holistic-authority-5c2.notion.site/RAG-1e3f66b636ba80f1b425dc15d7fae04c</a></p>
 <h3 id="Cursor实现每秒-1000-tokens-的文件编辑">Cursor实现每秒 1000 tokens 的文件编辑</h3>
 <p><a target="_blank" rel="noopener" href="https://web.archive.org/web/20240605010559/https://www.cursor.com/blog/instant-apply">https://web.archive.org/web/20240605010559/https://www.cursor.com/blog/instant-apply</a></p>
 <p>第一阶段 - 规划（Planning）：使用 GPT 或 Claude 等强大模型 通过聊天界面理解用户需求，制定编辑计划</p>
@@ -852,7 +974,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">AI-Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LangChain"><span class="nav-text">LangChain</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Model"><span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Key-methods"><span class="nav-text">Key methods</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tool-calling"><span class="nav-text">Tool calling</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Structured-Output"><span class="nav-text">Structured Output</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Multimodality"><span class="nav-text">Multimodality</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Memory"><span class="nav-text">Memory</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9F%AD%E6%9C%9F%E8%AE%B0%E5%BF%86"><span class="nav-text">短期记忆</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8"><span class="nav-text">编辑消息列表</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E8%BF%87%E5%BE%80%E5%AF%B9%E8%AF%9D"><span class="nav-text">总结过往对话</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%95%BF%E6%9C%9F%E8%AE%B0%E5%BF%86"><span class="nav-text">长期记忆</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E5%AD%98%E5%82%A8"><span class="nav-text">记忆存储</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%95%BF%E6%9C%9F%E8%AE%B0%E5%BF%86%E6%80%9D%E8%80%83%E6%A1%86%E6%9E%B6"><span class="nav-text">长期记忆思考框架</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">记忆类型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E5%86%99%E5%85%A5"><span class="nav-text">记忆写入</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Caching"><span class="nav-text">Caching</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prompt"><span class="nav-text">Prompt</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PromptTemplate"><span class="nav-text">PromptTemplate</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Semantic-search-engine"><span class="nav-text">Semantic search engine</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Chunking"><span class="nav-text">Chunking</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Better-Chunking"><span class="nav-text">Better Chunking</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Embedding-Vector-Store"><span class="nav-text">Embedding &amp; Vector Store</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrieval"><span class="nav-text">Retrieval</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Agent"><span class="nav-text">Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#QA-Processing-Method"><span class="nav-text">QA Processing Method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Streaming-message-Streaming-tokens"><span class="nav-text">Streaming message &amp; Streaming tokens</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Memory-Adding"><span class="nav-text">Memory Adding</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example"><span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Extraction-Chain"><span class="nav-text">Extraction Chain</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Schema-Extrator"><span class="nav-text">Schema &amp; Extrator</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RAG-based-long-context-extraction"><span class="nav-text">RAG based long context extraction</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Classify"><span class="nav-text">Classify</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LangGraph"><span class="nav-text">LangGraph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Graph"><span class="nav-text">Graph</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Agentic-Design-Patterns"><span class="nav-text">Agentic Design Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-Pattern"><span class="nav-text">Design Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reflection"><span class="nav-text">Reflection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tool-Use"><span class="nav-text">Tool Use</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Planning"><span class="nav-text">Planning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-Agent-Collaboration"><span class="nav-text">Multi-Agent Collaboration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP"><span class="nav-text">MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83%E6%95%B0%E6%8D%AE%E9%9B%86%E6%9E%84%E5%BB%BA"><span class="nav-text">微调数据集构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Chunking-2"><span class="nav-text">Chunking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%88%9B%E5%BB%BA-%E9%97%AE%E9%A2%98%E6%B1%82%E8%A7%A3"><span class="nav-text">问题创建&amp;问题求解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KBQA"><span class="nav-text">KBQA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Semantic-Parsing-based-Methods"><span class="nav-text">Semantic Parsing-based Methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Information-retrieval-based-Methods"><span class="nav-text">Information retrieval-based Methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Other-Methods"><span class="nav-text">Other Methods</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RAG"><span class="nav-text">RAG</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RAG-Design"><span class="nav-text">RAG Design</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Effective-Chunking-Strategies-for-RAG"><span class="nav-text">Effective Chunking Strategies for RAG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reranker"><span class="nav-text">Reranker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Improved-RAG"><span class="nav-text">Improved RAG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GraphRAG"><span class="nav-text">GraphRAG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LightRAG"><span class="nav-text">LightRAG</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prompt-Engineering"><span class="nav-text">Prompt Engineering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base-2"><span class="nav-text">Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Zero-Shot-Prompting"><span class="nav-text">Zero-Shot Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Few-Shot-Prompting"><span class="nav-text">Few-Shot Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Chain-of-Thought-CoT-Prompting"><span class="nav-text">Chain-of-Thought (CoT) Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Self-Consistency-Prompting"><span class="nav-text">Self-Consistency Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrieval-Augmented-Generation-RAG"><span class="nav-text">Retrieval-Augmented Generation (RAG)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Medprompt"><span class="nav-text">Medprompt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cursor%E5%AE%9E%E7%8E%B0%E6%AF%8F%E7%A7%92-1000-tokens-%E7%9A%84%E6%96%87%E4%BB%B6%E7%BC%96%E8%BE%91"><span class="nav-text">Cursor实现每秒 1000 tokens 的文件编辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BB%E8%A7%89%E5%A4%84%E7%90%86"><span class="nav-text">幻觉处理</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">AI-Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LangChain"><span class="nav-text">LangChain</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Model"><span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Key-methods"><span class="nav-text">Key methods</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tool-calling"><span class="nav-text">Tool calling</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Structured-Output"><span class="nav-text">Structured Output</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Multimodality"><span class="nav-text">Multimodality</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Memory"><span class="nav-text">Memory</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9F%AD%E6%9C%9F%E8%AE%B0%E5%BF%86"><span class="nav-text">短期记忆</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8"><span class="nav-text">编辑消息列表</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E8%BF%87%E5%BE%80%E5%AF%B9%E8%AF%9D"><span class="nav-text">总结过往对话</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%95%BF%E6%9C%9F%E8%AE%B0%E5%BF%86"><span class="nav-text">长期记忆</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E5%AD%98%E5%82%A8"><span class="nav-text">记忆存储</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%95%BF%E6%9C%9F%E8%AE%B0%E5%BF%86%E6%80%9D%E8%80%83%E6%A1%86%E6%9E%B6"><span class="nav-text">长期记忆思考框架</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">记忆类型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E5%86%99%E5%85%A5"><span class="nav-text">记忆写入</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Caching"><span class="nav-text">Caching</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prompt"><span class="nav-text">Prompt</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PromptTemplate"><span class="nav-text">PromptTemplate</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Semantic-search-engine"><span class="nav-text">Semantic search engine</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Chunking"><span class="nav-text">Chunking</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Better-Chunking"><span class="nav-text">Better Chunking</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Embedding-Vector-Store"><span class="nav-text">Embedding &amp; Vector Store</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrieval"><span class="nav-text">Retrieval</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Agent"><span class="nav-text">Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#QA-Processing-Method"><span class="nav-text">QA Processing Method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Streaming-message-Streaming-tokens"><span class="nav-text">Streaming message &amp; Streaming tokens</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Memory-Adding"><span class="nav-text">Memory Adding</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example"><span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Extraction-Chain"><span class="nav-text">Extraction Chain</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Schema-Extrator"><span class="nav-text">Schema &amp; Extrator</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RAG-based-long-context-extraction"><span class="nav-text">RAG based long context extraction</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Classify"><span class="nav-text">Classify</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LangGraph"><span class="nav-text">LangGraph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Graph"><span class="nav-text">Graph</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Agentic-Design-Patterns"><span class="nav-text">Agentic Design Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-Pattern"><span class="nav-text">Design Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reflection"><span class="nav-text">Reflection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tool-Use"><span class="nav-text">Tool Use</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Planning"><span class="nav-text">Planning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-Agent-Collaboration"><span class="nav-text">Multi-Agent Collaboration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP"><span class="nav-text">MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83%E6%95%B0%E6%8D%AE%E9%9B%86%E6%9E%84%E5%BB%BA"><span class="nav-text">微调数据集构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Chunking-2"><span class="nav-text">Chunking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%88%9B%E5%BB%BA-%E9%97%AE%E9%A2%98%E6%B1%82%E8%A7%A3"><span class="nav-text">问题创建&amp;问题求解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KBQA"><span class="nav-text">KBQA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Semantic-Parsing-based-Methods"><span class="nav-text">Semantic Parsing-based Methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Information-retrieval-based-Methods"><span class="nav-text">Information retrieval-based Methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Other-Methods"><span class="nav-text">Other Methods</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RAG"><span class="nav-text">RAG</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RAG-Design"><span class="nav-text">RAG Design</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Effective-Chunking-Strategies-for-RAG"><span class="nav-text">Effective Chunking Strategies for RAG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reranker"><span class="nav-text">Reranker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Extended-Method"><span class="nav-text">Extended Method</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%81%87%E8%AE%BE%E6%80%A7%E6%96%87%E6%A1%A3%E5%B5%8C%E5%85%A5-Hypothetical-Document-Embedding-HDE"><span class="nav-text">假设性文档嵌入 (Hypothetical Document Embedding - HDE)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E5%BC%8F%E6%A3%80%E7%B4%A2%E7%94%9F%E6%88%90-Iterative-Retrieval-Generation-IRG"><span class="nav-text">迭代式检索生成 (Iterative Retrieval Generation - IRG)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%A8%A0%E5%AF%86%E5%8A%A0%E7%A8%80%E7%96%8F%E6%A3%80%E7%B4%A2-Optimized-Dense-Sparse-Retrieval"><span class="nav-text">优化稠密加稀疏检索 (Optimized Dense + Sparse Retrieval)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Improved-RAG"><span class="nav-text">Improved RAG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GraphRAG"><span class="nav-text">GraphRAG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LightRAG"><span class="nav-text">LightRAG</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prompt-Engineering"><span class="nav-text">Prompt Engineering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base-2"><span class="nav-text">Base</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Zero-Shot-Prompting"><span class="nav-text">Zero-Shot Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Few-Shot-Prompting"><span class="nav-text">Few-Shot Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Chain-of-Thought-CoT-Prompting"><span class="nav-text">Chain-of-Thought (CoT) Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Self-Consistency-Prompting"><span class="nav-text">Self-Consistency Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrieval-Augmented-Generation-RAG"><span class="nav-text">Retrieval-Augmented Generation (RAG)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Medprompt"><span class="nav-text">Medprompt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RAG%E6%80%BB%E7%BB%93"><span class="nav-text">RAG总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cursor%E5%AE%9E%E7%8E%B0%E6%AF%8F%E7%A7%92-1000-tokens-%E7%9A%84%E6%96%87%E4%BB%B6%E7%BC%96%E8%BE%91"><span class="nav-text">Cursor实现每秒 1000 tokens 的文件编辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BB%E8%A7%89%E5%A4%84%E7%90%86"><span class="nav-text">幻觉处理</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -920,12 +1042,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">524k</span>
+    <span title="Symbols count total">529k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:53</span>
+    <span title="Reading time total">16:01</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

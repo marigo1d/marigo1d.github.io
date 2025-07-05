@@ -86,7 +86,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250325200037093.png">
 <meta property="og:image" content="https://marigo1d.github.io/2024/06/10/reinforce-learning-record/image-20250323105541258.png">
 <meta property="article:published_time" content="2024-06-10T12:29:05.000Z">
-<meta property="article:modified_time" content="2025-06-21T07:51:14.975Z">
+<meta property="article:modified_time" content="2025-07-05T08:42:25.745Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -279,7 +279,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-21 15:51:14" itemprop="dateModified" datetime="2025-06-21T15:51:14+08:00">2025-06-21</time>
+                <time title="Modified: 2025-07-05 16:42:25" itemprop="dateModified" datetime="2025-07-05T16:42:25+08:00">2025-07-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -297,14 +297,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>31k</span>
+              <span>33k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>57 mins.</span>
+              <span>59 mins.</span>
             </span>
 
         </div>
@@ -771,7 +771,7 @@ $$</p>
 <p><strong>Actor采用策略迭代算法更新，Critic采用价值(状态价值)迭代算法更新</strong>，Actor的更新依赖于于Critic计算的优势函数；</p>
 <p>策略函数梯度</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240612110026419.png" class="" title="image-20240612110026419">
-<p>其中，ψ_t可为不同值，表示不同的方法</p>
+<p>其中，ψ_t 可为不同值，表示不同的方法</p>
 <img src="/2024/06/10/reinforce-learning-record/image-20240612110241521.png" class="" title="image-20240612110241521">
 <blockquote>
 <p>注意，理论上来说，在收敛模型上上述6种方法得到的值是一致的，这六种方法都是基于策略梯度定理（Policy Gradient Theorem）的不同实现形式</p>
@@ -1129,6 +1129,73 @@ $$</p>
 <p>reward设置</p>
 <p>惩罚和奖励设置插值不要过大, 防止惩罚拟合过快</p>
 <p>+2, -200 -&gt; +2, 0</p>
+<br>
+<h3 id="GRPO相关">GRPO相关</h3>
+<p>在强化学习中，<strong>优势函数 (Advantage Function)</strong> <code>A(s, a)</code> 的标准定义是：</p>
+<p><code>A(s, a) = Q(s, a) - V(s)</code></p>
+<p>这里的每个部分代表：</p>
+<ul>
+<li><code>s</code> (State): 状态。在LLM的场景中，这通常是输入的<strong>提示（Prompt）</strong>，例如 “What is 2+2?”。</li>
+<li><code>a</code> (Action): 动作。在LLM中，这是模型生成的<strong>回答（Response）</strong>，例如 “4”。</li>
+<li><code>Q(s, a)</code> (Q-Value): <strong>动作价值函数</strong>。它代表在状态 <code>s</code> 下，执行动作 <code>a</code> 后，期望能获得的总回报。简单来说，就是**“这个具体回答有多好？”**。在RLHF中，这个值通常由奖励模型（Reward Model）直接给出，即 <code>R(s, a)</code>。</li>
+<li><code>V(s)</code> (Value): <strong>状态价值函数</strong>。它代表在状态 <code>s</code> 下，遵循当前策略（policy），所能获得的<strong>平均期望回报</strong>。简单来说，就是**“对于这个提示，我的模型平均能回答得多好？”**。</li>
+</ul>
+<p>所以，优势函数的直观理解是：</p>
+<p><strong><code>A(s, a) = (执行特定动作 a 的价值) - (在该状态 s 下的平均价值)</code></strong></p>
+<p>它衡量的是，某个具体的回答（<code>a</code>）相比于当前模型对于该提示（<code>s</code>）的“平均水平”来说，是<strong>更好还是更差</strong>。</p>
+<ul>
+<li>如果 <code>A(s, a) &gt; 0</code>，说明这个回答比模型的平均表现要好，我们应该增加生成这个回答的概率。</li>
+<li>如果 <code>A(s, a) &lt; 0</code>，说明这个回答比模型的平均表现要差，我们应该降低生成这个回答的概率。</li>
+</ul>
+<br>
+<p>使用均值代替GAE：</p>
+<p><strong>我们不需要一个复杂的神经网络去 <em>学习</em> <code>V(s)</code>，我们可以直接在当前批次的数据中 <em>估算</em> 它。</strong></p>
+<p><code>V(s)</code> 的定义是“在状态 <code>s</code> 下的<strong>期望回报</strong>”。期望值在数学上可以通过大量的采样来近似。</p>
+<p>这个方法的具体步骤如下（用你的例子 “What is 2+2?”）：</p>
+<ol>
+<li>
+<p><strong>状态 (State)</strong>: <code>s</code> = “What is 2+2?”</p>
+</li>
+<li>
+<p><strong>采样多个动作 (Sample Actions)</strong>: 使用当前策略（LLM），针对同一个提示 <code>s</code> 生成 <code>k</code> 个不同的回答（比如 <code>k=4</code>）。</p>
+<ul>
+<li><code>a1</code> = “4”</li>
+<li><code>a2</code> = “3”</li>
+<li><code>a3</code> = “D”</li>
+<li><code>a4</code> = “C”</li>
+</ul>
+</li>
+<li>
+<p><strong>获取每个动作的回报 (Get Rewards)</strong>: 用奖励模型（Reward Model）为每个回答打分。</p>
+<ul>
+<li><code>R(s, a1)</code> = 10.0 (非常好的回答)</li>
+<li><code>R(s, a2)</code> = 2.0 (错误的数学计算)</li>
+<li><code>R(s, a3)</code> = -5.0 (无关的回答)</li>
+<li><code>R(s, a4)</code> = -5.0 (无关的回答)</li>
+</ul>
+</li>
+<li>
+<p><strong>估算 V(s) - 核心步骤</strong>: 我们用这 <code>k</code> 个回报的<strong>统计均值</strong>来作为 <code>V(s)</code> 的一个近似估计值 <code>V̂(s)</code>。</p>
+<ul>
+<li><code>V̂(s) ≈ mean(10.0, 2.0, -5.0, -5.0) = (10+2-5-5) / 4 = 0.5</code></li>
+<li>这个 <code>0.5</code> 就代表了我们对当前模型在回答“What is 2+2?”这个问题上的**“平均表现”**的估计。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算优势函数 A(s, a)</strong>: 现在我们可以为每一个采样出的回答计算其优势值了。</p>
+<ul>
+<li><code>A(s, a1) = R(s, a1) - V̂(s) = 10.0 - 0.5 = 9.5</code> (远高于平均，非常好)</li>
+<li><code>A(s, a2) = R(s, a2) - V̂(s) = 2.0 - 0.5 = 1.5</code> (略高于平均)</li>
+<li><code>A(s, a3) = R(s, a3) - V̂(s) = -5.0 - 0.5 = -5.5</code> (远低于平均，很差)</li>
+<li><code>A(s, a4) = R(s, a4) - V̂(s) = -5.0 - 0.5 = -5.5</code> (远低于平均，很差)</li>
+</ul>
+</li>
+</ol>
+<p>这种方法是<strong>用经验均值（Empirical Mean）来代替期望值（Expectation）</strong>。根据大数定律，当采样数量 <code>k</code> 足够大时，样本均值会收敛于真实的期望值。</p>
+<ul>
+<li><strong>价值网络 V(s)</strong>: 试图学习一个<strong>函数</strong>，对于任何输入 <code>s</code>，都能输出一个期望回报。它具有泛化能力，但需要额外训练和内存。</li>
+<li><strong>取均值 V̂(s)</strong>: 不学习函数，而是<strong>即时计算</strong>。它直接利用当前策略的表现来估算期望回报。这是一种“无模型”（model-free）的估算方式。</li>
+</ul>
 
     </div>
 
@@ -1212,7 +1279,7 @@ $$</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">reinforce learning record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-text">数学基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B"><span class="nav-text">机器学习模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRP"><span class="nav-text">MRP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%8A%A5"><span class="nav-text">回报</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">价值函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MDP"><span class="nav-text">MDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5"><span class="nav-text">策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">状态价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">动作价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E4%B8%8E%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E5%85%B3%E7%B3%BB"><span class="nav-text">状态价值函数与动作价值函数关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-text">最优策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%9F%E6%9C%9B%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼期望方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼最优方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E8%AE%BF%E9%97%AE%E5%88%86%E5%B8%83"><span class="nav-text">状态访问分布</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">策略迭代算法&#x2F;基于策略函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">价值迭代算法&#x2F;基于价值函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3-%E4%BB%B7%E5%80%BC%E8%BF%AD%E4%BB%A3%E5%AF%B9%E6%AF%94"><span class="nav-text">策略迭代&amp;价值迭代对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E6%A8%A1%E5%9E%8B-%E6%97%A0%E6%A8%A1%E5%9E%8B-%E5%9C%A8%E7%BA%BF%E7%AD%96%E7%95%A5-%E7%A6%BB%E7%BA%BF%E7%AD%96%E7%95%A5"><span class="nav-text">有模型&amp;无模型+在线策略&amp;离线策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95"><span class="nav-text">蒙特卡洛方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%E7%AE%97%E6%B3%95"><span class="nav-text">时序差分算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sarsa%E7%AE%97%E6%B3%95"><span class="nav-text">Sarsa算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning%E7%AE%97%E6%B3%95"><span class="nav-text">Q-learning算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DQN-DDQN"><span class="nav-text">DQN&#x2F;DDQN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E7%AE%97%E6%B3%95-REINFORCE"><span class="nav-text">策略梯度算法(REINFORCE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor-Critic"><span class="nav-text">Actor-Critic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TRPO"><span class="nav-text">TRPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-text">整体流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E5%A4%84%E7%90%86"><span class="nav-text">近似处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E7%BA%A6%E6%9D%9F%E4%B8%8E%E6%B1%82%E8%A7%A3"><span class="nav-text">近似约束与求解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%BF%E4%B9%89%E4%BC%98%E5%8A%BF"><span class="nav-text">广义优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%B3%95-2"><span class="nav-text">算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PPO-clip"><span class="nav-text">PPO-clip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDPG"><span class="nav-text">DDPG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E5%88%86%E5%BF%83%E5%BE%97"><span class="nav-text">部分心得</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AC%E5%88%86%E7%A6%BB"><span class="nav-text">AC分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">reinforce learning record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-text">数学基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B"><span class="nav-text">机器学习模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRP"><span class="nav-text">MRP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%8A%A5"><span class="nav-text">回报</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">价值函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MDP"><span class="nav-text">MDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5"><span class="nav-text">策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">状态价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-text">动作价值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E4%B8%8E%E5%8A%A8%E4%BD%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E5%85%B3%E7%B3%BB"><span class="nav-text">状态价值函数与动作价值函数关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-text">最优策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%9F%E6%9C%9B%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼期望方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B"><span class="nav-text">贝尔曼最优方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E8%AE%BF%E9%97%AE%E5%88%86%E5%B8%83"><span class="nav-text">状态访问分布</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">策略迭代算法&#x2F;基于策略函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95-%E5%9F%BA%E4%BA%8E%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E7%9A%84"><span class="nav-text">价值迭代算法&#x2F;基于价值函数的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3-%E4%BB%B7%E5%80%BC%E8%BF%AD%E4%BB%A3%E5%AF%B9%E6%AF%94"><span class="nav-text">策略迭代&amp;价值迭代对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E6%A8%A1%E5%9E%8B-%E6%97%A0%E6%A8%A1%E5%9E%8B-%E5%9C%A8%E7%BA%BF%E7%AD%96%E7%95%A5-%E7%A6%BB%E7%BA%BF%E7%AD%96%E7%95%A5"><span class="nav-text">有模型&amp;无模型+在线策略&amp;离线策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95"><span class="nav-text">蒙特卡洛方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%E7%AE%97%E6%B3%95"><span class="nav-text">时序差分算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sarsa%E7%AE%97%E6%B3%95"><span class="nav-text">Sarsa算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning%E7%AE%97%E6%B3%95"><span class="nav-text">Q-learning算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DQN-DDQN"><span class="nav-text">DQN&#x2F;DDQN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E7%AE%97%E6%B3%95-REINFORCE"><span class="nav-text">策略梯度算法(REINFORCE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor-Critic"><span class="nav-text">Actor-Critic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TRPO"><span class="nav-text">TRPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-text">整体流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E5%A4%84%E7%90%86"><span class="nav-text">近似处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E7%BA%A6%E6%9D%9F%E4%B8%8E%E6%B1%82%E8%A7%A3"><span class="nav-text">近似约束与求解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%BF%E4%B9%89%E4%BC%98%E5%8A%BF"><span class="nav-text">广义优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%B3%95-2"><span class="nav-text">算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PPO-clip"><span class="nav-text">PPO-clip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDPG"><span class="nav-text">DDPG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E5%88%86%E5%BF%83%E5%BE%97"><span class="nav-text">部分心得</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AC%E5%88%86%E7%A6%BB"><span class="nav-text">AC分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-text">心得</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GRPO%E7%9B%B8%E5%85%B3"><span class="nav-text">GRPO相关</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1280,12 +1347,12 @@ $$</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">524k</span>
+    <span title="Symbols count total">529k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:53</span>
+    <span title="Reading time total">16:01</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
