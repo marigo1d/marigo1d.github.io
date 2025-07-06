@@ -64,7 +64,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/LLM-structure.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/LLM-structure-moe.png">
 <meta property="article:published_time" content="2025-03-19T02:50:14.000Z">
-<meta property="article:modified_time" content="2025-07-06T03:52:24.257Z">
+<meta property="article:modified_time" content="2025-07-06T06:37:28.668Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python, Pytorch">
 <meta name="twitter:card" content="summary">
@@ -257,7 +257,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-06 11:52:24" itemprop="dateModified" datetime="2025-07-06T11:52:24+08:00">2025-07-06</time>
+                <time title="Modified: 2025-07-06 14:37:28" itemprop="dateModified" datetime="2025-07-06T14:37:28+08:00">2025-07-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -275,14 +275,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>36k</span>
+              <span>35k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1:06</span>
+              <span>1:04</span>
             </span>
 
         </div>
@@ -753,6 +753,73 @@ $$</p>
 <p>ref: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">Attention is All You Need</a></p>
 <br>
 <img src="/2025/03/19/LLM-Rela/image-20250325195428329.png" class="" title="image-20250325195428329">
+<p>Transformer架构下的完整流程</p>
+<p>假设我们要将英文句子 “I am a student” 翻译成中文 “我 是 一名 学生”。</p>
+<ul>
+<li><strong>源序列</strong>: “I am a student” -&gt; <code>L_source = 4</code></li>
+<li><strong>模型维度</strong>: <code>d_model = 512</code> (为了举例方便，我们忽略多头和维度<code>d_k</code>的切分，假设<code>d_k = d_model</code>)</li>
+</ul>
+<p><strong>第0步：编码器处理</strong></p>
+<ol>
+<li>输入 “I am a student” 进入编码器。</li>
+<li>经过多层自注意力和前馈网络后，编码器输出一个上下文感知的向量序列。</li>
+<li>这个输出的形状是 <code>(batch_size=1, L_source=4, d_model=512)</code>。</li>
+<li>这个输出将作为<strong>固定不变</strong>的 <code>K</code> 和 <code>V</code> 提供给解码器的每一个时间步。我们称它们为 <code>K_encoder</code> 和 <code>V_encoder</code>。</li>
+</ol>
+<p><code>K_encoder</code> 形状: <code>(1, 4, 512)</code><br>
+<code>V_encoder</code> 形状: <code>(1, 4, 512)</code></p>
+<p><strong>第1步：解码器生成第一个token “我”</strong></p>
+<ol>
+<li>解码器的输入只有一个起始符 <code>&lt;start&gt;</code>。</li>
+<li>经过嵌入和位置编码后，我们得到一个向量，形状为 <code>(1, 1, 512)</code>。</li>
+<li>这个向量首先通过<strong>带掩码的自注意力</strong>（在这一步没什么可注意的，因为只有一个token）。</li>
+<li>然后，它的输出作为 <code>Q</code> 进入<strong>交叉注意力</strong>层。
+<ul>
+<li><code>Q</code> 形状: <code>(1, L_q=1, 512)</code></li>
+<li><code>K</code> (来自编码器): <code>(1, L_k=4, 512)</code></li>
+</ul>
+</li>
+<li>计算注意力分数 <code>Q @ K^T</code>:
+<ul>
+<li><code>(1, 1, 512) @ (1, 512, 4)</code> -&gt; 结果形状 <code>(1, 1, 4)</code></li>
+<li>这个 <code>(1, 1, 4)</code> 的向量表示 <code>&lt;start&gt;</code> 符为了生成下一个token，应该对 “I”, “am”, “a”, “student” 分别赋予多大的注意力。</li>
+</ul>
+</li>
+<li>用这个分数加权 <code>V_encoder</code>，然后通过前馈网络，最终预测出第一个目标token “我”。</li>
+</ol>
+<p><strong>第2步：解码器生成第二个token “是”</strong></p>
+<ol>
+<li>现在解码器的输入是 <code>&lt;start&gt; 我</code>。</li>
+<li>经过嵌入和位置编码，我们得到一个向量序列，形状为 <code>(1, 2, 512)</code>。</li>
+<li>这个序列通过<strong>带掩码的自注意力</strong>（&quot;我&quot;会注意到<code>&lt;start&gt;</code>，但反之不行，因为有掩码）。</li>
+<li>其输出作为 <code>Q</code> 进入<strong>交叉注意力</strong>层。
+<ul>
+<li><code>Q</code> 形状: <code>(1, L_q=2, 512)</code>  &lt;-- <strong>看，Q的序列长度维度变化了！</strong></li>
+<li><code>K</code> (来自编码器): <code>(1, L_k=4, 512)</code> &lt;-- <strong>K保持不变！</strong></li>
+</ul>
+</li>
+<li>计算注意力分数 <code>Q @ K^T</code>:
+<ul>
+<li><code>(1, 2, 512) @ (1, 512, 4)</code> -&gt; 结果形状 <code>(1, 2, 4)</code></li>
+<li>这个 <code>(1, 2, 4)</code> 的矩阵包含了两行信息：
+<ul>
+<li>第一行：<code>&lt;start&gt;</code> 对源序列的注意力（通常在后续步骤中被忽略，因为我们只关心最后一个token的预测）。</li>
+<li>第二行：token “我” 为了生成下一个token，对 “I”, “am”, “a”, “student” 的注意力。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>解码器使用这个信息（特别是与 “我” 相关的部分）来预测出第二个token “是”。</li>
+</ol>
+<p><strong>第3步及以后</strong></p>
+<p>这个过程会一直重复。在生成第 <code>t</code> 个token时：</p>
+<ul>
+<li>解码器的输入是 <code>&lt;start&gt;</code> 加上前 <code>t-1</code> 个已生成的token。</li>
+<li>交叉注意力中的 <code>Q</code> 的形状是 <code>(1, L_q=t, 512)</code>。</li>
+<li>交叉注意力中的 <code>K</code> 和 <code>V</code> 的形状<strong>始终</strong>是 <code>(1, L_k=4, 512)</code>。</li>
+<li>注意力分数矩阵的形状是 <code>(1, t, 4)</code>。</li>
+</ul>
+<p>这个过程一直持续，直到解码器生成一个结束符 <code>&lt;end&gt;</code>。</p>
 <br>
 <h3 id="Encoder-Only">Encoder Only</h3>
 <img src="/2025/03/19/LLM-Rela/image-20250706105452257.png" class="" title="image-20250706105452257">
@@ -761,6 +828,57 @@ $$</p>
 <img src="/2025/03/19/LLM-Rela/LLM-structure.png" class="" title="structure">
 <img src="/2025/03/19/LLM-Rela/LLM-structure-moe.png" class="" title="structure-moe">
 <p>ref: <a target="_blank" rel="noopener" href="https://github.com/jingyaogong/minimind">minimind</a></p>
+<p>decoder-only GPT流程</p>
+<p><strong>基本维度设定：</strong></p>
+<ul>
+<li><code>batch_size</code> (B): 一次并行处理的序列数量。</li>
+<li><code>sequence_length</code> (L): 输入序列的长度（或最大上下文窗口）。</li>
+<li><code>d_model</code> (D): 模型维度，也是每个token经过Transformer层后的隐藏状态维度。</li>
+<li><code>vocab_size</code> (V): 词汇表的大小，即模型能生成或识别的唯一词汇的数量。</li>
+</ul>
+<br>
+<p><strong>Transformer Decoder Block 内部的输出 (经过 Layer Norm 之前的 Feed Forward 输出，以及最终 Layer Norm 之后的输出)</strong></p>
+<p>在每个 Transformer Decoder Block 内部，<code>Masked Multi Self Attention</code> 和 <code>Feed Forward</code> 都会处理输入，并输出与输入维度相同的张量。</p>
+<ul>
+<li><strong>输入 <code>Text &amp; Position Embed</code> 后的张量维度：</strong> <code>(B, L, D)</code></li>
+<li><strong>经过 <code>Masked Multi Self Attention</code> 后的张量维度：</strong> <code>(B, L, D)</code></li>
+<li><strong>经过第一个 <code>Layer Norm</code> 后的张量维度：</strong> <code>(B, L, D)</code></li>
+<li><strong>经过 <code>Feed Forward</code> 后的张量维度：</strong> <code>(B, L, D)</code></li>
+<li><strong>经过第二个 <code>Layer Norm</code> 后的张量维度：</strong> <code>(B, L, D)</code></li>
+</ul>
+<p>这个 <code>(B, L, D)</code> 的张量代表了输入序列中每个token在当前层经过处理后，所获得的上下文感知的隐藏状态（或特征向量）。GPT模型通常有多个这样的Decoder Block（例如GPT-2有12层，GPT-3有96层），每一层都会接收 <code>(B, L, D)</code> 的输入，并输出同样维度的张量，作为下一层的输入。</p>
+<br>
+<p><strong>整个GPT模型最终的输出 (用于文本预测)</strong></p>
+<p>当所有 <code>12x</code> （或更多）的Decoder Block 处理完成后，最后一个Decoder Block 的输出依然是 <code>(B, L, D)</code>。</p>
+<p>这个 <code>(B, L, D)</code> 张量，现在包含了每个token在<strong>所有层</strong>处理后、充分融合了上下文信息的表示。</p>
+<p>为了预测下一个词，GPT通常会做以下处理：</p>
+<ol>
+<li>
+<p><strong>取最后一个 token 的隐藏状态（用于生成）：</strong></p>
+<ul>
+<li>在自回归生成文本时，我们通常只关心预测序列中<strong>下一个词</strong>。这个预测是基于<strong>当前输入序列的完整上下文</strong>。</li>
+<li>而根据掩码自注意力的原理，输入序列中<strong>最后一个 token 的隐藏状态</strong>(<code>L-1</code> 索引位置的 token) 已经包含了整个输入序列（从第一个 token 到最后一个 token）的上下文信息。</li>
+<li>所以，我们会从 <code>(B, L, D)</code> 这个张量中，取出**最后一个时间步（<code>L-1</code> 索引）**的隐藏状态。</li>
+<li>这个操作会得到一个维度为 <code>(B, D)</code> 的张量。</li>
+</ul>
+</li>
+<li>
+<p><strong>线性投影到词汇表大小：</strong></p>
+<ul>
+<li>这个 <code>(B, D)</code> 的张量会被送入一个<strong>线性层（Linear Layer）</strong>，有时也称为“语言模型头（Language Model Head）”或“文本预测头（Text Prediction Head）”。</li>
+<li>这个线性层的权重矩阵维度是 <code>(D, V)</code>。</li>
+<li>线性层进行矩阵乘法：<code>(B, D) @ (D, V) = (B, V)</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>最终输出维度：</strong></p>
+<ul>
+<li>所以，用于预测下一个词的**原始逻辑值（logits）**的张量维度是 <code>(B, V)</code>。</li>
+<li>每一行（维度为 <code>V</code>）代表了该批次中一个序列的下一个词在词汇表上的概率分布（在经过 Softmax 激活函数之前）。</li>
+</ul>
+</li>
+</ol>
+<p>GPT在训练阶段（或标准的自回归生成时），最后从Decoder层输出的张量维度通常是 <code>(batch_size, sequence_length, d_model)</code>。但是，为了进行下一个词的预测，它会专门<strong>提取最后一个时间步的表示</strong>，然后通过一个线性层将其投影到词汇表大小的维度，最终得到 <code>(batch_size, vocab_size)</code> 的 logits 张量。</p>
 <br>
 <h3 id="Tokenizer">Tokenizer</h3>
 <p>分词表</p>
@@ -983,7 +1101,7 @@ $$</p>
 <li>前馈网络层的输入/输出维度</li>
 </ul>
 <h4 id="注意力">注意力</h4>
-<h5 id="自注意力">自注意力</h5>
+<h5 id="自注意力-decoder">自注意力 - decoder</h5>
 <img src="/2025/03/19/LLM-Rela/image-20250404192612286.png" class="" title="image-20250404192612286">
 <img src="/2025/03/19/LLM-Rela/image-20250325195443397.png" class="" title="image-20250325195443397">
 <p>ref: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1XH4y1T76e/">从编解码和词嵌入开始，一步一步理解Transformer，注意力机制(Attention)的本质是卷积神经网络(CNN)</a><br>
@@ -1000,7 +1118,7 @@ $QK^T$ 相当于计算 $token_i$ 与 $token_j$ 对应词向量的相似度</p>
 <p>假设 $W_Q$ 的维度为 ($d_{model}$, $d_k$)，输入形状为 (batch_size, $L_{actual}$, $d_{model}$)，这里的 $L_{actual}$ 为输入token序列长度，则 $QK^{\top}$ 的维度为 (batch_size, $L_{actual}$, $L_{actual}$)，V的维度为(batch_size, $L_{actual}$, $d_v$)</p>
 </blockquote>
 <br>
-<h5 id="交叉注意力">交叉注意力</h5>
+<h5 id="交叉注意力-encoder">交叉注意力 - encoder</h5>
 <img src="/2025/03/19/LLM-Rela/image-20250325195459862.png" class="" title="image-20250325195459862">
 <br>
 <h4 id="多头注意力">多头注意力</h4>
@@ -1051,86 +1169,16 @@ $\text{Attn}_h(x) = \text{softmax}\left(\frac{Q^{(h)} K^{(h)\top}}{\sqrt{d_h}}\r
 <p>测试</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">Wq = Wk = Wv = np.array([</span><br><span class="line">    [1, 0, 0, 0],</span><br><span class="line">    [0, 2, 0, 0],</span><br><span class="line">    [0, 0, 3, 0],</span><br><span class="line">    [0, 0, 0, 4]</span><br><span class="line">]) </span><br><span class="line"></span><br><span class="line">输入 X:</span><br><span class="line"> [[1 0 1 0]</span><br><span class="line"> [0 2 0 2]]</span><br><span class="line"></span><br><span class="line">--- 单头 Attention ---</span><br><span class="line">QK^T / sqrt(dk):</span><br><span class="line"> [[ 5.  0.]</span><br><span class="line"> [ 0. 40.]]</span><br><span class="line">Attention Weights:</span><br><span class="line"> [[9.93307149e-01 6.69285092e-03]</span><br><span class="line"> [4.24835426e-18 1.00000000e+00]]</span><br><span class="line">Single-Head Output:</span><br><span class="line"> [[9.93307149e-01 2.67714037e-02 2.97992145e+00 5.35428074e-02]</span><br><span class="line"> [4.24835426e-18 4.00000000e+00 1.27450628e-17 8.00000000e+00]]</span><br><span class="line"></span><br><span class="line">--- 多头 Attention（Head 1）---</span><br><span class="line">Q1K1^T / sqrt(dk):</span><br><span class="line"> [[ 0.70710678  0.        ]</span><br><span class="line"> [ 0.         11.3137085 ]]</span><br><span class="line">Attention Weights Head 1:</span><br><span class="line"> [[6.69761549e-01 3.30238451e-01]</span><br><span class="line"> [1.22043184e-05 9.99987796e-01]]</span><br><span class="line">Head 1 Output:</span><br><span class="line"> [[6.69761549e-01 1.32095380e+00]</span><br><span class="line"> [1.22043184e-05 3.99995118e+00]]</span><br><span class="line"></span><br><span class="line">--- 多头 Attention（Head 2）---</span><br><span class="line">Q2K2^T / sqrt(dk):</span><br><span class="line"> [[ 6.36396103  0.        ]</span><br><span class="line"> [ 0.         45.254834  ]]</span><br><span class="line">Attention Weights Head 2:</span><br><span class="line"> [[9.98280432e-01 1.71956818e-03]</span><br><span class="line"> [2.21858114e-20 1.00000000e+00]]</span><br><span class="line">Head 2 Output:</span><br><span class="line"> [[2.99484130e+00 1.37565454e-02]</span><br><span class="line"> [6.65574341e-20 8.00000000e+00]]</span><br><span class="line"></span><br><span class="line">Multi-Head Output:</span><br><span class="line"> [[6.69761549e-01 1.32095380e+00 2.99484130e+00 1.37565454e-02]</span><br><span class="line"> [1.22043184e-05 3.99995118e+00 6.65574341e-20 8.00000000e+00]]</span><br></pre></td></tr></table></figure>
 <br>
-<h4 id="掩码注意力">掩码注意力</h4>
+<h4 id="掩码注意力-decoder">掩码注意力 - decoder</h4>
 <img src="/2025/03/19/LLM-Rela/mask-attention-map.jpg" class="" title="img">
 <p><strong>掩码（Masking）在计算注意力权重（Attention Weights）时生效，注意力权重是通过Q（Query）和K（Key）的点积计算得出的。</strong> Value（V）是根据这些权重加权求和的。严格来说，掩码不是直接作用在Q、K、V的原始数值上，而是作用在<strong>Q和K计算得到的注意力分数（logits）上</strong>，以此来决定哪些K不能被Q关注到。</p>
-<p><strong>处理过程（以单个注意力头为例，多头只是并行进行多次）：</strong></p>
-<ol>
-<li><strong>输入嵌入：</strong>
-<ul>
-<li>x_I, x_like, x_apples (包含词嵌入和位置编码)</li>
-</ul>
-</li>
-<li><strong>线性投影生成 Q, K, V：</strong><br>
-每个输入嵌入 x_i 会被线性投影成 q_i, k_i, v_i。
-<ul>
-<li>q_I, k_I, v_I</li>
-<li>q_like, k_like, v_like</li>
-<li>q_apples, k_apples, v_apples</li>
-</ul>
-</li>
-<li><strong>计算注意力分数 (Q * K^T)：</strong><br>
-现在，我们关注如何为每个Query计算它对所有Key的注意力分数。
-<ul>
-<li><strong>对于 Query q_I (预测 “I” 的表示时)：</strong>
-<ul>
-<li>score(q_I, k_I)</li>
-<li>score(q_I, k_like)</li>
-<li>score(q_I, k_apples)</li>
-<li><strong>掩码生效：</strong> 由于 q_I 是序列的第一个词，它<strong>不能</strong>关注到 k_like 和 k_apples。在分数计算后，这些分数会被设置为一个极小的负数（例如 -infinity），这样在经过 Softmax 后，它们的概率会趋近于0。</li>
-<li><strong>掩码后的分数:</strong><br>
-[ score(q_I, k_I), -inf, -inf ]</li>
-</ul>
-</li>
-<li><strong>对于 Query q_like (预测 “like” 的表示时)：</strong>
-<ul>
-<li>score(q_like, k_I)</li>
-<li>score(q_like, k_like)</li>
-<li>score(q_like, k_apples)</li>
-<li><strong>掩码生效：</strong> q_like 可以关注到 k_I 和 k_like，但<strong>不能</strong>关注到 k_apples。</li>
-<li><strong>掩码后的分数:</strong><br>
-[ score(q_like, k_I), score(q_like, k_like), -inf ]</li>
-</ul>
-</li>
-<li><strong>对于 Query q_apples (预测 “apples” 的表示时)：</strong>
-<ul>
-<li>score(q_apples, k_I)</li>
-<li>score(q_apples, k_like)</li>
-<li>score(q_apples, k_apples)</li>
-<li><strong>掩码生效：</strong> q_apples 可以关注到 k_I、k_like 和 k_apples。在GPT这种自回归模型中，apples 是序列的最后一个词，它的Q可以关注到所有前面的K，包括它自己。</li>
-<li><strong>掩码后的分数:</strong><br>
-[ score(q_apples, k_I), score(q_apples, k_like), score(q_apples, k_apples) ]</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>Softmax 应用：</strong><br>
-对掩码后的分数应用 Softmax 函数。由于 -inf 经过 Softmax 后会变成接近 0 的概率，所以被掩码的部分实际上不会对最终的加权和产生贡献。
-<ul>
-<li><strong>对于 Query q_I 的权重:</strong><br>
-[ weight_I_I, 0, 0 ] (假设 weight_I_I 接近 1)</li>
-<li><strong>对于 Query q_like 的权重:</strong><br>
-[ weight_like_I, weight_like_like, 0 ]</li>
-<li><strong>对于 Query q_apples 的权重:</strong><br>
-[ weight_apples_I, weight_apples_like, weight_apples_apples ]</li>
-</ul>
-</li>
-<li><strong>加权求和 V：</strong><br>
-最后，用这些权重对Value向量进行加权求和，得到每个Query的最终注意力输出。
-<ul>
-<li>output_I = weight_I_I * v_I + 0 * v_like + 0 * v_apples</li>
-<li>output_like = weight_like_I * v_I + weight_like_like * v_like + 0 * v_apples</li>
-<li>output_apples = weight_apples_I * v_I + weight_apples_like * v_like + weight_apples_apples * v_apples</li>
-</ul>
-</li>
-</ol>
 <blockquote>
 <p>需要说明的是，掩码通过作用于 $QK^T$ ，使得位置靠前的token 在 $softmax(\frac{QK^T}{\sqrt{d}})$ 后，其注意力权重向量（行向量）从结果上来说后位均为0，因此得到的修正词向量（注意力矩阵的每行），在原token序列越靠前的，其词向量变化越小（<strong>融入的上文信息量</strong>越少），越靠后的，在注意力机制下变化越大（融入的上文信息量越大）</p>
 </blockquote>
 <br>
 <h4 id="MHA、MQA、GQA-MLA">MHA、MQA、GQA&amp;MLA</h4>
 <p>ref: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/21151178690">https://zhuanlan.zhihu.com/p/21151178690</a></p>
-<img src="/2025/03/19/LLM-Rela/v2-b257d8660af7678f9c9bdc14d095b6d3_1440w.jpg" class="" title="img">![img](https://picx.zhimg.com/v2-b257d8660af7678f9c9bdc14d095b6d3_1440w.jpg)
+<img src="/2025/03/19/LLM-Rela/v2-b257d8660af7678f9c9bdc14d095b6d3_1440w.jpg" class="" title="img">
 <p>MQA(<strong>M</strong>ulti-<strong>Q</strong>uery <strong>A</strong>ttention): 每个 head 的 Query 共享K和V矩阵，KV cache的内存占用降为 $\frac{1}{n}$</p>
 <p>GQA(<strong>G</strong>rouped-<strong>Q</strong>uery <strong>A</strong>ttention): 每个 head 的 Query 按组区分，共享K和V矩阵，$g = 1$ 为MQA，$g = n$ 为MHA</p>
 <blockquote>
@@ -1141,92 +1189,6 @@ $\text{Attn}_h(x) = \text{softmax}\left(\frac{Q^{(h)} K^{(h)\top}}{\sqrt{d_h}}\r
 </blockquote>
 <p>MLA(<strong>M</strong>ulti-head <strong>L</strong>atent <strong>A</strong>ttention):</p>
 <img src="/2025/03/19/LLM-Rela/v2-1eda59791cb4a0a09f9ebce4fbb23865_1440w.jpg" class="" title="img">
-<br>
-<h4 id="相关问题">相关问题</h4>
-<ol start="2">
-<li>
-<p>为什么Attenion公式中要除以 $\sqrt d$（d为Q, K矩阵的输出维度）？</p>
-<ul>
-<li>当向量维度变大的时候，d变大， q 和 k 的点积的方差变大</li>
-<li>由于要对 q 和 k 的点积的每一行进行softmax，过大的方差将导致softmax极端化，得到类似于 $[1,0,0,…]$ 的one-hot分布</li>
-<li>当输出接近one-hot时，非最大值的梯度趋近于0，反向传播时，这些位置的参数无法得到更新</li>
-<li>因此，设置 softmax 的 temperature 来缓解这个问题，这里 temperature 被设置为了 $\sqrt d$ .</li>
-</ul>
-<p>如下图所示，假设随机向量 $X$ 满足均值为 0，协方差矩阵为单位矩阵（即各变量独立且方差为 1）的<strong>多元标准正态分布</strong>，可计算得到 $XY^T$ 满足均值为 0，协方差矩阵为 $D_{out} I$ 的<strong>多元正态分布</strong>，通过除以 $\sqrt d$ 将 $XY^T$ 的方差缩放为1</p>
-</li>
-</ol>
-<img src="/2025/03/19/LLM-Rela/image-20250404100511037.png" class="" title="image-20250404100511037">
-<ol start="3">
-<li>
-<p>为什么选择多头注意力？</p>
-<p>有说法认为，克服**「模型在对当前位置的信息进行编码时，会过度的将注意力集中于自身的位置」<strong>，或者</strong>表达能力提升**：多个低秩注意力头（$d_h &lt; d$）的集成，能捕捉更复杂的交互模式；</p>
-<p>ref: <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1905.10650">https://arxiv.org/pdf/1905.10650</a></p>
-<p>结论：</p>
-<img src="/2025/03/19/LLM-Rela/image-20250405101512560.png" class="" title="image-20250405101512560">
-</li>
-<li>
-<p>Q，K，V为什么名为Query，Key，Value？注意力机制的注意力体现在哪里？</p>
-<p>在交叉注意力场景中，</p>
-<ol>
-<li>
-<p><strong>解码器的任务：</strong> 解码器的目标是根据编码器输出的源语句信息，并结合已经生成的词，来预测下一个词。</p>
-</li>
-<li>
-<p><strong>编码器的输出：</strong> 编码器处理完源语句后，会输出一系列的向量表示。这些向量捕获了源语句中每个词的上下文信息。在 Transformer 的原始设计中，这些输出向量就是解码器交叉注意力的 K 和 V。</p>
-</li>
-<li>
-<p><strong>Q 来源解码器：</strong> 解码器在生成第 t 个词时，它已经生成了 t-1 个词（或者说，它知道要生成哪个位置的词）。解码器使用它自己当前的输入（通常是前一个生成的词的嵌入，或者一个特殊的表示当前位置的向量）来生成 <strong>查询向量 Q</strong>。这个 Q 代表了“我（解码器）现在想知道什么？我需要哪些信息来生成下一个词？”</p>
-</li>
-<li>
-<p><strong>K，V 来源于编码器：</strong> 编码器处理完整个源语句后，会输出一系列上下文向量。这些向量被用作 <strong>键向量 K</strong> 和 <strong>值向量 V</strong>。</p>
-<ul>
-<li><strong>K（键）</strong>：代表了源语句中每个词的“身份”或“特征”。当解码器的 Q 去查询时，它会与这些 K 进行匹配，以判断源语句中哪些词与当前的 Q 更相关。</li>
-</ul>
-</li>
-</ol>
-<ul>
-<li><strong>V（值）</strong>：包含了源语句中每个词的实际“内容”或“信息”。一旦 Q 和 K 确定了相关性，V 就会提供这些相关词的实际信息，供解码器使用。
-<ul>
-<li><strong>为什么 K 和 V 一样？</strong> 在标准的交叉注意力中，K 和 V 确实都来源于编码器的输出。编码器的每个输出向量同时扮演了“键”的角色（用于计算注意力权重）和“值”的角色（用于加权求和得到上下文向量）。</li>
-</ul>
-</li>
-</ul>
-<ol start="5">
-<li>
-<p><strong>交叉注意力的过程：</strong></p>
-<ul>
-<li>解码器的 Q（来自当前生成词的表示）与编码器的 K 矩阵进行点积，并通过 softmax 得到注意力权重。这些权重表明了当前解码器关注点在源语句中各个词上的分布。</li>
-</ul>
-</li>
-</ol>
-<ul>
-<li>
-<p>将这些权重应用于编码器的 V 矩阵，进行加权求和，得到一个 <strong>上下文向量</strong>。这个上下文向量浓缩了源语句中对当前生成词最重要的信息。</p>
-<ul>
-<li>解码器将这个上下文向量与自己的内部状态（例如，通过自注意力获得的已生成词的信息）结合起来，用于预测下一个词。</li>
-</ul>
-<p>“通过已经生成的词和源语句做自注意力，就是确定源语句中哪些词对接下来的词的生成更有作用”正是 <strong>交叉注意力</strong> 的功能。解码器的 Q（代表当前生成词的意图）去查询编码器的 K/V（源语句信息），找到源语句中最重要的部分。</p>
-</li>
-</ul>
-<p>对比：</p>
-<ul>
-<li><strong>LSTM Seq2Seq 的问题：</strong>
-<ul>
-<li><strong>信息瓶颈（Information Bottleneck）</strong>：在传统的 LSTM Encoder-Decoder 架构中，编码器会将整个源序列压缩成一个固定长度的 <strong>上下文向量 C</strong>。无论源序列多长，所有信息都必须挤进这个 C。这导致长序列的信息丢失，尤其在解码器生成后半段序列时，C 中关于源序列前半段的信息可能已经非常稀释。</li>
-<li><strong>“每一次生成词，都是通过 C 的全部信息去生成”</strong>：是的，解码器在每一步都依赖于这个固定的 C。这使得模型难以动态地关注源序列中与当前生成词最相关的部分。</li>
-<li><strong>“很多信息对于当前生成词而言都是没有意义的”</strong>：没错，对于生成某个特定词，源序列中可能只有一两个词是真正相关的。LSTM 的 C 却包含了所有信息，无法做到“按需提取”。</li>
-</ul>
-</li>
-<li><strong>Transformer 注意力机制的解决方案：</strong>
-<ul>
-<li><strong>动态聚焦：</strong> 通过交叉注意力，解码器在生成每一个词时，都能动态地计算源序列中不同词的注意力权重。这意味着它能根据当前生成词的需要，<strong>“按需”地从编码器输出中提取最相关的信息</strong>。</li>
-<li><strong>避免信息瓶颈：</strong> 编码器不再需要将所有信息压缩成一个单一向量。它输出的是一系列的上下文向量（每个对应源序列中的一个词），解码器可以随时通过注意力机制访问这些向量。</li>
-<li><strong>长距离依赖：</strong> 注意力机制可以直接连接源序列中的任意两个词，无论它们相距多远，有助于捕捉长距离依赖关系，这在 LSTM 中很难实现。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
 <br>
 <h3 id="Layer-Norm-Residual-Network">Layer Norm &amp; Residual Network</h3>
 <p>Batch Normalization 是对 <strong>所有样本的同一特征维度</strong> 分别做归一化（按列操作）</p>
@@ -1267,17 +1229,6 @@ $\text{Attn}_h(x) = \text{softmax}\left(\frac{Q^{(h)} K^{(h)\top}}{\sqrt{d_h}}\r
 </tbody>
 </table>
 <br>
-<p>为什么BN在NLP中效果差</p>
-<ul>
-<li>BN计算特征的均值和方差是需要在batch_size维度，而这个维度表示一个特征，比如身高、体重、肤色等，如果将BN用于NLP中，其需要对每一个单词做处理，让每一个单词是对应到了MLP中的每一个特征明显是违背直觉得；</li>
-<li>BN是对单词做缩放，在NLP中，单词由词向量来表达，本质上是对词向量进行缩放。词向量是什么？是我们学习出来的参数来表示词语语义的参数，不是真实存在的。</li>
-</ul>
-<p>为什么LayerNorm单独对一个样本的所有单词做缩放可以起到效果</p>
-<ul>
-<li>layner-norm 针对每一个样本做特征的缩放。换句话讲，保留了N维度，在C/H/W维度上做缩放。</li>
-<li>layner-norm 也是在对同一个特征下的元素做归一化，只不过这里不再是对应N（或者说batch size），而是对应的文本长度。</li>
-</ul>
-<br>
 <h3 id="MLP-FFN">MLP&amp;FFN</h3>
 <p>在Transformer的每个编码器和解码器层中，MLP（也称为<strong>Feed Forward Network, FFN</strong>）用于对自注意力层的输出进行非线性变换和特征映射。</p>
 <p>MLP (Multi-Layer Perceptron) 是 Transformer 编码器中每个自注意力层之后的一个前馈网络模块。这个 MLP 通常包含两个线性层，中间有一个非线性激活函数（如 GELU）</p>
@@ -1307,111 +1258,93 @@ $$
 <li><strong>示例:</strong> 在 ViT-Base 模型中，如果 $D = 768$，那么 MLP size 通常是 $768 \times 4 = 3072$。</li>
 </ul>
 <br>
-<h3 id="output-rela">output&amp;rela</h3>
-<p>GPT的最终输出张量维度会因上下文和目的而异，但最常见且核心的输出，是用于**预测下一个词的逻辑值（logits）**的张量。</p>
-<p><strong>基本维度设定：</strong></p>
-<ul>
-<li><code>batch_size</code> (B): 一次并行处理的序列数量。</li>
-<li><code>sequence_length</code> (L): 输入序列的长度（或最大上下文窗口）。</li>
-<li><code>d_model</code> (D): 模型维度，也是每个token经过Transformer层后的隐藏状态维度。</li>
-<li><code>vocab_size</code> (V): 词汇表的大小，即模型能生成或识别的唯一词汇的数量。</li>
-</ul>
-<br>
-<p><strong>场景1：Transformer Decoder Block 内部的输出 (经过 Layer Norm 之前的 Feed Forward 输出，以及最终 Layer Norm 之后的输出)</strong></p>
-<p>在每个 Transformer Decoder Block 内部，<code>Masked Multi Self Attention</code> 和 <code>Feed Forward</code> 都会处理输入，并输出与输入维度相同的张量。</p>
-<ul>
-<li><strong>输入 <code>Text &amp; Position Embed</code> 后的张量维度：</strong> <code>(B, L, D)</code></li>
-<li><strong>经过 <code>Masked Multi Self Attention</code> 后的张量维度：</strong> <code>(B, L, D)</code></li>
-<li><strong>经过第一个 <code>Layer Norm</code> 后的张量维度：</strong> <code>(B, L, D)</code></li>
-<li><strong>经过 <code>Feed Forward</code> 后的张量维度：</strong> <code>(B, L, D)</code></li>
-<li><strong>经过第二个 <code>Layer Norm</code> 后的张量维度：</strong> <code>(B, L, D)</code></li>
-</ul>
-<p>这个 <code>(B, L, D)</code> 的张量代表了输入序列中每个token在当前层经过处理后，所获得的上下文感知的隐藏状态（或特征向量）。GPT模型通常有多个这样的Decoder Block（例如GPT-2有12层，GPT-3有96层），每一层都会接收 <code>(B, L, D)</code> 的输入，并输出同样维度的张量，作为下一层的输入。</p>
-<br>
-<p><strong>场景2：整个GPT模型最终的输出 (用于文本预测)</strong></p>
-<p>当所有 <code>12x</code> （或更多）的Decoder Block 处理完成后，最后一个Decoder Block 的输出依然是 <code>(B, L, D)</code>。</p>
-<p>这个 <code>(B, L, D)</code> 张量，现在包含了每个token在<strong>所有层</strong>处理后、充分融合了上下文信息的表示。</p>
-<p>为了预测下一个词，GPT通常会做以下处理：</p>
+<h3 id="相关问题">相关问题</h3>
 <ol>
 <li>
-<p><strong>取最后一个 token 的隐藏状态（用于生成）：</strong></p>
+<p>为什么Attenion公式中要除以 $\sqrt d$（d为Q, K矩阵的输出维度）？</p>
 <ul>
-<li>在自回归生成文本时，我们通常只关心预测序列中<strong>下一个词</strong>。这个预测是基于<strong>当前输入序列的完整上下文</strong>。</li>
-<li>而根据掩码自注意力的原理，输入序列中<strong>最后一个 token 的隐藏状态</strong>(<code>L-1</code> 索引位置的 token) 已经包含了整个输入序列（从第一个 token 到最后一个 token）的上下文信息。</li>
-<li>所以，我们会从 <code>(B, L, D)</code> 这个张量中，取出**最后一个时间步（<code>L-1</code> 索引）**的隐藏状态。</li>
-<li>这个操作会得到一个维度为 <code>(B, D)</code> 的张量。</li>
+<li>当向量维度变大的时候，d变大， q 和 k 的点积的方差变大</li>
+<li>由于要对 q 和 k 的点积的每一行进行softmax，过大的方差将导致softmax极端化，得到类似于 $[1,0,0,…]$ 的one-hot分布</li>
+<li>当输出接近one-hot时，非最大值的梯度趋近于0，反向传播时，这些位置的参数无法得到更新</li>
+<li>因此，设置 softmax 的 temperature 来缓解这个问题，这里 temperature 被设置为了 $\sqrt d$ .</li>
+</ul>
+<p>如下图所示，假设随机向量 $X$ 满足均值为 0，协方差矩阵为单位矩阵（即各变量独立且方差为 1）的<strong>多元标准正态分布</strong>，可计算得到 $XY^T$ 满足均值为 0，协方差矩阵为 $D_{out} I$ 的<strong>多元正态分布</strong>，通过除以 $\sqrt d$ 将 $XY^T$ 的方差缩放为1</p>
+</li>
+</ol>
+<img src="/2025/03/19/LLM-Rela/image-20250404100511037.png" class="" title="image-20250404100511037">
+<ol start="2">
+<li>
+<p>为什么选择多头注意力？</p>
+<p>有说法认为，克服**「模型在对当前位置的信息进行编码时，会过度的将注意力集中于自身的位置」<strong>，或者</strong>表达能力提升**：多个低秩注意力头（$d_h &lt; d$）的集成，能捕捉更复杂的交互模式；</p>
+<p>但是仍有相悖观点认为并非如此</p>
+<p>ref: <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1905.10650">https://arxiv.org/pdf/1905.10650</a></p>
+<img src="/2025/03/19/LLM-Rela/image-20250405101512560.png" class="" title="image-20250405101512560">
+</li>
+<li>
+<p>Q，K，V为什么名为Query，Key，Value？注意力机制的注意力体现在哪里？</p>
+<p>在交叉注意力场景中，</p>
+<ol>
+<li>
+<p><strong>解码器的任务：</strong> 解码器的目标是根据编码器输出的源语句信息，并结合已经生成的词，来预测下一个词。</p>
+</li>
+<li>
+<p><strong>编码器的输出：</strong> 编码器处理完源语句后，会输出一系列的向量表示。这些向量捕获了源语句中每个词的上下文信息。在 Transformer 的原始设计中，这些输出向量就是解码器交叉注意力的 K 和 V。</p>
+</li>
+<li>
+<p><strong>Q 来源解码器：</strong> 解码器在生成第 t 个词时，它已经生成了 t-1 个词（或者说，它知道要生成哪个位置的词）。解码器使用它自己当前的输入（通常是前一个生成的词的嵌入，或者一个特殊的表示当前位置的向量）来生成 <strong>查询向量 Q</strong>。这个 Q 代表了“我（解码器）现在想知道什么？我需要哪些信息来生成下一个词？”</p>
+</li>
+<li>
+<p><strong>K，V 来源于编码器：</strong> 编码器处理完整个源语句后，会输出一系列上下文向量。这些向量被用作 <strong>键向量 K</strong> 和 <strong>值向量 V</strong>。</p>
+<ul>
+<li><strong>K（键）</strong>：代表了源语句中每个词的“身份”或“特征”。当解码器的 Q 去查询时，它会与这些 K 进行匹配，以判断源语句中哪些词与当前的 Q 更相关。</li>
+<li><strong>V（值）</strong>：包含了源语句中每个词的实际“内容”或“信息”。一旦 Q 和 K 确定了相关性，V 就会提供这些相关词的实际信息，供解码器使用。</li>
 </ul>
 </li>
 <li>
-<p><strong>线性投影到词汇表大小：</strong></p>
+<p><strong>交叉注意力的过程：</strong></p>
 <ul>
-<li>这个 <code>(B, D)</code> 的张量会被送入一个<strong>线性层（Linear Layer）</strong>，有时也称为“语言模型头（Language Model Head）”或“文本预测头（Text Prediction Head）”。</li>
-<li>这个线性层的权重矩阵维度是 <code>(D, V)</code>。</li>
-<li>线性层进行矩阵乘法：<code>(B, D) @ (D, V) = (B, V)</code>。</li>
+<li>解码器的 Q（来自当前生成词的表示）与编码器的 K 矩阵进行点积，并通过 softmax 得到注意力权重。这些权重表明了当前解码器关注点在源语句中各个词上的分布。</li>
+<li>将这些权重应用于编码器的 V 矩阵，进行加权求和，得到一个 <strong>上下文向量</strong>。这个上下文向量浓缩了源语句中对当前生成词最重要的信息。</li>
+<li>解码器将这个上下文向量与自己的内部状态（例如，通过自注意力获得的已生成词的信息）结合起来，用于预测下一个词。</li>
+</ul>
+<p>“通过已经生成的词和源语句做自注意力，就是确定源语句中哪些词对接下来的词的生成更有作用”正是 <strong>交叉注意力</strong> 的功能。解码器的 Q（代表当前生成词的意图）去查询编码器的 K/V（源语句信息），找到源语句中最重要的部分。</p>
+</li>
+</ol>
+<p>对比：</p>
+<ul>
+<li><strong>LSTM Seq2Seq 的问题：</strong>
+<ul>
+<li><strong>信息瓶颈（Information Bottleneck）</strong>：在传统的 LSTM Encoder-Decoder 架构中，编码器会将整个源序列压缩成一个固定长度的 <strong>上下文向量 C</strong>。无论源序列多长，所有信息都必须挤进这个 C。这导致长序列的信息丢失，尤其在解码器生成后半段序列时，C 中关于源序列前半段的信息可能已经非常稀释。</li>
+<li><strong>“每一次生成词，都是通过 C 的全部信息去生成”</strong>：解码器在每一步都依赖于这个固定的 C。这使得模型难以动态地关注源序列中与当前生成词最相关的部分。</li>
+<li><strong>“很多信息对于当前生成词而言都是没有意义的”</strong>：没错，对于生成某个特定词，源序列中可能只有一两个词是真正相关的。LSTM 的 C 却包含了所有信息，无法做到“按需提取”。</li>
+</ul>
+</li>
+<li><strong>Transformer 注意力机制的解决方案：</strong>
+<ul>
+<li><strong>动态聚焦：</strong> 通过交叉注意力，解码器在生成每一个词时，都能动态地计算源序列中不同词的注意力权重。这意味着它能根据当前生成词的需要，<strong>“按需”地从编码器输出中提取最相关的信息</strong>。</li>
+<li><strong>避免信息瓶颈：</strong> 编码器不再需要将所有信息压缩成一个单一向量。它输出的是一系列的上下文向量（每个对应源序列中的一个词），解码器可以随时通过注意力机制访问这些向量。</li>
+<li><strong>长距离依赖：</strong> 注意力机制可以直接连接源序列中的任意两个词，无论它们相距多远，有助于捕捉长距离依赖关系，这在 LSTM 中很难实现。</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>
-<p><strong>最终输出维度：</strong></p>
+<p>为什么encoder需要多个注意力层？</p>
+<p>我们可以把自注意力（Self-Attention）看作是一次信息交互的过程。在一个注意力层中，每个token会“看”到序列中所有其他的token，并根据相关性（Attention Score）从它们那里“借”一些信息来更新自己。</p>
 <ul>
-<li>所以，用于预测下一个词的**原始逻辑值（logits）**的张量维度是 <code>(B, V)</code>。</li>
-<li>每一行（维度为 <code>V</code>）代表了该批次中一个序列的下一个词在词汇表上的概率分布（在经过 Softmax 激活函数之前）。</li>
+<li><strong>一层注意力 = 一次直接交互</strong>：<br>
+在句子 “The cat that chased the dog was tired” 中，第一层注意力可以让 “tired” 直接关联到 “cat”。它能建立起直接的语法联系。<br>
+但是，“tired” 与 “dog” 的关系是<em>间接</em>的（“tired” -&gt; “cat” -&gt; “chased” -&gt; “dog”）。在一层注意力中，“tired” 看到 “dog” 主要是因为它们同在一个句子里，但它们之间的深层逻辑关系（猫因为追狗而累）还很模糊。</li>
+<li><strong>多层注意力 = 多次间接交互</strong>：
+<ul>
+<li><strong>第一层</strong>：每个词都与所有其他词进行了直接的信息交换。现在，每个词的向量表示（embedding）已经包含了它直接邻居的信息。比如，“cat” 的新向量里包含了 “chased” 的信息。</li>
+<li><strong>第二层</strong>：当第二层注意力开始工作时，它的输入是第一层处理过的、已经“混合”了初步上下文的序列。现在，当 “tired” 再次审视 “cat” 时，它看到的 “cat” 已经不是最初的那个了，这个 “cat” 的向量里已经带有了 “chased” 和 “dog” 的“影子”。</li>
+<li><strong>以此类推</strong>：每一层都建立在前一层的基础上，信息可以像涟漪一样，通过中间token一跳一跳地传播到更远的地方。经过多层堆叠，一个token的表示就能够聚合到跨越整个序列的、非常复杂的间接依赖关系。</li>
+</ul>
+</li>
 </ul>
 </li>
 </ol>
-<p><strong>举例说明：</strong></p>
-<p>假设你正在使用一个简化的GPT模型：</p>
-<ul>
-<li><code>batch_size</code> (B) = 2</li>
-<li><code>max_sequence_length</code> (L) = 5</li>
-<li><code>d_model</code> (D) = 768</li>
-<li><code>vocab_size</code> (V) = 50257 (GPT-2的词汇表大小)</li>
-</ul>
-<p><strong>输入：</strong></p>
-<ul>
-<li>批次1：<code>[&quot;The&quot;, &quot;dog&quot;, &quot;barked&quot;, &quot;at&quot;, &quot;the&quot;]</code></li>
-<li>批次2：<code>[&quot;I&quot;, &quot;like&quot;, &quot;to&quot;, &quot;eat&quot;, &quot;apple&quot;]</code></li>
-</ul>
-<p><strong>模型处理过程：</strong></p>
-<ol>
-<li>
-<p><strong>初始嵌入：</strong><br>
-张量维度：<code>(2, 5, 768)</code></p>
-</li>
-<li>
-<p><strong>经过多层Decoder Blocks (假设12层)：</strong><br>
-每一层都接收 <code>(2, 5, 768)</code> 并输出 <code>(2, 5, 768)</code>。<br>
-最终，第12层Decoder Block 的输出依然是 <code>(2, 5, 768)</code>。<br>
-这个张量包含：</p>
-<ul>
-<li><code>token_0_embedding_final</code>, <code>token_1_embedding_final</code>, <code>token_2_embedding_final</code>, <code>token_3_embedding_final</code>, <code>token_4_embedding_final</code></li>
-</ul>
-</li>
-<li>
-<p><strong>文本预测：</strong></p>
-<ul>
-<li>我们取出每个序列的<strong>最后一个token</strong>（索引为4，即第5个token）的最终隐藏状态：
-<ul>
-<li>从批次1取出 <code>token_4_embedding_final_batch1</code> (对应 “the” 的最终表示)</li>
-<li>从批次2取出 <code>token_4_embedding_final_batch2</code> (对应 “apple” 的最终表示)</li>
-</ul>
-</li>
-<li>这会得到一个 <code>(2, 768)</code> 的张量。</li>
-</ul>
-</li>
-<li>
-<p><strong>线性层投影：</strong></p>
-<ul>
-<li>这个 <code>(2, 768)</code> 张量送入一个线性层。</li>
-<li>线性层输出的张量维度为 <code>(2, 50257)</code>。</li>
-</ul>
-</li>
-</ol>
-<p><strong>最终输出的张量</strong> (用于预测下一个词的 logits)：<code>(2, 50257)</code></p>
-<ul>
-<li>第一行 <code>(50257,)</code> 向量：是模型对 <code>[&quot;The&quot;, &quot;dog&quot;, &quot;barked&quot;, &quot;at&quot;, &quot;the&quot;]</code> 后面应该接什么词的概率分布（未经Softmax的logits）。</li>
-<li>第二行 <code>(50257,)</code> 向量：是模型对 <code>[&quot;I&quot;, &quot;like&quot;, &quot;to&quot;, &quot;eat&quot;, &quot;apple&quot;]</code> 后面应该接什么词的概率分布。</li>
-</ul>
-<p>GPT在训练阶段（或标准的自回归生成时），最后从Decoder层输出的张量维度通常是 <code>(batch_size, sequence_length, d_model)</code>。但是，为了进行下一个词的预测，它会专门<strong>提取最后一个时间步的表示</strong>，然后通过一个线性层将其投影到词汇表大小的维度，最终得到 <code>(batch_size, vocab_size)</code> 的 logits 张量。</p>
 <br>
 <h2 id="LLM-Train">LLM-Train</h2>
 <h3 id="Base-2">Base</h3>
@@ -2117,7 +2050,7 @@ $$<br>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">LLM&amp;Rela</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-base"><span class="nav-text">LLM-base</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B%E4%B8%8E%E6%96%B9%E5%B7%AE"><span class="nav-text">期望与方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E6%96%B9%E5%B7%AE"><span class="nav-text">协方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-text">激活函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-text">优化算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">随机梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E6%89%B9%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">小批量梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Adam"><span class="nav-text">Adam</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1-%E7%88%86%E7%82%B8"><span class="nav-text">梯度消失&amp;爆炸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96-%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-text">正则化&amp;归一化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#batch"><span class="nav-text">batch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E9%81%93"><span class="nav-text">通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN-LSTM"><span class="nav-text">RNN&amp;LSTM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-struc"><span class="nav-text">LLM-struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoder-Decoder"><span class="nav-text">Encoder&amp;Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoder-Only"><span class="nav-text">Encoder Only</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Decoder-Only"><span class="nav-text">Decoder Only</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tokenizer"><span class="nav-text">Tokenizer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Positional-Encoding"><span class="nav-text">Positional Encoding</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RoPE"><span class="nav-text">RoPE</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">注意力</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">自注意力</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">交叉注意力</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%A4%B4%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">多头注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A9%E7%A0%81%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">掩码注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MHA%E3%80%81MQA%E3%80%81GQA-MLA"><span class="nav-text">MHA、MQA、GQA&amp;MLA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="nav-text">相关问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Layer-Norm-Residual-Network"><span class="nav-text">Layer Norm &amp; Residual Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MLP-FFN"><span class="nav-text">MLP&amp;FFN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output-rela"><span class="nav-text">output&amp;rela</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-Train"><span class="nav-text">LLM-Train</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base-2"><span class="nav-text">Base</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Parallelism"><span class="nav-text">Parallelism</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DataParallel"><span class="nav-text">DataParallel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TensorParallel"><span class="nav-text">TensorParallel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PipelineParallel"><span class="nav-text">PipelineParallel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deepspeed"><span class="nav-text">Deepspeed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FSDP"><span class="nav-text">FSDP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-Inference"><span class="nav-text">LLM-Inference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Parameters"><span class="nav-text">Parameters</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Temperature"><span class="nav-text">Temperature</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sampling"><span class="nav-text">Sampling</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fine-Tuning"><span class="nav-text">Fine-Tuning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BitFit-Prefix-Tuning-Prompt-Tuning"><span class="nav-text">BitFit, Prefix Tuning &amp; Prompt Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P-Tuning"><span class="nav-text">P-Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapter-Tuning"><span class="nav-text">Adapter Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LoRA"><span class="nav-text">LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E4%B8%8E%E4%BD%8E%E7%A7%A9%E5%88%86%E8%A7%A3"><span class="nav-text">奇异值分解与低秩分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E5%BA%94%E7%94%A8%E4%BD%8D%E7%BD%AE"><span class="nav-text">LoRA应用位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E6%94%B9%E8%BF%9B"><span class="nav-text">LoRA改进</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#LoRA-2"><span class="nav-text">LoRA+</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DoRA"><span class="nav-text">DoRA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rsLoRA"><span class="nav-text">rsLoRA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#PiSSA"><span class="nav-text">PiSSA</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E7%9B%B8%E5%85%B3%E8%AE%BA%E6%96%87"><span class="nav-text">LoRA相关论文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%83%E5%8F%82%E6%8A%80%E5%B7%A7"><span class="nav-text">调参技巧</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MAM-Adapter-UniPELT"><span class="nav-text">MAM Adapter &amp; UniPELT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reinforce-Learning-on-LLM"><span class="nav-text">Reinforce Learning on LLM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-DPO"><span class="nav-text">LLM-DPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%8F%82%E4%B8%8E%E8%80%85%EF%BC%88%E4%B8%A4%E5%A4%A7%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="nav-text">第一阶段：定义参与者（两大模型）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">第二阶段：准备数据集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9ADPO%E8%AE%AD%E7%BB%83%E5%BE%AA%E7%8E%AF"><span class="nav-text">第三阶段：DPO训练循环</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-PPO"><span class="nav-text">LLM-PPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B-2"><span class="nav-text">流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%8F%82%E4%B8%8E%E8%80%85%EF%BC%88%E5%9B%9B%E5%A4%A7%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="nav-text">第一阶段：定义参与者（四大模型）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%EF%BC%88Rollout-Phase%EF%BC%89"><span class="nav-text">第二阶段：数据生成（Rollout Phase）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0%EF%BC%88Learning-Phase%EF%BC%89"><span class="nav-text">第三阶段：模型学习（Learning Phase）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9"><span class="nav-text">相关内容</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-GRPO"><span class="nav-text">LLM-GRPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9-2"><span class="nav-text">相关内容</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sparse-Dense-Model"><span class="nav-text">Sparse &amp; Dense Model</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">LLM&amp;Rela</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-base"><span class="nav-text">LLM-base</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B%E4%B8%8E%E6%96%B9%E5%B7%AE"><span class="nav-text">期望与方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E6%96%B9%E5%B7%AE"><span class="nav-text">协方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-text">激活函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-text">优化算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">随机梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E6%89%B9%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-text">小批量梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Adam"><span class="nav-text">Adam</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1-%E7%88%86%E7%82%B8"><span class="nav-text">梯度消失&amp;爆炸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96-%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-text">正则化&amp;归一化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#batch"><span class="nav-text">batch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E9%81%93"><span class="nav-text">通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN-LSTM"><span class="nav-text">RNN&amp;LSTM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-struc"><span class="nav-text">LLM-struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoder-Decoder"><span class="nav-text">Encoder&amp;Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoder-Only"><span class="nav-text">Encoder Only</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Decoder-Only"><span class="nav-text">Decoder Only</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tokenizer"><span class="nav-text">Tokenizer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding"><span class="nav-text">Embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Positional-Encoding"><span class="nav-text">Positional Encoding</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Base"><span class="nav-text">Base</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RoPE"><span class="nav-text">RoPE</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">注意力</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B-decoder"><span class="nav-text">自注意力 - decoder</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E6%B3%A8%E6%84%8F%E5%8A%9B-encoder"><span class="nav-text">交叉注意力 - encoder</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%A4%B4%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-text">多头注意力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A9%E7%A0%81%E6%B3%A8%E6%84%8F%E5%8A%9B-decoder"><span class="nav-text">掩码注意力 - decoder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MHA%E3%80%81MQA%E3%80%81GQA-MLA"><span class="nav-text">MHA、MQA、GQA&amp;MLA</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Layer-Norm-Residual-Network"><span class="nav-text">Layer Norm &amp; Residual Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MLP-FFN"><span class="nav-text">MLP&amp;FFN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="nav-text">相关问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-Train"><span class="nav-text">LLM-Train</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base-2"><span class="nav-text">Base</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Parallelism"><span class="nav-text">Parallelism</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DataParallel"><span class="nav-text">DataParallel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TensorParallel"><span class="nav-text">TensorParallel</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PipelineParallel"><span class="nav-text">PipelineParallel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deepspeed"><span class="nav-text">Deepspeed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FSDP"><span class="nav-text">FSDP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM-Inference"><span class="nav-text">LLM-Inference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Parameters"><span class="nav-text">Parameters</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Temperature"><span class="nav-text">Temperature</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sampling"><span class="nav-text">Sampling</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fine-Tuning"><span class="nav-text">Fine-Tuning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BitFit-Prefix-Tuning-Prompt-Tuning"><span class="nav-text">BitFit, Prefix Tuning &amp; Prompt Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P-Tuning"><span class="nav-text">P-Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapter-Tuning"><span class="nav-text">Adapter Tuning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LoRA"><span class="nav-text">LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E4%B8%8E%E4%BD%8E%E7%A7%A9%E5%88%86%E8%A7%A3"><span class="nav-text">奇异值分解与低秩分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E5%BA%94%E7%94%A8%E4%BD%8D%E7%BD%AE"><span class="nav-text">LoRA应用位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E6%94%B9%E8%BF%9B"><span class="nav-text">LoRA改进</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#LoRA-2"><span class="nav-text">LoRA+</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DoRA"><span class="nav-text">DoRA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rsLoRA"><span class="nav-text">rsLoRA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#PiSSA"><span class="nav-text">PiSSA</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoRA%E7%9B%B8%E5%85%B3%E8%AE%BA%E6%96%87"><span class="nav-text">LoRA相关论文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%83%E5%8F%82%E6%8A%80%E5%B7%A7"><span class="nav-text">调参技巧</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MAM-Adapter-UniPELT"><span class="nav-text">MAM Adapter &amp; UniPELT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reinforce-Learning-on-LLM"><span class="nav-text">Reinforce Learning on LLM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-DPO"><span class="nav-text">LLM-DPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%8F%82%E4%B8%8E%E8%80%85%EF%BC%88%E4%B8%A4%E5%A4%A7%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="nav-text">第一阶段：定义参与者（两大模型）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">第二阶段：准备数据集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9ADPO%E8%AE%AD%E7%BB%83%E5%BE%AA%E7%8E%AF"><span class="nav-text">第三阶段：DPO训练循环</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-PPO"><span class="nav-text">LLM-PPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B-2"><span class="nav-text">流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%8F%82%E4%B8%8E%E8%80%85%EF%BC%88%E5%9B%9B%E5%A4%A7%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="nav-text">第一阶段：定义参与者（四大模型）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%EF%BC%88Rollout-Phase%EF%BC%89"><span class="nav-text">第二阶段：数据生成（Rollout Phase）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0%EF%BC%88Learning-Phase%EF%BC%89"><span class="nav-text">第三阶段：模型学习（Learning Phase）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9"><span class="nav-text">相关内容</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-GRPO"><span class="nav-text">LLM-GRPO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9-2"><span class="nav-text">相关内容</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sparse-Dense-Model"><span class="nav-text">Sparse &amp; Dense Model</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -2185,12 +2118,12 @@ $$<br>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">530k</span>
+    <span title="Symbols count total">529k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">16:04</span>
+    <span title="Reading time total">16:02</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
