@@ -28,7 +28,7 @@
 <meta property="og:description" content="MQ evolution">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-07-27T02:09:00.000Z">
-<meta property="article:modified_time" content="2025-07-27T03:25:27.204Z">
+<meta property="article:modified_time" content="2025-07-29T00:52:31.516Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="MQ">
 <meta name="twitter:card" content="summary">
@@ -212,10 +212,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-07-27 10:09:00 / Modified: 11:25:27" itemprop="dateCreated datePublished" datetime="2025-07-27T10:09:00+08:00">2025-07-27</time>
+              <time title="Created: 2025-07-27 10:09:00" itemprop="dateCreated datePublished" datetime="2025-07-27T10:09:00+08:00">2025-07-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-29 08:52:31" itemprop="dateModified" datetime="2025-07-29T08:52:31+08:00">2025-07-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -232,7 +238,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>5.3k</span>
+              <span>5.2k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -255,7 +261,7 @@
 <span id="more"></span>
 <h3 id=""></h3>
 <h1>消息队列模型演进</h1>
-<h2 id="模型之基石：经典的生产者-消费者模型">模型之基石：经典的生产者-消费者模型</h2>
+<h2 id="生产者-消费者模型">生产者-消费者模型</h2>
 <p>它构成了所有现代消息队列系统的内核，是理解一切复杂模型的起点。</p>
 <ul>
 <li>
@@ -281,8 +287,7 @@
 </ol>
 </li>
 </ul>
-<hr>
-<h2 id="演进一：追求极致吞吐量-Competing-Consumers-Partition">演进一：追求极致吞吐量 (Competing Consumers &amp; Partition)</h2>
+<h2 id="吞吐量-Competing-Consumers-Partition">吞吐量 (Competing Consumers &amp; Partition)</h2>
 <p><strong>核心诉求：如何让多个消费者协同工作，线性提升整个系统的处理能力？</strong></p>
 <ul>
 <li>
@@ -324,7 +329,7 @@
 </li>
 </ul>
 <br>
-<h2 id="演进二：一对多的消息广播-Publish-Subscribe-Topic">演进二：一对多的消息广播 (Publish/Subscribe &amp; Topic)</h2>
+<h2 id="一对多的消息广播-Publish-Subscribe-Topic">一对多的消息广播 (Publish/Subscribe &amp; Topic)</h2>
 <p><strong>核心诉求：一条消息如何被多个不同的下游系统独立消费？</strong></p>
 <ul>
 <li>
@@ -366,7 +371,7 @@
 </li>
 </ul>
 <br>
-<h2 id="演进三：确保数据万无一失-ACK-Persistence">演进三：确保数据万无一失 (ACK &amp; Persistence)</h2>
+<h2 id="可靠性-ACK-Persistence">可靠性 (ACK &amp; Persistence)</h2>
 <p><strong>核心诉求：如何在任何一个环节（网络、硬件、程序）发生故障时，消息都不丢失？</strong></p>
 <ul>
 <li>
@@ -413,7 +418,7 @@
 指对同一个操作执行一次和执行多次，产生的结果完全相同。它是实现可靠消息系统的<strong>消费端必须遵循的核心设计原则</strong>，用于从容应对重复消息，避免“一笔订单支付两次”等严重问题。</p>
 </blockquote>
 <br>
-<h2 id="演进四：业务与消息的原子性绑定-Transactional-Messages">演进四：业务与消息的原子性绑定 (Transactional Messages)</h2>
+<h2 id="业务与消息的原子性绑定-Transactional-Messages">业务与消息的原子性绑定 (Transactional Messages)</h2>
 <p><strong>核心诉求：如何保证本地数据库操作和消息发送这两个动作，要么都成功，要么都失败？</strong></p>
 <ul>
 <li>
@@ -462,7 +467,7 @@
 </li>
 </ul>
 <br>
-<h2 id="演进五：优雅处理失败与异常-Dead-Letter-Queue">演进五：优雅处理失败与异常 (Dead-Letter Queue)</h2>
+<h2 id="失败与异常-Dead-Letter-Queue">失败与异常 (Dead-Letter Queue)</h2>
 <p><strong>核心诉求：当一条消息持续消费失败时，如何避免它阻塞整个队列，并能对其进行追踪和处理？</strong></p>
 <ul>
 <li>
@@ -640,7 +645,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"></span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">消息队列模型演进</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E4%B9%8B%E5%9F%BA%E7%9F%B3%EF%BC%9A%E7%BB%8F%E5%85%B8%E7%9A%84%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B"><span class="nav-text">模型之基石：经典的生产者-消费者模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%94%E8%BF%9B%E4%B8%80%EF%BC%9A%E8%BF%BD%E6%B1%82%E6%9E%81%E8%87%B4%E5%90%9E%E5%90%90%E9%87%8F-Competing-Consumers-Partition"><span class="nav-text">演进一：追求极致吞吐量 (Competing Consumers &amp; Partition)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%94%E8%BF%9B%E4%BA%8C%EF%BC%9A%E4%B8%80%E5%AF%B9%E5%A4%9A%E7%9A%84%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD-Publish-Subscribe-Topic"><span class="nav-text">演进二：一对多的消息广播 (Publish&#x2F;Subscribe &amp; Topic)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%94%E8%BF%9B%E4%B8%89%EF%BC%9A%E7%A1%AE%E4%BF%9D%E6%95%B0%E6%8D%AE%E4%B8%87%E6%97%A0%E4%B8%80%E5%A4%B1-ACK-Persistence"><span class="nav-text">演进三：确保数据万无一失 (ACK &amp; Persistence)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%94%9F%E4%BA%A7%E8%80%85-Broker-%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E5%8F%91%E9%80%81%E6%96%B9%E7%A1%AE%E8%AE%A4-Publisher-Confirms"><span class="nav-text">1. 生产者 -&gt; Broker 可靠性：发送方确认 (Publisher Confirms)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Broker-%E8%87%AA%E8%BA%AB%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E9%9B%86%E7%BE%A4-Persistence-Clustering"><span class="nav-text">2. Broker 自身可靠性：持久化与集群 (Persistence &amp; Clustering)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Broker-%E6%B6%88%E8%B4%B9%E8%80%85%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%B6%88%E8%B4%B9%E6%96%B9%E7%A1%AE%E8%AE%A4-Consumer-Acknowledgement"><span class="nav-text">3. Broker -&gt; 消费者可靠性：消费方确认 (Consumer Acknowledgement)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%94%E8%BF%9B%E5%9B%9B%EF%BC%9A%E4%B8%9A%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E7%BB%91%E5%AE%9A-Transactional-Messages"><span class="nav-text">演进四：业务与消息的原子性绑定 (Transactional Messages)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%94%E8%BF%9B%E4%BA%94%EF%BC%9A%E4%BC%98%E9%9B%85%E5%A4%84%E7%90%86%E5%A4%B1%E8%B4%A5%E4%B8%8E%E5%BC%82%E5%B8%B8-Dead-Letter-Queue"><span class="nav-text">演进五：优雅处理失败与异常 (Dead-Letter Queue)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">主流消息队列实现对比</span></a></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"></span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">消息队列模型演进</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B"><span class="nav-text">生产者-消费者模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F-Competing-Consumers-Partition"><span class="nav-text">吞吐量 (Competing Consumers &amp; Partition)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A%E7%9A%84%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD-Publish-Subscribe-Topic"><span class="nav-text">一对多的消息广播 (Publish&#x2F;Subscribe &amp; Topic)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%80%A7-ACK-Persistence"><span class="nav-text">可靠性 (ACK &amp; Persistence)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%94%9F%E4%BA%A7%E8%80%85-Broker-%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E5%8F%91%E9%80%81%E6%96%B9%E7%A1%AE%E8%AE%A4-Publisher-Confirms"><span class="nav-text">1. 生产者 -&gt; Broker 可靠性：发送方确认 (Publisher Confirms)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Broker-%E8%87%AA%E8%BA%AB%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E9%9B%86%E7%BE%A4-Persistence-Clustering"><span class="nav-text">2. Broker 自身可靠性：持久化与集群 (Persistence &amp; Clustering)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Broker-%E6%B6%88%E8%B4%B9%E8%80%85%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%B6%88%E8%B4%B9%E6%96%B9%E7%A1%AE%E8%AE%A4-Consumer-Acknowledgement"><span class="nav-text">3. Broker -&gt; 消费者可靠性：消费方确认 (Consumer Acknowledgement)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E7%BB%91%E5%AE%9A-Transactional-Messages"><span class="nav-text">业务与消息的原子性绑定 (Transactional Messages)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%B1%E8%B4%A5%E4%B8%8E%E5%BC%82%E5%B8%B8-Dead-Letter-Queue"><span class="nav-text">失败与异常 (Dead-Letter Queue)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">主流消息队列实现对比</span></a></div>
       </div>
       <!--/noindex-->
 
@@ -713,7 +718,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:57</span>
+    <span title="Reading time total">15:56</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
