@@ -28,7 +28,7 @@
 <meta property="og:description" content="MQ evolution">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-07-27T02:09:00.000Z">
-<meta property="article:modified_time" content="2025-07-29T00:54:47.374Z">
+<meta property="article:modified_time" content="2025-07-29T01:01:48.411Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="MQ">
 <meta name="twitter:card" content="summary">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-29 08:54:47" itemprop="dateModified" datetime="2025-07-29T08:54:47+08:00">2025-07-29</time>
+                <time title="Modified: 2025-07-29 09:01:48" itemprop="dateModified" datetime="2025-07-29T09:01:48+08:00">2025-07-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,14 +238,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>5.2k</span>
+              <span>4.2k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>10 mins.</span>
+              <span>8 mins.</span>
             </span>
 
         </div>
@@ -388,13 +388,13 @@
 </li>
 <li>
 <p><strong>演进方案与特性</strong></p>
-<h4 id="1-生产者-Broker-可靠性：发送方确认-Publisher-Confirms">1. 生产者 -&gt; Broker 可靠性：发送方确认 (Publisher Confirms)</h4>
+<h4 id="生产者-Broker-可靠性：发送方确认-Publisher-Confirms">生产者 -&gt; Broker 可靠性：发送方确认 (Publisher Confirms)</h4>
 <ul>
 <li><strong>原理</strong>：Broker 成功接收并持久化消息后，才向生产者发送 ACK。若生产者未收到 ACK，则重发。</li>
 <li><strong>效果</strong>：保证消息从生产者可靠地到达 Broker。</li>
 <li><strong>副作用</strong>：可能产生<strong>重复消息</strong>。这就要求消费者必须具备<strong>幂等性</strong>。</li>
 </ul>
-<h4 id="2-Broker-自身可靠性：持久化与集群-Persistence-Clustering">2. Broker 自身可靠性：持久化与集群 (Persistence &amp; Clustering)</h4>
+<h4 id="Broker-自身可靠性：持久化与集群-Persistence-Clustering">Broker 自身可靠性：持久化与集群 (Persistence &amp; Clustering)</h4>
 <ul>
 <li><strong>原理</strong>：
 <ul>
@@ -404,7 +404,7 @@
 </li>
 <li><strong>效果</strong>：提供<strong>高可用性</strong>和<strong>数据冗余</strong>，防止单点故障。</li>
 </ul>
-<h4 id="3-Broker-消费者可靠性：消费方确认-Consumer-Acknowledgement">3. Broker -&gt; 消费者可靠性：消费方确认 (Consumer Acknowledgement)</h4>
+<h4 id="Broker-消费者可靠性：消费方确认-Consumer-Acknowledgement">Broker -&gt; 消费者可靠性：消费方确认 (Consumer Acknowledgement)</h4>
 <ul>
 <li><strong>原理</strong>：Broker 将消息投递给消费者后，会等待消费者的 ACK。消费者在<strong>完成所有业务逻辑</strong>后，才发送 ACK。若 Broker 未收到 ACK（例如消费者崩溃），它会将该消息<strong>重新投递</strong>给另一个健康的消费者。</li>
 <li><strong>效果</strong>：保证消息最终一定会被成功消费，实现了<strong>至少一次消费 (At-least-once Delivery)</strong>。</li>
@@ -497,73 +497,12 @@
 <li><strong>问题追溯与告警</strong>：运维人员可以监控死信队列，一旦有消息进入，立即触发告警。开发人员可根据死信信息快速定位问题，进行修复。</li>
 <li><strong>人工干预成为可能</strong>：修复问题后，可以将死信消息重新发送回原队列进行处理，实现数据恢复。</li>
 </ol>
+</li>
+</ul>
 <blockquote>
 <p><strong>典型实现</strong>：<strong>RabbitMQ</strong> 的 Dead Letter Exchange 是经典实现。<strong>RocketMQ</strong> 也原生支持。<strong>Kafka</strong> 通常需要通过自定义逻辑或社区方案实现。</p>
 </blockquote>
-</li>
-</ul>
 <br>
-<h1>主流消息队列实现对比</h1>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">特性 / 演进点</th>
-<th style="text-align:left">RabbitMQ</th>
-<th style="text-align:left">Kafka</th>
-<th style="text-align:left">RocketMQ</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><strong>定位/哲学</strong></td>
-<td style="text-align:left"><strong>协议专家</strong>：基于 AMQP 等标准协议，功能全面，路由策略灵活，适用于企业级复杂业务解耦。</td>
-<td style="text-align:left"><strong>流处理平台</strong>：以日志（Log）为核心，追求极致的吞吐量和持久化能力，是大数据和流计算领域的王者。</td>
-<td style="text-align:left"><strong>金融级标杆</strong>：面向电商、金融等场景设计，功能丰富，在事务消息、延迟消息等方面表现突出。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>吞吐量模型<br>(Competing Consumers)</strong></td>
-<td style="text-align:left"><strong>队列 (Queue)</strong>。多个消费者监听同一队列，实现竞争消费。</td>
-<td style="text-align:left"><strong>分区 (Partition)</strong>。消费组内的消费者瓜分Topic下的分区，是其核心扩展方式。</td>
-<td style="text-align:left"><strong>分区 (Partition)</strong>。类似Kafka，消费组内的消费者瓜分Topic下的分区。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>消息分发模型<br>(Publish/Subscribe)</strong></td>
-<td style="text-align:left"><strong>交换机 (Exchange)</strong>。通过<code>fanout</code>, <code>direct</code>, <code>topic</code>等不同类型的交换机实现强大的路由和广播功能。</td>
-<td style="text-align:left"><strong>主题 (Topic)</strong>。不同消费组 (Consumer Group) 订阅同一主题即可实现广播。</td>
-<td style="text-align:left"><strong>主题 (Topic)</strong>。与Kafka类似，不同消费组订阅同一主题实现广播。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>顺序保证</strong></td>
-<td style="text-align:left"><strong>单队列单消费者</strong>。保证严格顺序，但牺牲吞吐量。不支持分区级别的顺序保证。</td>
-<td style="text-align:left"><strong>分区内有序</strong>。通过指定分区键，保证同一业务实体的消息在分区内严格有序。</td>
-<td style="text-align:left"><strong>分区内有序</strong>。与Kafka类似，支持分区顺序和全局顺序（以牺牲高并发为代价）。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>可靠性机制<br>(ACK &amp; Persistence)</strong></td>
-<td style="text-align:left"><strong>全面支持</strong>。提供 Publisher Confirms, 持久化消息, 消费者 ACK 机制。</td>
-<td style="text-align:left"><strong>全面支持</strong>。通过 acks, ISR (In-Sync Replicas) 副本机制, 消费者位移 (Offset) 提交保证。</td>
-<td style="text-align:left"><strong>全面支持</strong>。提供同步/异步刷盘, 集群主从复制, 消费者ACK。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>事务消息</strong></td>
-<td style="text-align:left"><strong>支持原生事务</strong>，但性能开销大，官方更推荐使用 Publisher Confirms + 业务端去重。</td>
-<td style="text-align:left"><strong>原生支持</strong>。通过其 exactly-once 语义的事务API，可以实现端到端的事务性。</td>
-<td style="text-align:left"><strong>原生支持</strong>，且设计非常成熟。通过半消息和事务回查机制，是其核心优势功能。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>死信队列</strong></td>
-<td style="text-align:left"><strong>原生支持</strong>。通过 Dead Letter Exchange (DLX) 机制，配置灵活，功能完善。</td>
-<td style="text-align:left"><strong>原生不支持</strong>。通常需要用户自行编码，将处理失败的消息转发到另一个专用的 “死信Topic”。</td>
-<td style="text-align:left"><strong>原生支持</strong>。可配置重试次数，超过次数后消息自动进入死信队列。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>延迟消息</strong></td>
-<td style="text-align:left"><strong>通过插件支持</strong>（<code>rabbitmq_delayed_message_exchange</code>），功能强大。</td>
-<td style="text-align:left"><strong>原生不支持</strong>。需要上层应用或框架（如 时间轮算法）自行实现。</td>
-<td style="text-align:left"><strong>原生支持</strong>。支持多个预设的延迟等级，是其另一大特色功能。</td>
-</tr>
-</tbody>
-</table>
 
     </div>
 
@@ -644,7 +583,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">消息队列模型演进</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B"><span class="nav-text">生产者-消费者模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F-Competing-Consumers-Partition"><span class="nav-text">吞吐量 (Competing Consumers &amp; Partition)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A%E7%9A%84%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD-Publish-Subscribe-Topic"><span class="nav-text">一对多的消息广播 (Publish&#x2F;Subscribe &amp; Topic)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%80%A7-ACK-Persistence"><span class="nav-text">可靠性 (ACK &amp; Persistence)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%94%9F%E4%BA%A7%E8%80%85-Broker-%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E5%8F%91%E9%80%81%E6%96%B9%E7%A1%AE%E8%AE%A4-Publisher-Confirms"><span class="nav-text">1. 生产者 -&gt; Broker 可靠性：发送方确认 (Publisher Confirms)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Broker-%E8%87%AA%E8%BA%AB%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E9%9B%86%E7%BE%A4-Persistence-Clustering"><span class="nav-text">2. Broker 自身可靠性：持久化与集群 (Persistence &amp; Clustering)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Broker-%E6%B6%88%E8%B4%B9%E8%80%85%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%B6%88%E8%B4%B9%E6%96%B9%E7%A1%AE%E8%AE%A4-Consumer-Acknowledgement"><span class="nav-text">3. Broker -&gt; 消费者可靠性：消费方确认 (Consumer Acknowledgement)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E7%BB%91%E5%AE%9A-Transactional-Messages"><span class="nav-text">业务与消息的原子性绑定 (Transactional Messages)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%B1%E8%B4%A5%E4%B8%8E%E5%BC%82%E5%B8%B8-Dead-Letter-Queue"><span class="nav-text">失败与异常 (Dead-Letter Queue)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">主流消息队列实现对比</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">消息队列模型演进</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B"><span class="nav-text">生产者-消费者模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F-Competing-Consumers-Partition"><span class="nav-text">吞吐量 (Competing Consumers &amp; Partition)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A%E7%9A%84%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD-Publish-Subscribe-Topic"><span class="nav-text">一对多的消息广播 (Publish&#x2F;Subscribe &amp; Topic)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%80%A7-ACK-Persistence"><span class="nav-text">可靠性 (ACK &amp; Persistence)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85-Broker-%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E5%8F%91%E9%80%81%E6%96%B9%E7%A1%AE%E8%AE%A4-Publisher-Confirms"><span class="nav-text">生产者 -&gt; Broker 可靠性：发送方确认 (Publisher Confirms)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Broker-%E8%87%AA%E8%BA%AB%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E9%9B%86%E7%BE%A4-Persistence-Clustering"><span class="nav-text">Broker 自身可靠性：持久化与集群 (Persistence &amp; Clustering)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Broker-%E6%B6%88%E8%B4%B9%E8%80%85%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%B6%88%E8%B4%B9%E6%96%B9%E7%A1%AE%E8%AE%A4-Consumer-Acknowledgement"><span class="nav-text">Broker -&gt; 消费者可靠性：消费方确认 (Consumer Acknowledgement)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E7%BB%91%E5%AE%9A-Transactional-Messages"><span class="nav-text">业务与消息的原子性绑定 (Transactional Messages)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%B1%E8%B4%A5%E4%B8%8E%E5%BC%82%E5%B8%B8-Dead-Letter-Queue"><span class="nav-text">失败与异常 (Dead-Letter Queue)</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -712,12 +651,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">526k</span>
+    <span title="Symbols count total">525k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:56</span>
+    <span title="Reading time total">15:54</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
