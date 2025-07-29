@@ -28,7 +28,7 @@
 <meta property="og:description" content="MQ evolution">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-07-27T02:09:00.000Z">
-<meta property="article:modified_time" content="2025-07-29T00:52:31.516Z">
+<meta property="article:modified_time" content="2025-07-29T00:54:47.374Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="MQ">
 <meta name="twitter:card" content="summary">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-29 08:52:31" itemprop="dateModified" datetime="2025-07-29T08:52:31+08:00">2025-07-29</time>
+                <time title="Modified: 2025-07-29 08:54:47" itemprop="dateModified" datetime="2025-07-29T08:54:47+08:00">2025-07-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,7 +259,6 @@
       
         <p>MQ evolution</p>
 <span id="more"></span>
-<h3 id=""></h3>
 <h1>消息队列模型演进</h1>
 <h2 id="生产者-消费者模型">生产者-消费者模型</h2>
 <p>它构成了所有现代消息队列系统的内核，是理解一切复杂模型的起点。</p>
@@ -645,7 +644,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"></span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">消息队列模型演进</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B"><span class="nav-text">生产者-消费者模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F-Competing-Consumers-Partition"><span class="nav-text">吞吐量 (Competing Consumers &amp; Partition)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A%E7%9A%84%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD-Publish-Subscribe-Topic"><span class="nav-text">一对多的消息广播 (Publish&#x2F;Subscribe &amp; Topic)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%80%A7-ACK-Persistence"><span class="nav-text">可靠性 (ACK &amp; Persistence)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%94%9F%E4%BA%A7%E8%80%85-Broker-%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E5%8F%91%E9%80%81%E6%96%B9%E7%A1%AE%E8%AE%A4-Publisher-Confirms"><span class="nav-text">1. 生产者 -&gt; Broker 可靠性：发送方确认 (Publisher Confirms)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Broker-%E8%87%AA%E8%BA%AB%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E9%9B%86%E7%BE%A4-Persistence-Clustering"><span class="nav-text">2. Broker 自身可靠性：持久化与集群 (Persistence &amp; Clustering)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Broker-%E6%B6%88%E8%B4%B9%E8%80%85%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%B6%88%E8%B4%B9%E6%96%B9%E7%A1%AE%E8%AE%A4-Consumer-Acknowledgement"><span class="nav-text">3. Broker -&gt; 消费者可靠性：消费方确认 (Consumer Acknowledgement)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E7%BB%91%E5%AE%9A-Transactional-Messages"><span class="nav-text">业务与消息的原子性绑定 (Transactional Messages)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%B1%E8%B4%A5%E4%B8%8E%E5%BC%82%E5%B8%B8-Dead-Letter-Queue"><span class="nav-text">失败与异常 (Dead-Letter Queue)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">主流消息队列实现对比</span></a></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">消息队列模型演进</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%9E%8B"><span class="nav-text">生产者-消费者模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F-Competing-Consumers-Partition"><span class="nav-text">吞吐量 (Competing Consumers &amp; Partition)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A%E7%9A%84%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD-Publish-Subscribe-Topic"><span class="nav-text">一对多的消息广播 (Publish&#x2F;Subscribe &amp; Topic)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%80%A7-ACK-Persistence"><span class="nav-text">可靠性 (ACK &amp; Persistence)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%94%9F%E4%BA%A7%E8%80%85-Broker-%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E5%8F%91%E9%80%81%E6%96%B9%E7%A1%AE%E8%AE%A4-Publisher-Confirms"><span class="nav-text">1. 生产者 -&gt; Broker 可靠性：发送方确认 (Publisher Confirms)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Broker-%E8%87%AA%E8%BA%AB%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E9%9B%86%E7%BE%A4-Persistence-Clustering"><span class="nav-text">2. Broker 自身可靠性：持久化与集群 (Persistence &amp; Clustering)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Broker-%E6%B6%88%E8%B4%B9%E8%80%85%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%9A%E6%B6%88%E8%B4%B9%E6%96%B9%E7%A1%AE%E8%AE%A4-Consumer-Acknowledgement"><span class="nav-text">3. Broker -&gt; 消费者可靠性：消费方确认 (Consumer Acknowledgement)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E7%BB%91%E5%AE%9A-Transactional-Messages"><span class="nav-text">业务与消息的原子性绑定 (Transactional Messages)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%B1%E8%B4%A5%E4%B8%8E%E5%BC%82%E5%B8%B8-Dead-Letter-Queue"><span class="nav-text">失败与异常 (Dead-Letter Queue)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">主流消息队列实现对比</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
