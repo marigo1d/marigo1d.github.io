@@ -59,7 +59,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/885e438e-cf54-41f6-880e-faf36e72cd57">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/f2993d30-3803-4543-97db-f98cdca3a493">
 <meta property="article:published_time" content="2024-08-10T01:52:46.000Z">
-<meta property="article:modified_time" content="2025-08-27T07:16:52.000Z">
+<meta property="article:modified_time" content="2025-09-01T09:02:50.000Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="MySQL, Redis">
 <meta name="twitter:card" content="summary">
@@ -252,7 +252,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-08-27 15:16:52" itemprop="dateModified" datetime="2025-08-27T15:16:52+08:00">2025-08-27</time>
+                <time title="Modified: 2025-09-01 17:02:50" itemprop="dateModified" datetime="2025-09-01T17:02:50+08:00">2025-09-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -270,14 +270,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>29k</span>
+              <span>32k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>53 mins.</span>
+              <span>58 mins.</span>
             </span>
 
         </div>
@@ -462,11 +462,13 @@
 <li><strong>UNION</strong>: 会自动去除合并结果集中的重复行，只保留唯一的行。 这涉及到额外的排序和去重操作，因此性能相对较差。</li>
 <li><strong>UNION ALL</strong>: 简单地将所有 SELECT 语句的结果集合并，保留所有行，包括重复的行。 性能较高，因为它避免了去重操作。</li>
 </ul>
+<br>
 <blockquote>
 <p><strong>列的数量必须相同</strong>： 所有 SELECT 语句必须返回相同数量的列。</p>
 <p><strong>对应列的数据类型必须兼容</strong>： 每个 SELECT 语句中对应位置的列的数据类型必须兼容（可以隐式转换），以便可以合并到一个列中。</p>
 <p><strong>列名可以不同，但结果集会采用第一个 SELECT 语句的列名</strong>： 合并后的结果集会使用第一个 SELECT 语句中的列名作为最终的列名。 如果需要指定不同的列名，可以在第一个 SELECT 语句中使用 AS 别名。</p>
 </blockquote>
+<br>
 <h2 id="SQL执行流程">SQL执行流程</h2>
 <img src="/2024/08/10/Database-Learning-Record/db-mysql-sql-8.png" class="" title="img">
 <img src="/2024/08/10/Database-Learning-Record/db-mysql-sql-14.png" class="" title="sqlworkflow">
@@ -488,6 +490,128 @@
 <li>将本次操作记录写入到 bin log文件中</li>
 <li>将 bin log 文件名字和更新内容在 bin log 中的位置记录到redo log中，同时在 redo log 最后添加 commit 标记</li>
 </ul>
+<br>
+<p>案例：</p>
+<p>假设我们执行这样一条SQL语句：<br>
+<code>SELECT id, name FROM users WHERE age &gt; 20 ORDER BY id DESC;</code></p>
+<hr>
+<p><strong>Server层执行的操作</strong></p>
+<p>Server层涵盖了MySQL的大多数核心服务功能，所有跨存储引擎的功能都在这一层实现。</p>
+<ol>
+<li>
+<p><strong>连接处理与权限验证</strong></p>
+<ul>
+<li><strong>操作示例</strong>：客户端发起连接请求，Server层的“连接器”会负责TCP握手、验证用户名和密码。 验证通过后，它会查询权限表，确认该用户是否拥有对<code>users</code>表的查询权限。</li>
+</ul>
+</li>
+<li>
+<p><strong>SQL解析与预处理 (Parser &amp; Preprocessor)</strong></p>
+<ul>
+<li><strong>操作示例</strong>：Server层的“分析器”会对上面的SQL语句进行词法和语法分析，检查是否有语法错误（比如把<code>SELECT</code>写成了<code>SELCET</code>）。 分析后会生成一个“解析树”，这是一个内部的数据结构，方便后续模块理解这条SQL。</li>
+</ul>
+</li>
+<li>
+<p><strong>查询优化 (Optimizer)</strong></p>
+<ul>
+<li><strong>操作示例</strong>：这是Server层最核心的部分。优化器会根据解析树生成多种执行计划，并选择成本最低的一个。
+<ul>
+<li>它会分析<code>WHERE age &gt; 20</code>这个条件，判断<code>users</code>表上是否有<code>age</code>字段的索引。</li>
+<li>如果有索引，优化器会决定是使用<code>age</code>索引进行范围扫描，还是直接全表扫描（比如当它认为大部分数据都满足<code>age &gt; 20</code>时，全表扫描可能更快）。</li>
+<li>它还会决定如何处理<code>ORDER BY id DESC</code>，是利用<code>id</code>的主键索引天然有序的特性，还是在获取数据后进行文件排序（filesort）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>执行计划生成与执行 (Executor)</strong></p>
+<ul>
+<li><strong>操作示例</strong>：优化器确定了最优执行计划后，“执行器”就开始工作。
+<ul>
+<li>执行器首先会检查用户权限，确保有权限执行该计划。</li>
+<li>然后，它会根据执行计划，调用InnoDB存储引擎提供的接口来获取数据。它会说：“InnoDB，请给我<code>users</code>表中<code>age &gt; 20</code>的第一条记录”。</li>
+<li>当InnoDB返回一条记录后，执行器会判断是否满足所有条件（对于简单查询，条件在引擎层就已过滤）。</li>
+<li>对于<code>ORDER BY</code>，如果执行计划决定需要排序，执行器会在内存中或临时磁盘文件上对从引擎层获取的所有行进行排序。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>InnoDB引擎层执行的操作</strong></p>
+<p>InnoDB引擎层专注于数据的物理存储和提取，以及事务处理。它根据Server层发出的指令来操作数据。</p>
+<ol>
+<li>
+<p><strong>数据检索</strong></p>
+<ul>
+<li><strong>操作示例</strong>：接收到执行器“获取<code>age &gt; 20</code>的记录”的指令后，InnoDB开始查找数据。
+<ul>
+<li><strong>访问内存缓冲池 (Buffer Pool)</strong>：InnoDB首先检查所需的数据页是否已经存在于内存的Buffer Pool中。 如果存在，就可以直接从内存返回，避免磁盘I/O。</li>
+<li><strong>访问磁盘</strong>：如果Buffer Pool中没有，InnoDB会通过操作系统的文件接口，从磁盘上的<code>.ibd</code>数据文件中加载相应的数据页到Buffer Pool中。</li>
+<li><strong>使用索引</strong>：如果Server层的执行计划决定使用<code>age</code>索引，InnoDB会在<code>age</code>索引的B+树上快速定位到<code>age &gt; 20</code>的第一条记录，然后通过主键值进行“回表”操作，到聚簇索引中找到完整的行数据。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>数据过滤</strong></p>
+<ul>
+<li><strong>操作示例</strong>：InnoDB在索引或表中找到数据时，会根据Server层传递的条件（如<code>age &gt; 20</code>）进行过滤，只将符合条件的行数据返回给Server层。</li>
+</ul>
+</li>
+<li>
+<p><strong>事务与锁管理 (以更新操作为例)</strong></p>
+<ul>
+<li>如果执行的是<code>UPDATE users SET name = '张三' WHERE id = 1;</code></li>
+<li><strong>操作示例</strong>：
+<ul>
+<li><strong>开启事务</strong>：InnoDB会隐式或显式地开启一个事务。</li>
+<li><strong>加锁</strong>：为了保证数据一致性，InnoDB会对<code>id = 1</code>的这行记录加上行级锁。</li>
+<li><strong>记录Undo Log</strong>：在修改数据前，会先把这行数据修改前的状态记录到Undo Log中，用于事务回滚。</li>
+<li><strong>修改数据页</strong>：在内存的Buffer Pool中找到对应的数据页并修改。</li>
+<li><strong>记录Redo Log</strong>：将所做的修改写入Redo Log（预写日志），并将其状态设置为<code>prepare</code>。这是为了确保即使数据库崩溃，也能通过日志恢复这次修改。 当Server层写入Binlog后，会通知InnoDB将Redo Log状态改为<code>commit</code>，完成两阶段提交。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<br>
+<p><strong>子查询的中间结果通常是在Server层生成和保存的。</strong></p>
+<p>子查询的执行方式在不同MySQL版本中有所优化，但其本质是生成一个中间结果集，供外部查询使用。这个中间结果集通常被称为“派生表”（Derived Table）或“物化临时表”（Materialized Temporary Table）。</p>
+<ul>
+<li>
+<p><strong>如何处理</strong>：</p>
+<ol>
+<li>MySQL Server层的优化器会首先执行子查询。</li>
+<li>然后，它会将子查询返回的结果集物化（materialize）成一个内部的临时表，这个临时表保存在内存中。如果结果集太大，超出了内存限制（由<code>tmp_table_size</code>和<code>max_heap_table_size</code>等参数控制），这个临时表就会被存放到磁盘上。</li>
+<li>这个临时表对于外部查询来说，就和一个普通的表一样。外部查询会基于这个在Server层创建的临时表继续执行。</li>
+</ol>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">AVG</span>(order_count)</span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> user_id, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> order_count <span class="keyword">FROM</span> orders <span class="keyword">GROUP</span> <span class="keyword">BY</span> user_id) <span class="keyword">AS</span> user_orders;</span><br></pre></td></tr></table></figure>
+<p>这里，子查询 <code>(SELECT user_id, COUNT(*) AS order_count FROM orders GROUP BY user_id)</code> 会先被执行。其结果（每个用户的订单数）会被存放在Server层的一个内存临时表中，然后外部查询再对这个临时表进行<code>AVG()</code>计算。</p>
+</li>
+</ul>
+<hr>
+<p><code>WITH ... AS xx</code> CTE（Common Table Expression）的中间结果在Server层处理和保存的。</p>
+<p><code>WITH</code>子句可以看作是一种更清晰、可读性更好，并且支持递归的子查询。</p>
+<ul>
+<li>
+<p><strong>处理方式</strong>：</p>
+<ol>
+<li>当优化器遇到<code>WITH</code>子句时，它会执行<code>AS</code>后面的查询。</li>
+<li>其结果同样会被物化成一个内部临时表，存储在Server层的内存或磁盘上。</li>
+<li>后续的查询部分就可以像引用普通表一样引用这个CTE的名称（<code>xx</code>）。</li>
+<li>在一个查询中，如果一个CTE被多次引用，在旧版MySQL中可能会被多次执行。但在新版本（如MySQL 8.0）中，优化器通常只会物化一次，然后多次复用这个临时结果集，从而提高效率。</li>
+</ol>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> regional_sales <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> region, <span class="built_in">SUM</span>(amount) <span class="keyword">AS</span> total_sales</span><br><span class="line">    <span class="keyword">FROM</span> orders</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> region</span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> region, total_sales</span><br><span class="line"><span class="keyword">FROM</span> regional_sales</span><br><span class="line"><span class="keyword">WHERE</span> total_sales <span class="operator">&gt;</span> (<span class="keyword">SELECT</span> <span class="built_in">SUM</span>(total_sales) <span class="operator">*</span> <span class="number">0.1</span> <span class="keyword">FROM</span> regional_sales);</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，<code>regional_sales</code>这个CTE会先被执行和物化，其结果（每个区域的总销售额）被保存在Server层的临时表中。后续的主查询和子查询都引用了这个临时表来完成计算。</p>
+</li>
+</ul>
+<br>
 <h2 id="property">property</h2>
 <h3 id="数据库事务的-ACID-特性">数据库事务的 ACID 特性</h3>
 <p>ACID 是数据库事务的四个重要特性，它们保证了事务的可靠性和一致性。</p>
@@ -1718,12 +1842,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">536k</span>
+    <span title="Symbols count total">540k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">16:15</span>
+    <span title="Reading time total">16:22</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
