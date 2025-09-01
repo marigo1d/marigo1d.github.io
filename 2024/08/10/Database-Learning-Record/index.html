@@ -59,7 +59,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/885e438e-cf54-41f6-880e-faf36e72cd57">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/f2993d30-3803-4543-97db-f98cdca3a493">
 <meta property="article:published_time" content="2024-08-10T01:52:46.000Z">
-<meta property="article:modified_time" content="2025-03-28T02:23:12.670Z">
+<meta property="article:modified_time" content="2025-08-27T07:16:52.000Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="MySQL, Redis">
 <meta name="twitter:card" content="summary">
@@ -252,7 +252,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-28 10:23:12" itemprop="dateModified" datetime="2025-03-28T10:23:12+08:00">2025-03-28</time>
+                <time title="Modified: 2025-08-27 15:16:52" itemprop="dateModified" datetime="2025-08-27T15:16:52+08:00">2025-08-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -277,7 +277,7 @@
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>52 mins.</span>
+              <span>53 mins.</span>
             </span>
 
         </div>
@@ -931,6 +931,7 @@
 <p>假如要查询name = C 的数据，其搜索过程如下：a) 先在辅助索引中通过C查询最后找到主键id = 9; b) 在主键索引中搜索id为9的数据，最终在主键索引的叶子节点中获取到真正的数据。所以通过辅助索引进行检索，需要检索两次索引。</p>
 <p>之所以这样设计，一个原因就是：如果和MyISAM一样在主键索引和辅助索引的叶子节点中都存放数据行指针，一旦数据发生迁移，则需要去重新组织维护所有的索引。</p>
 <p>ref: <a target="_blank" rel="noopener" href="https://pdai.tech/md/interview/x-interview.html#_8-2-mysql">https://pdai.tech/md/interview/x-interview.html#_8-2-mysql</a></p>
+<br>
 <p><strong>索引失效场景</strong></p>
 <ul>
 <li>
@@ -949,6 +950,7 @@
 <p>WHERE 子句使用 OR，存在 OR 的字段不是索引列</p>
 </li>
 </ul>
+<br>
 <p><strong>索引构建原则</strong></p>
 <p>最左前缀匹配原则</p>
 <blockquote>
@@ -962,11 +964,60 @@
 <blockquote>
 <p>索引的B+树中保存的是字段值，如果对字段使用函数，则需要将该字段的值计算为新值，无法使用索引</p>
 </blockquote>
+<br>
 <p><strong>组合索引</strong></p>
 <img src="/2024/08/10/Database-Learning-Record/492e0e5857459a335db7c7aea5377791.png" class="" title="combine_index">
 <blockquote>
 <p>感觉可用理解为，每一个filed均进行hashcode计算，然后加和，然后按照和的大小建立B+树</p>
 </blockquote>
+<br>
+<h3 id="案例">案例</h3>
+<p>下面把 <code>SELECT * FROM table LIMIT 1000, 10</code> 的执行过程与关键细节讲清楚（以 MySQL/InnoDB 为例，其他数据库思路相近）：</p>
+<ol>
+<li>这条 SQL 在干什么</li>
+</ol>
+<ul>
+<li><code>LIMIT 1000, 10</code> = <strong>跳过前 1000 行</strong>，再<strong>取 10 行</strong>。</li>
+<li>没有 <code>ORDER BY</code> 就<strong>不保证返回顺序</strong>（通常是所选访问路径的顺序，如聚簇主键顺序），两次执行可能拿到<strong>不一样</strong>的 10 行。</li>
+</ul>
+<ol start="2">
+<li>引擎内部的步骤（简化）</li>
+</ol>
+<ol>
+<li>
+<p><strong>解析/优化</strong><br>
+语法分析 → 基于统计信息选择访问路径（全表扫描、走某个索引、是否需要回表、是否 filesort 等）。</p>
+</li>
+<li>
+<p><strong>访问路径</strong></p>
+<ul>
+<li>无 <code>WHERE</code>、无 <code>ORDER BY</code>：通常选<strong>全表顺序读</strong>（InnoDB 聚簇主键顺序）。</li>
+<li>有 <code>WHERE</code>：尽量用索引做<strong>范围/等值扫描</strong>；若 <code>SELECT *</code> 且用到二级索引，需要<strong>回表</strong>（根据二级索引的主键值再到聚簇索引取整行）。</li>
+<li>有 <code>ORDER BY</code>：若<strong>排序列与方向</strong>与某个索引完全匹配，可<strong>按索引有序扫描</strong>；否则会建临时结构做<strong>filesort</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>应用 OFFSET / LIMIT</strong><br>
+不管访问路径如何，执行器都会先<strong>数到第 1000 行</strong>（满足条件/顺序的行）——这些行<strong>也需要被读到</strong>（可能还要回表），但<strong>直接丢弃不返回</strong>；随后把<strong>接下来的 10 行</strong>返回给客户端。</p>
+<blockquote>
+<p>成本近似 O(offset + limit)，因此大偏移量会贵在“白读白丢”的 1000 行。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>返回结果</strong><br>
+服务器通常<strong>流式</strong>逐行返回，不会把全部结果缓存完再发（除非排序/临时表需要）。</p>
+</li>
+</ol>
+<ol start="3">
+<li>性能与代价</li>
+</ol>
+<ul>
+<li><strong>大 OFFSET 代价高</strong>：即使只要 10 行，也要读并跳过前 1000 行（且可能每行都要回表）。</li>
+<li><strong>SELECT *</strong>：更容易触发<strong>回表</strong>与更大的行拷贝成本；覆盖索引能省回表但前提是查询列都在同一个索引里。</li>
+<li><strong>无 ORDER BY</strong>：结果<strong>不稳定</strong>且优化器可能选择不同路径，分页体验不可控。</li>
+<li><strong>ORDER BY 不走索引</strong>：会 filesort，可能产生临时表与额外 IO。</li>
+</ul>
+<br>
 <h2 id="SQL优化">SQL优化</h2>
 <p>使用 <code>EXPLAIN</code> 优化</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> name, age <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department <span class="operator">=</span> <span class="string">&#x27;HR&#x27;</span> <span class="keyword">AND</span> salary <span class="operator">&gt;</span> <span class="number">50000</span>;</span><br></pre></td></tr></table></figure>
@@ -1599,7 +1650,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">SQL执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVCC%E4%B8%8E%E5%B9%BB%E8%AF%BB"><span class="nav-text">MVCC与幻读</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Undo-Log"><span class="nav-text">Undo Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log-%E5%92%8C-binlog"><span class="nav-text">redo log 和 binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">联合索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-text">MySQL存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">MySQL主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E9%94%81"><span class="nav-text">MySQL锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81"><span class="nav-text">表级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E7%BA%A7%E9%94%81"><span class="nav-text">行级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E5%AF%B9%E8%B1%A1"><span class="nav-text">锁对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-2"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9B%B8%E5%85%B3"><span class="nav-text">分库分表相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存穿透，缓存雪崩，缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">缓存可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#count-%E4%B8%8E-count-1"><span class="nav-text">count(*) 与 count(1)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C"><span class="nav-text">一致性哈希</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Database Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL"><span class="nav-text">SQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">SQL执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#property"><span class="nav-text">property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84-ACID-%E7%89%B9%E6%80%A7"><span class="nav-text">数据库事务的 ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-text">MVCC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVCC%E4%B8%8E%E5%B9%BB%E8%AF%BB"><span class="nav-text">MVCC与幻读</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Struc"><span class="nav-text">MySQL Struc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Undo-Log"><span class="nav-text">Undo Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log-%E5%92%8C-binlog"><span class="nav-text">redo log 和 binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E8%BE%85%E5%8A%A9%E7%B4%A2%E5%BC%95"><span class="nav-text">主索引与辅助索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-text">联合索引与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-text">MySQL存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">MySQL主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E9%94%81"><span class="nav-text">MySQL锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81"><span class="nav-text">表级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E7%BA%A7%E9%94%81"><span class="nav-text">行级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E5%AF%B9%E8%B1%A1"><span class="nav-text">锁对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-text">案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">数据结构&amp;底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">Redis 淘汰机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-text">Redis高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%93%A8%E5%85%B5"><span class="nav-text">集群哨兵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E8%84%9A%E6%9C%AC-%E4%B8%8E-Redis%E4%BA%8B%E5%8A%A1"><span class="nav-text">Lua脚本 与 Redis事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="nav-text">Redis 分布式会话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-2"><span class="nav-text">Redis 分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E4%B8%8E-%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">Redis 与 数据库 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9B%B8%E5%85%B3"><span class="nav-text">分库分表相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%EF%BC%8C%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%EF%BC%8C%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存穿透，缓存雪崩，缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">缓存可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#count-%E4%B8%8E-count-1"><span class="nav-text">count(*) 与 count(1)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C"><span class="nav-text">一致性哈希</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1667,12 +1718,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">523k</span>
+    <span title="Symbols count total">533k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">15:50</span>
+    <span title="Reading time total">16:10</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
