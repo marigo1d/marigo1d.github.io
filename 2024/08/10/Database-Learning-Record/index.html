@@ -59,7 +59,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/885e438e-cf54-41f6-880e-faf36e72cd57">
 <meta property="og:image" content="https://marigo1d.github.io/2024/08/10/Database-Learning-Record/f2993d30-3803-4543-97db-f98cdca3a493">
 <meta property="article:published_time" content="2024-08-10T01:52:46.000Z">
-<meta property="article:modified_time" content="2025-09-02T03:30:32.000Z">
+<meta property="article:modified_time" content="2025-09-02T03:42:10.000Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="MySQL, Redis">
 <meta name="twitter:card" content="summary">
@@ -252,7 +252,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-02 11:30:32" itemprop="dateModified" datetime="2025-09-02T11:30:32+08:00">2025-09-02</time>
+                <time title="Modified: 2025-09-02 11:42:10" itemprop="dateModified" datetime="2025-09-02T11:42:10+08:00">2025-09-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -270,14 +270,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>33k</span>
+              <span>34k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>59 mins.</span>
+              <span>1:01</span>
             </span>
 
         </div>
@@ -978,10 +978,13 @@
 <br>
 <h3 id="行级锁">行级锁</h3>
 <p>行锁是 InnoDB 的特性，通过 <strong>事务 + SQL 语句</strong> 实现。</p>
+<p><strong>行锁属于事务级锁（transaction-level lock）</strong></p>
+<p><strong>加锁时间：</strong> 从执行加锁语句（如 <code>SELECT ... FOR UPDATE</code>、<code>UPDATE</code> 等）开始</p>
+<p><strong>释放时间：</strong> 直到事务 <strong>提交（COMMIT）或回滚（ROLLBACK）</strong></p>
 <p>非事务语句（如默认的 autocommit=1 的 SQL）执行后会立即提交，行锁会立即释放。</p>
 <br>
 <p><strong>SELECT … FOR UPDATE（排它锁 X lock）</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">START TRANSACTION;</span><br><span class="line"></span><br><span class="line">SELECT * FROM users WHERE id=1 FOR UPDATE;</span><br><span class="line"></span><br><span class="line">-- 修改操作</span><br><span class="line">UPDATE users SET balance = balance - 100 WHERE id=1;</span><br><span class="line"></span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">START TRANSACTION;</span><br><span class="line"></span><br><span class="line">-- 行锁</span><br><span class="line">SELECT * FROM users WHERE id=1 FOR UPDATE;</span><br><span class="line"></span><br><span class="line">-- 修改操作</span><br><span class="line">UPDATE users SET balance = balance - 100 WHERE id=1;</span><br><span class="line"></span><br><span class="line">-- 间隙锁</span><br><span class="line">SELECT * FROM users WHERE id &gt; 10 AND id &lt; 20 FOR UPDATE;</span><br><span class="line"></span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>锁住符合条件的行，其他事务不能修改或删除。</li>
 <li>通常用于 <strong>事务中保护数据一致性</strong>。</li>
@@ -996,13 +999,71 @@
 <hr>
 <p><strong>UPDATE / DELETE / INSERT 自动加锁</strong></p>
 <ul>
-<li><strong>UPDATE</strong> 和 <strong>DELETE</strong> 默认会加行锁：</li>
+<li><strong>UPDATE</strong> , <strong>DELETE</strong> 和 <strong>INSERT</strong> 默认会加行锁：</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPDATE users SET balance = balance - 100 WHERE id=1;</span><br><span class="line">DELETE FROM users WHERE id=1;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UPDATE users SET balance = balance - 100 WHERE id=1;</span><br><span class="line">DELETE FROM users WHERE id=1;</span><br><span class="line">INSERT INTO users (id, name) VALUES (15, &#x27;User C&#x27;);</span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>INSERT</strong> 会锁住索引上的相关 gap（防止幻读）。</li>
 <li>这些操作通常必须在 <strong>事务内</strong>才能体现行锁效果，否则会自动提交。</li>
 </ul>
+<blockquote>
+<ul>
+<li><strong>行锁 (Record Lock)</strong>：锁的是 <strong>“真实存在的数据行”</strong>。当一个事务锁住某一行时，它的目的是防止其他事务修改或删除这一行的数据。</li>
+<li><strong>间隙锁 (Gap Lock)</strong>：锁的是 <strong>“不存在的空隙”</strong>。这个“空隙”位于两条索引记录之间，或者第一条记录之前，或者最后一条记录之后。它的唯一目的是阻止其他事务在这个空隙里插入新的数据。</li>
+</ul>
+<p>为了更好地理解 <code>INSERT</code> 操作中的间隙锁，我们通过一个例子来说明。</p>
+<p>假设我们有一个 <code>users</code> 表，结构如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> users (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">255</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>现在，表中已经存在 <code>id</code> 为 10 和 20 的两条记录。</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>User A</td>
+</tr>
+<tr>
+<td>20</td>
+<td>User B</td>
+</tr>
+</tbody>
+</table>
+<p>在 <code>id</code> 这个主键索引上，存在以下几个间隙：</p>
+<ul>
+<li>(-∞, 10)</li>
+<li>(10, 20)</li>
+<li>(20, +∞)</li>
+</ul>
+<p>现在，我们来看两个并发事务的操作：</p>
+<p><strong>事务 A:</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">START</span> TRANSACTION;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> users (id, name) <span class="keyword">VALUES</span> (<span class="number">15</span>, <span class="string">&#x27;User C&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>事务 B:</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">START</span> TRANSACTION;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> users (id, name) <span class="keyword">VALUES</span> (<span class="number">16</span>, <span class="string">&#x27;User D&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>加锁过程：</strong></p>
+<ol>
+<li><strong>事务 A</strong> 准备插入 <code>id</code> 为 15 的记录。它会检查 <code>(10, 20)</code> 这个间隙，并在这个间隙上设置一个插入意向锁。</li>
+<li><strong>事务 B</strong> 几乎同时准备插入 <code>id</code> 为 16 的记录。它也会检查 <code>(10, 20)</code> 这个间隙，并同样在这个间隙上设置一个插入意向锁。</li>
+</ol>
+<p><strong>关键点：</strong></p>
+<ul>
+<li>
+<p>由于事务 A 和事务 B 插入的位置不同（15 和 16），它们的插入意向锁是兼容的，因此<strong>不会相互阻塞</strong>。</p>
+</li>
+<li>
+<p>事务 A 和事务 B 的操作<strong>没有锁住 <code>id</code> 为 10 或 20 的行</strong>。其他事务仍然可以读取甚至更新这两行（只要 <code>UPDATE</code> 的 <code>WHERE</code> 条件是基于主键的精确匹配，因为这种情况下通常只需要行锁而不需要间隙锁）。</p>
+</li>
+<li>
+<p>然而，如果此时有<strong>事务 C</strong> 尝试在 <code>id</code> 为 10 和 20 之间执行一个范围查询并加锁，例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> id <span class="operator">&gt;</span> <span class="number">10</span> <span class="keyword">AND</span> id <span class="operator">&lt;</span> <span class="number">20</span> <span class="keyword">FOR</span> <span class="keyword">UPDATE</span>;</span><br></pre></td></tr></table></figure>
+<p>这个查询会试图在 <code>(10, 20)</code> 这个间隙上加一个间隙锁。如果此时事务 A 或事务 B 已经持有了插入意向锁并正在等待插入，那么事务 C 的范围查询可能会被阻塞，反之亦然，具体取决于操作的时序和锁的兼容性。</p>
+</li>
+</ul>
+</blockquote>
 <hr>
 <p><strong>注意：明确使用索引加锁</strong></p>
 <ul>
@@ -1824,12 +1885,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">542k</span>
+    <span title="Symbols count total">543k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">16:25</span>
+    <span title="Reading time total">16:28</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
