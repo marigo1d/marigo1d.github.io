@@ -29,7 +29,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://marigo1d.github.io/2025/09/10/Selected-Q-A/2a3c22e2ac6d0a8990f04e4920760b57.png">
 <meta property="article:published_time" content="2025-09-10T02:12:25.000Z">
-<meta property="article:modified_time" content="2025-09-10T07:41:13.066Z">
+<meta property="article:modified_time" content="2025-09-10T09:41:50.543Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="default">
 <meta name="twitter:card" content="summary">
@@ -216,7 +216,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-09-10 10:12:25 / Modified: 15:41:13" itemprop="dateCreated datePublished" datetime="2025-09-10T10:12:25+08:00">2025-09-10</time>
+              <time title="Created: 2025-09-10 10:12:25 / Modified: 17:41:50" itemprop="dateCreated datePublished" datetime="2025-09-10T10:12:25+08:00">2025-09-10</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -234,14 +234,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>19k</span>
+              <span>21k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>35 mins.</span>
+              <span>39 mins.</span>
             </span>
 
         </div>
@@ -802,7 +802,36 @@ Java 中典型的悲观锁实现包括：</p>
 <li><strong>Next-Key Lock</strong>：结合记录锁(Record Lock)和间隙锁(Gap Lock)</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 会话A</span></span><br><span class="line"><span class="keyword">START</span> TRANSACTION;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> name <span class="operator">=</span> <span class="string">&#x27;张三&#x27;</span> <span class="keyword">FOR</span> <span class="keyword">UPDATE</span>;</span><br><span class="line"><span class="comment">-- 对全表加锁，因为name字段无索引</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 会话B</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> users(name) <span class="keyword">VALUES</span>(<span class="string">&#x27;张三&#x27;</span>);</span><br><span class="line"><span class="comment">-- 被阻塞，因为会话A持有全表锁</span></span><br></pre></td></tr></table></figure>
+<br>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- age字段有索引</span></span><br><span class="line"><span class="comment">-- 会话A</span></span><br><span class="line"><span class="keyword">START</span> TRANSACTION;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> age <span class="operator">=</span> <span class="number">25</span> <span class="keyword">FOR</span> <span class="keyword">UPDATE</span>;</span><br><span class="line"><span class="comment">-- 锁定age=25的记录及(20,25),(25,30)的间隙</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 会话B</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> users(age) <span class="keyword">VALUES</span>(<span class="number">22</span>); <span class="comment">-- 被阻塞(如果22在锁定间隙内)</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> users(age) <span class="keyword">VALUES</span>(<span class="number">30</span>);  <span class="comment">-- 成功(不在锁定间隙内)</span></span><br></pre></td></tr></table></figure>
+<br>
+<h2 id="Mysql-锁">Mysql 锁</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM FOR UPDATE</span><br><span class="line">UPDATE </span><br><span class="line">DELETE</span><br></pre></td></tr></table></figure>
+<p>MySQL UPDATE 和 DELETE 操作的加锁示例</p>
+<p>基本环境准备</p>
+<p>首先创建一个测试表：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE employees (</span><br><span class="line">    id INT PRIMARY KEY,</span><br><span class="line">    name VARCHAR(50),</span><br><span class="line">    age INT,</span><br><span class="line">    department VARCHAR(50),</span><br><span class="line">    salary DECIMAL(10,2),</span><br><span class="line">    INDEX idx_department (department),</span><br><span class="line">    INDEX idx_age (age)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">INSERT INTO employees VALUES</span><br><span class="line">(1, &#x27;张三&#x27;, 30, &#x27;技术部&#x27;, 8000),</span><br><span class="line">(2, &#x27;李四&#x27;, 35, &#x27;销售部&#x27;, 9000),</span><br><span class="line">(3, &#x27;王五&#x27;, 28, &#x27;技术部&#x27;, 7500),</span><br><span class="line">(4, &#x27;赵六&#x27;, 40, &#x27;人事部&#x27;, 8500),</span><br><span class="line">(5, &#x27;钱七&#x27;, 32, &#x27;销售部&#x27;, 9500);</span><br></pre></td></tr></table></figure>
+<p>示例1：使用主键的UPDATE（行级锁）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 会话1</span><br><span class="line">BEGIN;</span><br><span class="line">UPDATE employees SET salary = salary + 500 WHERE id = 3;</span><br><span class="line">-- 只锁定id=3这一行</span><br><span class="line"></span><br><span class="line">-- 会话2（同时执行）</span><br><span class="line">UPDATE employees SET salary = salary + 500 WHERE id = 4;</span><br><span class="line">-- 可以正常执行，因为锁定的是不同行</span><br></pre></td></tr></table></figure>
+<p>示例2：使用普通索引的UPDATE</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-- 会话1</span><br><span class="line">BEGIN;</span><br><span class="line">UPDATE employees SET salary = salary + 500 WHERE department = &#x27;技术部&#x27;;</span><br><span class="line">-- 锁定department索引中&#x27;技术部&#x27;对应的行(id=1和id=3)</span><br><span class="line"></span><br><span class="line">-- 会话2（同时执行）</span><br><span class="line">UPDATE employees SET salary = salary + 500 WHERE id = 2;</span><br><span class="line">-- 可以正常执行，因为不涉及被锁定的行</span><br><span class="line"></span><br><span class="line">-- 会话3（同时执行）</span><br><span class="line">UPDATE employees SET salary = salary + 500 WHERE department = &#x27;销售部&#x27;;</span><br><span class="line">-- 也可以执行，因为锁定的是不同的索引范围</span><br></pre></td></tr></table></figure>
+<p>示例3：无索引条件的UPDATE（接近全表锁）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- 会话1</span><br><span class="line">BEGIN;</span><br><span class="line">UPDATE employees SET salary = salary + 500 WHERE age &gt; 30;</span><br><span class="line">-- 因为没有使用age索引(即使有索引，可能优化器选择全表扫描)</span><br><span class="line">-- 会锁定所有age&gt;30的行(实际会锁定扫描到的所有行)</span><br><span class="line"></span><br><span class="line">-- 会话2（同时执行）</span><br><span class="line">UPDATE employees SET salary = salary + 500 WHERE id = 1;</span><br><span class="line">-- 可能被阻塞，因为会话1可能已经扫描并锁定了id=1的行</span><br></pre></td></tr></table></figure>
+<p>示例4：DELETE操作与UPDATE类似</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-- 会话1</span><br><span class="line">BEGIN;</span><br><span class="line">DELETE FROM employees WHERE department = &#x27;销售部&#x27;;</span><br><span class="line">-- 锁定department索引中&#x27;销售部&#x27;对应的行(id=2和id=5)</span><br><span class="line"></span><br><span class="line">-- 会话2（同时执行）</span><br><span class="line">UPDATE employees SET salary = salary + 500 WHERE id = 3;</span><br><span class="line">-- 可以正常执行</span><br><span class="line"></span><br><span class="line">-- 会话3（同时执行）</span><br><span class="line">DELETE FROM employees WHERE id = 2;</span><br><span class="line">-- 会被阻塞，因为id=2的行已被锁定</span><br></pre></td></tr></table></figure>
+<p>示例5：无WHERE条件的UPDATE/DELETE（全表锁）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 会话1</span><br><span class="line">BEGIN;</span><br><span class="line">UPDATE employees SET salary = salary + 500;</span><br><span class="line">-- 锁定全表所有行</span><br><span class="line"></span><br><span class="line">-- 会话2（同时执行任何修改操作）</span><br><span class="line">UPDATE employees SET name = &#x27;测试&#x27; WHERE id = 1;</span><br><span class="line">-- 会被阻塞，直到会话1提交</span><br></pre></td></tr></table></figure>
+<p>示例6：大事务导致的锁升级</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- 会话1</span><br><span class="line">BEGIN;</span><br><span class="line">UPDATE employees SET salary = salary + 500 WHERE age &gt; 20;</span><br><span class="line">-- 如果影响的行数超过阈值(由innodb_lock_wait_timeout等参数决定)</span><br><span class="line">-- 可能从行锁升级为表锁</span><br><span class="line"></span><br><span class="line">-- 会话2（同时执行）</span><br><span class="line">INSERT INTO employees VALUES (6, &#x27;孙八&#x27;, 29, &#x27;市场部&#x27;, 7000);</span><br><span class="line">-- 可能被阻塞，因为表可能被锁定</span><br></pre></td></tr></table></figure>
+<p>关键结论</p>
+<ol>
+<li><strong>最佳情况</strong>：使用主键或唯一索引，只锁定目标行</li>
+<li><strong>次优情况</strong>：使用普通索引，锁定索引范围内的行</li>
+<li><strong>最差情况</strong>：无索引条件或无WHERE条件，可能锁定全表或大部分表</li>
+<li><strong>锁升级</strong>：大事务可能导致行锁升级为表锁</li>
+</ol>
+<p>实际锁行为还受事务隔离级别、索引选择、MySQL版本等因素影响。</p>
+
     </div>
 
     
@@ -882,7 +911,7 @@ Java 中典型的悲观锁实现包括：</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Selected Q&amp;A</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E5%9F%BA%E7%A1%80"><span class="nav-text">Java 基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E5%8F%8D%E5%B0%84"><span class="nav-text">Java 反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E4%BB%A3%E7%90%86"><span class="nav-text">Java 代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E7%BC%96%E8%AF%91"><span class="nav-text">Java 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E9%94%81"><span class="nav-text">Java 锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E5%AE%B9%E5%99%A8"><span class="nav-text">Java 容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql-%E6%9F%A5%E8%AF%A2"><span class="nav-text">Mysql 查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql-%E5%8D%95%E8%A1%A8%E9%87%8F%E7%BA%A7"><span class="nav-text">Mysql 单表量级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql-%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">Mysql 事务隔离级别</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Selected Q&amp;A</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E5%9F%BA%E7%A1%80"><span class="nav-text">Java 基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E5%8F%8D%E5%B0%84"><span class="nav-text">Java 反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E4%BB%A3%E7%90%86"><span class="nav-text">Java 代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E7%BC%96%E8%AF%91"><span class="nav-text">Java 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E9%94%81"><span class="nav-text">Java 锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E5%AE%B9%E5%99%A8"><span class="nav-text">Java 容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql-%E6%9F%A5%E8%AF%A2"><span class="nav-text">Mysql 查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql-%E5%8D%95%E8%A1%A8%E9%87%8F%E7%BA%A7"><span class="nav-text">Mysql 单表量级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql-%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">Mysql 事务隔离级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql-%E9%94%81"><span class="nav-text">Mysql 锁</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -950,12 +979,12 @@ Java 中典型的悲观锁实现包括：</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">549k</span>
+    <span title="Symbols count total">551k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">16:38</span>
+    <span title="Reading time total">16:42</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
