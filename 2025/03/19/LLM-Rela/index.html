@@ -64,6 +64,8 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250901103056683.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/v2-eaaf1c00d0c4ea350cd3a79b47de26d3_1440w.jpg">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250810092440215.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250929141016096.png">
+<meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250929141029131.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325131654259.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250907172731668.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325151928459.png">
@@ -77,7 +79,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250325202638658.png">
 <meta property="og:image" content="https://marigo1d.github.io/2025/03/19/LLM-Rela/image-20250901105613345.png">
 <meta property="article:published_time" content="2025-03-19T02:50:14.000Z">
-<meta property="article:modified_time" content="2025-09-29T06:04:30.353Z">
+<meta property="article:modified_time" content="2025-09-29T06:11:25.828Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="Python, Pytorch">
 <meta name="twitter:card" content="summary">
@@ -270,7 +272,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-29 14:04:30" itemprop="dateModified" datetime="2025-09-29T14:04:30+08:00">2025-09-29</time>
+                <time title="Modified: 2025-09-29 14:11:25" itemprop="dateModified" datetime="2025-09-29T14:11:25+08:00">2025-09-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1635,6 +1637,17 @@ $$</p>
 <h3 id="LoRA">LoRA</h3>
 <p>ref: <a target="_blank" rel="noopener" href="https://x.com/DailyDoseOfDS_/status/1942878914889826686">https://x.com/DailyDoseOfDS_/status/1942878914889826686</a></p>
 <img src="/2025/03/19/LLM-Rela/image-20250810092440215.png" class="" title="image-20250810092440215">
+<p>$$<br>
+h = W_0 x + (\frac{\alpha}{r}) B A x<br>
+$$<br>
+其中</p>
+<ul>
+<li>$W_0$ 表示被冻结的原始权重矩阵</li>
+<li>$x$ 为模块输入</li>
+<li>$A$ $B$ 为低秩可训矩阵，秩为 $r$</li>
+<li>$\alpha$ 为缩放因子</li>
+</ul>
+<br>
 <h4 id="奇异值分解与低秩分解">奇异值分解与低秩分解</h4>
 <p><strong>SVD</strong></p>
 <p>对于任意一个 $m \times n$ 的实矩阵 $A$，可以分解成三个矩阵的乘积：<br>
@@ -1863,11 +1876,14 @@ $$ W_{new} = W_{residual} + (B_{init} + B’) (A_{init} + A’) $$</p>
 <p>QLoRA（论文： <strong>QLORA: Efficient Finetuning of Quantized LLMs</strong>），使用一种新颖的高精度技术将预训练模型量化为 4 bit，然后添加一小组可学习的低秩适配器权重，这些权重通过量化权重的反向传播梯度进行微调。QLORA 有一种低精度存储数据类型（4 bit），还有一种计算数据类型（BFloat16）。实际上，这意味着无论何时使用 QLoRA 权重张量，我们都会将张量反量化为 BFloat16，然后执行 16 位矩阵乘法。QLoRA提出了两种技术实现高保真 4 bit微调——4 bit NormalFloat(NF4) 量化和双量化。此外，还引入了分页优化器，以防止梯度检查点期间的内存峰值，从而导致内存不足的错误，这些错误在过去使得大型模型难以在单台机器上进行微调。</p>
 <br>
 <h4 id="调参技巧">调参技巧</h4>
+<p>通过固定 $\alpha$ 后，调整 rank（原始LoRA论文实现）； $\alpha$ 默认为8</p>
 <ul>
 <li>从低秩开始：对于绝大多数任务，可以从 $r=8$ 和 $r = 16$ 开始调整，评估性能后再决定是否需要更高的秩</li>
 <li>数据集大小与秩的关系：小数据集（&lt;5k 样本）用低秩（$r=8$）；大数据集（&gt;50k样本）可以尝试更大秩（r=32+）</li>
 <li>复杂任务策略：对于复杂推理任务，可以结合使用：（1）增大r到32或64；（2）启用rsLoRA；（3）添加更多目标层；</li>
 </ul>
+<img src="/2025/03/19/LLM-Rela/image-20250929141016096.png" class="" title="image-20250929141016096">
+<img src="/2025/03/19/LLM-Rela/image-20250929141029131.png" class="" title="image-20250929141029131">
 <br>
 <h3 id="MAM-Adapter-UniPELT">MAM Adapter &amp; UniPELT</h3>
 <p>MAM Adapter（论文：TOWARDS A UNIFIED VIEW OF PARAMETER-EFFICIENT TRANSFER LEARNING），一个在Adapter、Prefix Tuning和LoRA之间建立联系的统一方法。</p>
