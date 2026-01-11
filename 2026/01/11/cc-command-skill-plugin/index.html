@@ -28,7 +28,7 @@
 <meta property="og:description" content="claude code 术语与设计">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-01-11T02:28:27.000Z">
-<meta property="article:modified_time" content="2026-01-11T03:21:52.046Z">
+<meta property="article:modified_time" content="2026-01-11T08:52:12.961Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="default">
 <meta name="twitter:card" content="summary">
@@ -214,7 +214,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2026-01-11 10:28:27 / Modified: 11:21:52" itemprop="dateCreated datePublished" datetime="2026-01-11T10:28:27+08:00">2026-01-11</time>
+              <time title="Created: 2026-01-11 10:28:27 / Modified: 16:52:12" itemprop="dateCreated datePublished" datetime="2026-01-11T10:28:27+08:00">2026-01-11</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,14 +232,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>3.3k</span>
+              <span>4.9k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>6 mins.</span>
+              <span>9 mins.</span>
             </span>
 
         </div>
@@ -254,6 +254,7 @@
         <p>claude code 术语与设计</p>
 <span id="more"></span>
 <h1>cc:command,skill&amp;plugin</h1>
+<h1>技能</h1>
 <h2 id="Command">Command</h2>
 <p>模板prompt</p>
 <p>实现</p>
@@ -268,19 +269,22 @@
 <p>内容为</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位代码评审专家，正在评审java代码....</span><br></pre></td></tr></table></figure>
 <br>
-<h2 id="Agent">Agent</h2>
-<p>上下文无关&amp;可并发的llm调用</p>
-<p>例如，指令 <code>cr-java 代码: xxx.java</code></p>
-<p>cr-java 指令为commands目录下的markdown文件</p>
-<p>内容为</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">使用cr-java-std和cr-java-sec进行代码评审</span><br></pre></td></tr></table></figure>
-<p>cr-java-std和cr-java-sec为agents目录下的markdown文件</p>
-<p>cr-java-std</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java-std</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位代码评审专家，正在根据代码规范进行评审</span><br></pre></td></tr></table></figure>
-<p>cr-java-std</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java-std</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位Java代码评审专家，正在根据代码规范进行评审...</span><br></pre></td></tr></table></figure>
-<p>cr-java-sec</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java-sec</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位Java安全专家，正在根据代码规范进行安全评审...</span><br></pre></td></tr></table></figure>
+<h2 id="Skill">Skill</h2>
+<blockquote>
+<p>MCP connects Cluade to data; Skills teach Claude what to do with that data</p>
+</blockquote>
+<p>每个skill对应一个skill文档，通过类似于tool的方式暴露skill元数据给llm，由llm决定加载所需skill的完整文档（完整prompt）</p>
+<blockquote>
+<p>可用理解为对command的进一步分层封装，将多个command的元信息暴露给</p>
+</blockquote>
+<p>skill文档中可通过自然语言描述的方式引入reference（例如，当提到“钱，预算”时触发：读取“<a target="_blank" rel="noopener" href="http://xn--zfry56buv1aq8a.md">财务说明.md</a>”），追加<strong>reference内容</strong>到上下文；</p>
+<p>skill文档中可通过自然语言描述的方式引入script（例如，当提到“上传”时触发：运行upload.py脚本上传文件内容），追加**脚本执行状态（不读取脚本）**到上下文；</p>
+<p>特性</p>
+<ul>
+<li>渐进式披露</li>
+<li>reference按需加载</li>
+<li>script选择性触发</li>
+</ul>
 <br>
 <h2 id="Tool-MCP">Tool &amp; MCP</h2>
 <p>以一个典型的 MCP 配置为例（简化）：</p>
@@ -352,7 +356,91 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">用户</span><br><span class="line"> ↓</span><br><span class="line">Agent 应用</span><br><span class="line"> ↓ 读取 MCP 配置</span><br><span class="line"> ↓ 启动 MCP Server</span><br><span class="line"> ↓ 拉取 tools</span><br><span class="line"> ↓ 注入 tools 到 LLM API</span><br><span class="line"> ↓</span><br><span class="line">LLM 选择工具</span><br><span class="line"> ↓ (tool_call)</span><br><span class="line">Agent 应用</span><br><span class="line"> ↓ MCP 协议</span><br><span class="line">MCP Server 执行</span><br><span class="line"> ↓</span><br><span class="line">结果返回</span><br><span class="line"> ↓</span><br><span class="line">LLM 生成最终回答</span><br></pre></td></tr></table></figure>
 <hr>
 <br>
-<h2 id="Skill">Skill</h2>
+<h2 id="Agent">Agent</h2>
+<p>上下文无关&amp;可并发的llm调用</p>
+<p>例如，指令 <code>cr-java 代码: xxx.java</code></p>
+<p>cr-java 指令为commands目录下的markdown文件</p>
+<p>内容为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">使用cr-java-std和cr-java-sec进行代码评审</span><br></pre></td></tr></table></figure>
+<p>cr-java-std和cr-java-sec为agents目录下的markdown文件</p>
+<p>cr-java-std</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java-std</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位代码评审专家，正在根据代码规范进行评审</span><br></pre></td></tr></table></figure>
+<p>cr-java-std</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java-std</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位Java代码评审专家，正在根据代码规范进行评审...</span><br></pre></td></tr></table></figure>
+<p>cr-java-sec</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java-sec</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位Java安全专家，正在根据代码规范进行安全评审...</span><br></pre></td></tr></table></figure>
+<br>
+<h2 id="Workflow">Workflow</h2>
+<p>workflow目前存在两种实现方式</p>
+<ul>
+<li>通过代码（类langchain）的方式实现</li>
+<li>通过自然语言描述的方式实现</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li>通过langchain实现流程固定的workflow</li>
+<li>通过skill中自然语言描述的方式实现较为灵活的workflow</li>
+</ul>
+<br>
+<h1>设计</h1>
+<h2 id="接口暴露">接口暴露</h2>
+<p>Tool和Skill的使用均依赖于对应元数据对LLM的暴露，</p>
+<p>通过元数据的描述为LLM选择调用哪个tool/skill提供基础</p>
+<blockquote>
+<p>可以理解为后端暴露接口需向前端提供说明文档</p>
+</blockquote>
+<br>
+<h3 id="引用">引用</h3>
+<p>引用注重于为上下文追加所需信息</p>
+<p>核心：仅为llm提供数据的引用，当需要时进行进一步加载</p>
+<blockquote>
+<p>类似于惰性加载</p>
+</blockquote>
+<p>包括</p>
+<ul>
+<li>告知llm文件目录格式，当llm需要某文件详细内容时追加至上下文</li>
+<li>告知llm可用skill，当llm需要时追加至上下文</li>
+</ul>
+<br>
+<h3 id="调用">调用</h3>
+<p>调用注重于直接获取执行结果而不关心执行过程</p>
+<p>包括</p>
+<ul>
+<li>告知llm可用脚本，当llm需要某数据时执行脚本并追加脚本获得数据</li>
+<li>告知llm可用脚本，当llm需要某动作时执行脚本并追加脚本执行结果</li>
+</ul>
+<h2 id="触发">触发</h2>
+<p>通过</p>
+<ul>
+<li>正反例</li>
+<li>精确的关键词匹配</li>
+<li>代码</li>
+</ul>
+<p>的方式有效控制llm对暴露接口的触发</p>
+<br>
+<h1>Fin</h1>
+<p>个人在学习时也看到了很多关于skill和mcp的争论，其实感觉由于现在agent技术的蓬勃发展，很多术语可能也是从不同角度对同一个事物的描述，顺便记录一下自己对见到的一些观点的看法吧</p>
+<br>
+<p>skill = sop?</p>
+<ul>
+<li>skill确实可以做sop的事情（通过自然语言描述软编码实现），感觉更像是模型能力提升后的进一步发展</li>
+<li>个人认为实际上如果是标准化规范化的场景，更应该做成coze的方式通过程序化硬编码的方式规范状态机的状态与转移</li>
+</ul>
+<br>
+<p>skill是为了省上下文？</p>
+<ul>
+<li>个人认为确实是，进一步的说为什么2026年了还需要节省上下文？</li>
+</ul>
+<p>ref: <a target="_blank" rel="noopener" href="https://github.com/Lianues/LLM-NeedleInAHaystack">https://github.com/Lianues/LLM-NeedleInAHaystack</a></p>
+<p><a target="_blank" rel="noopener" href="https://x.com/LotusDecoder/status/2009809387951468787">https://x.com/LotusDecoder/status/2009809387951468787</a></p>
+<p>提示这些模型在长上下文下可能存在能力边界，但具体在 agent 的许多场景中表现如何，还需要针对性测试。</p>
+<p>有效上下文窗口 Gemini-3-pro 在40K，glm-4.7 在 35K。 根据github评测项目作者在大海捞针测试，Gemini-3-pro 在41k时断崖式崩塌到 20%多。意味着超出边界后，问牛答马，搞不清对象，这在复杂任务，高信息密度情况下，几乎是灾难。 然后我本地安排claude code测试了一次glm-4.7，发现ta在40K开始崩得更厉害，直接无法回复连贯有逻辑的文本。 现在 claude code 开机经常 20K，opencode 开机 23K，也就是说留给 难兄难弟们 ，保守只有15K用，这就决定了，他们跑不了多少轮会话和长任务，高信息密度任务。</p>
+<br>
+<p>选择 mcp or skill?</p>
+<ul>
+<li>目前来看一个偏执行一个偏文档</li>
+<li>未来mcp的设计很有可能引入skill，比如说出现专有化mcp server，该server上同时存在专用化script和reference（相当于把数据 + 获取数据的工具放在同类server上，资产化了说是）</li>
+</ul>
 
     </div>
 
@@ -433,7 +521,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">cc:command,skill&amp;plugin</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Command"><span class="nav-text">Command</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Agent"><span class="nav-text">Agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tool-MCP"><span class="nav-text">Tool &amp; MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Skill"><span class="nav-text">Skill</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">cc:command,skill&amp;plugin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">技能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Command"><span class="nav-text">Command</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Skill"><span class="nav-text">Skill</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tool-MCP"><span class="nav-text">Tool &amp; MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Agent"><span class="nav-text">Agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Workflow"><span class="nav-text">Workflow</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%9A%B4%E9%9C%B2"><span class="nav-text">接口暴露</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-text">引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8"><span class="nav-text">调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91"><span class="nav-text">触发</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Fin</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -501,12 +589,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">558k</span>
+    <span title="Symbols count total">560k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">16:55</span>
+    <span title="Reading time total">16:58</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
