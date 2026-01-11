@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"marigo1d.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="claude code 术语与设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cc:command,skill,plugin...">
+<meta property="og:url" content="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/index.html">
+<meta property="og:site_name" content="Marigold">
+<meta property="og:description" content="claude code 术语与设计">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-01-11T02:28:27.000Z">
+<meta property="article:modified_time" content="2026-01-11T03:21:52.046Z">
+<meta property="article:author" content="marigo1d">
+<meta property="article:tag" content="default">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>cc:command,skill,plugin... | Marigold</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Marigold</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Salt, Pepper and Birds~</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="marigo1d">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Marigold">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          cc:command,skill,plugin...
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-01-11 10:28:27 / Modified: 11:21:52" itemprop="dateCreated datePublished" datetime="2026-01-11T10:28:27+08:00">2026-01-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/default/" itemprop="url" rel="index"><span itemprop="name">default</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>3.3k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>6 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>claude code 术语与设计</p>
+<span id="more"></span>
+<h1>cc:command,skill&amp;plugin</h1>
+<h2 id="Command">Command</h2>
+<p>模板prompt</p>
+<p>实现</p>
+<ul>
+<li>通过简洁的command</li>
+<li>使用prompt模板</li>
+<li>构造完整提示词</li>
+<li>提供给ai</li>
+</ul>
+<p>例如，指令 <code>cr-java 代码: xxx.java</code></p>
+<p>cr-java 指令为commands目录下的markdown文件</p>
+<p>内容为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位代码评审专家，正在评审java代码....</span><br></pre></td></tr></table></figure>
+<br>
+<h2 id="Agent">Agent</h2>
+<p>上下文无关&amp;可并发的llm调用</p>
+<p>例如，指令 <code>cr-java 代码: xxx.java</code></p>
+<p>cr-java 指令为commands目录下的markdown文件</p>
+<p>内容为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">使用cr-java-std和cr-java-sec进行代码评审</span><br></pre></td></tr></table></figure>
+<p>cr-java-std和cr-java-sec为agents目录下的markdown文件</p>
+<p>cr-java-std</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java-std</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位代码评审专家，正在根据代码规范进行评审</span><br></pre></td></tr></table></figure>
+<p>cr-java-std</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java-std</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位Java代码评审专家，正在根据代码规范进行评审...</span><br></pre></td></tr></table></figure>
+<p>cr-java-sec</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--</span><br><span class="line">name: cr-java-sec</span><br><span class="line">--</span><br><span class="line"></span><br><span class="line">你是一位Java安全专家，正在根据代码规范进行安全评审...</span><br></pre></td></tr></table></figure>
+<br>
+<h2 id="Tool-MCP">Tool &amp; MCP</h2>
+<p>以一个典型的 MCP 配置为例（简化）：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;fs&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;server.js&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;ROOT&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/workspace&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这个配置<strong>只会被 agent 应用读取</strong>，<strong>不会直接发送给 LLM</strong>。</p>
+<p><strong>agent 应用执行：</strong></p>
+<ol>
+<li><strong>启动 MCP Server（若不存在）</strong>
+<ul>
+<li>通过 <code>command + args</code></li>
+<li>MCP Server 是一个独立进程（stdio / socket）</li>
+</ul>
+</li>
+<li><strong>与 MCP Server 建立协议连接</strong>
+<ul>
+<li>JSON-RPC over stdio / websocket</li>
+<li>符合 MCP 规范</li>
+</ul>
+</li>
+<li><strong>向 MCP Server 请求能力声明（capabilities）</strong>
+<ul>
+<li>包括 tools / resources / prompts</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>LLM API 调用的“原始报文”里包含什么？</strong></p>
+<p>agent 应用 → LLM API 的请求包含：</p>
+<p>system prompt（通常包含工具使用规则） + 普通对话消息 + 工具描述（tools / functions）</p>
+<p>1.普通对话消息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">  &quot;content&quot;: &quot;帮我读取 workspace 里的 config.json&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.工具描述（tools / functions）</p>
+<blockquote>
+<p>这是 <strong>agent 应用从 MCP Server 动态获取后，转换注入的</strong></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;type&quot;: &quot;function&quot;,</span><br><span class="line">  &quot;function&quot;: &#123;</span><br><span class="line">    &quot;name&quot;: &quot;fs.readFile&quot;,</span><br><span class="line">    &quot;description&quot;: &quot;Read a file from the workspace&quot;,</span><br><span class="line">    &quot;parameters&quot;: &#123;</span><br><span class="line">      &quot;type&quot;: &quot;object&quot;,</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;path&quot;: &#123; &quot;type&quot;: &quot;string&quot; &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;required&quot;: [&quot;path&quot;]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.system prompt（通常包含工具使用规则）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">You have access to tools. </span><br><span class="line">Use them when appropriate.</span><br></pre></td></tr></table></figure>
+<p>LLM 是如何“得到可用工具列表”的？</p>
+<p>实际路径是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MCP Server</span><br><span class="line">   ↓  (list_tools)</span><br><span class="line">Agent 应用</span><br><span class="line">   ↓  (转换为 OpenAI / Anthropic tool schema)</span><br><span class="line">LLM API</span><br></pre></td></tr></table></figure>
+<p>MCP Server 返回的原始格式（示意）：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;tools&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;readFile&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Read a file&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;inputSchema&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>agent 应用做的事情：</p>
+<ul>
+<li><strong>命名空间处理</strong>（如 <code>fs.readFile</code>）</li>
+<li><strong>Schema 转换</strong></li>
+<li><strong>注入到 LLM API 的 tools / functions 字段</strong></li>
+</ul>
+<hr>
+<p>工具是谁执行的？agent 还是 MCP Server？</p>
+<p>早期的OpenAI / Anthropic Function Calling（工具调用）由Agent 应用进行工具调度&amp;执行，在MCP架构下 <strong>agent 应用负责调度，MCP Server 负责执行</strong></p>
+<p>MCP架构详细拆解：</p>
+<p>agent 应用解析 LLM 的 tool_call</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LLM wants to call fs.readFile</span><br></pre></td></tr></table></figure>
+<p>agent 应用 → MCP Server</p>
+<p>通过 MCP 协议发送：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;method&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tools/call&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;params&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;readFile&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;config.json&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>MCP Server 执行真实逻辑</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fs.<span class="title function_">readFileSync</span>(<span class="string">&quot;/workspace/config.json&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>MCP Server 返回结果</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&#123; \&quot;port\&quot;: 3000 &#125;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>agent 应用把结果“喂回” LLM</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.readFile&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&#123; \&quot;port\&quot;: 3000 &#125;&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>LLM 生成最终回复</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config.json 中的端口是 3000。</span><br></pre></td></tr></table></figure>
+<hr>
+<p>完整端到端流程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">用户</span><br><span class="line"> ↓</span><br><span class="line">Agent 应用</span><br><span class="line"> ↓ 读取 MCP 配置</span><br><span class="line"> ↓ 启动 MCP Server</span><br><span class="line"> ↓ 拉取 tools</span><br><span class="line"> ↓ 注入 tools 到 LLM API</span><br><span class="line"> ↓</span><br><span class="line">LLM 选择工具</span><br><span class="line"> ↓ (tool_call)</span><br><span class="line">Agent 应用</span><br><span class="line"> ↓ MCP 协议</span><br><span class="line">MCP Server 执行</span><br><span class="line"> ↓</span><br><span class="line">结果返回</span><br><span class="line"> ↓</span><br><span class="line">LLM 生成最终回答</span><br></pre></td></tr></table></figure>
+<hr>
+<br>
+<h2 id="Skill">Skill</h2>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/default/" rel="tag"># default</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/10/Selected-Q-A/" rel="prev" title="Selected Q&A">
+      <i class="fa fa-chevron-left"></i> Selected Q&A
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">cc:command,skill&amp;plugin</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Command"><span class="nav-text">Command</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Agent"><span class="nav-text">Agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tool-MCP"><span class="nav-text">Tool &amp; MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Skill"><span class="nav-text">Skill</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="marigo1d"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">marigo1d</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/marigo1d" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;marigo1d" rel="noopener" target="_blank">GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">marigo1d</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">558k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">16:55</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
