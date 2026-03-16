@@ -27,16 +27,15 @@
 <meta property="og:site_name" content="Marigold">
 <meta property="og:description" content="GPU&amp;…">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260315161335912.png">
-<meta property="og:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260315160434397.png">
-<meta property="og:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260315160321323.png">
-<meta property="og:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260315160628362.png">
+<meta property="og:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260316095126008.png">
+<meta property="og:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260316095344351.png">
+<meta property="og:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260316095435322.png">
 <meta property="article:published_time" content="2026-03-15T08:00:22.000Z">
-<meta property="article:modified_time" content="2026-03-15T08:40:17.251Z">
+<meta property="article:modified_time" content="2026-03-16T01:57:31.958Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="default">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260315161335912.png">
+<meta name="twitter:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260316095126008.png">
 
 <link rel="canonical" href="https://marigo1d.github.io/2026/03/15/gpu/">
 
@@ -217,10 +216,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2026-03-15 16:00:22 / Modified: 16:40:17" itemprop="dateCreated datePublished" datetime="2026-03-15T16:00:22+08:00">2026-03-15</time>
+              <time title="Created: 2026-03-15 16:00:22" itemprop="dateCreated datePublished" datetime="2026-03-15T16:00:22+08:00">2026-03-15</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-03-16 09:57:31" itemprop="dateModified" datetime="2026-03-16T09:57:31+08:00">2026-03-16</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -262,13 +267,12 @@
 <h2 id="Arch">Arch</h2>
 <h3 id="hardware-arch">hardware arch</h3>
 <p>chip</p>
-<img src="/2026/03/15/gpu/image-20260315161335912.png" class="" title="image-20260315161335912">
-<img src="/2026/03/15/gpu/image-20260315160434397.png" class="" title="image-20260315160434397">
-<img src="/2026/03/15/gpu/image-20260315160321323.png" class="" title="image-20260315160321323">
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">GPU Chip (GA102 - Ampere Architecture)</span><br><span class="line"> ├── GigaThread Engine (全局线程调度器)</span><br><span class="line"> ├── L2 Cache (二级缓存，通常为6MB)</span><br><span class="line"> ├── PCIe 4.0 Interface (主机接口)</span><br><span class="line"> ├── Memory Controllers (显存控制器，GA102 使用 384-bit GDDR6X) </span><br><span class="line"> ├── NVLink (第三代 NVLink 互联接口)</span><br><span class="line"> ├── Media &amp; Display Engines (媒体与显示引擎)</span><br><span class="line"> │      ├── NVDEC (视频解码器)</span><br><span class="line"> │      ├── NVENC (视频编码器)</span><br><span class="line"> │      └── Display Engine (显示输出引擎)</span><br><span class="line"> └── GPC (Graphics Processing Cluster, 图形处理集群, GA102 最多 7 个)</span><br><span class="line">        ├── Raster Engine (光栅化引擎)</span><br><span class="line">        ├── ROPs (Render Output Units, 渲染输出单元) </span><br><span class="line">        └── TPC (Texture Processing Cluster, 纹理处理集群, 每个GPC最多6个)</span><br><span class="line">               ├── PolyMorph Engine (多形体引擎，负责几何/曲面细分等)</span><br><span class="line">               └── SM (Streaming Multiprocessor, 流多处理器, 每个TPC有2个SM)</span><br><span class="line">                     ├── Instruction Cache &amp; Dispatch Unit (指令缓存与分发)</span><br><span class="line">                     ├── L1 Data Cache / Shared Memory (128KB 统一 L1/共享内存)</span><br><span class="line">                     ├── Register File (寄存器堆, 256KB/SM)</span><br><span class="line">                     ├── 4x Texture Units (纹理单元, 4个/SM)</span><br><span class="line">                     ├── RT Core (第二代光线追踪核心, 1个/SM)</span><br><span class="line">                     └── 4x Warp (4个处理子块/分区, 每个SM包含4个)</span><br><span class="line">                           ├── Warp Scheduler (线程束调度器, 1个/分区, 共4个/SM)</span><br><span class="line">                           ├── Tensor Core (第三代张量核心, 1个/分区, 共4个/SM)</span><br><span class="line">                           ├── 16x CUDA Cores - FP32 (专用单精度浮点核心, 16个/分区, 共64个/SM)</span><br><span class="line">                           ├── 16x CUDA Cores - FP32/INT32 (并发浮点/整数核心, 16个/分区, 共64个/SM)</span><br><span class="line">                           ├── 4x LD/ST Units (加载/存储单元, 4个/分区, 共16个/SM)</span><br><span class="line">                           └── 4x SFU (Special Function Units, 特殊数学函数单元, 4个/分区, 共16个/SM)</span><br></pre></td></tr></table></figure>
+<img src="/2026/03/15/gpu/image-20260316095126008.png" class="" title="image-20260316095126008">
+<img src="/2026/03/15/gpu/image-20260316095344351.png" class="" title="image-20260316095344351">
+<img src="/2026/03/15/gpu/image-20260316095435322.png" class="" title="image-20260316095435322">
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">GPU Chip (GA102 - Ampere Architecture)</span><br><span class="line"> ├── GigaThread Engine (全局线程调度器)</span><br><span class="line"> ├── L2 Cache (二级缓存，通常为6MB)</span><br><span class="line"> ├── PCIe 4.0 Interface (主机接口)</span><br><span class="line"> ├── Memory Controllers (显存控制器，GA102 使用 384-bit GDDR6X) </span><br><span class="line"> ├── NVLink (第三代 NVLink 互联接口)</span><br><span class="line"> └── GPC (Graphics Processing Cluster, 图形处理集群, GA102 最多 7 个)</span><br><span class="line">        ├── Raster Engine (光栅化引擎)</span><br><span class="line">        ├── ROPs (Render Output Units, 渲染输出单元) </span><br><span class="line">        └── TPC (Texture Processing Cluster, 纹理处理集群, 每个GPC最多6个)</span><br><span class="line">               ├── PolyMorph Engine (多形体引擎，负责几何/曲面细分等)</span><br><span class="line">               └── SM (Streaming Multiprocessor, 流多处理器, 每个TPC有2个SM)</span><br><span class="line">                     ├── Instruction Cache &amp; Dispatch Unit (指令缓存与分发)</span><br><span class="line">                     ├── L1 Data Cache / Shared Memory (128KB 统一 L1/共享内存)</span><br><span class="line">                     ├── Register File (寄存器堆, 256KB/SM)</span><br><span class="line">                     ├── 4x Texture Units (纹理单元, 4个/SM)</span><br><span class="line">                     ├── RT Core (第二代光线追踪核心, 1个/SM)</span><br><span class="line">                     └── 4x Warp (4个处理子块/分区, 每个SM包含4个)</span><br><span class="line">                           ├── Warp Scheduler (线程束调度器, 1个/分区, 共4个/SM)</span><br><span class="line">                           ├── Tensor Core (第三代张量核心, 1个/分区, 共4个/SM)</span><br><span class="line">                           ├── 16x CUDA Cores - FP32 (专用单精度浮点核心, 16个/分区, 共64个/SM)</span><br><span class="line">                           ├── 16x CUDA Cores - FP32/INT32 (并发浮点/整数核心, 16个/分区, 共64个/SM)</span><br><span class="line">                           ├── 4x LD/ST Units (加载/存储单元, 4个/分区, 共16个/SM)</span><br><span class="line">                           └── 4x SFU (Special Function Units, 特殊数学函数单元, 4个/分区, 共16个/SM)</span><br></pre></td></tr></table></figure>
 <br>
 <p>HBM(high Bandwidth Memory) GDDR</p>
-<img src="/2026/03/15/gpu/image-20260315160628362.png" class="" title="image-20260315160628362">
 <p>CPU RAM</p>
 <br>
 <h3 id="CUDA-model">CUDA model</h3>
@@ -291,6 +295,7 @@
 <p><strong>注意：</strong> Block 0、Block 1、Block 2 都在同一个 SM 1 上运行，它们各自拥有独立的 30KB Shared Memory（互相隔离，不能互访）。这就是为什么 Shared Memory 叫 <strong>Block-Level Memory</strong>，它的作用域被硬件死死限制在分配给该 Block 的那部分 SRAM 中。</p>
 </blockquote>
 <br>
+<h2 id="CUDA-process">CUDA process</h2>
 
     </div>
 
@@ -371,7 +376,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">GPU&amp;…</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Arch"><span class="nav-text">Arch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hardware-arch"><span class="nav-text">hardware arch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA-model"><span class="nav-text">CUDA model</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">GPU&amp;…</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Arch"><span class="nav-text">Arch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hardware-arch"><span class="nav-text">hardware arch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA-model"><span class="nav-text">CUDA model</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CUDA-process"><span class="nav-text">CUDA process</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
