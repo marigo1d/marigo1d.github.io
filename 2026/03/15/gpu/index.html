@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260316095344351.png">
 <meta property="og:image" content="https://marigo1d.github.io/2026/03/15/gpu/image-20260316095435322.png">
 <meta property="article:published_time" content="2026-03-15T08:00:22.000Z">
-<meta property="article:modified_time" content="2026-03-16T01:57:31.958Z">
+<meta property="article:modified_time" content="2026-03-16T02:29:42.596Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="default">
 <meta name="twitter:card" content="summary">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-03-16 09:57:31" itemprop="dateModified" datetime="2026-03-16T09:57:31+08:00">2026-03-16</time>
+                <time title="Modified: 2026-03-16 10:29:42" itemprop="dateModified" datetime="2026-03-16T10:29:42+08:00">2026-03-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -242,14 +242,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>2.8k</span>
+              <span>3.4k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>5 mins.</span>
+              <span>6 mins.</span>
             </span>
 
         </div>
@@ -279,10 +279,13 @@
 <p>CUDA/编程模型里的内存抽象</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">CUDA Memory Model (编程模型视角)</span><br><span class="line"> ├── System-Level / Heterogeneous Memory (系统级/异构内存)</span><br><span class="line"> │      ├── Host Memory (主机内存 - CPU端 RAM)</span><br><span class="line"> │      │      ├── Pageable Memory (可分页内存 - 默认的 malloc/new)</span><br><span class="line"> │      │      └── Pinned / Page-Locked Memory (锁页内存 - cudaMallocHost，支持 DMA 异步传输)</span><br><span class="line"> │      └── Unified / Managed Memory (统一托管内存 - cudaMallocManaged)</span><br><span class="line"> │             └── [注: CPU 和 GPU 共享同一个虚拟地址空间，由驱动和硬件自动迁移数据]</span><br><span class="line"> │</span><br><span class="line"> ├── Grid-Level / Device-Level Memory (网格/设备级内存 - 所有线程可见，Host可读写)</span><br><span class="line"> │      ├── Global Memory (全局内存)</span><br><span class="line"> │      │      ├── 修饰符: __device__ (或通过 cudaMalloc 动态分配)</span><br><span class="line"> │      │      ├── 特点: 容量最大，延迟最高，生命周期随应用程序或手动释放。</span><br><span class="line"> │      │      └── 优化关键: 内存合并访问 (Coalesced Access)。</span><br><span class="line"> │      │</span><br><span class="line"> │      ├── Constant Memory (常量内存)</span><br><span class="line"> │      │      ├── 修饰符: __constant__</span><br><span class="line"> │      │      ├── 特点: 只读，容量小(通常64KB)，针对所有线程读取同一地址(Broadcast)进行了极致优化。</span><br><span class="line"> │      │      └── [注: 拥有专属的 Constant Cache]</span><br><span class="line"> │      │</span><br><span class="line"> │      └── Texture / Surface Memory (纹理/表面内存)</span><br><span class="line"> │             ├── 绑定: texture&lt;&gt; / surface&lt;&gt;</span><br><span class="line"> │             └── 特点: 只读/读写，针对 2D/3D 空间局部性(Spatial Locality)优化，支持硬件插值和边界处理。</span><br><span class="line"> │</span><br><span class="line"> ├── Block-Level Memory (线程块级内存 - 同一个 Block 内的线程可见)</span><br><span class="line"> │      └── Shared Memory (共享内存)</span><br><span class="line"> │             ├── 修饰符: __shared__</span><br><span class="line"> │             ├── 特点: 片上内存，延迟极低，带宽高。生命周期与 Block 相同。</span><br><span class="line"> │             ├── 作用: 线程间通信、避免重复读取 Global Memory（用户管理的缓存）。</span><br><span class="line"> │             └── 优化关键: 避免 Bank Conflict (存储体冲突)。</span><br><span class="line"> │</span><br><span class="line"> └── Thread-Level Memory (线程级内存 - 仅单个 Thread 私有及可见)</span><br><span class="line">        ├── Registers (寄存器)</span><br><span class="line">        │      ├── 分配: 编译器自动分配（局部非数组变量）。</span><br><span class="line">        │      └── 特点: 速度最快，无延迟。数量有限（如果用完会导致 Register Spilling）。</span><br><span class="line">        │</span><br><span class="line">        └── Local Memory (局部内存)</span><br><span class="line">               ├── 分配: 编译器自动分配（如占用空间大的局部数组、寄存器溢出时）。</span><br><span class="line">               ├── 特点: 名字叫“局部”，但**物理上实际存放在 Global Memory 中！**</span><br><span class="line">               └── [注: 延迟极高，是性能杀手，应尽量避免寄存器溢出(Spilling)]</span><br></pre></td></tr></table></figure>
 <br>
-<p>kernel &lt;-&gt; grid</p>
-<p><strong>一个 Grid通常包含多个 Block（线程块）。</strong></p>
-<p><strong>一个 Block（线程块）通常包含多个 Warp（线程束）。</strong></p>
+<p>一个 Grid通常包含多个 Block（线程块），Block中的Thread数量由用户指定</p>
+<blockquote>
+<p>由于硬件调度问题（Warp是硬件调度最小单位），因此Block中的线程数量最好是32的倍数</p>
+</blockquote>
+<p>一个SM包含4个Warp，1 个 Warp 固定包含 32 个线程</p>
 <br>
+<p>一个Block只能被分配到一个SM上执行，多个Block可在同一个SM上运行；</p>
 <p><strong>举个具体的例子（以 GA102 为例）：</strong><br>
 假设你写了一个 Kernel，每个 Block 需要使用 <strong>30KB</strong> 的 Shared Memory，包含 256 个线程（即 8 个 Warp）。</p>
 <ul>
@@ -296,6 +299,12 @@
 </blockquote>
 <br>
 <h2 id="CUDA-process">CUDA process</h2>
+<p>Stream 是一个由 GPU 维护的 <strong>FIFO（先进先出）命令队列</strong>，Stream中的存在Grid，内存拷贝指令等；</p>
+<p>案例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cudaMemcpyAsync</span>(d_A, h_A, size, cudaMemcpyHostToDevice, stream1); <span class="comment">// 节点1：数据传输</span></span><br><span class="line"><span class="comment">// 语法：Kernel名称 &lt;&lt;&lt; Grid大小, Block大小, 共享内存大小, Stream句柄 &gt;&gt;&gt; (参数...);</span></span><br><span class="line">MyKernel &lt;&lt;&lt; Grid1, Block1, <span class="number">0</span>, stream1 &gt;&gt;&gt; (d_A);                 <span class="comment">// 节点2：计算任务(Grid)</span></span><br><span class="line"><span class="built_in">cudaMemcpyAsync</span>(h_B, d_B, size, cudaMemcpyDeviceToHost, stream1); <span class="comment">// 节点3：数据传回</span></span><br></pre></td></tr></table></figure>
+<p>在 stream1 这个队列里，排队的不仅有 Kernel 实例化出来的 Grid，还有内存拷贝指令。<strong>Grid 只是可以放入 Stream 队列中的众多“指令卡片”之一。</strong> 流水线保证了：必须等 d_A 传完，Grid1 才能开始计算；必须等 Grid1 计算全完成，结果 h_B 才会往回传。</p>
+<br>
+<p><strong>一次 Kernel 函数的启动（Launch），就会实例化产生并对应唯一的一个 Grid</strong>。在逻辑上被组织成 <strong>Grid -&gt; Block -&gt; Thread</strong> 的层级结构。</p>
 
     </div>
 
@@ -449,7 +458,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">17:03</span>
+    <span title="Reading time total">17:04</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
