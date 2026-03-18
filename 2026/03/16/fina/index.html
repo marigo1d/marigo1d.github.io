@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://marigo1d.github.io/2026/03/16/fina/image-20260318101129586.png">
 <meta property="og:image" content="https://marigo1d.github.io/2026/03/16/fina/image-20260318102238372.png">
 <meta property="article:published_time" content="2026-03-16T08:22:57.000Z">
-<meta property="article:modified_time" content="2026-03-18T03:16:02.638Z">
+<meta property="article:modified_time" content="2026-03-18T09:02:29.771Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="default">
 <meta name="twitter:card" content="summary">
@@ -225,7 +225,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-03-18 11:16:02" itemprop="dateModified" datetime="2026-03-18T11:16:02+08:00">2026-03-18</time>
+                <time title="Modified: 2026-03-18 17:02:29" itemprop="dateModified" datetime="2026-03-18T17:02:29+08:00">2026-03-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -243,14 +243,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>14k</span>
+              <span>15k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>26 mins.</span>
+              <span>28 mins.</span>
             </span>
 
         </div>
@@ -357,10 +357,36 @@
 <blockquote>
 <p>现金正值流入公司，负值流出公司</p>
 </blockquote>
-<p>经营现金流：公司净利润 + 折旧费用 + 员工配股 + 营运资金变化 + 应收账款</p>
-<p>投资现金流：</p>
+<br>
+<p>经营现金流：= 净利润 + 非现金费用 +/- 营运资金变动</p>
+<ul>
+<li><strong>净利润 (Net Income)</strong>：损益表上的最终利润，作为计算的起点。</li>
+<li><strong>非现金费用 (Non-Cash Expenses)</strong>：需要<strong>加回（+）</strong>。因为计算利润时扣除了这些费用，但实际上并没有真实的现金流出。
+<ul>
+<li><em>折旧与摊销 (D&amp;A)</em>：设备变旧了，但不用再掏钱。</li>
+<li><em>员工股权激励 (SBC)</em>：给员工发股票，没发真金白银。</li>
+</ul>
+</li>
+<li><strong>营运资金变动 (Changes in Working Capital)</strong>：
+<ul>
+<li><strong>应收账款增加 -&gt; 负值（-）</strong>：货卖了但钱没收回来，相当于资金被客户占用了。</li>
+<li><strong>存货增加 -&gt; 负值（-）</strong>：花钱进货/生产了，钱变成了仓库里的货。</li>
+<li><strong>应付账款增加 -&gt; 正值（+）</strong>：买了供应商的材料但还没付款，相当于无息占用了别人的钱。</li>
+</ul>
+</li>
+</ul>
+<br>
+<p>投资现金流：<strong>=</strong><br>
+<strong>[ - ] 资本支出 (CapEx)</strong> （买新机器、建新厂房流出的钱）<br>
+<strong>[ + ] 出售长期资产收到的现金</strong> （把旧机器、旧厂房卖了换回来的钱）<br>
+<strong>[ - ] 并购与对外投资流出的现金</strong> （花钱收购别的公司，或者买理财、买股票、买债券）<br>
+<strong>[ + ] 出售投资收到的现金</strong> （卖掉理财、股票、债券，或者卖掉子公司换回来的钱）</p>
+<br>
 <p>融资现金流：借钱、发行股票（钱流入公司，正值；分红、回购股票（钱流出公司，负值</p>
+<br>
 <p>现金流净变动：= 营业现金流 + 投资现金流 + 融资现金流</p>
+<br>
+<p>自由现金流FCF Free Cash Flow：经营现金流 (CFO) - 资本支出 (CapEx)；公司在维持日常运营和必要扩张（资本支出）之后，<strong>真正可以自由支配的、能装进股东口袋里的真金白银</strong>。</p>
 <br>
 <h2 id="估值法">估值法</h2>
 <h3 id="PE估值">PE估值</h3>
@@ -372,7 +398,46 @@
 <blockquote>
 <p>S&amp;P500 Forward PE $\approx$ 22</p>
 </blockquote>
+<br>
 <h3 id="DCF现金流折现估值">DCF现金流折现估值</h3>
+<p>Discounted Cash Flow</p>
+<blockquote>
+<p>公司未来产生的所有现金流折算到今天值多少钱</p>
+</blockquote>
+<p>将公司未来的全部现金流，按照合适的折现率，折算成当前的价值</p>
+<p>prc</p>
+<ul>
+<li>
+<p>获取公司当前的自由现金流 -&gt; search xxx free cash flow(FCF)</p>
+</li>
+<li>
+<p>预测公司未来n年的自由现金流 -&gt; 过去n年向前推算 <em>含主观预估</em></p>
+</li>
+<li>
+<p>选择合适的折现率 -&gt; <strong>加权平均资本成本WACC</strong> 计算折现率 <em>含主观预估</em></p>
+</li>
+<li>
+<p>计算公司未来所有现金流的现值：=非永续增长阶段价值折现 + 永续增长阶段价值折现</p>
+</li>
+</ul>
+<p>非永续价值折现=未来n年的折现值的sum</p>
+<p>永续价值折现 $V = \frac{FCF * (1 + g)}{WAAC - g} / (1 + WAAC)^{x}$，其中 $g$ 为永续增长率，FCF为非永续增长阶段最后一年的自由现金流，x为非永续年份</p>
+<ul>
+<li>
+<p>计算公司的股权价值：= 非永续增长阶段 + 永续增长阶段 - 公司净负债net debt</p>
+</li>
+<li>
+<p>计算公司最终的合理股价：=股权价值/总流通股数outstanding shares</p>
+</li>
+</ul>
+<br>
+<p>案例：</p>
+<p>公司自由现金流 第0年 10000</p>
+<p>预估未来增长率 15% ，折现率WACC 10%，$g$ 2%</p>
+<p>未来第x年 $10000 * 1.15^{x}$</p>
+<p>未来第x年到今年的折现现值 $10000 * 1.15^{x} /  1.1^{x}$</p>
+<p>V = $\frac{10000 * 1.15^{x} * (1 + 0.02)}{0.1-0.02}$，永续折现值 $V/1.1^{x}$</p>
+<br>
 <h2 id="杂">杂</h2>
 <p>Prompt</p>
 <p>提示词 1/12：Tastytrade零日到期SPX信用价差扫描器 “你是一名Tastytrade资深期权交易员，专攻零日到期SPX信用价差策略——这是专业Theta交易员通过标普500指数时间价值衰减获取日收益的核心策略。 我需要一套完整的今日零日到期交易设置，包含精确行权价和风险参数。 扫描内容： •市场状态检查：今日VIX波动率水平、隔夜期货走势及经济日历是否适合卖出权利金 •SPX预期波动区间：根据当前平价跨式期权价格计算今日隐含预期波动范围 •认沽信用价差设置：卖出行权价delta值0.10-0.15的认沽期权，下方5-10点买入保护性认沽 •认购信用价差设置：卖出行权价delta值0.10-0.15的认购期权，上方5-10点买入保护性认购 •铁鹰组合：若条件允许，可双方向组合以获取双重权利金 •权利金目标：每笔价差至少收取0.50-1.00美元权利金以平衡风险收益 •风险收益比：最大亏损与收取权利金之比，目标最小收益风险比1:3 •入场时机：最佳入场时段（通常为开盘波动平缓后的9:45-10:30） •止损规则：价差亏损达收取权利金2倍或SPX突破卖出行权价时平仓 •退出策略：持有到期归零获取全额利润，或于下午2点前达50%盈利时提前平仓 请以Tastytrade风格零日到期交易单格式呈现，包含精确行权价、入场价、最大盈利、最大亏损及基于时间的退出规则。 今日参数：[填入今日日期、当前SPX价格、VIX水平及重大经济事件]”</p>
@@ -786,12 +851,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">585k</span>
+    <span title="Symbols count total">586k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">17:43</span>
+    <span title="Reading time total">17:45</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
