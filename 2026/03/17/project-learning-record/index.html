@@ -28,7 +28,7 @@
 <meta property="og:description" content="default">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-17T02:28:56.000Z">
-<meta property="article:modified_time" content="2026-03-17T03:15:52.085Z">
+<meta property="article:modified_time" content="2026-03-17T08:58:12.980Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="default">
 <meta name="twitter:card" content="summary">
@@ -214,7 +214,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2026-03-17 10:28:56 / Modified: 11:15:52" itemprop="dateCreated datePublished" datetime="2026-03-17T10:28:56+08:00">2026-03-17</time>
+              <time title="Created: 2026-03-17 10:28:56 / Modified: 16:58:12" itemprop="dateCreated datePublished" datetime="2026-03-17T10:28:56+08:00">2026-03-17</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,14 +232,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>662</span>
+              <span>7.1k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1 mins.</span>
+              <span>13 mins.</span>
             </span>
 
         </div>
@@ -255,17 +255,204 @@
 <span id="more"></span>
 <h1>Project Learning Record</h1>
 <h2 id="Zep">Zep</h2>
-<p>Graphiti 是一个用于构建和查询 AI 代理的时序上下文图的框架。与静态知识图谱不同，Graphiti 的上下文图跟踪事实随时间的变化，维护数据来源的溯源，并支持既定的和学习到的本体——这使得它们专为在不断发展、真实世界数据上运行的代理而设计。</p>
-<p>与传统检索增强生成（RAG）方法不同，Graphiti 持续将用户交互、结构化与非结构化企业数据及外部信息整合为连贯、可查询的图。该框架支持增量数据更新、高效检索和精确历史查询，无需完整图重新计算，适用于开发交互式、上下文感知型 AI 应用。</p>
-<p>Use Graphiti to: 使用 Graphiti 可以实现：</p>
-<ul>
-<li>Build context graphs that evolve with every interaction — tracking what’s true now and what was true before.<br>
-构建随每次交互而演变的上下文图——追踪当前真实情况及过往真实情况。</li>
-<li>Give agents rich, structured context instead of flat document chunks or raw chat history.<br>
-为智能体提供丰富、结构化的上下文，而不是平面的文档片段或原始的聊天历史。</li>
-<li>Query across time, meaning, and relationships with hybrid retrieval (semantic + keyword + graph traversal).<br>
-跨越时间、语义和关系进行查询，采用混合检索（语义+关键词+图遍历）。</li>
-</ul>
+<h3 id="Model">Model</h3>
+<p>图中含场景子图谱（场景节点，场景边），语义子图谱（实体节点，事实边），社区子图谱（社区节点，社区边）</p>
+<p><strong>场景节点</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景节点 ID</th>
+<th>节点类型</th>
+<th>原始数据内容</th>
+<th>参考时间戳t_ref</th>
+<th>关联实体</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>e1</td>
+<td>消息</td>
+<td>张总（A 科技）：我司 A 科技（杭州）计划 3 月 10 日和贵司签订云服务采购合同，采购 20 台云服务器，对接人是我司技术总监李工。</td>
+<td>2025-03-01T09:30:00Z</td>
+<td>张总、A 科技（杭州）、云服务器、李工、贵司</td>
+</tr>
+<tr>
+<td>e2</td>
+<td>消息</td>
+<td>张总（A 科技）：因公司扩张，把云服务器采购量调整为 30 台，签订时间延后到 3 月 15 日，对接人不变还是李工。</td>
+<td>2025-03-08T14:00:00Z</td>
+<td>张总、A 科技（杭州）、云服务器、李工</td>
+</tr>
+</tbody>
+</table>
+<p><strong>场景边</strong>：6 条（场景节点→语义实体节点，单向关联，无时序属性）</p>
+<p>e1 → 张总、e1 → A 科技（杭州）、e1 → 云服务器、e1 → 李工、e1 → 贵司；</p>
+<p>e2 → 云服务器、e2 → 李工（重复实体仅关联，不重复创建）。</p>
+<br>
+<p><strong>实体节点</strong>（含实体名词 + 实体摘要）—&gt; 1024维嵌入向量</p>
+<table>
+<thead>
+<tr>
+<th>实体节点 ID</th>
+<th>实体名称</th>
+<th>实体摘要（从对话提取，用于检索 / 匹配）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>s1</td>
+<td>张总</td>
+<td>A 科技（杭州）客户代表，负责云服务采购合同对接</td>
+</tr>
+<tr>
+<td>s2</td>
+<td>A 科技（杭州）</td>
+<td>杭州的科技企业，有云服务器采购需求，处于扩张阶段</td>
+</tr>
+<tr>
+<td>s3</td>
+<td>云服务器</td>
+<td>贵司的云服务产品，为 A 科技（杭州）采购标的</td>
+</tr>
+<tr>
+<td>s4</td>
+<td>李工</td>
+<td>A 科技（杭州）技术总监，为云服务采购对接人</td>
+</tr>
+<tr>
+<td>s5</td>
+<td>贵司</td>
+<td>云服务提供方，与 A 科技（杭州）签订采购合同</td>
+</tr>
+</tbody>
+</table>
+<p><strong>事实边</strong></p>
+<table>
+<thead>
+<tr>
+<th>事实边 ID</th>
+<th>关联实体（源→目标）</th>
+<th>关联类型</th>
+<th>事实详细内容</th>
+<th>t_created（系统创建时间）</th>
+<th>t_expired（系统失效时间）</th>
+<th>t_valid（事实生效时间）</th>
+<th>t_invalid（事实失效时间）</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>se1</td>
+<td>s2→s5</td>
+<td>PURCHASES</td>
+<td>A 科技（杭州）向贵司采购云服务器</td>
+<td>2025-03-01T09:30:00Z</td>
+<td>null</td>
+<td>2025-03-01T09:30:00Z</td>
+<td>null</td>
+<td>有效</td>
+</tr>
+<tr>
+<td>se2</td>
+<td>s2→s3</td>
+<td>BUY_QUANTITY</td>
+<td>A 科技（杭州）采购云服务器 20 台，计划 3 月 10 日签订合同</td>
+<td>2025-03-01T09:30:00Z</td>
+<td>2025-03-08T14:00:00Z</td>
+<td>2025-03-10T00:00:00Z</td>
+<td>2025-03-15T00:00:00Z</td>
+<td>失效（被 se_3 推翻）</td>
+</tr>
+<tr>
+<td>se3</td>
+<td>s2→s3</td>
+<td>BUY_QUANTITY</td>
+<td>A 科技（杭州）将云服务器采购量调整为 30 台，签订时间延后至 3 月 15 日</td>
+<td>2025-03-08T14:00:00Z</td>
+<td>null</td>
+<td>2025-03-15T00:00:00Z</td>
+<td>null</td>
+<td>有效（最新）</td>
+</tr>
+<tr>
+<td>se4</td>
+<td>s2→s4</td>
+<td>CONTACT_PERSON</td>
+<td>A 科技（杭州）指定李工作为云服务采购对接人</td>
+<td>2025-03-01T09:30:00Z</td>
+<td>null</td>
+<td>2025-03-01T09:30:00Z</td>
+<td>null</td>
+<td>有效（无变更）</td>
+</tr>
+</tbody>
+</table>
+<br>
+<p><strong>社区节点</strong>：将强关联实体聚类为社区节点，生成社区摘要 / 名称，支持快速全局检索，降低大模型推理成本。</p>
+<table>
+<thead>
+<tr>
+<th>社区节点 ID</th>
+<th>社区名称（核心关键词）</th>
+<th>社区摘要（迭代 map-reduce 生成，符合论文准则）</th>
+<th>包含实体节点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c1</td>
+<td>A 科技 - 云服务采购项目</td>
+<td>杭州 A 科技为扩张采购贵司云服务器，由张总对接、李工作为技术对接人，采购量从 20 台调整为 30 台，合同签订时间从 3 月 10 日延后至 3 月 15 日，尚未正式签订。</td>
+<td>s1/s2/s3/s4/s5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>社区边</strong>：5 条（社区节点→所属实体节点，单向关联，无时序属性，仅用于层级映射）</p>
+<p>c1 → s1、c1 → s2、c1 → s3、c1 → s4、c1 → s5。</p>
+<br>
+<h4 id="Episode">Episode</h4>
+<p>双时间线设计：片段发生时间 + 片段语义时间</p>
+<br>
+<h4 id="Semantic-Entities-Fact">Semantic Entities&amp;Fact</h4>
+<p>使用LLM prompt template提取entities &amp; facts &amp; 时间信息</p>
+<p>使用两个完整对话的上下文 + 设定说话者为实体 + reflextion反思减少幻觉</p>
+<p>对实体进行嵌入得到1024维向量，用于余弦检索 + 已存在实体查重</p>
+<p>四个时间 创建/过期时间 fact有效时间/无效时间</p>
+<br>
+<h4 id="Communities">Communities</h4>
+<p>标签传播算法</p>
+<br>
+<h3 id="Retrieve">Retrieve</h3>
+<p>输出模板</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">FACTS and ENTITIES represent relevant context to the current conversation. These are the most relevant facts and their valid date ranges. If the fact is about an event, the event takes place during</span><br><span class="line">this time.</span><br><span class="line">format: FACT (Date range: from - to) </span><br><span class="line">&lt;FACTS&gt;</span><br><span class="line">&#123;facts&#125;</span><br><span class="line">&lt;/FACTS&gt; </span><br><span class="line">These are the most relevant entities ENTITY_NAME: entity summary</span><br><span class="line">&lt;ENTITIES&gt;</span><br><span class="line">&#123;entities&#125;</span><br><span class="line">&lt;/ENTITIES&gt; </span><br></pre></td></tr></table></figure>
+<h4 id="搜索">搜索</h4>
+<p>余弦语义相似度，BM25，广度优先</p>
+<blockquote>
+<p>这三种搜索方法分别针对相似性的不同方面：全文搜索识别词语相似性，余弦相似度捕捉语义相似性，而广度优先搜索则揭示语境相似性——即图中距离较近的节点和边出现在更相似的对话语境中。这种多维度的候选结果识别方法最大程度地提高了发现最佳语境的可能性。</p>
+</blockquote>
+<h4 id="重排">重排</h4>
+<blockquote>
+<p>虽然初始搜索方法旨在实现高召回率，但重排器通过优先展示最相关的结果来提高精度。Zep支持现有的重排方法，如 reciprocal Rank Fusion（RRF）[20]和最大边际相关性（MMR）[21]。此外，Zep还实现了一种基于图的片段提及重排器，该重排器根据对话中实体或事实提及的频率来确定结果的优先级，使频繁引用的信息更容易获取。该系统还包括一个节点距离重排器，它根据结果与指定质心节点的图距离对结果进行重新排序，提供局限于知识图特定区域的上下文。该系统最复杂的重排功能采用交叉编码器——这些大语言模型通过交叉注意力根据查询对节点和边进行评估，从而生成相关性分数，不过这种方法的计算成本最高。</p>
+</blockquote>
+<h3 id="Prompt">Prompt</h3>
+<p><strong>实体提取Prompt</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;PREVIOUS MESSAGES&gt;</span><br><span class="line">&#123;previous_messages&#125;</span><br><span class="line">&lt;/PREVIOUS MESSAGES&gt;</span><br><span class="line">&lt;CURRENT MESSAGE&gt;</span><br><span class="line">&#123;current_message&#125;</span><br><span class="line">&lt;/CURRENT MESSAGE&gt;</span><br><span class="line">Given the above conversation, extract entity nodes from the CURRENT MESSAGE that are explicitly or implicitly</span><br><span class="line">mentioned:</span><br><span class="line">Guidelines:</span><br><span class="line">1. ALWAYS extract the speaker/actor as the first node. The speaker is the part before the colon in each line of dialogue.</span><br><span class="line">2. Extract other significant entities, concepts, or actors mentioned in the CURRENT MESSAGE.</span><br><span class="line">3. DO NOT create nodes for relationships or actions.</span><br><span class="line">4. DO NOT create nodes for temporal information like dates, times or years (these will be added to edges later).</span><br><span class="line">5. Be as explicit as possible in your node names, using full names.</span><br><span class="line">6. DO NOT extract entities mentioned only</span><br></pre></td></tr></table></figure>
+<p><strong>实体解析Prompt</strong></p>
+<p>去重</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;PREVIOUS MESSAGES&gt;</span><br><span class="line">&#123;previous_messages&#125;</span><br><span class="line">&lt;/PREVIOUS MESSAGES&gt;</span><br><span class="line">&lt;CURRENT MESSAGE&gt;</span><br><span class="line">&#123;current_message&#125;</span><br><span class="line">&lt;/CURRENT MESSAGE&gt;</span><br><span class="line">&lt;EXISTING NODES&gt;</span><br><span class="line">&#123;existing_nodes&#125;</span><br><span class="line">&lt;/EXISTING NODES&gt;</span><br><span class="line">Given the above EXISTING NODES, MESSAGE, and PREVIOUS MESSAGES. Determine if the NEW NODE</span><br><span class="line">extracted from the conversation is a duplicate entity of one of the EXISTING NODES.</span><br><span class="line">&lt;NEW NODE&gt;</span><br><span class="line">&#123;new_node&#125;</span><br><span class="line">&lt;/NEW NODE&gt;</span><br><span class="line">Task:</span><br><span class="line">\1. If the New Node represents the same entity as any node in Existing Nodes, return ’is_duplicate: true’ in the response.</span><br><span class="line">Otherwise, return ’is_duplicate: false’</span><br><span class="line">\2. If is_duplicate is true, also return the uuid of the existing node in the response</span><br><span class="line">\3. If is_duplicate is true, return a name for the node that is the most complete full name.</span><br><span class="line">Guidelines:</span><br><span class="line">\1. Use both the name and summary of nodes to determine if the entities are duplicates, duplicate nodes may have</span><br><span class="line">different names</span><br></pre></td></tr></table></figure>
+<p><strong>事实提取Prompt</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;PREVIOUS MESSAGES&gt;</span><br><span class="line">&#123;previous_messages&#125;</span><br><span class="line">&lt;/PREVIOUS MESSAGES&gt;</span><br><span class="line">&lt;CURRENT MESSAGE&gt;</span><br><span class="line">&#123;current_message&#125;</span><br><span class="line">&lt;/CURRENT MESSAGE&gt;</span><br><span class="line">&lt;ENTITIES&gt;</span><br><span class="line">&#123;entities&#125;</span><br><span class="line">&lt;/ENTITIES&gt;</span><br><span class="line">Given the above MESSAGES and ENTITIES, extract all facts pertaining to the listed ENTITIES from the CURRENT</span><br><span class="line">MESSAGE.</span><br><span class="line">Guidelines:</span><br><span class="line">\1. Extract facts only between the provided entities.</span><br><span class="line">\2. Each fact should represent a clear relationship between two DISTINCT nodes.</span><br><span class="line">\3. The relation_type should be a concise, all-caps description of the fact (e.g., LOVES, IS_FRIENDS_WITH,</span><br><span class="line">WORKS_FOR).</span><br><span class="line">\4. Provide a more detailed fact containing all relevant information.</span><br><span class="line">\5. Consider temporal aspects of relationships when relevant.</span><br></pre></td></tr></table></figure>
+<p><strong>事实解析Prompt</strong></p>
+<p>去重</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Given the following context, determine whether the New Edge represents any of the edges in the list of Existing Edges.</span><br><span class="line">&lt;EXISTING EDGES&gt;</span><br><span class="line">&#123;existing_edges&#125;</span><br><span class="line">&lt;/EXISTING EDGES&gt;</span><br><span class="line">&lt;NEW EDGE&gt;</span><br><span class="line">&#123;new_edge&#125;</span><br><span class="line">&lt;/NEW EDGE&gt;</span><br><span class="line">Task:</span><br><span class="line">\1. If the New Edges represents the same factual information as any edge in Existing Edges, return ’is_duplicate: true’</span><br><span class="line">in the response. Otherwise, return ’is_duplicate: false’</span><br><span class="line">\2. If is_duplicate is true, also return the uuid of the existing edge in the response</span><br><span class="line">Guidelines:</span><br><span class="line">\1. The facts do not need to be completely identical to be duplicates, they just need to express the same information.</span><br></pre></td></tr></table></figure>
+<p><strong>时间提取Prompt</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;PREVIOUS MESSAGES&gt;</span><br><span class="line">&#123;previous_messages&#125;</span><br><span class="line">&lt;/PREVIOUS MESSAGES&gt;</span><br><span class="line">&lt;CURRENT MESSAGE&gt;</span><br><span class="line">&#123;current_message&#125;</span><br><span class="line">&lt;/CURRENT MESSAGE&gt;</span><br><span class="line">&lt;REFERENCE TIMESTAMP&gt;</span><br><span class="line">&#123;reference_timestamp&#125;</span><br><span class="line">&lt;/REFERENCE TIMESTAMP&gt;</span><br><span class="line">&lt;FACT&gt;</span><br><span class="line">&#123;fact&#125;</span><br><span class="line">&lt;/FACT&gt;</span><br><span class="line">IMPORTANT: Only extract time information if it is part of the provided fact. Otherwise ignore the time mentioned.</span><br><span class="line">Make sure to do your best to determine the dates if only the relative time is mentioned. (eg 10 years ago, 2 mins ago)</span><br><span class="line">based on the provided reference timestamp</span><br><span class="line">If the relationship is not of spanning nature, but you are still able to determine the dates, set the valid_at only.</span><br><span class="line">Definitions:</span><br><span class="line">\- valid_at: The date and time when the relationship described by the edge fact became true or was established.</span><br><span class="line">\- invalid_at: The date and time when the relationship described by the edge fact stopped being true or ended.</span><br><span class="line">Task:</span><br><span class="line">Analyze the conversation and determine if there are dates that are part of the edge fact. Only set dates if they explicitly</span><br><span class="line">relate to the formation or alteration of the relationship itself.</span><br><span class="line">Guidelines:</span><br><span class="line">\1. Use ISO 8601 format (YYYY-MM-DDTHH:MM:SS.SSSSSSZ) for datetimes.</span><br><span class="line">\2. Use the reference timestamp as the current time when determining the valid_at and invalid_at dates.</span><br><span class="line">\3. If the fact is written in the present tense, use the Reference Timestamp for the valid_at date</span><br><span class="line">\4. If no temporal information is found that establishes or changes the relationship, leave the fields as null.</span><br><span class="line">\5. Do not infer dates from related events. Only use dates that are directly stated to establish or change the relationship.</span><br><span class="line">\6. For relative time mentions directly related to the relationship, calculate the actual datetime based on the reference</span><br><span class="line">timestamp.</span><br><span class="line">\7. If only a date is mentioned without a specific time, use 00:00:00 (midnight) for that date.</span><br><span class="line">\8. If only year is mentioned, use January 1st of that year at 00:00:00.</span><br><span class="line">\9. Always include the time zone offset (use Z for UTC if no specific time zone is mentioned).</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<br>
+<h2 id="Graph-RAG">Graph RAG</h2>
+<p>使用Leiden 算法实现社群聚类</p>
+<br>
+<h2 id="MoriFish">MoriFish</h2>
 
     </div>
 
@@ -346,7 +533,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Project Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Zep"><span class="nav-text">Zep</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Project Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Zep"><span class="nav-text">Zep</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Model"><span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Episode"><span class="nav-text">Episode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Semantic-Entities-Fact"><span class="nav-text">Semantic Entities&amp;Fact</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Communities"><span class="nav-text">Communities</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Retrieve"><span class="nav-text">Retrieve</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2"><span class="nav-text">搜索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E6%8E%92"><span class="nav-text">重排</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prompt"><span class="nav-text">Prompt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Graph-RAG"><span class="nav-text">Graph RAG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MoriFish"><span class="nav-text">MoriFish</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -414,12 +601,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">578k</span>
+    <span title="Symbols count total">585k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">17:31</span>
+    <span title="Reading time total">17:43</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
