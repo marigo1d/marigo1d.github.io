@@ -22,16 +22,19 @@
 
   <meta name="description" content="default">
 <meta property="og:type" content="article">
-<meta property="og:title" content="project learning record">
+<meta property="og:title" content="2026 project&amp;paper learning record">
 <meta property="og:url" content="https://marigo1d.github.io/2026/03/17/project-learning-record/index.html">
 <meta property="og:site_name" content="Marigold">
 <meta property="og:description" content="default">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2026/03/17/project-learning-record/fig2_msa_layer.png">
+<meta property="og:image" content="https://marigo1d.github.io/2026/03/17/project-learning-record/overview.png">
 <meta property="article:published_time" content="2026-03-17T02:28:56.000Z">
-<meta property="article:modified_time" content="2026-03-17T08:58:12.980Z">
+<meta property="article:modified_time" content="2026-03-22T08:12:31.622Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="default">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://marigo1d.github.io/2026/03/17/project-learning-record/fig2_msa_layer.png">
 
 <link rel="canonical" href="https://marigo1d.github.io/2026/03/17/project-learning-record/">
 
@@ -46,7 +49,7 @@
   };
 </script>
 
-  <title>project learning record | Marigold</title>
+  <title>2026 project&paper learning record | Marigold</title>
   
 
 
@@ -203,7 +206,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          project learning record
+          2026 project&paper learning record
         </h1>
 
         <div class="post-meta">
@@ -212,10 +215,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2026-03-17 10:28:56 / Modified: 16:58:12" itemprop="dateCreated datePublished" datetime="2026-03-17T10:28:56+08:00">2026-03-17</time>
+              <time title="Created: 2026-03-17 10:28:56" itemprop="dateCreated datePublished" datetime="2026-03-17T10:28:56+08:00">2026-03-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-03-22 16:12:31" itemprop="dateModified" datetime="2026-03-22T16:12:31+08:00">2026-03-22</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -232,14 +241,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>7.1k</span>
+              <span>10k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>13 mins.</span>
+              <span>19 mins.</span>
             </span>
 
         </div>
@@ -253,9 +262,10 @@
       
         <p>default</p>
 <span id="more"></span>
-<h1>Project Learning Record</h1>
-<h2 id="Zep">Zep</h2>
-<h3 id="Model">Model</h3>
+<h1>2026 P&amp;P Learning Record</h1>
+<h2 id="Project">Project</h2>
+<h3 id="Zep">Zep</h3>
+<h4 id="Model">Model</h4>
 <p>图中含场景子图谱（场景节点，场景边），语义子图谱（实体节点，事实边），社区子图谱（社区节点，社区边）</p>
 <p><strong>场景节点</strong></p>
 <table>
@@ -411,31 +421,31 @@
 <p><strong>社区边</strong>：5 条（社区节点→所属实体节点，单向关联，无时序属性，仅用于层级映射）</p>
 <p>c1 → s1、c1 → s2、c1 → s3、c1 → s4、c1 → s5。</p>
 <br>
-<h4 id="Episode">Episode</h4>
+<h5 id="Episode">Episode</h5>
 <p>双时间线设计：片段发生时间 + 片段语义时间</p>
 <br>
-<h4 id="Semantic-Entities-Fact">Semantic Entities&amp;Fact</h4>
+<h5 id="Semantic-Entities-Fact">Semantic Entities&amp;Fact</h5>
 <p>使用LLM prompt template提取entities &amp; facts &amp; 时间信息</p>
 <p>使用两个完整对话的上下文 + 设定说话者为实体 + reflextion反思减少幻觉</p>
 <p>对实体进行嵌入得到1024维向量，用于余弦检索 + 已存在实体查重</p>
 <p>四个时间 创建/过期时间 fact有效时间/无效时间</p>
 <br>
-<h4 id="Communities">Communities</h4>
+<h5 id="Communities">Communities</h5>
 <p>标签传播算法</p>
 <br>
-<h3 id="Retrieve">Retrieve</h3>
+<h4 id="Retrieve">Retrieve</h4>
 <p>输出模板</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">FACTS and ENTITIES represent relevant context to the current conversation. These are the most relevant facts and their valid date ranges. If the fact is about an event, the event takes place during</span><br><span class="line">this time.</span><br><span class="line">format: FACT (Date range: from - to) </span><br><span class="line">&lt;FACTS&gt;</span><br><span class="line">&#123;facts&#125;</span><br><span class="line">&lt;/FACTS&gt; </span><br><span class="line">These are the most relevant entities ENTITY_NAME: entity summary</span><br><span class="line">&lt;ENTITIES&gt;</span><br><span class="line">&#123;entities&#125;</span><br><span class="line">&lt;/ENTITIES&gt; </span><br></pre></td></tr></table></figure>
-<h4 id="搜索">搜索</h4>
+<h5 id="搜索">搜索</h5>
 <p>余弦语义相似度，BM25，广度优先</p>
 <blockquote>
 <p>这三种搜索方法分别针对相似性的不同方面：全文搜索识别词语相似性，余弦相似度捕捉语义相似性，而广度优先搜索则揭示语境相似性——即图中距离较近的节点和边出现在更相似的对话语境中。这种多维度的候选结果识别方法最大程度地提高了发现最佳语境的可能性。</p>
 </blockquote>
-<h4 id="重排">重排</h4>
+<h5 id="重排">重排</h5>
 <blockquote>
 <p>虽然初始搜索方法旨在实现高召回率，但重排器通过优先展示最相关的结果来提高精度。Zep支持现有的重排方法，如 reciprocal Rank Fusion（RRF）[20]和最大边际相关性（MMR）[21]。此外，Zep还实现了一种基于图的片段提及重排器，该重排器根据对话中实体或事实提及的频率来确定结果的优先级，使频繁引用的信息更容易获取。该系统还包括一个节点距离重排器，它根据结果与指定质心节点的图距离对结果进行重新排序，提供局限于知识图特定区域的上下文。该系统最复杂的重排功能采用交叉编码器——这些大语言模型通过交叉注意力根据查询对节点和边进行评估，从而生成相关性分数，不过这种方法的计算成本最高。</p>
 </blockquote>
-<h3 id="Prompt">Prompt</h3>
+<h4 id="Prompt">Prompt</h4>
 <p><strong>实体提取Prompt</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;PREVIOUS MESSAGES&gt;</span><br><span class="line">&#123;previous_messages&#125;</span><br><span class="line">&lt;/PREVIOUS MESSAGES&gt;</span><br><span class="line">&lt;CURRENT MESSAGE&gt;</span><br><span class="line">&#123;current_message&#125;</span><br><span class="line">&lt;/CURRENT MESSAGE&gt;</span><br><span class="line">Given the above conversation, extract entity nodes from the CURRENT MESSAGE that are explicitly or implicitly</span><br><span class="line">mentioned:</span><br><span class="line">Guidelines:</span><br><span class="line">1. ALWAYS extract the speaker/actor as the first node. The speaker is the part before the colon in each line of dialogue.</span><br><span class="line">2. Extract other significant entities, concepts, or actors mentioned in the CURRENT MESSAGE.</span><br><span class="line">3. DO NOT create nodes for relationships or actions.</span><br><span class="line">4. DO NOT create nodes for temporal information like dates, times or years (these will be added to edges later).</span><br><span class="line">5. Be as explicit as possible in your node names, using full names.</span><br><span class="line">6. DO NOT extract entities mentioned only</span><br></pre></td></tr></table></figure>
 <p><strong>实体解析Prompt</strong></p>
@@ -449,10 +459,120 @@
 <p><strong>时间提取Prompt</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;PREVIOUS MESSAGES&gt;</span><br><span class="line">&#123;previous_messages&#125;</span><br><span class="line">&lt;/PREVIOUS MESSAGES&gt;</span><br><span class="line">&lt;CURRENT MESSAGE&gt;</span><br><span class="line">&#123;current_message&#125;</span><br><span class="line">&lt;/CURRENT MESSAGE&gt;</span><br><span class="line">&lt;REFERENCE TIMESTAMP&gt;</span><br><span class="line">&#123;reference_timestamp&#125;</span><br><span class="line">&lt;/REFERENCE TIMESTAMP&gt;</span><br><span class="line">&lt;FACT&gt;</span><br><span class="line">&#123;fact&#125;</span><br><span class="line">&lt;/FACT&gt;</span><br><span class="line">IMPORTANT: Only extract time information if it is part of the provided fact. Otherwise ignore the time mentioned.</span><br><span class="line">Make sure to do your best to determine the dates if only the relative time is mentioned. (eg 10 years ago, 2 mins ago)</span><br><span class="line">based on the provided reference timestamp</span><br><span class="line">If the relationship is not of spanning nature, but you are still able to determine the dates, set the valid_at only.</span><br><span class="line">Definitions:</span><br><span class="line">\- valid_at: The date and time when the relationship described by the edge fact became true or was established.</span><br><span class="line">\- invalid_at: The date and time when the relationship described by the edge fact stopped being true or ended.</span><br><span class="line">Task:</span><br><span class="line">Analyze the conversation and determine if there are dates that are part of the edge fact. Only set dates if they explicitly</span><br><span class="line">relate to the formation or alteration of the relationship itself.</span><br><span class="line">Guidelines:</span><br><span class="line">\1. Use ISO 8601 format (YYYY-MM-DDTHH:MM:SS.SSSSSSZ) for datetimes.</span><br><span class="line">\2. Use the reference timestamp as the current time when determining the valid_at and invalid_at dates.</span><br><span class="line">\3. If the fact is written in the present tense, use the Reference Timestamp for the valid_at date</span><br><span class="line">\4. If no temporal information is found that establishes or changes the relationship, leave the fields as null.</span><br><span class="line">\5. Do not infer dates from related events. Only use dates that are directly stated to establish or change the relationship.</span><br><span class="line">\6. For relative time mentions directly related to the relationship, calculate the actual datetime based on the reference</span><br><span class="line">timestamp.</span><br><span class="line">\7. If only a date is mentioned without a specific time, use 00:00:00 (midnight) for that date.</span><br><span class="line">\8. If only year is mentioned, use January 1st of that year at 00:00:00.</span><br><span class="line">\9. Always include the time zone offset (use Z for UTC if no specific time zone is mentioned).</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <br>
-<h2 id="Graph-RAG">Graph RAG</h2>
+<h3 id="Graph-RAG">Graph RAG</h3>
 <p>使用Leiden 算法实现社群聚类</p>
 <br>
-<h2 id="MoriFish">MoriFish</h2>
+<h3 id="MoriFish">MoriFish</h3>
+<br>
+<h2 id="Paper">Paper</h2>
+<h3 id="MSA">MSA</h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/EverMind-AI/MSA">https://github.com/EverMind-AI/MSA</a></p>
+<h4 id="流程">流程</h4>
+<img src="/2026/03/17/project-learning-record/fig2_msa_layer.png" class="" title="Figure 2: MSA layer">
+<p>其前向传播过程主要分为四个阶段：</p>
+<ol>
+<li>文档独立编码与位置解耦 (Docs Processing &amp; Doc-wise RoPE)</li>
+</ol>
+<ul>
+<li><strong>输入分离</strong>：长文档（Docs）和当前查询（Query）在初始阶段是分开处理的。</li>
+<li><strong>Doc-wise RoPE (文档级旋转位置编码)</strong>：这是极其关键的一步。长文本被切分成多个独立的Document Chunk。对于每个Chunk，它的位置编码<strong>从0开始重新计算</strong>，而不是全局累加。</li>
+<li><strong>特征提取</strong>：文档被投影出四个向量：$Q, K, V$ 以及专门用于检索的 $K^R$ (Retrieval Key)。这些特征随后经过一个多头注意力（Multi-head Attention）进行局部上下文融合。</li>
+</ul>
+<ol start="2">
+<li>状态压缩与缓存 (Compression &amp; Pooling)</li>
+</ol>
+<ul>
+<li><strong>Token-wise mean pooling</strong>：为了极致节省显存，经过局部注意力处理后的文档隐状态矩阵 ($K, V, K^R$) 并不会以Token级别完全保留，而是沿着Chunk维度进行<strong>均值池化（Mean Pooling）</strong>，压缩成低维度的块级表示 $\bar{K}, \bar{V}, \bar{K}^R$。这构成了离线缓存的全局记忆（Global Memory）。</li>
+</ul>
+<ol start="3">
+<li>动态稀疏路由 (Dynamic Routing)</li>
+</ol>
+<ul>
+<li><strong>计算相关性</strong>：Query端除了生成常规的 $Q, K, V$ 外，还会生成一个专属的检索查询向量 $Q^R$。</li>
+<li><strong>Top-k 选择</strong>：$Q^R$ 与压缩后的文档检索键 $\bar{K}^R$ 进行张量乘法（$\otimes$计算余弦相似度），通过 <code>Pooling</code> 和 <code>Topk</code> 操作，选出与当前Query最相关的 $k$ 个文档块（绿色块）。</li>
+<li><strong>辅助损失 $\mathcal{L}_{aux}$</strong>：在路由处引入辅助损失函数，通常是为了保证路由的负载均衡（避免每次都选同样的几个块）或加速路由器的收敛。</li>
+</ul>
+<ol start="4">
+<li>上下文组装与全局生成 (Context Assembly &amp; Global RoPE)</li>
+</ol>
+<ul>
+<li><strong>Select &amp; Concat</strong>：根据Top-k的索引，从庞大的离线缓存中<strong>只提取</strong>选中的 $\bar{K}, \bar{V}$（图中绿色的块），并将其与Query自身的局部 $K, V$（蓝色的块）拼接（Concat）。</li>
+<li><strong>Global RoPE (全局位置编码)</strong>：在最终拼接好的、高度浓缩的 KV Cache 上，对 Query 的起始索引偏移 $k$（检索到的块数），应用全局RoPE。这保证了**“背景知识 -&gt; 查询 -&gt; 生成”的严格因果顺序**。</li>
+<li><strong>最终生成</strong>：拼接后的特征与 Query 的 $Q$ 送入最终的 Multi-head Attention 进行自回归解码。</li>
+</ul>
+<br>
+<p>通过<strong>分层处理机制（Hierarchical Alignment）”来进行文档细节丢失弥补</strong></p>
+<ol>
+<li><strong>底层 Transformer（无损细节提取）</strong>：在模型的较浅层（Lower layers），文档是被切分成 Chunk 独立输入的，这些层<strong>依然执行 Token-wise 的注意力机制</strong>。也就是说，在底层，模型依然在逐词理解“The quick brown fox”的确切含义和语法结构，提取细粒度的局部语义特征。</li>
+<li><strong>高层 Transformer（有损压缩与宏观路由）</strong>：随着层数加深，特征已经高度抽象。此时到了高层（Upper layers），MSA 层开始介入。它将底层提取出的丰富 Token 特征进行 Mean Pooling。此时丢失“词”的细节是可以接受的，因为<strong>高层需要的是“宏观主题（Topic/Concept）”级别的特征来进行大规模检索</strong>（例如判断这个 Chunk 是关于物理学的还是关于历史的）。</li>
+</ol>
+<hr>
+<h4 id="核心设计动机">核心设计动机</h4>
+<ol>
+<li>解决超长上下文（100M）的位置越界问题 (外推性)</li>
+</ol>
+<ul>
+<li><strong>设计动机</strong>：模型通常只在短文本（如64k）上训练。如果在推理时直接输入1亿Token，传统的绝对/相对位置编码会发生严重的“位置漂移（Position Drift）”，模型直接崩溃。</li>
+<li><strong>MSA解法</strong>：采用 <strong>双重RoPE设计</strong>。底层对文档使用 <strong>Doc-wise RoPE</strong>（每个块位置从0开始算），使得模型在处理无论多长的文档时，其局部特征的提取始终在训练时的长度分布内。顶层拼接时使用 <strong>Global RoPE</strong> 维持宏观逻辑顺序。<strong>这使得模型具备了从 64k 训练长度直接外推到 100M 推理长度的能力。</strong></li>
+</ul>
+<ol start="2">
+<li>极致的显存与计算压缩</li>
+</ol>
+<ul>
+<li><strong>设计动机</strong>：1亿Token的 KV Cache 即使采用量化，单张甚至多张GPU VRAM也绝对装不下。</li>
+<li><strong>MSA解法</strong>：采用 <strong>Mean Pooling 压缩</strong> 加上 <strong>Sparse Routing（稀疏路由）</strong>。文档被极度浓缩，且在生成当前词时，只把最相关的 Top-k 个块加载入显存参与注意力计算，其余无关内容被完全忽略（Sparse Attention）。</li>
+</ul>
+<ol start="3">
+<li>突破传统RAG的“割裂感”</li>
+</ol>
+<ul>
+<li><strong>设计动机</strong>：传统的RAG（检索增强生成）系统是拼凑的：独立的向量数据库检索 + 独立的大模型生成。检索器和生成器目标不一致，且无法端到端联合训练。</li>
+<li><strong>MSA解法</strong>：在 Transformer 层级内部实现了原生的、<strong>端到端可导的检索-生成闭环 (differentiable loop)</strong>。路由器（Router）和语言模型是一体化训练的，检索出的信息直接是隐空间的KV状态，而不是明文，信息损耗更低。</li>
+</ul>
+<br>
+<h4 id="Re">Re</h4>
+<p>个人感觉在超长文本的细节检索上存在细节丢失问题，适用于高层次的，领域的知识追加；</p>
+<p>但是新架构又需要进行训练为何不直接将长文档融入训练集内化为模型知识的一部分？</p>
+<br>
+<h3 id="AttnRes">AttnRes</h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/MoonshotAI/Attention-Residuals">https://github.com/MoonshotAI/Attention-Residuals</a></p>
+<img src="/2026/03/17/project-learning-record/overview.png" class="" title="img">
+<p>AttnRes 的核心思想是将传统的<strong>跨层相加</strong>（Residual）替换为<strong>跨层注意力机制</strong>（Attention over depth）。对于第 $l$ 层，其输入不是仅由上一层决定，而是历史所有层的<strong>加权求和</strong>。</p>
+<ol>
+<li>核心计算目标：第 $l$ 层的输入 $h_l$</li>
+</ol>
+<p>第 $l$ 层的输入 $h_l$，是由前面所有层（从第 $0$ 层到第 $l-1$ 层）的输出 $v_i$ 按权重 $\alpha_{i \to l}$ 线性叠加得到的：</p>
+<p>$$ h_l = \sum_{i=0}^{l-1} \alpha_{i \to l} \cdot v_i $$</p>
+<blockquote>
+<p><strong>笔记：</strong><br>
+这替代了标准 Transformer 中的 $h_l = h_{l-1} + f(h_{l-1})$。</p>
+</blockquote>
+<hr>
+<ol start="2">
+<li>深度方向的 Q, K, V 定义</li>
+</ol>
+<p>在跨层注意力中，Query (查询)、Key (键) 和 Value (值) 的定义与传统 Token 间的注意力不同：</p>
+<p>$$ q_l = w_l $$<br>
+$$ k_i = v_i = \begin{cases} h_1 &amp; i = 0 \ f_i(h_i) &amp; 1 \le i \le l-1 \end{cases} $$</p>
+<p><strong>变量解释：</strong></p>
+<ul>
+<li>$q_l$: 第 $l$ 层的 <strong>Query</strong>。它是一个<strong>特定于该层的可学习向量</strong> $w_l \in \mathbb{R}^d$。代表当前层“想要什么特征”。</li>
+<li>$k_i, v_i$: 第 $i$ 层的 <strong>Key</strong> 和 <strong>Value</strong>。在这里它们是相等的，都代表<strong>第 $i$ 层的实际输出特征</strong>。（当 $i=0$ 时，代表最开始的 Embedding 输出）。</li>
+</ul>
+<hr>
+<ol start="3">
+<li>注意力权重 $\alpha_{i \to l}$ 的计算</li>
+</ol>
+<p>当前层 $l$ 对历史层 $i$ 的注意力权重，是通过计算 Query 和 Key 的相似度，并经过 Softmax 归一化得到的：</p>
+<p>$$ \alpha_{i \to l} = \frac{\phi(q_l, k_i)}{\sum_{j=0}^{l-1} \phi(q_l, k_j)} $$</p>
+<p>其中，打分函数（核函数） $\phi(q, k)$ 的具体计算公式为：</p>
+<p>$$ \phi(\mathbf{q}, \mathbf{k}) = \exp \Big( \mathbf{q}^\top \text{RMSNorm}(\mathbf{k}) \Big) $$</p>
+<p><strong>变量解释：</strong></p>
+<ul>
+<li>$\alpha_{i \to l}$: 历史层 $i$ 对当前层 $l$ 的重要程度权重（所有 $\alpha$ 加起来等于 $1$）。</li>
+<li>$\text{RMSNorm}(\mathbf{k})$: 论文特别指出，对历史层的输出做均方根归一化，是为了<strong>防止某些层输出数值过大，从而导致注意力权重失衡（一家独大）</strong>。</li>
+<li>$\exp(\dots)$: 指数操作，结合外层的除法，构成了标准的 Softmax 运算。</li>
+</ul>
 
     </div>
 
@@ -533,7 +653,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Project Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Zep"><span class="nav-text">Zep</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Model"><span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Episode"><span class="nav-text">Episode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Semantic-Entities-Fact"><span class="nav-text">Semantic Entities&amp;Fact</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Communities"><span class="nav-text">Communities</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Retrieve"><span class="nav-text">Retrieve</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2"><span class="nav-text">搜索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E6%8E%92"><span class="nav-text">重排</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prompt"><span class="nav-text">Prompt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Graph-RAG"><span class="nav-text">Graph RAG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MoriFish"><span class="nav-text">MoriFish</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">2026 P&amp;P Learning Record</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Project"><span class="nav-text">Project</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zep"><span class="nav-text">Zep</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Model"><span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Episode"><span class="nav-text">Episode</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Semantic-Entities-Fact"><span class="nav-text">Semantic Entities&amp;Fact</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Communities"><span class="nav-text">Communities</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrieve"><span class="nav-text">Retrieve</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2"><span class="nav-text">搜索</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%87%8D%E6%8E%92"><span class="nav-text">重排</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Prompt"><span class="nav-text">Prompt</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Graph-RAG"><span class="nav-text">Graph RAG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MoriFish"><span class="nav-text">MoriFish</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Paper"><span class="nav-text">Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MSA"><span class="nav-text">MSA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E8%AE%BE%E8%AE%A1%E5%8A%A8%E6%9C%BA"><span class="nav-text">核心设计动机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Re"><span class="nav-text">Re</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AttnRes"><span class="nav-text">AttnRes</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -601,12 +721,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">586k</span>
+    <span title="Symbols count total">591k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">17:45</span>
+    <span title="Reading time total">17:55</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

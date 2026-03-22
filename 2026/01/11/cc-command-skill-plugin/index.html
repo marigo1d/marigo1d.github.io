@@ -20,18 +20,24 @@
     var CONFIG = {"hostname":"marigo1d.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="claude code 术语与设计">
+  <meta name="description" content="claude code 设计">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cc:command,skill,plugin...">
 <meta property="og:url" content="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/index.html">
 <meta property="og:site_name" content="Marigold">
-<meta property="og:description" content="claude code 术语与设计">
+<meta property="og:description" content="claude code 设计">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/image-20260322143925224.png">
+<meta property="og:image" content="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/image-20260322144236969.png">
+<meta property="og:image" content="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/image-20260322144304186.png">
+<meta property="og:image" content="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/image-20260322143126448.png">
+<meta property="og:image" content="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/image-20260322143602494.png">
 <meta property="article:published_time" content="2026-01-11T02:28:27.000Z">
-<meta property="article:modified_time" content="2026-03-17T03:30:32.983Z">
+<meta property="article:modified_time" content="2026-03-22T06:46:13.412Z">
 <meta property="article:author" content="marigo1d">
 <meta property="article:tag" content="default">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/image-20260322143925224.png">
 
 <link rel="canonical" href="https://marigo1d.github.io/2026/01/11/cc-command-skill-plugin/">
 
@@ -220,7 +226,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-03-17 11:30:32" itemprop="dateModified" datetime="2026-03-17T11:30:32+08:00">2026-03-17</time>
+                <time title="Modified: 2026-03-22 14:46:13" itemprop="dateModified" datetime="2026-03-22T14:46:13+08:00">2026-03-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,14 +244,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>5k</span>
+              <span>7.1k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>9 mins.</span>
+              <span>13 mins.</span>
             </span>
 
         </div>
@@ -257,9 +263,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>claude code 术语与设计</p>
+        <p>claude code 设计</p>
 <span id="more"></span>
 <h1>cc:command,skill&amp;plugin</h1>
+<p>ref: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1yRPWzqEhL">https://www.bilibili.com/video/BV1yRPWzqEhL</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1cywWztEur">https://www.bilibili.com/video/BV1cywWztEur</a></p>
 <h1>技能</h1>
 <h2 id="Command">Command</h2>
 <p>模板prompt</p>
@@ -291,6 +299,28 @@
 <li>reference按需加载</li>
 <li>script选择性触发</li>
 </ul>
+<br>
+<h3 id="案例">案例</h3>
+<p>api 请求结构</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;claude-3-7-sonnet-20250219&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;system&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你是一个资深AI工程师&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;messages&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;解释一下Transformer模型&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;max_tokens&quot;</span><span class="punctuation">:</span> <span class="number">1024</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;temperature&quot;</span><span class="punctuation">:</span> <span class="number">0.7</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;top_p&quot;</span><span class="punctuation">:</span> <span class="number">0.9</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;top_k&quot;</span><span class="punctuation">:</span> <span class="number">50</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;stop_sequences&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;END&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;stream&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;metadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;user_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;12345&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tools&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;获取天气&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;input_schema&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;city&quot;</span><span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool_choice&quot;</span><span class="punctuation">:</span> <span class="string">&quot;auto&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<br>
+<p><strong>用户请求</strong></p>
+<img src="/2026/01/11/cc-command-skill-plugin/image-20260322143925224.png" class="" title="image-20260322143925224">
+<img src="/2026/01/11/cc-command-skill-plugin/image-20260322144236969.png" class="" title="image-20260322144236969">
+<img src="/2026/01/11/cc-command-skill-plugin/image-20260322144304186.png" class="" title="image-20260322144304186">
+<p>cc的新实现，通过text类型字段的system-reminder标签向LLM提供可用skill list</p>
+<blockquote>
+<p>个人感觉这部分的工程实现还是比较依赖于所使用模型的后训练手段，比如说需要知道模型后训练时使用的数据格式以决定skill list是放在message中作为上下文还是放在tool中</p>
+</blockquote>
+<p><strong>LLM返回</strong></p>
+<img src="/2026/01/11/cc-command-skill-plugin/image-20260322143126448.png" class="" title="image-20260322143126448">
+<p>新增工具(Skill)，用户可用Skill（图中为docx，用于创建word文件）作为参数传给工具Skill</p>
+<p><strong>用户返回</strong></p>
+<img src="/2026/01/11/cc-command-skill-plugin/image-20260322143602494.png" class="" title="image-20260322143602494">
+<p>前两条content为工具使用结果，第二个工具使用结果为渐进式披露Skill，工程实现为在content中追加text类型字段，包含docx skill中内容</p>
+<blockquote>
+<p>Claude Code 最早那版，Skill 是直接放在 Skill tool 的 desc 里的。那时候暴露出来的 Tool 也很多，比如 AskUserQuestion、Bash、Edit、EnterPlanMode、ExitPlanMode、Glob、Grep、KillShell、NotebookEdit、Read、Search、WebSearch、Write。 后面有一次更新，cc 基本改成只保留一个 Tool，也就是 ToolSearch。也是从这个阶段开始，Skill 相关的提示词被放进了 system-reminder(以下简称sr)，格式大概是： <sr>The following skills are available for use with the Skill tool ${getSkillsText()}</sr> 这么改（原因个人猜测），一方面是因为新版只剩一个 Tool 了，所以 Skill 这部分内容不能再像以前那样放在独立的 Skill desc 里，只能放到 sr 里。另一方面是因为之前 Skill 是放在 tools 里的，而 tools 本身是会变的，Anthropic 那边缓存命中又是先从 tools 开始算，所以只要 tools 一变，后面的缓存就容易一起失效。现在把 Skill 挪到 sr，至少可以减少 tools 这一层变化对缓存命中的影响。 再补充一点，Claude Code 以前的 /commander 和 Skill 其实是分开的，但本质上做的是同一件事。所以在新版提示词里会有这种描述： /<skill-name>（比如 /commit）是用户调用用户可调用技能的简写，执行时会展开成完整提示，再通过 Skill 工具执行。 也就是说，到了新版里，/commander 和 Skill 实际上已经并到一起了，表面上看是 slash command，底层本质上还是 skill 那一套。</p>
+</blockquote>
 <br>
 <h2 id="Tool-MCP">Tool &amp; MCP</h2>
 <p>以一个典型的 MCP 配置为例（简化）：</p>
@@ -547,7 +577,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">cc:command,skill&amp;plugin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">技能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Command"><span class="nav-text">Command</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Skill"><span class="nav-text">Skill</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tool-MCP"><span class="nav-text">Tool &amp; MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Agent"><span class="nav-text">Agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Workflow"><span class="nav-text">Workflow</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%9A%B4%E9%9C%B2"><span class="nav-text">接口暴露</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-text">引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8"><span class="nav-text">调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91"><span class="nav-text">触发</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Fin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">CLI&amp;MCP&amp;Skill</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">cc:command,skill&amp;plugin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">技能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Command"><span class="nav-text">Command</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Skill"><span class="nav-text">Skill</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-text">案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tool-MCP"><span class="nav-text">Tool &amp; MCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Agent"><span class="nav-text">Agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Workflow"><span class="nav-text">Workflow</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%9A%B4%E9%9C%B2"><span class="nav-text">接口暴露</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-text">引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8"><span class="nav-text">调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91"><span class="nav-text">触发</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Fin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">CLI&amp;MCP&amp;Skill</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -615,12 +645,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">586k</span>
+    <span title="Symbols count total">591k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">17:45</span>
+    <span title="Reading time total">17:55</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
